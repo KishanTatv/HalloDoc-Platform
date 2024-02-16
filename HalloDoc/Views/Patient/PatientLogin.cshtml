@@ -1,0 +1,48 @@
+﻿@*
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HalloDoc.Entity.Models.Aspnetuser;
+
+@{
+    ViewData["Title"] = "Patient Login";
+    Layout = "~/Views/Patient/PLoginLayout.cshtml";
+}
+
+<form class="FormCnt w-25" asp-controller="Patient" asp-action="PatientVerification" method="post">
+    <div class="d-flex">
+        <a class="btn w-5 btn-info rounded bg-transparent mb-2 text-info text-decoration-none" asp-controller="Patient"
+           asp-action="PatientSite">
+            <strong class="pe-2"><i class="bi bi-chevron-left fw-bold"></i> Back </strong>
+        </a>
+    </div>
+
+    <h4 class="mb-4 mt-3">Login to Your Account</h4>
+
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control bg-transparent focus-ring focus-ring-info  position-relative"
+               id="floatingInput" placeholder="name@example.com" asp-for="Email" required>
+        <label for="floatingInput">Username</label>
+        <div class="position-absolute top-0 end-0 mx-3 my-2">
+            <i class="bi bi-person-circle fs-4 text-secondary"></i>
+        </div>
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input type="password" class="form-control bg-transparent focus-ring focus-ring-info position-relative"
+               id="ConfirmPassword" placeholder="name@example.com" asp-for="Passwordhash" required>
+        <label for="floatingInput">Password</label>
+        <span asp-validation-for="Passwordhash" class="text-danger"></span>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <p class="text-danger text-center">@TempData["Error"]</p>
+    }
+
+    <button type="submit" class="w-100 h-10 btn btn-md btn-info text-light mt-3">Log in</button>
+    <a class="nav-link text-center text-info fw-bold" asp-controller="Patient" asp-action="PatientForgotpass">
+        Forgot
+        Password ?
+    </a>
+</form>

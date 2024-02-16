@@ -1,0 +1,166 @@
+﻿.HLOGO {
+    height: 80px;
+    width: 150px;
+}
+
+.Dark-Theme, .nav-lin {
+    background-color: rgba(0, 0, 0, 0.747);
+    color: white;
+}
+
+.nav-link, .nav-link:hover {
+    color: rgba(56, 56, 56, 0.842);
+}
+
+.nav-underline .nav-link.active, .nav-underline .show > .nav-link {
+    font-weight: 700;
+    color: #0dcaf0;
+    border-bottom: 2px solid #0dcaf0;
+}
+
+.dashIcon {
+    width: 30px;
+}
+
+.form-check-input {
+    width: 1.3em;
+    height: 1.2em;
+}
+
+/* .list-group-item.active, .list-group-item:hover {
+    color: #fff;
+    background-color: #65d4eb;
+    border-color: #65cde2;
+} */
+
+.DashCardN {
+    color: #203f9a;
+    border: 1px solid #203f9a;
+    background-color: #e8eaf1;
+}
+
+    .DashCardN:hover {
+        color: white;
+        background-color: #203f9a;
+    }
+
+.DashCardP {
+    color: #3096c5;
+    border: 1px solid #3096c5;
+    background-color: #e5f2f8;
+}
+
+    .DashCardP:hover {
+        color: white;
+        background-color: #3096c5;
+    }
+
+.DashCardA {
+    color: #2f7e3c;
+    border: 1px solid #2f7e3c;
+    background-color: #e8f0e8;
+}
+
+    .DashCardA:hover {
+        color: white;
+        background-color: #2f7e3c;
+    }
+
+.DashCardC {
+    color: #a4246e;
+    border: 1px solid #a4246e;
+    background-color: #f7e6ee;
+}
+
+    .DashCardC:hover {
+        color: white;
+        background-color: #a4246e;
+    }
+
+.DashCardT {
+    color: #136bb2;
+    border: 1px solid #136bb2;
+    background-color: #e5eef5;
+}
+
+    .DashCardT:hover {
+        color: white;
+        background-color: #136bb2;
+    }
+
+
+.DashCardU {
+    color: #8a68ad;
+    border: 1px solid #8a68ad;
+    background-color: #efeef4;
+}
+
+    .DashCardU:hover {
+        color: white;
+        background-color: #8a68ad;
+    }
+
+.bg-lighinfo {
+    background-color: #d4f7ffbd;
+}
+
+
+@media only screen and (max-width: 740px) {
+    .Dash-nav {
+        display: flex;
+        flex-direction: column;
+        z-index: 1;
+        width: 65%;
+        position: absolute;
+        background-color: white;
+        height: 100%;
+        margin: 0%;
+    }
+
+    .nav-underline .nav-link.active, .nav-underline .show > .nav-link {
+        background-color: #37c9e6a1 !important;
+        color: white !important;
+        border: none;
+    }
+}
+
+
+@media only screen and (min-width: 740px) {
+    .Menu_btn {
+        display: none !important;
+    }
+}
+
+
+@media only screen and (max-width: 579px) {
+    .card-body {
+        padding-top: 0px !important;
+    }
+
+    .logInInfo, .HeadLogOut, .headerName, .MedicalLG {
+        display: none;
+    }
+
+    .bi-moon, .bi-sun {
+        padding: 0% !important;
+    }
+
+    .card-body {
+        text-align: center;
+    }
+
+    .Dash-num {
+        font-size: 16px;
+    }
+
+    .Dash-name {
+        font-size: 12px;
+    }
+}
+
+
+@media only screen and (min-width: 579px) {
+    .MediaclSM {
+        display: none !important;
+    }
+}

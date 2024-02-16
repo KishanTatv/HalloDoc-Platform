@@ -1,0 +1,156 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model HalloDoc.Entity.RequestForm.FormFCB;
+
+@{
+    ViewData["Title"] = "Bussiness Request";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+<div class="d-flex w-100 justify-content-center pt-4 pb-4">
+    <div class="HContainer">
+        <div class="d-flex justify-content-end">
+            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="Patient" asp-action="SubmitReq">
+                <strong class="pe-2">&lt Back</strong>
+            </a>
+        </div>
+        <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="FormDone" asp-controller="Patient" method="post">
+            <div class="mb-4">
+                <h5>Bussiness Information</h5>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="PatientFname">
+                        <label class="ms-3">Your First Name</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="PatientLname">
+                        <label class="ms-3">Your Last Name</label>
+                    </div>
+                </div>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="PatientPhonenumber" />
+                    </div>   
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="email" class="form-control bg-transparent" id="floatingInput" placeholder="email" asp-for="PatientEmail">
+                        <label class="ms-3">Your Email</label>
+                    </div>
+                </div>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput"
+                               placeholder="bussinessName" asp-for="PatientProperty">
+                        <label class="ms-3">Bussiness/Property Name</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="caseNumber" asp-for="PatientCase">
+                        <label class="ms-3">Case Number (Optional)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 mb-4">
+                <h5>Patient Information</h5>
+                <div class="form-floating">
+                    <textarea type="text" class="form-control bg-transparent border h-25" placeholder="Detail info"
+                              id="floatingInput" rows="3" aria-label="Detail info"
+                              aria-describedby="button-addon2" asp-for="clientInformation.Symptoms"></textarea>
+                    <label class="ms-3">Enter Brief Detail of Symptoms(options)</label>
+                </div>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="clientInformation.Firstname">
+                        <label class="ms-3">First Name</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="clientInformation.Lastname">
+                        <label class="ms-3">Last Name</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="date" class="form-control bg-transparent" id="floatingInputValue"
+                               placeholder="Date of birth" value="12/05/2023" asp-for="clientInformation.Dob">
+                        <label class="ms-3">Date Of Birth</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h5>Patient Contact Information</h5>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="email" id="email" class="form-control bg-transparent" id="email" placeholder="lastName" asp-for="clientInformation.Email">
+                        <label class="ms-3">Your Email</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" id="phone2" class="form-control h-100 bg-transparent" asp-for="clientInformation.Phonenumber"/>
+                    </div>   
+                </div>
+            </div>
+
+            <div class="mt-4 mb-4">
+                <h5>Patient Location</h5>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street" asp-for="clientInformation.Street">
+                        <label class="ms-3">Street</label>
+                    </div>
+                    <div class="col-md-6 d-flex form-floating mt-2 ">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="city" asp-for="clientInformation.City">
+                        <label class="ms-3">City</label>
+                    </div>
+                </div>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="state" asp-for="clientInformation.State">
+                        <label class="ms-3">State</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="number" class="form-control bg-transparent" id="floatingInput" placeholder="zipCode" asp-for="clientInformation.Zipcode">
+                        <label class="ms-3">Zip Code</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="roomSuite" asp-for="clientInformation.Locroom">
+                        <label class="ms-3">Room # / Suite(optional)</label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="mt-4 mb-4">
+                <h5>(optional) Upload Photo or Document</h5>
+                <div class="d-flex m-auto">
+                    <div class="p-0 w-100">
+                        <input type="text" class="form-control bg-transparent" id="selectedFile" placeholder="select File"
+                               disabled>
+                        <label class="ms-3"></label>
+                    </div>
+                    <div>
+                        <label class="btn btn-outline-info d-flex ">
+                            <input type="file" style="display: none;" id="FileInput">
+                            <i class="bi bi-cloud-arrow-up border-info"></i>
+                            <span class="upload_txt ms-2">Upload</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4 mb-4">
+                <input type="hidden" name="button" value="Bussinessbtn" />
+                <button type="submit" class="btn btn-info me-4">Submit</button>
+                <button type="button" class="btn btn-outline-info">Cancel</button>
+
+                <!-- Modal -->
+                <partial name="partial/ModalPartial" />
+          
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<script src="~/js/custom.js" asp-append-version="true"></script>
+<script src="~/js/contact-api.js" asp-append-version="true"></script>

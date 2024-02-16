@@ -1,0 +1,30 @@
+﻿@*
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "Patient Fogotpass";
+    Layout = "~/Views/Patient/PLoginLayout.cshtml";
+}
+
+
+
+<form class="FormCnt w-25">
+    <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="Patient" asp-action="PatientLogin">
+        <strong class="pe-2"> <i class="bi bi-chevron-left fw-bold"></i> Back</strong>
+    </a>
+    <h4 class="mb-4 mt-3">Reset Your Password</h4>
+
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control bg-transparent focus-ring focus-ring-info  position-relative"
+               id="floatingInput" placeholder="name@example.com" >
+        <label for="floatingInput">Username</label>
+        <div class="position-absolute top-0 end-0 mx-3 my-2">
+            <i class="bi bi-person-circle fs-4 text-secondary"></i>
+        </div>
+    </div>
+
+    <button type="submit" class="w-100 h-10 btn btn-md btn-info text-light mt-3">Reset Password</button>
+    <a class="nav-link text-center text-info fw-bold" asp-controller="Patient" asp-action="PatientLogin"><span
+            class="w-20">&lt </span>Back to login</a>
+</form>

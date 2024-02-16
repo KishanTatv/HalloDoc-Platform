@@ -1,0 +1,37 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "Submit Request";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+<div class="d-flex flex-column justify-content-between min-vh-100 lightEnable">
+        <div>
+            <div class="d-flex align-items-center justify-content-around mt-5">
+                <p></p>
+                <h2 class="mt-5">I am a ...</h2>
+                <a class="btn w-5 btn-info rounded bg-transparent mt-5 text-info" asp-controller="Patient" asp-action="PatientSite">
+                    <strong class="pe-2">&lt Back</strong>
+                </a>
+            </div>
+            <div class="HContainer d-flex flex-column w-50 m-auto">
+                <form class="text-center d-flex flex-column mt-4">
+                    <a class="btn btn-md bg-darkBlue rounded p-2 mt-3" asp-controller="PatientRequest" asp-action="PatientReq">
+                        <p class="text-primary fw-bold p-2 mb-2">PATIENT</p>
+                    </a>
+                <a class="btn btn-md bg-lightInfo rounded p-2 mt-3" asp-controller="PatientRequest" asp-action="FamilyReq">
+                        <p class="text-info fw-bold p-2 mb-2">FAMILY / FRIEND</p>
+                    </a>
+                <a class="btn btn-md bg-lightSuccess rounded p-2 mt-3" asp-controller="PatientRequest" asp-action="ConciergeReq">
+                        <p class="text-success fw-bold p-2 mb-2">CONCIERGE</p>
+                    </a>
+                <a class="btn btn-md bg-lightPink rounded p-2 mt-3" asp-controller="PatientRequest" asp-action="BussinessReq">
+                        <p class="text-danger fw-bold p-2 mb-2">BUSSINESS PARTNERS</p>
+                    </a>
+                </form>
+            </div>
+        </div>
+</div>

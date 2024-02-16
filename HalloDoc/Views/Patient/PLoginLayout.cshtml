@@ -1,0 +1,68 @@
+﻿@*
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - halloDoc</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/halloDoc.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="container-fluid min-vh-100  d-flex flex-column min-vh-100 justify-content-between align-items-center">
+        <button class="btn position-fixed top-0 end-0 w-5 btn-info rounded bg-transparent p-2 m-3" id="modeIcon">
+            <i class="bi bi-moon MICON text-info ps-2 pe-2"></i>
+        </button>
+        <div class="heroImg">
+            <img class="w-100 min-vh-100" src="~/image/patient-log-banner.png">
+        </div>
+        <div class="RightCnt w-100 d-flex flex-column min-vh-100 justify-content-between align-items-center lightEnable">
+            <div class="headerlogo mt-4">
+                <img class="img-fluid" src="~/image/Fig56. Patient site 1.png">
+            </div>
+
+            @RenderBody()
+
+            <div class="d-flex mb-3">
+                <a class="text-dark text-decoration-none" href="#">Term's of Condition</a>
+                <p class="text-dark ms-2">|</p>
+                <a class="text-dark text-decoration-none ms-2" href="#">privacy policy</a>
+            </div>
+        </div>
+    </div>
+    
+
+    @*error model*@
+    <div class="modal fade" id="errorModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-5 text-danger" id="exampleModalToggleLabel">Error </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Password and confirm 
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/theme.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

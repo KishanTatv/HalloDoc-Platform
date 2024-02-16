@@ -1,0 +1,133 @@
+.input-field {  
+    background: #fff url("../images/search.jpg") no-repeat; 
+}
+
+input,
+textarea {
+    &:focus {
+        box-shadow: none !important;
+        border-color: #0dcaf0 !important;
+
+        +label {
+            color: #0dcaf0 !important;
+            transition: ease 0.3s;
+        }
+    }
+}
+
+.heroImg {
+    position: absolute;
+    z-index: -1;
+    opacity: 0.8;
+    filter: blur(2px);
+}
+
+
+.form-floating > .form-control {
+    padding-left: 15px;
+    color: #38ddffed;
+}
+
+.form-floating > .form-control:-webkit-autofill{
+    padding-left: 15px;
+    color: #38ddffed !important;
+}
+
+.Dark-Theme{
+    background-color: rgba(14, 14, 14, 0.733);
+    color: white;
+}
+
+.HContainer{
+    width: 70%;
+}
+
+.HLOGO{
+    height: 80px;
+    width: 150px;
+}
+
+.bg-darkBlue{
+    border: 2px solid rgb(110, 110, 219);
+    background-color: rgb(195, 195, 255);
+}
+.bg-darkBlue:hover{
+    background-color: rgb(145, 145, 224);
+}
+.bg-lightInfo{
+    border: 2px solid rgb(109, 211, 211);
+    background-color: rgb(208, 255, 255);
+}
+.bg-lightInfo:hover{
+    background-color: rgb(176, 241, 241);
+}
+.bg-lightSuccess{
+    border: 2px solid rgb(106, 199, 106);
+    background-color: rgb(216, 255, 216);
+}
+.bg-lightSuccess:hover{
+    background-color: rgb(124, 216, 124);
+}
+.bg-lightPink{
+    border: 2px solid rgb(224, 128, 159);
+    background-color: rgb(255, 216, 229);
+}
+.bg-lightPink:hover{
+    background-color: rgb(243, 162, 188);
+}
+
+.flagIcon{
+    width: 25px;
+}
+
+
+.iti--allow-dropdown{
+    height: 100%;
+    width: 100%;
+}
+
+.iti--allow-dropdown input[type=text] {
+    color: #38ddffed;
+}
+
+
+
+@media only screen and (max-width: 740px) {
+    .LeftCnt{
+        height: 0px;
+        z-index: -1;
+        opacity: 0.3;
+        filter: blur(2px);
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .HContainer{
+        width: 100% !important;
+        padding: 0% 2% !important;
+    }
+    .upload_txt{
+        display: none;
+    }
+    .footer{
+        height: 35px;
+    }
+    .footerCnt{
+        margin: 1% !important;
+        margin: auto !important;
+        font-size: small;
+    }
+}
+
+@media only screen and (max-width: 950px) {
+    .FormCnt {
+        width: 70% !important;
+    }
+}
+
+@media only screen and (max-width: 778px) {
+    .FormCnt {
+        width: 90% !important;
+    }
+}
+
