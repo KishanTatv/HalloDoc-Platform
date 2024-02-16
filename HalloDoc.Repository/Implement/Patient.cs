@@ -251,12 +251,12 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public void AddOnlyFcbRequest(FormFCB fInfo)
+        public void AddOnlyFcbRequest(FormFCB fInfo, int requestId)
         {
             Request req = new Request
             {
                 Userid = _context.Users.FirstOrDefault(u => u.Email == fInfo.clientInformation.Email).Userid,
-                Requesttypeid = 1,
+                Requesttypeid = requestId,
                 Status = 1,
                 Firstname = fInfo.PatientFname,
                 Lastname = fInfo.PatientLname,

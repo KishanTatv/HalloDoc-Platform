@@ -89,7 +89,15 @@ namespace HalloDoc.Controllers
             {
                 if (button == "Familybtn")
                 {
-                    patient.AddFcbRequest(FInfo);
+                    patient.AddOnlyFcbRequest(FInfo, 3);
+                }
+                else if (button == "Conciergebtn")
+                {
+                    patient.AddOnlyFcbRequest(FInfo, 4);
+                }
+                else if (button == "Bussinessbtn")
+                {
+                    patient.AddOnlyFcbRequest(FInfo, 1);
                 }
             }
             else
