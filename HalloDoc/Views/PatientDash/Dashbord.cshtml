@@ -1,0 +1,261 @@
+﻿@using static HalloDoc.Controllers.PatientController;
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model HalloDoc.Entity.RequestForm.PatientDash;
+
+@{
+    ViewData["Title"] = "Patient Dashbord";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";   
+}
+
+<link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
+
+<link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
+
+<div class="MainContent pt-0 min-vh-100">
+    <div class="tab-content" id="nav-tabContent">
+        <nav class="shadow-sm bg-body-tertiary rounded collapse show" id="collapseExample">
+            <div class="Dash-nav nav nav-underline nav-item text-info" id="nav-tab" role="tablist">
+                <span class="nav-link ps-3 bg-transparent active show" id="nav-home-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                      aria-selected="true">Dashbord</span>
+                <span class="nav-link ps-3 bg-transparent" id="nav-loc-provider-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-loc-provider"
+                      aria-selected="false">Profile</span>
+            </div>
+        </nav>
+
+
+        <div class="tab-pane fade show active min-vh-100" id="nav-home" role="tabpanel" aria-labelledby="nav-home"
+             tabindex="0">
+
+            <h4 class="pt-3 ms-4">Medical History</h4>
+
+            <div class="m-4 mt-2 MedicalLG">
+
+                <div class="rounded-4 shadow p-4 mb-5 pt-0 bg-body-tertiary rounded">
+                    <div class="d-flex justify-content-end">
+                        <button class="btn w-5 btn-info rounded bg-transparent m-2 text-info" data-bs-toggle="modal"
+                                data-bs-target="#ReqModal">
+                            Create New Request
+                        </button>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="ReqModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog  modal-dialog-centered">
+                            <div class="modal-content rounded-4">
+                                <div class="modal-header bg-info p-2">
+                                    <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Here, I want to create new request For ...
+                                    <div class="text-center pt-2">
+                                        <form asp-action="CheckPatientReq" asp-controller="Patient">
+                                            <button type="submit" class="btn btn-secondary btn-info text-light" name="btn" value="Me">Me</button>
+                                            <button type="submit" class="btn btn-outline-info" name="btn" value="Someoneelse"> Some one Else </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="modal-footer p-1">
+                                    <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
+                                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th scope="col" class="w-25">created Date<i class="bi bi-arrow-down ms-1"></i></th>
+                                    <th scope="col">Current Status</th>
+                                    <th scope="col" class="text-center">Document</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ReqWithFiles)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Createddate.ToString("MMMM dd, yyyy")
+                                        </td>
+                                        <td>
+                                            @Enum.GetName(typeof(Status), item.Status) 
+                                        </td>
+                                        <td class="text-center">
+                                            @if (@item.FileCount != 0)
+                                            {
+                                                <a class="btn btn-outline-info ps-2 pe-2 p-0" asp-route-id="@item.Requestid" asp-controller="Patient" asp-action="ViewDocument">(@item.FileCount) Document</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="m-4 mt-2 MediaclSM">
+
+                <div class="rounded-4 shadow mb-5 pt-0 bg-body-tertiary rounded">
+                    <div class="d-flex justify-content-end">
+                        <button class="btn w-5 btn-info rounded bg-transparent m-2 text-info" data-bs-toggle="modal"
+                                data-bs-target="#ReqModal1">
+                            <i class="bi bi-plus-lg text-info"></i>
+                        </button>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="ReqModal1" tabindex="-1" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog  modal-dialog-centered">
+                            <div class="modal-content rounded-4">
+                                <div class="modal-header bg-info p-2">
+                                    <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Here, I want to create new request For ...
+                                    <div class="text-center pt-2">
+                                        <form asp-action="CheckPatientReq" asp-controller="Patient">
+                                            <button type="submit" class="btn btn-secondary btn-info text-light" name="btn" value="Me">Me</button>
+                                            <button type="submit" class="btn btn-outline-info" name="btn" value="Someoneelse"> Some one Else </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="modal-footer p-1">
+                                    <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
+                                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                        @foreach (var item in Model.ReqWithFiles)
+                        {
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed bg-lighinfo" type="button" data-bs-toggle="collapse" data-bs-target="#flush-@item.Requestid" aria-expanded="false" aria-controls="flush-collapseOne">
+                                        <i class="bi bi-clock text-info pe-1"></i>
+                                        <span class="fw-bold">created Date: </span> @item.Createddate.ToString("MMMM dd, yyyy")
+                                    </button>
+                                </h2>
+                                <div id="flush-@item.Requestid" class="accordion-collapse collapse bg-lighinfo" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                        <p class="mt-1">
+                                            <i class="bi bi-person-lines-fill text-info pe-1"></i>
+                                            Provider:  @item.Firstname
+                                        </p>
+                                        <p class="mt-1">
+                                            <i class="bi bi-check2-circle text-info pe-1"></i>
+                                            CurrentStatus: @Enum.GetName(typeof(Status), item.Status)
+                                        </p>
+
+
+                                        @if (@item.FileCount != 0)
+                                        {
+                                            <a class="btn btn-outline-info w-100 ps-2 pe-2 p-0" asp-route-id="@item.Requestid" asp-controller="Patient" asp-action="ViewDocument">(@item.FileCount) Document</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile" tabindex="0">
+            <div class="d-flex w-100 justify-content-center pt-4 pb-4">
+                <div class="HContainer m-auto">
+                    <div class="d-flex justify-content-end">
+                        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="Patient" asp-action="PatientDashbord">
+                            <strong class="pe-2">&lt Back</strong>
+                        </a>
+                    </div>
+                    <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="UpadteProfile" asp-controller="Patient" method="post">
+                        <div class="mb-4">
+                            <h5>General Information</h5>
+                            <div class="row form-floating ">
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="User.Firstname">
+                                    <label class="ms-3">Your First Name</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="User.Lastname">
+                                    <label class="ms-3">Your Last Name</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="date" class="form-control bg-transparent" id="floatingInputValue"
+                                           placeholder="Date of birth" value="12/05/2023" asp-for="User.Dob">
+                                    <label class="ms-3">Date Of Birth</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <h5>Contact Information</h5>
+                            <div class="row form-floating">
+                                <div class="col-md-6 d-flex justify-content-between form-floating mt-2">
+                                    <div class="col-md-3 form-floating">
+                                        <select class="form-select h-100" aria-label="Default select example">
+                                            <option selected>Mobile</option>
+                                            <option value="1">Telephone</option>
+                                        </select>
+                                        <label class="ms-3">Type</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="User.Mobile" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="User.Email">
+                                    <label class="ms-3">Email</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 mb-4">
+                            <h5> Location Information </h5>
+                            <div class="row form-floating">
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street" asp-for="User.Street">
+                                    <label class="ms-3">Street</label>
+                                </div>
+                                <div class="col-md d-flex form-floating mt-2">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="city" asp-for="User.City">
+                                    <label class="ms-3">City</label>
+                                </div>
+                            </div>
+                            <div class="row form-floating">
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="state" asp-for="User.State">
+                                    <label class="ms-3">State</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="number" class="form-control bg-transparent" id="floatingInput" placeholder="zipCode" asp-for="User.Zipcode">
+                                    <label class="ms-3">Zip Code</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="d-flex justify-content-end mt-4 mb-4">
+                            <button type="submit" class="btn btn-info ps-4 pe-4">Edit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

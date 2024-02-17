@@ -1,0 +1,25 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "Admin Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+
+<form class="FormCnt w-50">
+    <h4 class="mb-4">Login to Your Account</h4>
+
+    <div class="form-floating">
+        <input type="email" class="form-control mt-2" id="floatingInput" placeholder="name@example.com">
+        <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating">
+        <input type="password" class="form-control mt-2" id="floatingPassword" placeholder="Password">
+        <label for="floatingPassword">Password</label>
+    </div>
+
+    <button type="button" class="w-100 h-10 btn btn-lg btn-info text-light mt-3">Log in</button>
+    <a class="nav-link text-center text-info fw-bold" asp-controller="Admin" asp-action="AdminForgotPass">Forgot Password?</a>
+</form>

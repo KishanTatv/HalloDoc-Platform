@@ -84,47 +84,45 @@ namespace HalloDoc.Controllers
         [HttpPost]
         public async Task<IActionResult> FormDone(string button, FormFCB FInfo, IFormFile DocFile)
         {
-            User user;
+            Request request;
             if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
             {
                 if (button == "Familybtn")
                 {
-                    patient.AddOnlyFcbRequest(FInfo, 3);
+                    request = patient.AddOnlyFcbRequest(FInfo, 3);
                 }
                 else if (button == "Conciergebtn")
                 {
-                    patient.AddOnlyFcbRequest(FInfo, 4);
+                    request = patient.AddOnlyFcbRequest(FInfo, 4);
                 }
                 else if (button == "Bussinessbtn")
                 {
-                    patient.AddOnlyFcbRequest(FInfo, 1);
+                    request = patient.AddOnlyFcbRequest(FInfo, 1);
                 }
             }
             else
             {
-                user = patient.AddFcbUser(FInfo);
+                 User user = patient.AddFcbUser(FInfo);
 
                 if (button == "Familybtn")
                 {
-                    Request req = patient.AddFcbRequest(FInfo, user.Userid, 3);
-                    patient.AddFcbRequestClient(FInfo, req.Requestid);
+                    request = patient.AddFcbRequest(FInfo, user.Userid, 3);
+                    patient.AddFcbRequestClient(FInfo, request.Requestid);
                 }
                 else if (button == "Conciergebtn")
                 {
-                    Request req = patient.AddFcbRequest(FInfo, user.Userid, 4);
-                    patient.AddFcbRequestClient(FInfo, req.Requestid);
+                    request = patient.AddFcbRequest(FInfo, user.Userid, 4);
+                    patient.AddFcbRequestClient(FInfo, request.Requestid);
                     Concierge con = patient.AddConcierge(FInfo);
-                    patient.AddRequestConcierge(FInfo, req.Requestid, con.Conciergeid);
+                    patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
                 }
                 else if (button == "Bussinessbtn")
                 {
-                    Request req = patient.AddFcbRequest(FInfo, user.Userid, 1);
-                    patient.AddFcbRequestClient(FInfo, req.Requestid);
+                    request = patient.AddFcbRequest(FInfo, user.Userid, 1);
+                    patient.AddFcbRequestClient(FInfo, request.Requestid);
                     Business bus = patient.AddBussiness(FInfo);
-                    patient.AddRequestBussiness(FInfo, req.Requestid, bus.Businessid);
+                    patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
                 }
-
-
             }
 
             if (DocFile != null && DocFile.Length > 0)
@@ -134,7 +132,7 @@ namespace HalloDoc.Controllers
                 using (var stream = System.IO.File.Create(filePath))
                 {
                     await DocFile.CopyToAsync(stream);
-                    patient.AddDocFile(DocFile, request.Requestid);
+                    //patient.AddDocFile(DocFile, request.Requestid);
                 }
                 return RedirectToAction("PatientLogin");
             }

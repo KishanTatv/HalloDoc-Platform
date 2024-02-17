@@ -25,7 +25,7 @@ namespace HalloDoc.Repository.Interface
 
 
         //other form
-        void AddOnlyFcbRequest(FormFCB fInfo, int requestId);
+        Request AddOnlyFcbRequest(FormFCB fInfo, int reqType);
         User AddFcbUser(FormFCB fcbInfo);
         Request AddFcbRequest(FormFCB fInfo, int UserId,int reqType);
         void AddFcbRequestClient(FormFCB fInfo, int requestId);

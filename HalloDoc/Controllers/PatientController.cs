@@ -14,12 +14,17 @@ namespace HalloDoc.Controllers
         private readonly ILogger<PatientController> _logger;
         private readonly IPatient patient;
 
-
         public PatientController(ILogger<PatientController> logger, IPatient patient)
         {
             _logger = logger;
             this.patient = patient;
         }
+
+        public enum Status
+        {
+            Unassigned = 1, Accepted, Cancelled, Reserving, MDEnRoute, MDOnSite, FollowUp, Closed, Locked, Declined, Consult, Clear, CancelledByProvider, CCUploadedByClient, CCApprovedByAdmin
+        }
+
         public IActionResult PatientSite()
         {
             return View();
