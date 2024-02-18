@@ -12,8 +12,6 @@
 
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
 
-<link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
-
 <div class="MainContent pt-0 min-vh-100">
     <div class="tab-content" id="nav-tabContent">
         <nav class="shadow-sm bg-body-tertiary rounded collapse show" id="collapseExample">
@@ -56,7 +54,7 @@
                                 <div class="modal-body">
                                     Here, I want to create new request For ...
                                     <div class="text-center pt-2">
-                                        <form asp-action="CheckPatientReq" asp-controller="Patient">
+                                        <form asp-action="CheckPatientReq" asp-controller="PatientDash">
                                             <button type="submit" class="btn btn-secondary btn-info text-light" name="btn" value="Me">Me</button>
                                             <button type="submit" class="btn btn-outline-info" name="btn" value="Someoneelse"> Some one Else </button>
                                         </form>
@@ -92,7 +90,7 @@
                                         <td class="text-center">
                                             @if (@item.FileCount != 0)
                                             {
-                                                <a class="btn btn-outline-info ps-2 pe-2 p-0" asp-route-id="@item.Requestid" asp-controller="Patient" asp-action="ViewDocument">(@item.FileCount) Document</a>
+                                                <a class="btn btn-outline-info ps-2 pe-2 p-0" asp-route-id="@item.Requestid" asp-controller="PatientDash" asp-action="ViewDocument">(@item.FileCount) Document</a>
                                             }
                                         </td>
                                     </tr>
@@ -164,7 +162,7 @@
 
                                         @if (@item.FileCount != 0)
                                         {
-                                            <a class="btn btn-outline-info w-100 ps-2 pe-2 p-0" asp-route-id="@item.Requestid" asp-controller="Patient" asp-action="ViewDocument">(@item.FileCount) Document</a>
+                                            <a class="btn btn-outline-info w-100 ps-2 pe-2 p-0" asp-route-id="@item.Requestid" asp-controller="PatientDash" asp-action="ViewDocument">(@item.FileCount) Document</a>
                                         }
                                     </div>
                                 </div>
@@ -183,7 +181,7 @@
                             <strong class="pe-2">&lt Back</strong>
                         </a>
                     </div>
-                    <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="UpadteProfile" asp-controller="Patient" method="post">
+                    <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="UpadteProfile" asp-controller="PatientDash" method="post">
                         <div class="mb-4">
                             <h5>General Information</h5>
                             <div class="row form-floating ">

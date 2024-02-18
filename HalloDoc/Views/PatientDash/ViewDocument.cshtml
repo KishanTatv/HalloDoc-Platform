@@ -1,0 +1,186 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model HalloDoc.Entity.RequestForm.PatientDash;
+
+@{
+    ViewData["Title"] = "View Document";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+<div class="MainContent pt-0 min-vh-100">
+    <div class="tab-content" id="nav-tabContent">
+        <nav class="shadow-sm bg-body-tertiary rounded collapse show" id="collapseExample">
+            <div class="Dash-nav nav nav-underline nav-item text-info" id="nav-tab" role="tablist">
+                <span class="nav-link ps-3 bg-transparent active show" id="nav-home-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                      aria-selected="true">Dashbord</span>
+                <span class="nav-link ps-3 bg-transparent" id="nav-loc-provider-tab" data-bs-toggle="tab"
+                      data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-loc-provider"
+                      aria-selected="false">Profile</span>
+            </div>
+        </nav>
+
+        <div class="tab-pane show active min-vh-100" id="nav-home" role="tabpanel" aria-labelledby="nav-home"
+             tabindex="0">
+            <div class="d-flex w-100 justify-content-center pt-4 pb-4">
+                <div class="HContainer m-auto">
+                    <div class="d-flex justify-content-between">
+                        <h4>Documents</h4>
+                        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="Patient" asp-action="PatientDashbord">
+                            <strong class="pe-2">&lt Back</strong>
+                        </a>
+                    </div>
+                    <div class="rounded shadow p-4 bg-body-tertiary ">
+                        <form class="mb-5" asp-route-id="@Model.ReqWithFiles.First().Requestid" asp-action="UploadDoc" asp-controller="PatientDash" method="post" enctype="multipart/form-data">
+                            <div class="mb-4">
+                                <p>Patient Name</p>
+                                <div class="d-flex">
+                                    <h5 class="text-info">@Model.User.Firstname  @Model.User.Lastname</h5>
+                                    <h6>(54654684)</h6>
+                                </div>
+                                <p>Check here for any files that you or the doctors of your subsequent requestor have attached for you to review.</p>
+                                <div class="d-flex m-auto">
+                                    <div class="p-0 w-100">
+                                        <input type="text" class="form-control bg-transparent" id="selectedFile" placeholder="select File"
+                                               disabled>
+                                        <label class="ms-3"></label>
+                                    </div>
+                                    <div>
+                                        <label class="btn btn-outline-info d-flex ">
+                                            <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
+                                            <button id="SpBtnUpload" type="submit" style="display:none"></button>
+                                            <i class="bi bi-cloud-arrow-up border-info"></i>
+                                            <span class="upload_txt ms-2">Upload</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="MedicalLG">
+                            <form class="form" asp-controller="Patient" asp-action="DownloadAllFile" method="post">
+                                <div class="d-flex justify-content-between">
+                                    <h5>Documents</h5>
+
+                                    <button type="submit" class="btn w-5 btn-info rounded bg-transparent m-2 text-info">
+                                        Download All
+                                    </button>
+
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="table-secondary">
+                                            <tr>
+                                                <th>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="" id="toggleAllCheck">
+                                                    </div>
+                                                </th>
+                                                <th scope="col">File</th>
+                                                <th scope="col">Uploader</th>
+                                                <th scope="col">Upload Date<i class="bi bi-arrow-up ms-1"></i></th>
+                                                <th scope="col" class="text-center">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.ReqWithFiles)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <input name="selectCheckFile" class="form-check-input checkboxClass" type="checkbox" value="@item.Filename" id="flexCheckDefault">
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <p><i class="bi bi-file-earmark-pdf-fill text-danger"></i> @item.Filename</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>@item.Firstname</p>
+                                                    </td>
+                                                    <td>
+                                                        <p>@item.UploadDate.ToString("MMMM dd, yyyy")</p>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="PatientDash" asp-action="DownloadDocument">
+                                                            <i class="bi bi-cloud-check"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="MediaclSM">
+                            <form class="form" asp-controller="PatientDash" asp-action="DownloadAllFile" method="post">
+                                <div class="d-flex justify-content-between">
+                                    <h5>Documents</h5>
+                                    <button type="submit" class="btn w-5 btn-info rounded bg-transparent m-2 text-info">
+                                        <i class="bi bi-cloud-fog2-fill text-info"></i>
+                                    </button>
+                                </div>
+                                <div>
+                                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                                        @foreach (var item in Model.ReqWithFiles)
+                                        {
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-@item.Requestwisefileid" aria-expanded="false" aria-controls="flush-collapseOne">
+                                                        <input name="selectCheckFile" class="form-check-input checkboxClass" type="checkbox" value="@item.Filename" id="flexCheckDefault">
+                                                        <p class="ps-3 m-0"><i class="bi bi-file-earmark-pdf-fill text-danger"></i> @item.Filename</p>
+                                                    </button>
+                                                </h2>
+                                                <div id="flush-@item.Requestwisefileid" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                                    <div class="accordion-body">
+                                                        <p class="mt-1">
+                                                            @item.Firstname
+                                                        </p>
+                                                        <p class="mt-1">
+                                                        <p>@item.UploadDate.ToString("MMMM dd, yyyy")</p>
+                                                        </p>
+                                                        <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="PatientDash" asp-action="DownloadDocument">
+                                                            <i class="bi bi-cloud-check"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script asp-append-version="true">
+    window.addEventListener("DOMContentLoaded", (event) => {
+        let SpBtnUpload = document.getElementById("SpBtnUpload");
+        let FileInput = document.getElementById("FileInput");
+        if (FileInput) {
+            FileInput.addEventListener('change', () => {
+                SpBtnUpload.click();
+            });
+        }
+    });
+
+    $(document).ready(function () {
+        $("#toggleAllCheck").click(function () {
+            $(".checkboxClass").prop('checked', $(this).prop('checked'));
+        });
+        $(".checkboxClass").change(function () {
+            if (!$(this).prop("checked")) {
+                $("#toggleAllCheck").prop("checked", false);
+            }
+        })
+    });
+</script>

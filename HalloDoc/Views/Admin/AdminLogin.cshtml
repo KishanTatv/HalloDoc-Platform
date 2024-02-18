@@ -2,24 +2,31 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
+@model HalloDoc.Entity.Models.Aspnetuser;
+
 @{
     ViewData["Title"] = "Admin Login";
     Layout = "~/Views/Shared/_LayoutLogin.cshtml";
 }
 
 
-<form class="FormCnt w-50">
+<form class="FormCnt w-50" asp-controller="Admin" asp-action="verifyAdmin">
     <h4 class="mb-4">Login to Your Account</h4>
 
     <div class="form-floating">
-        <input type="email" class="form-control mt-2" id="floatingInput" placeholder="name@example.com">
+        <input type="email" class="form-control mt-2" id="floatingInput" placeholder="name@example.com" asp-for="Email">
         <label for="floatingInput">Email address</label>
     </div>
     <div class="form-floating">
-        <input type="password" class="form-control mt-2" id="floatingPassword" placeholder="Password">
+        <input type="password" class="form-control mt-2" id="floatingPassword" placeholder="Password" asp-for="Passwordhash">
         <label for="floatingPassword">Password</label>
     </div>
 
-    <button type="button" class="w-100 h-10 btn btn-lg btn-info text-light mt-3">Log in</button>
+    @if (TempData["Error"] != null)
+    {
+        <p class="text-danger text-center">@TempData["Error"]</p>
+    }
+
+    <button type="submit" class="w-100 h-10 btn btn-lg btn-info text-light mt-3">Log in</button>
     <a class="nav-link text-center text-info fw-bold" asp-controller="Admin" asp-action="AdminForgotPass">Forgot Password?</a>
 </form>

@@ -4,6 +4,7 @@ using HalloDoc.Models;
 using HalloDoc.Repository.Implement;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace HalloDoc.Controllers
@@ -34,7 +35,7 @@ namespace HalloDoc.Controllers
 
         [HttpPost]
         [ActionName("PatientReq")]
-        public async Task<IActionResult> PatientReq(ClientInformation Clientinfo, IFormFile DocFile)
+        public async Task<IActionResult> PatientReq(ClientInformation Clientinfo, List<IFormFile> DocFile)
         {
             Request request;
             if (patient.CheckExistAspUser(Clientinfo.Email))
@@ -49,18 +50,23 @@ namespace HalloDoc.Controllers
                 patient.AddRequestClient(Clientinfo, request.Requestid);
             }
 
-            if (DocFile != null && DocFile.Length > 0)
+            if (DocFile != null)
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwrootuploads", DocFile.FileName);
-                //Using Buffering
-                using (var stream = System.IO.File.Create(filePath))
+                foreach (var File in DocFile)
                 {
-                    await DocFile.CopyToAsync(stream);
-                    patient.AddDocFile(DocFile, request.Requestid);
+                    if (File != null && File.Length > 0)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
+                        //Using Buffering
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            await File.CopyToAsync(stream);
+                            patient.AddDocFile(File, request.Requestid);
+                        }
+                    }
                 }
-                return RedirectToAction("PatientLogin");
             }
-            return RedirectToAction("PatientLogin");
+            return RedirectToAction("Dashbord", "PatientDash");
         }
 
         [HttpGet]
@@ -69,11 +75,87 @@ namespace HalloDoc.Controllers
             return View();
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> FamilyReq(FormFCB FInfo, List<IFormFile> DocFile)
+        {
+            Request request;
+            if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
+            {
+                request = patient.AddOnlyFcbRequest(FInfo, 3);
+            }
+            else
+            {
+                User user = patient.AddFcbUser(FInfo);
+                request = patient.AddFcbRequest(FInfo, user.Userid, 3);
+                patient.AddFcbRequestClient(FInfo, request.Requestid);
+            }
+
+            if (DocFile != null)
+            {
+                foreach (var File in DocFile)
+                {
+                    if (File != null && File.Length > 0)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
+                        //Using Buffering
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            await File.CopyToAsync(stream);
+                            patient.AddDocFile(File, request.Requestid);
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("PatientLogin");
+        }
+
+
         [HttpGet]
         public IActionResult ConciergeReq()
         {
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ConciergeReq(FormFCB FInfo, List<IFormFile> DocFile)
+        {
+            Request request;
+            if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
+            {
+                request = patient.AddOnlyFcbRequest(FInfo, 4);
+                Concierge con = patient.AddConcierge(FInfo);
+                patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
+            }
+            else
+            {
+                User user = patient.AddFcbUser(FInfo);
+                request = patient.AddFcbRequest(FInfo, user.Userid, 4);
+                patient.AddFcbRequestClient(FInfo, request.Requestid);
+                Concierge con = patient.AddConcierge(FInfo);
+                patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
+            }
+
+            if (DocFile != null)
+            {
+                foreach (var File in DocFile)
+                {
+                    if (File != null && File.Length > 0)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
+                        //Using Buffering
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            await File.CopyToAsync(stream);
+                            patient.AddDocFile(File, request.Requestid);
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("PatientLogin");
+        }
+
+
 
         [HttpGet]
         public IActionResult BussinessReq()
@@ -82,62 +164,44 @@ namespace HalloDoc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> FormDone(string button, FormFCB FInfo, IFormFile DocFile)
+        public async Task<IActionResult> BussinessReq(FormFCB FInfo, List<IFormFile> DocFile)
         {
             Request request;
             if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
             {
-                if (button == "Familybtn")
-                {
-                    request = patient.AddOnlyFcbRequest(FInfo, 3);
-                }
-                else if (button == "Conciergebtn")
-                {
-                    request = patient.AddOnlyFcbRequest(FInfo, 4);
-                }
-                else if (button == "Bussinessbtn")
-                {
-                    request = patient.AddOnlyFcbRequest(FInfo, 1);
-                }
+                request = patient.AddOnlyFcbRequest(FInfo, 1);
+                Business bus = patient.AddBussiness(FInfo);
+                patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
             }
             else
             {
-                 User user = patient.AddFcbUser(FInfo);
-
-                if (button == "Familybtn")
-                {
-                    request = patient.AddFcbRequest(FInfo, user.Userid, 3);
-                    patient.AddFcbRequestClient(FInfo, request.Requestid);
-                }
-                else if (button == "Conciergebtn")
-                {
-                    request = patient.AddFcbRequest(FInfo, user.Userid, 4);
-                    patient.AddFcbRequestClient(FInfo, request.Requestid);
-                    Concierge con = patient.AddConcierge(FInfo);
-                    patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
-                }
-                else if (button == "Bussinessbtn")
-                {
-                    request = patient.AddFcbRequest(FInfo, user.Userid, 1);
-                    patient.AddFcbRequestClient(FInfo, request.Requestid);
-                    Business bus = patient.AddBussiness(FInfo);
-                    patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
-                }
+                User user = patient.AddFcbUser(FInfo);
+                request = patient.AddFcbRequest(FInfo, user.Userid, 1);
+                patient.AddFcbRequestClient(FInfo, request.Requestid);
+                Business bus = patient.AddBussiness(FInfo);
+                patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
             }
 
-            if (DocFile != null && DocFile.Length > 0)
+            if (DocFile != null)
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwrootuploads", DocFile.FileName);
-                //Using Buffering
-                using (var stream = System.IO.File.Create(filePath))
+                foreach (var File in DocFile)
                 {
-                    await DocFile.CopyToAsync(stream);
-                    //patient.AddDocFile(DocFile, request.Requestid);
+                    if (File != null && File.Length > 0)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
+                        //Using Buffering
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            await File.CopyToAsync(stream);
+                            patient.AddDocFile(File, request.Requestid);
+                        }
+                    }
                 }
-                return RedirectToAction("PatientLogin");
             }
             return RedirectToAction("PatientLogin");
         }
+
+
 
 
 

@@ -5,7 +5,10 @@ using HalloDoc.Repository.Implement;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions.Internal;
 using System.Diagnostics;
+using System.Net.Mail;
+using System.Net;
 
 namespace HalloDoc.Controllers
 {
@@ -50,7 +53,10 @@ namespace HalloDoc.Controllers
             {
                 if (patient.CheckExistAspUser(user.Email))
                 {
-                    return RedirectToAction("Index", "Home");
+                    string userName = patient.userFullName(user);
+                    HttpContext.Session.SetString("SessionKeyEmail", user.Email);
+                    HttpContext.Session.SetString("SessionKeyClientName", userName);
+                    return RedirectToAction("Dashbord", "PatientDash");
                 }
                 else
                 {
@@ -70,6 +76,73 @@ namespace HalloDoc.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult ResetPassEmail(Aspnetuser user)
+        {
+            if (patient.CheckExistAspUser(user.Email))
+            {
+                var userEmail = user.Email;
+                var subject = "Password reset request";
+                string link = Url.Action("NewPassword", "Patient", new { email = user.Email }, Request.Scheme);
+                var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />https://localhost:44372/" + link;
+                patient.sendMailResetPassword(user, subject, body);
+                TempData["Msg"] = "please check your Email";
+            }
+            else
+            {
+                TempData["Msg"] = "Invalid Email";
+            }
+            return RedirectToAction("PatientForgotpass");
+        }
+
+        public IActionResult NewPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult NewPassword(ClientInformation user, string email)
+        {
+            if(user.Password == user.ConfirmPassword)
+            {
+                patient.newPasswordCreate(user, email);
+            }
+            else
+            {
+                TempData["Error"] = "Password and ConfirmPassword not match";
+            }
+            return RedirectToAction("PatientLogin");
+        }
+
+
+        [HttpGet]
+        public IActionResult CreatePatient()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        [ActionName("CreatePatient")]
+        public IActionResult CreatePatient(Aspnetuser user)
+        {
+            if (ModelState.IsValid)
+            {
+                patient.createPatient(user);
+                return RedirectToAction("PatientLogin");
+            }
+            else
+            {
+                return RedirectToAction("index", "Home");
+            }
+        }
+
+
+        public IActionResult logOut()
+        {
+            HttpContext.Session.Clear();
+            return View("PatientLogin");
+        }
 
 
 

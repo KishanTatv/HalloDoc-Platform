@@ -1,0 +1,62 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title> Agreement - halloDoc</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/Login.css" asp-append-version="true" />
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="HContainer m-auto">
+            <h5 class="pt-5">To provide best medical service, we cannot determine the cost right away. If you agree to our service, so we will provide care and follow-up until all care is completed. So with this points, if you like us to provide care to you click on "Agree" and we'll get started immediately, if you do not agree simply click "Cancel".</h5>
+            <div class="d-flex HContainer justify-content-between mt-5 m-auto">
+                <button type="button" class="btn btn-success">I Agree</button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#AgreeModel">Cancel</button>
+            </div>
+
+            @*Model*@
+            <div class="modal fade" id="AgreeModel" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered">
+                    <div class="modal-content rounded-4">
+                        <div class="modal-header bg-info p-2">
+                            <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Cancel Confirmation</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Test Test,
+                            <div class="text-center pt-2">
+                                <form asp-controller="PatientDash">
+                                    <div class="form-floating">
+                                        <textarea type="text" class="form-control bg-transparent border h-25" placeholder="Detail info"
+                                                  id="floatingInput" rows="3" aria-label="Detail info"
+                                                  aria-describedby="button-addon2"></textarea>
+                                        <label class="pt-1">Please provide a brief explanation for your cancelation</label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer p-1">
+                            <button type="button" class="btn btn-secondary btn-info text-light">Confirm</button>
+                            <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

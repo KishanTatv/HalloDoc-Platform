@@ -15,7 +15,7 @@
 .nav-underline .nav-link.active, .nav-underline .show > .nav-link {
     font-weight: 700;
     color: #0dcaf0;
-    border-bottom: 2px solid #0dcaf0;
+    border-bottom: 3px solid #0dcaf0;
 }
 
 .dashIcon {
@@ -105,15 +105,37 @@
 }
 
 
+
+.text-orange {
+    color: #e5922f;
+}
+
+.text-pink {
+    color: #df6679;
+}
+
+.text-blue {
+    color: #0b7cb5;
+}
+
+.text-purple {
+    color: #8d41b2;
+}
+
+.bg-patient {
+    background-color: #5fbc61;
+}
+
+
 @media only screen and (max-width: 740px) {
     .Dash-nav {
         display: flex;
         flex-direction: column;
+        height: 90%;
         z-index: 1;
         width: 65%;
         position: absolute;
         background-color: white;
-        height: 100%;
         margin: 0%;
     }
 
@@ -137,7 +159,7 @@
         padding-top: 0px !important;
     }
 
-    .logInInfo, .HeadLogOut, .headerName, .MedicalLG {
+    .logInInfo, .HeadLogOut {
         display: none;
     }
 
@@ -156,11 +178,8 @@
     .Dash-name {
         font-size: 12px;
     }
-}
 
-
-@media only screen and (min-width: 579px) {
-    .MediaclSM {
-        display: none !important;
+    .dashIcon, .text-dashide {
+        display: none;
     }
-}
+}}
