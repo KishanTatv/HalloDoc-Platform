@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.7.34221.43
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio Version 10
+VisualStudioVersion = 10.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDoc", "HalloDoc\HalloDoc.csproj", "{1B087E16-C600-4C27-A157-804637F9C628}"
 EndProject

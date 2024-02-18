@@ -1,0 +1,12 @@
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\bin\Debug\net7.0\HalloDoc.Entity.deps.json
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\bin\Debug\net7.0\HalloDoc.Entity.dll
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\bin\Debug\net7.0\HalloDoc.Entity.pdb
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\obj\Debug\net7.0\HalloDoc.Entity.csproj.AssemblyReference.cache
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\obj\Debug\net7.0\HalloDoc.Entity.GeneratedMSBuildEditorConfig.editorconfig
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\obj\Debug\net7.0\HalloDoc.Entity.AssemblyInfoInputs.cache
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\obj\Debug\net7.0\HalloDoc.Entity.AssemblyInfo.cs
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\obj\Debug\net7.0\HalloDoc.Entity.csproj.CoreCompileInputs.cache
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\obj\Debug\net7.0\HalloDoc.Entity.dll
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\obj\Debug\net7.0\refint\HalloDoc.Entity.dll
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\obj\Debug\net7.0\HalloDoc.Entity.pdb
+E:\gitTatva\_net hallo\MVC\HalloDoc.Entity\obj\Debug\net7.0\ref\HalloDoc.Entity.dll
