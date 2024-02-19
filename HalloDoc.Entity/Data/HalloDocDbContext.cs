@@ -20,6 +20,8 @@ public partial class HalloDocDbContext : DbContext
 
     public virtual DbSet<Adminregion> Adminregions { get; set; }
 
+    public virtual DbSet<Aspnetrole> Aspnetroles { get; set; }
+
     public virtual DbSet<Aspnetuser> Aspnetusers { get; set; }
 
     public virtual DbSet<Aspnetuserrole> Aspnetuserroles { get; set; }
@@ -94,6 +96,13 @@ public partial class HalloDocDbContext : DbContext
             entity.HasOne(d => d.Region).WithMany(p => p.Adminregions)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_adminregion_regionid");
+        });
+
+        modelBuilder.Entity<Aspnetrole>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("aspnetroles_pkey");
+
+            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
         });
 
         modelBuilder.Entity<Aspnetuser>(entity =>

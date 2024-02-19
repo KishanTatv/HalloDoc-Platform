@@ -33,6 +33,23 @@ namespace HalloDoc.Controllers
             return View();
         }
 
+
+        [HttpPost]
+        public IActionResult CheckPatientReq(string btn)
+        {
+            ViewBag.DefaultFieldValue = "reqMap";
+            if (btn == "Me")
+            {
+                ViewBag.ShowAdditionalInput = false;
+            }
+            else if (btn == "Someoneelse")
+            {
+                ViewBag.ShowAdditionalInput = true;
+            }
+            return View("PatientReq");
+        }
+
+
         [HttpPost]
         [ActionName("PatientReq")]
         public async Task<IActionResult> PatientReq(ClientInformation Clientinfo, List<IFormFile> DocFile)
@@ -40,7 +57,8 @@ namespace HalloDoc.Controllers
             Request request;
             if (patient.CheckExistAspUser(Clientinfo.Email))
             {
-                request = patient.AddOnlyRequest(Clientinfo);
+                int userId = patient.FindUserId(Clientinfo.Email);
+                request = patient.AddRequest(Clientinfo, userId);
             }
             else
             {
@@ -82,10 +100,17 @@ namespace HalloDoc.Controllers
             Request request;
             if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
             {
-                request = patient.AddOnlyFcbRequest(FInfo, 3);
+                int userId = patient.FindUserId(FInfo.clientInformation.Email);
+                request = patient.AddFcbRequest(FInfo, userId, 3);
             }
             else
             {
+                var userEmail = FInfo.clientInformation.Email;
+                var subject = "Create your Account";
+                string link = Url.Action("CreatePatient", "Patient", new { email = userEmail }, Request.Scheme);
+                var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />" + link;
+                patient.sendMail(userEmail, subject, body);
+
                 User user = patient.AddFcbUser(FInfo);
                 request = patient.AddFcbRequest(FInfo, user.Userid, 3);
                 patient.AddFcbRequestClient(FInfo, request.Requestid);
@@ -118,39 +143,29 @@ namespace HalloDoc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConciergeReq(FormFCB FInfo, List<IFormFile> DocFile)
+        public async Task<IActionResult> ConciergeReq(FormFCB FInfo)
         {
             Request request;
             if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
             {
-                request = patient.AddOnlyFcbRequest(FInfo, 4);
+                int userId = patient.FindUserId(FInfo.clientInformation.Email);
+                request = patient.AddFcbRequest(FInfo, userId, 4);
                 Concierge con = patient.AddConcierge(FInfo);
                 patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
             }
             else
             {
+                var userEmail = FInfo.clientInformation.Email;
+                var subject = "Create your Account";
+                string link = Url.Action("CreatePatient", "Patient", new { email = userEmail }, Request.Scheme);
+                var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />" + link;
+                patient.sendMail(userEmail, subject, body);
+
                 User user = patient.AddFcbUser(FInfo);
                 request = patient.AddFcbRequest(FInfo, user.Userid, 4);
                 patient.AddFcbRequestClient(FInfo, request.Requestid);
                 Concierge con = patient.AddConcierge(FInfo);
                 patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
-            }
-
-            if (DocFile != null)
-            {
-                foreach (var File in DocFile)
-                {
-                    if (File != null && File.Length > 0)
-                    {
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
-                        //Using Buffering
-                        using (var stream = System.IO.File.Create(filePath))
-                        {
-                            await File.CopyToAsync(stream);
-                            patient.AddDocFile(File, request.Requestid);
-                        }
-                    }
-                }
             }
             return RedirectToAction("PatientLogin");
         }
@@ -164,39 +179,29 @@ namespace HalloDoc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> BussinessReq(FormFCB FInfo, List<IFormFile> DocFile)
+        public async Task<IActionResult> BussinessReq(FormFCB FInfo)
         {
             Request request;
             if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
             {
-                request = patient.AddOnlyFcbRequest(FInfo, 1);
+                int userId = patient.FindUserId(FInfo.clientInformation.Email);
+                request = patient.AddFcbRequest(FInfo, userId, 1);
                 Business bus = patient.AddBussiness(FInfo);
                 patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
             }
             else
             {
+                var userEmail = FInfo.clientInformation.Email;
+                var subject = "Create your Account";
+                string link = Url.Action("CreatePatient", "Patient", new { email = userEmail }, Request.Scheme);
+                var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />" + link;
+                patient.sendMail(userEmail, subject, body);
+
                 User user = patient.AddFcbUser(FInfo);
                 request = patient.AddFcbRequest(FInfo, user.Userid, 1);
                 patient.AddFcbRequestClient(FInfo, request.Requestid);
                 Business bus = patient.AddBussiness(FInfo);
                 patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
-            }
-
-            if (DocFile != null)
-            {
-                foreach (var File in DocFile)
-                {
-                    if (File != null && File.Length > 0)
-                    {
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
-                        //Using Buffering
-                        using (var stream = System.IO.File.Create(filePath))
-                        {
-                            await File.CopyToAsync(stream);
-                            patient.AddDocFile(File, request.Requestid);
-                        }
-                    }
-                }
             }
             return RedirectToAction("PatientLogin");
         }

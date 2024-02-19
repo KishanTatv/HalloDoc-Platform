@@ -36,6 +36,11 @@
         <label for="floatingInput">Confirm Password</label>
     </div>
 
+    @if (TempData["Msg"] != null)
+    {
+        <p class="text-danger text-center">@TempData["Msg"]</p>
+    }
+
     <button type="submit" class="w-100 h-10 btn btn-md btn-info text-light mt-3" onclick="return isPasswordSame()">Create</button>
 
 </form>

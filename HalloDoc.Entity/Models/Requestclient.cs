@@ -56,16 +56,6 @@ public partial class Requestclient
     [StringLength(50)]
     public string? Email { get; set; }
 
-    [Column("strmonth")]
-    [StringLength(20)]
-    public string? Strmonth { get; set; }
-
-    [Column("intyear")]
-    public int? Intyear { get; set; }
-
-    [Column("intdate")]
-    public int? Intdate { get; set; }
-
     [Column("ismobile", TypeName = "bit(1)")]
     public BitArray? Ismobile { get; set; }
 
@@ -111,6 +101,8 @@ public partial class Requestclient
     [Column("longitude")]
     [Precision(11, 8)]
     public decimal? Longitude { get; set; }
+
+    public DateOnly? Dob { get; set; }
 
     [ForeignKey("Regionid")]
     [InverseProperty("Requestclients")]

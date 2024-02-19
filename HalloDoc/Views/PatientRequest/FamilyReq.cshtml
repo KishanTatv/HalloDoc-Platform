@@ -18,7 +18,7 @@
                 <strong class="pe-2">&lt Back</strong>
             </a>
         </div>
-        <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="FamilyReq" asp-controller="Patient" method="post">
+        <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="FamilyReq" asp-controller="PatientRequest" method="post" enctype="multipart/form-data">
             <div class="mb-4">
                 <h5>Family/Friend Information</h5>
                 <div class="row form-floating ">
@@ -123,7 +123,7 @@
                     </div>
                     <div>
                         <label class="btn btn-outline-info d-flex ">
-                            <input type="file" style="display: none;" id="FileInput" multiple>
+                            <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
                             <i class="bi bi-cloud-arrow-up border-info"></i>
                             <span class="upload_txt ms-2">Upload</span>
                         </label>

@@ -20,7 +20,7 @@ namespace HalloDoc.Controllers
             return View();
         }
 
-        public IActionResult AdminLogin()
+        public IActionResult Login()
         {
             return View();
         }
@@ -34,7 +34,7 @@ namespace HalloDoc.Controllers
             {
                 if (patient.CheckExistAspUser(user.Email))
                 {
-                    string userName = patient.userFullName(user);
+                    string userName = patient.userFullName(user.Email);
                     HttpContext.Session.SetString("SessionKeyEmail", user.Email);
                     HttpContext.Session.SetString("SessionKeyClientName", userName);
                     return RedirectToAction("Index", "Home");
@@ -52,7 +52,7 @@ namespace HalloDoc.Controllers
         }
 
 
-        public IActionResult AdminForgotPass()
+        public IActionResult ForgotPass()
         {
             return View();
         }

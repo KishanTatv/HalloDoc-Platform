@@ -17,12 +17,12 @@ using System.Threading.Tasks;
 
 namespace HalloDoc.Repository.Implement
 {
-    public class Patient : IPatient
+    public class PatientRepo : IPatient
     {
 
         private readonly HalloDocDbContext _context;
 
-        public Patient(HalloDocDbContext context)
+        public PatientRepo(HalloDocDbContext context)
         {
             _context = context;
 
@@ -55,7 +55,6 @@ namespace HalloDoc.Repository.Implement
                 Aspnetuserid = Aspid,
                 Firstname = client.Firstname,
                 Lastname = client.Lastname,
-                Dob = client.Dob,
                 Mobile = client.Phonenumber,
                 Email = client.Email,
                 Street = client.Street,
@@ -66,6 +65,12 @@ namespace HalloDoc.Repository.Implement
             _context.Users.Add(user);
             _context.SaveChanges();
             return user;
+        }
+
+        public int FindUserId(string email)
+        {
+            var UserId = _context.Users.FirstOrDefault(x => x.Email == email).Userid;
+            return UserId;
         }
 
         public Request AddRequest(ClientInformation client, int userId)
@@ -96,6 +101,7 @@ namespace HalloDoc.Repository.Implement
                 Firstname = client.Firstname,
                 Lastname = client.Lastname,
                 Phonenumber = client.Phonenumber,
+                Dob = client.Dob,
                 Email = client.Email,
                 Street = client.Street,
                 City = client.City,
@@ -106,28 +112,6 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-
-        public Request AddOnlyRequest(ClientInformation client)
-        {
-            Request req = new Request
-            {
-                Userid = _context.Users.FirstOrDefaultAsync(x => x.Email == client.Email).Result.Userid,
-                Confirmationnumber = "M" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
-                Requesttypeid = 2,
-                Status = 1,
-                Firstname = client.Firstname,
-                Lastname = client.Lastname,
-                Phonenumber = client.Phonenumber,
-                Email = client.Email,
-                Locroom = client.Locroom,
-                Symptoms = client.Symptoms,
-                Relationname = client.relation,
-            };
-            _context.Requests.Add(req);
-            _context.SaveChanges();
-
-            return req;
-        }
 
         public void AddDocFile(IFormFile DocFile, int reqId)
         {
@@ -151,7 +135,6 @@ namespace HalloDoc.Repository.Implement
             {
                 Firstname = fInfo.clientInformation.Firstname,
                 Lastname = fInfo.clientInformation.Lastname,
-                Dob = fInfo.clientInformation.Dob,
                 Mobile = fInfo.clientInformation.Phonenumber,
                 Email = fInfo.clientInformation.Email,
                 Street = fInfo.clientInformation.Street,
@@ -193,6 +176,7 @@ namespace HalloDoc.Repository.Implement
                 Firstname = fInfo.clientInformation.Firstname,
                 Lastname = fInfo.clientInformation.Lastname,
                 Phonenumber = fInfo.clientInformation.Phonenumber,
+                Dob = fInfo.clientInformation.Dob,
                 Email = fInfo.clientInformation.Email,
                 Street = fInfo.clientInformation.Street,
                 City = fInfo.clientInformation.City,
@@ -254,63 +238,39 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public Request AddOnlyFcbRequest(FormFCB fInfo, int reqType)
-        {
-            Request req = new Request
-            {
-                Userid = _context.Users.FirstOrDefault(u => u.Email == fInfo.clientInformation.Email).Userid,
-                Requesttypeid = reqType,
-                Status = 1,
-                Firstname = fInfo.PatientFname,
-                Lastname = fInfo.PatientLname,
-                Phonenumber = fInfo.PatientPhonenumber,
-                Email = fInfo.PatientEmail,
-                Confirmationnumber = "M" + Guid.NewGuid().ToString().Substring(0, 9).ToUpper(),
-                Locroom = fInfo.clientInformation.Locroom,
-                Symptoms = fInfo.clientInformation.Symptoms,
-            };
-            _context.Requests.Add(req);
-            _context.SaveChanges();
-            return req;
-        }
-
-
 
         //create Patient
-        public void createPatient(Aspnetuser user)
+        public Aspnetuser createonlyAsp(Aspnetuser user)
         {
-            Aspnetuser newUser = new Aspnetuser
+            Aspnetuser asp = new Aspnetuser
             {
                 Email = user.Email,
                 Passwordhash = user.Passwordhash,
             };
-            _context.Aspnetusers.Add(newUser);
+            _context.Aspnetusers.Add(asp);
+            _context.SaveChanges();
+
+            return asp;
+        }
+
+        public void updateUserIdWithAsp(int aspId, string email)
+        {
+            User user = _context.Users.FirstOrDefault(x => x.Email == email);
+            user.Aspnetuserid = aspId;
+            _context.Users.Update(user);
             _context.SaveChanges();
         }
 
 
 
         //update profile
-        public Aspnetuser UpdateAspUser(PatientDash userInfo, string email)
-        {
-            Aspnetuser asp = _context.Aspnetusers.FirstOrDefault(u => u.Email == email);
-            asp.Email = userInfo.User.Email;
-            asp.Username = userInfo.User.Firstname + userInfo.User.Lastname;
-            asp.Phonenumber = userInfo.User.Mobile;
-            _context.SaveChanges();
 
-            return asp;
-        }
-
-        public void UpdateUser(PatientDash userInfo, string email, int aspId)
+        public void UpdateUser(PatientDash userInfo, string email)
         {
             User user = _context.Users.FirstOrDefault(u => u.Email == email);
-            user.Aspnetuserid = aspId;
             user.Firstname = userInfo.User.Firstname;
             user.Lastname = userInfo.User.Lastname;
-            user.Dob = userInfo.User.Dob;
-            user.Mobile = userInfo.User.Mobile;
-            user.Email = userInfo.User.Email;
+            user.Mobile = userInfo.User.Phonenumber;
             user.Street = userInfo.User.Street;
             user.City = userInfo.User.City;
             user.State = userInfo.User.State;
@@ -319,21 +279,36 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
+        public void UpdateRequestClient(PatientDash userInfo,string email)
+        {
+            Requestclient reqClient = _context.Requestclients.FirstOrDefault(u => u.Email == email);
+            reqClient.Firstname = userInfo.User.Firstname;
+            reqClient.Lastname = userInfo.User.Lastname;
+            reqClient.Phonenumber = userInfo.User.Phonenumber;
+            reqClient.Dob = userInfo.User.Dob;
+            reqClient.Street = userInfo.User.Street;
+            reqClient.City = userInfo.User.City;
+            reqClient.State = userInfo.User.State;
+            reqClient.Zipcode = userInfo.User.Zipcode;
+            _context.Requestclients.Update(reqClient);
+            _context.SaveChanges();
+        }
+
 
 
 
         //User full name
-        public string userFullName(Aspnetuser user)
+        public string userFullName(string email)
         {
-            string userName = _context.Users.FirstOrDefault(u => u.Email.Equals(user.Email)).Firstname + _context.Users.FirstOrDefault(u => u.Email.Equals(user.Email)).Lastname; ;
+             string userName = _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Firstname + " "+ _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Lastname; ;
             return userName;
         }
 
         //sendMailResetPassword
-        public void sendMailResetPassword(Aspnetuser user, string Sub, string bodyMsg)
+        public void sendMail(string email, string Sub, string bodyMsg)
         {
             var fromAddress = new MailAddress("kishanbhadani15@gmail.com", "HalloDoc Platform");
-            var toAddress = new MailAddress(user.Email);
+            var toAddress = new MailAddress(email);
             var subject = Sub;
             var body = bodyMsg;
             var message = new MailMessage(fromAddress, toAddress) 
@@ -370,9 +345,9 @@ namespace HalloDoc.Repository.Implement
 
 
         //specific data return
-        public User GetUserByEmail(string email)
+        public Requestclient GetUserByEmail(string email)
         {
-            var userData = _context.Users.FirstOrDefault(x => x.Email == email);
+            var userData = _context.Requestclients.FirstOrDefault(x => x.Email == email);
             return userData;
         }
 

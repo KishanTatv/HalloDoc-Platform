@@ -29,12 +29,12 @@
                 <div class="HContainer m-auto">
                     <div class="d-flex justify-content-between">
                         <h4>Documents</h4>
-                        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="Patient" asp-action="PatientDashbord">
+                        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="PatientDash" asp-action="Dashbord">
                             <strong class="pe-2">&lt Back</strong>
                         </a>
                     </div>
                     <div class="rounded shadow p-4 bg-body-tertiary ">
-                        <form class="mb-5" asp-route-id="@Model.ReqWithFiles.First().Requestid" asp-action="UploadDoc" asp-controller="PatientDash" method="post" enctype="multipart/form-data">
+                        <form class="mb-5" asp-route-id="@Model.ReqWithFiles.FirstOrDefault().Requestid" asp-action="UploadDoc" asp-controller="PatientDash" method="post" enctype="multipart/form-data">
                             <div class="mb-4">
                                 <p>Patient Name</p>
                                 <div class="d-flex">
@@ -61,7 +61,7 @@
                         </form>
 
                         <div class="MedicalLG">
-                            <form class="form" asp-controller="Patient" asp-action="DownloadAllFile" method="post">
+                            <form class="form" asp-controller="PatientDash" asp-action="DownloadAllFile" method="post">
                                 <div class="d-flex justify-content-between">
                                     <h5>Documents</h5>
 

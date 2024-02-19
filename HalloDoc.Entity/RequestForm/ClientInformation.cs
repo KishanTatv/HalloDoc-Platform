@@ -17,7 +17,7 @@ namespace HalloDoc.Entity.RequestForm
         [StringLength(100)]
         public string? Lastname { get; set; }
 
-        [Column("lastname")]
+        [Column("Dob")]
         public DateOnly? Dob { get; set; }
 
         [Column("phonenumber")]

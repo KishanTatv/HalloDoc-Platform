@@ -1,6 +1,5 @@
 ﻿using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
-using HalloDoc.Models;
 using HalloDoc.Repository.Implement;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +8,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Query.Expressions.Internal;
 using System.Diagnostics;
 using System.Net.Mail;
 using System.Net;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using HalloDoc.Models;
 
 namespace HalloDoc.Controllers
 {
@@ -49,23 +50,26 @@ namespace HalloDoc.Controllers
         [ActionName("PatientVerification")]
         public IActionResult PatientVerification(Aspnetuser user)
         {
-            if (user.Email != null)
+            if (ModelState.IsValid)
             {
-                if (patient.CheckExistAspUser(user.Email))
+                if (user.Email != null)
                 {
-                    string userName = patient.userFullName(user);
-                    HttpContext.Session.SetString("SessionKeyEmail", user.Email);
-                    HttpContext.Session.SetString("SessionKeyClientName", userName);
-                    return RedirectToAction("Dashbord", "PatientDash");
+                    if (patient.CheckExistAspUser(user.Email))
+                    {
+                        string userName = patient.userFullName(user.Email);
+                        HttpContext.Session.SetString("SessionKeyEmail", user.Email);
+                        HttpContext.Session.SetString("SessionKeyClientName", userName);
+                        return RedirectToAction("Dashbord", "PatientDash");
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Email Not Valid";
+                    }
                 }
                 else
                 {
-                    TempData["Error"] = "Email Not Valid";
+                    TempData["Error"] = "Email Required";
                 }
-            }
-            else
-            {
-                TempData["Error"] = "Email Required";
             }
             return RedirectToAction("PatientLogin");
         }
@@ -83,9 +87,9 @@ namespace HalloDoc.Controllers
             {
                 var userEmail = user.Email;
                 var subject = "Password reset request";
-                string link = Url.Action("NewPassword", "Patient", new { email = user.Email }, Request.Scheme);
-                var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />https://localhost:44372/" + link;
-                patient.sendMailResetPassword(user, subject, body);
+                string link = Url.Action("NewPassword", "Patient", new { email = userEmail }, Request.Scheme);
+                var body = $"Hi,<br /><br />Please click on the following link to change your password credential:<br /><br />" + link;
+                patient.sendMail(userEmail, subject, body);
                 TempData["Msg"] = "please check your Email";
             }
             else
@@ -111,13 +115,14 @@ namespace HalloDoc.Controllers
             {
                 TempData["Error"] = "Password and ConfirmPassword not match";
             }
-            return RedirectToAction("PatientLogin");
+            return View();
         }
 
 
         [HttpGet]
         public IActionResult CreatePatient()
         {
+
             return View();
         }
 
@@ -128,12 +133,22 @@ namespace HalloDoc.Controllers
         {
             if (ModelState.IsValid)
             {
-                patient.createPatient(user);
-                return RedirectToAction("PatientLogin");
+                if (patient.CheckExistAspUser(user.Email))
+                {
+                    TempData["Msg"] = "Alredy Account! Try to Login..";
+                    return View();
+                }
+                else
+                {
+                    Aspnetuser asp = patient.createonlyAsp(user);
+                    patient.updateUserIdWithAsp(asp.Id, asp.Email);
+                    TempData["Msg"] = "Your Account created Successfully!!";
+                    return View();
+                }
             }
             else
             {
-                return RedirectToAction("index", "Home");
+                return RedirectToAction("PatientLogin");
             }
         }
 

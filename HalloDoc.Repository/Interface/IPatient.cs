@@ -15,6 +15,9 @@ namespace HalloDoc.Repository.Interface
     {
         bool CheckExistAspUser(string email);
 
+        int FindUserId(string email);
+
+
         //for patient
         Aspnetuser AddAspUser(ClientInformation clientInformation);
         User AddUser(ClientInformation clientInformation, int AspUserId);
@@ -22,12 +25,10 @@ namespace HalloDoc.Repository.Interface
         Request AddRequest(ClientInformation clientInformation, int userId);
         void AddRequestClient(ClientInformation clientInformation, int requestId);
 
-        Request AddOnlyRequest(ClientInformation clientInformation);
         void AddDocFile(IFormFile DocFile, int reqId);
 
 
         //other form
-        Request AddOnlyFcbRequest(FormFCB fInfo, int reqType);
         User AddFcbUser(FormFCB fcbInfo);
         Request AddFcbRequest(FormFCB fInfo, int UserId,int reqType);
         void AddFcbRequestClient(FormFCB fInfo, int requestId);
@@ -39,13 +40,14 @@ namespace HalloDoc.Repository.Interface
 
 
         //create Patient
-        void createPatient(Aspnetuser user);
+        Aspnetuser createonlyAsp(Aspnetuser user);
+        void updateUserIdWithAsp(int aspId, string email);
 
         //User full name
-        string userFullName(Aspnetuser user);
+        string userFullName(string email);
 
         //sendMail ResetPassword
-        void sendMailResetPassword(Aspnetuser user, string Sub, string bodyMsg);
+        void sendMail(string email, string Sub, string bodyMsg);
 
         //New Password Create
         void newPasswordCreate(ClientInformation user, string email);
@@ -54,14 +56,15 @@ namespace HalloDoc.Repository.Interface
 
 
         //update profile patient
-        Aspnetuser UpdateAspUser(PatientDash userInfo, string email);
-        void UpdateUser(PatientDash userInfo, string email, int aspId);
+
+        void UpdateUser(PatientDash userInfo, string email);
+        void UpdateRequestClient(PatientDash userInfo, string email);
 
 
 
 
         //Get User
-        User GetUserByEmail(string email);
+        Requestclient GetUserByEmail(string email);
 
         IEnumerable<RequestWithFile> GetRequestsFiles(string email);
 

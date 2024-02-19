@@ -54,7 +54,7 @@
                                 <div class="modal-body">
                                     Here, I want to create new request For ...
                                     <div class="text-center pt-2">
-                                        <form asp-action="CheckPatientReq" asp-controller="PatientDash">
+                                        <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
                                             <button type="submit" class="btn btn-secondary btn-info text-light" name="btn" value="Me">Me</button>
                                             <button type="submit" class="btn btn-outline-info" name="btn" value="Someoneelse"> Some one Else </button>
                                         </form>
@@ -68,7 +68,7 @@
                         </div>
                     </div>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive ">
                         <table class="table">
                             <thead class="table-secondary">
                                 <tr>
@@ -85,7 +85,7 @@
                                             @item.Createddate.ToString("MMMM dd, yyyy")
                                         </td>
                                         <td>
-                                            @Enum.GetName(typeof(Status), item.Status) 
+                                            @Enum.GetName(typeof(Status), item.Status)
                                         </td>
                                         <td class="text-center">
                                             @if (@item.FileCount != 0)
@@ -177,7 +177,7 @@
             <div class="d-flex w-100 justify-content-center pt-4 pb-4">
                 <div class="HContainer m-auto">
                     <div class="d-flex justify-content-end">
-                        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="Patient" asp-action="PatientDashbord">
+                        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="PatientDash" asp-action="Dashbord">
                             <strong class="pe-2">&lt Back</strong>
                         </a>
                     </div>
@@ -195,7 +195,7 @@
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
                                     <input type="date" class="form-control bg-transparent" id="floatingInputValue"
-                                           placeholder="Date of birth" value="12/05/2023" asp-for="User.Dob">
+                                           placeholder="Date of birth" asp-for="User.Dob">
                                     <label class="ms-3">Date Of Birth</label>
                                 </div>
                             </div>
@@ -213,11 +213,11 @@
                                         <label class="ms-3">Type</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="User.Mobile" />
+                                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="User.Phonenumber" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="User.Email">
+                                    <input type="email" id="email" class="form-control bg-transparent" asp-for="User.Email">
                                     <label class="ms-3">Email</label>
                                 </div>
                             </div>

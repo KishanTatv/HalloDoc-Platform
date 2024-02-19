@@ -36,34 +36,18 @@ namespace HalloDoc.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> PatientDashbord()
+        public async Task<IActionResult> Dashbord()
         {
             var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
             if (UserEmail != null)
             {
-                User UserData  = patient.GetUserByEmail(UserEmail);
+                Requestclient UserData  = patient.GetUserByEmail(UserEmail);
                 IEnumerable<RequestWithFile> ReqFile = patient.GetRequestsFiles(UserEmail);
 
                 var PatientDash = new PatientDash { ReqWithFiles = ReqFile, User = UserData };
                 return View(PatientDash);
             }
             return RedirectToAction("PatientLogin", "Patient");
-        }
-
-
-        [HttpPost]
-        public IActionResult CheckPatientReq(string btn)
-        {
-            ViewBag.DefaultFieldValue = "reqMap";
-            if (btn == "Me")
-            {
-                ViewBag.ShowAdditionalInput = false;
-            }
-            else if (btn == "Someoneelse")
-            {
-                ViewBag.ShowAdditionalInput = true;
-            }
-            return View("PatientReq", "PatientRequest");
         }
 
 
@@ -74,17 +58,16 @@ namespace HalloDoc.Controllers
         {
             var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
 
-            Aspnetuser asp = patient.UpdateAspUser(userInfo, UserEmail);
-            patient.UpdateUser(userInfo, UserEmail, asp.Id);
+            patient.UpdateUser(userInfo, UserEmail);
+            patient.UpdateRequestClient(userInfo, UserEmail);
 
-            return RedirectToAction("PatientDashbord");
+            return RedirectToAction("Dashbord");
         }
-
 
 
         [Route("ViewDocument/{id ?}")]
         [ActionName("ViewDocument")]
-        public IActionResult ViewDocument(int id)
+        public async Task<IActionResult> ViewDocument(int id)
         {
             var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
             var ReqFile = patient.GetRequestsFileswithReq(UserEmail, id);
@@ -112,7 +95,7 @@ namespace HalloDoc.Controllers
                     }
                 }
             }
-            return RedirectToAction("ViewDocument", "Patient", new { id = id });
+            return RedirectToAction("ViewDocument", "PatientDash", new { id = id });
         }
 
 

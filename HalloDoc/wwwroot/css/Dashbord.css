@@ -122,9 +122,20 @@
     color: #8d41b2;
 }
 
-.bg-patient {
+.bgPatient {
     background-color: #5fbc61;
 }
+.bgFamily {
+    background-color: #e5922f;
+}
+.bgConcierge {
+    background-color: #0b7cb5;
+}
+.bgBussiness {
+    background-color: #df6679;
+}
+
+
 
 
 @media only screen and (max-width: 740px) {
@@ -159,7 +170,7 @@
         padding-top: 0px !important;
     }
 
-    .logInInfo, .HeadLogOut {
+    .logInInfo, .HeadLogOut, .headerName, .MedicalLG, .dashIcon, .text-dashide {
         display: none;
     }
 
@@ -174,12 +185,10 @@
     .Dash-num {
         font-size: 16px;
     }
+}
 
-    .Dash-name {
-        font-size: 12px;
+@media only screen and (min-width: 579px) {
+    .MediaclSM {
+        display: none !important;
     }
-
-    .dashIcon, .text-dashide {
-        display: none;
-    }
-}}
+}

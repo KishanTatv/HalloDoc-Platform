@@ -17,7 +17,7 @@
                 <strong class="pe-2">&lt Back</strong>
             </a>
         </div>
-        <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="ConciergeReq" asp-controller="Patient" method="post">
+        <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="ConciergeReq" asp-controller="PatientRequest" method="post" enctype="multipart/form-data">
             <div class="mb-4">
                 <h5>Concierge Information</h5>
                 <div class="row form-floating">
@@ -103,7 +103,7 @@
                         <label class="ms-3">Email</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="clientInformation.Phonenumber" />
+                        <input type="text" id="phone2" class="form-control h-100 bg-transparent" asp-for="clientInformation.Phonenumber" />
                     </div>
                 </div>
             </div>
@@ -114,24 +114,6 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="clientInformation.Locroom">
                         <label class="ms-3">Room # / Suite(Optional)</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-4 mb-4">
-                <h5>(optional) Upload Photo or Document</h5>
-                <div class="d-flex m-auto">
-                    <div class="p-0 w-100">
-                        <input type="text" class="form-control bg-transparent" id="selectedFile" placeholder="select File"
-                               disabled>
-                        <label class="ms-3"></label>
-                    </div>
-                    <div>
-                        <label class="btn btn-outline-info d-flex ">
-                            <input type="file" style="display: none;" id="FileInput"multiple>
-                            <i class="bi bi-cloud-arrow-up border-info"></i>
-                            <span class="upload_txt ms-2">Upload</span>
-                        </label>
                     </div>
                 </div>
             </div>
