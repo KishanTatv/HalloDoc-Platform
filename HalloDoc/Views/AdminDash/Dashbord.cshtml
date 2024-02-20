@@ -3,7 +3,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model IEnumerable<HalloDoc.Entity.AdminDashTable.tableData>;
+@model HalloDoc.Entity.AdminDashTable.DashTable;
 
 @{
     ViewData["Title"] = "Patient Dashbord";
@@ -12,185 +12,263 @@
 
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
 
+
+
+
 <div class="MainContent pt-0 min-vh-100">
     <div class="tab-content" id="nav-tabContent">
 
         <partial name="partial/AdminNavTab" />
 
-        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
-             tabindex="0">
-            <div class="container-fluid overflow-hidden mt-3">
-                <div class="row g-3">
-                    <div class="col-4 col-sm-4 col-lg-2">
-                        <div class="rounded-3 DashCardN p-2">
-                            <div class="card-body p-0">
-                                <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                     src="~/image/Dash_new.jpg">
-                                <strong class="Dash-name">NEW</strong>
-                                <h5 class="Dash-num fw-bold m-0"> 23,456 </h5>
-                            </div>
+        <div class="container-fluid overflow-hidden mt-3">
+            <div class="row gx-2 nav">
+                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardN active" idC="CardN-tab" data-bs-toggle="tab" data-bs-target="#CardN-tab-pane"  aria-selected="true">
+                    <div class="d-flex p-2">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_new.jpg">
+                            <strong class="Dash-name">NEW</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[0] </h5>
                         </div>
                     </div>
-                    <div class="col-4 col-sm-4 col-lg-2">
-                        <div class="rounded-3 DashCardP p-2">
-                            <div class="card-body p-0">
-                                <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                     src="~/image/Dash_pending.jpg">
-                                <strong class="Dash-name">PENDING</strong>
-                                <h5 class="Dash-num fw-bold m-0"> 23,456 </h5>
-                            </div>
+                </button>
+                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardP" id="CardP-tab" data-bs-toggle="tab" data-bs-target="#CardP-tab-pane"  aria-selected="false">
+                    <div class="d-flex p-2">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_pending.jpg">
+                            <strong class="Dash-name">PENDING</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[1] </h5>
                         </div>
                     </div>
-                    <div class="col-4 col-sm-4 col-lg-2">
-                        <div class="rounded-3 DashCardA p-2">
-                            <div class="card-body p-0">
-                                <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                     src="~/image/Dash_active.png">
-                                <strong class="Dash-name">ACTIVE</strong>
-                                <h5 class="Dash-num fw-bold m-0"> 23,456 </h5>
-                            </div>
+                </button>
+                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardA" id="CardA-tab" data-bs-toggle="tab" data-bs-target="#CardA-tab-pane"  aria-selected="false">
+                    <div class="d-flex p-2">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_active.png">
+                            <strong class="Dash-name">ACTIVE</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[2] </h5>
                         </div>
                     </div>
-                    <div class="col-4 col-sm-4 col-lg-2">
-                        <div class="rounded-3 DashCardU p-2">
-                            <div class="card-body p-0">
-                                <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                     src="~/image/Dash_conclude.png">
-                                <strong class="Dash-name">CONCLUDE</strong>
-                                <h5 class="Dash-num fw-bold m-0"> 23,456 </h5>
-                            </div>
+                </button>
+                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardC" id="CardC-tab" data-bs-toggle="tab" data-bs-target="#CardC-tab-pane"  aria-selected="false">
+                    <div class="d-flex p-2">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_conclude.png">
+                            <strong class="Dash-name">CONCLUDE</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[3] </h5>
                         </div>
                     </div>
-                    <div class="col-4 col-sm-4 col-lg-2">
-                        <div class="rounded-3 DashCardT p-2">
-                            <div class="card-body p-0">
-                                <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                     src="~/image/Dash_toclose.png">
-                                <strong class="Dash-name">To CLOSE</strong>
-                                <h5 class="Dash-num fw-bold m-0"> 23,456 </h5>
-                            </div>
+                </button>
+                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardT" id="CardT-tab" data-bs-toggle="tab" data-bs-target="#CardT-tab-pane"  aria-selected="false">
+                    <div class="d-flex p-2">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_toclose.png">
+                            <strong class="Dash-name">To CLOSE</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
                         </div>
                     </div>
-                    <div class="col-4 col-sm-4 col-lg-2">
-                        <div class="rounded-3 DashCardU p-2">
-                            <div class="card-body p-0">
-                                <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                     src="~/image/Dash_unpaid.png">
-                                <strong class="Dash-name">UNPAID</strong>
-                                <h5 class="Dash-num fw-bold m-0"> 23,456 </h5>
-                            </div>
+                </button>
+                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardU" id="CardU-tab" data-bs-toggle="tab" data-bs-target="#CardU-tab-pane"  aria-selected="false">
+                    <div class="d-flex p-2">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_unpaid.png">
+                            <strong class="Dash-name">UNPAID</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
                         </div>
                     </div>
-                </div>
+                </button>
             </div>
-            <div class="d-flex justify-content-between m-3">
-                <div>
-                    <h5>Patient <span> (New) </span> </h5>
-                </div>
-                <div>
-                    <button type="button" class="btn btn-info text-light"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
-                    <button type="button" class="btn btn-info text-light"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></button>
-                    <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
-                    <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></button>
-                    <button type="button" class="btn btn-info text-light"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></button>
-                </div>
+        </div>
+        <div class="d-flex justify-content-between m-3">
+            <div>
+                <h5>Patient <span> (New) </span> </h5>
             </div>
-
-            <div class="bg-light rounded-3 m-3 pt-2">
-                <div class="row">
-                    <div class="col-lg-4 ">
-                        <div class="d-flex ms-2">
-                            <input type="text" class="form-control me-2" placeholder="Search Patient">
-                            <select class="form-select" id="validationDefault04">
-                                <option selected disabled value="">All Regions</option>
-                                <option>District of Columbia</option>
-                                <option>Maryland</option>
-                                <option>New York</option>
-                                <option>Virginia</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg d-flex justify-content-end align-self-center">
-                        <span class="btn btn-outline-secondary p-0 ps-1 pe-1 me-2 h-50 text-dashide">All</span>
-                        <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-success"></i>Patient</span>
-                        <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-orange"></i>Family/Friend</span>
-                        <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-pink"></i>Bussiness</span>
-                        <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-blue"></i>Concierge</span>
-                        <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-purple"></i>vip</span>
-                    </div>
-                </div>
-                <div class="table-responsive mt-2">
-                    <table class="table">
-                        <tbody>
-                            <tr class="table-secondary">
-                                <th scope="col">Name</th>
-                                <th scope="col">Date of Birth</th>
-                                <th scope="col">Requestor</th>
-                                <th scope="col">Requested Date</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Address</th>
-                                <th scope="col">Notes</th>
-                                <th scope="col">Chat With</th>
-                                <th scope="col">Action</th>
-                            </tr>
-
-                            @foreach (var item in Model)
-                            {
-                                <tr class=" @Enum.GetName(typeof(reqTypebg), item.ReqTypeId)">
-                                    <th class="text-light" scope="row">
-                                        <p class="d-flex justify-content-between">
-                                        @item.Name  
-                                        <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
-                                        </p>
-                                    </th>
-                                    <td class="text-light"> @item.Dob</td>
-                                    <td class="text-light"> @Enum.GetName(typeof(repestType), @item.ReqTypeId) @item.Requestor</td>
-                                    <td class="text-light"> @item.RequestedDate</td>
-                                    <td><button class="btn btn-outline-light p-0 ps-1 pe-1"> <i class="bi bi-telephone text-light"></i> @item.Phonenumber</button> <p class="text-light m-0">(@Enum.GetName(typeof(repestType),item.ReqTypeId))</p></td>
-                                    <td class="text-light"> @item.Address</td>
-                                    <td class="text-light"> @item.Notes</td>
-                                    <td><button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button></td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Actions
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">Assign Case</a></li>
-                                            <li><a class="dropdown-item" href="#">Cancel Case</a></li>
-                                            <li><a class="dropdown-item" href="#">View Case</a></li>
-                                            <li><a class="dropdown-item" href="#">View Notes</a></li>
-                                            <li><a class="dropdown-item" href="#">Block Patient</a></li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+            <div>
+                <button type="button" class="btn btn-info text-light"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
+                <button type="button" class="btn btn-info text-light"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></button>
+                <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
+                <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></button>
+                <button type="button" class="btn btn-info text-light"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></button>
             </div>
         </div>
 
+        <div class="bg-light rounded-3 m-3 pt-2">
+            <div class="row">
+                <div class="col-lg-4 ">
+                    <div class="d-flex ms-2">
+                        <input type="text" class="form-control me-2" placeholder="Search Patient">
+                        <select class="form-select" id="validationDefault04">
+                            <option selected disabled value="">All Regions</option>
+                            <option>District of Columbia</option>
+                            <option>Maryland</option>
+                            <option>New York</option>
+                            <option>Virginia</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg d-flex justify-content-end align-self-center">
+                    <span class="btn btn-outline-secondary p-0 ps-1 pe-1 me-2 h-50 text-dashide">All</span>
+                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-success"></i>Patient</span>
+                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-orange"></i>Family/Friend</span>
+                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-pink"></i>Bussiness</span>
+                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-blue"></i>Concierge</span>
+                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-purple"></i>vip</span>
+                </div>
+            </div>
+            <div class="table-responsive mt-2">        
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="CardN-tab-pane" role="tabpanel" aria-labelledby="CardN-tab" tabindex="0">
+                                <table class="table">
+                                    <tbody>
+                                        <tr class="table-secondary">
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Date of Birth</th>
+                                            <th scope="col">Requestor</th>
+                                            <th scope="col">Requested Date</th>
+                                            <th scope="col">Phone</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Notes</th>
+                                            <th scope="col">Chat With</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
 
-        <div class="tab-pane fade" id="nav-loc-provider" role="tabpanel" aria-labelledby="nav-profile-tab"
-             tabindex="0">
-            Location Provider tab
+                                        @foreach (var item in Model.Tdata)
+                                        {
+                                            <tr class=" @Enum.GetName(typeof(reqTypebg), item.ReqTypeId)">
+                                                <th class="text-light" scope="row">
+                                                    <p class="d-flex justify-content-between">
+                                                        @item.Name
+                                                        <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
+                                                    </p>
+                                                </th>
+                                                <td class="text-light"> @item.Dob</td>
+                                                <td class="text-light"> @Enum.GetName(typeof(repestType), @item.ReqTypeId) @item.Requestor</td>
+                                                <td class="text-light"> @item.RequestedDate</td>
+                                                <td><button class="btn btn-outline-light p-0 ps-1 pe-1"> <i class="bi bi-telephone text-light"></i> @item.Phonenumber</button> <p class="text-light m-0">(@Enum.GetName(typeof(repestType),item.ReqTypeId))</p></td>
+                                                <td class="text-light"> @item.Address</td>
+                                                <td class="text-light"> @item.Notes</td>
+                                                <td><button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        Actions
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><a class="dropdown-item" href="#">Assign Case</a></li>
+                                                        <li><a class="dropdown-item" href="#">Cancel Case</a></li>
+                                                        <li><a class="dropdown-item" href="#">View Case</a></li>
+                                                        <li><a class="dropdown-item" href="#">View Notes</a></li>
+                                                        <li><a class="dropdown-item" href="#">Block Patient</a></li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="tab-pane fade" id="CardP-tab-pane" role="tabpanel" aria-labelledby="CardP-tab" tabindex="0">
+                                <table class="table">
+                                    <tbody>
+                                        <tr class="table-secondary">
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Date of Birth</th>
+                                            <th scope="col">Requestor</th>
+                                            <th scope="col">Physician Name</th>
+                                            <th scope="col">Date of Service</th>
+                                            <th scope="col">Requested Date</th>
+                                            <th scope="col">Phone</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Notes</th>
+                                            <th scope="col">Chat With</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="tab-pane fade" id="CardA-tab-pane" role="tabpanel" aria-labelledby="CardA-tab" tabindex="0">
+                                <table class="table">
+                                    <tbody>
+                                        <tr class="table-secondary">
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Date of Birth</th>
+                                            <th scope="col">Requestor</th>
+                                            <th scope="col">Physician Name</th>
+                                            <th scope="col">Date of Service</th>
+                                            <th scope="col">Requested Date</th>
+                                            <th scope="col">Phone</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Notes</th>
+                                            <th scope="col">Chat With</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="tab-pane fade" id="CardC-tab-pane" role="tabpanel" aria-labelledby="CardC-tab" tabindex="0">
+                                <table class="table">
+                                    <tbody>
+                                        <tr class="table-secondary">
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Date of Birth</th>
+                                            <th scope="col">Physician Name</th>
+                                            <th scope="col">Date of Service</th>
+                                            <th scope="col">Phone</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Chat With</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="tab-pane fade" id="CardT-tab-pane" role="tabpanel" aria-labelledby="CardT-tab" tabindex="0">
+                                <table class="table">
+                                    <tbody>
+                                        <tr class="table-secondary">
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Date of Birth</th>
+                                            <th scope="col">Region</th>
+                                            <th scope="col">Physician Name</th>
+                                            <th scope="col">Date of Service</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Notes</th>
+                                            <th scope="col">Chat With</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="tab-pane fade" id="CardU-tab-pane" role="tabpanel" aria-labelledby="CardU-tab" tabindex="0">
+                                <table class="table">
+                                    <tbody>
+                                        <tr class="table-secondary">
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Physician Name</th>
+                                            <th scope="col">Date of Service</th>
+                                            <th scope="col">Phone</th>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Chat With</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </div>
+                   
+
+            </div>
         </div>
-        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
-            Profile tab
-        </div>
-        <div class="tab-pane fade" id="nav-provider" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
-            Provider tab
-        </div>
-        <div class="tab-pane fade" id="nav-partners" role="tabpanel" aria-labelledby="nav-disabled-tab"
-             tabindex="0">
-            Partners Tab
-        </div>
-        <div class="tab-pane fade" id="nav-access" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">
-            Access tab
-        </div>
-        <div class="tab-pane fade" id="nav-records" role="tabpanel" aria-labelledby="nav-disabled-tab" tabindex="0">
-            Records tab
-        </div>
+
     </div>
 </div>
 

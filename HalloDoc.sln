@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.7.34221.43
+VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDoc", "HalloDoc\HalloDoc.csproj", "{1B087E16-C600-4C27-A157-804637F9C628}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalloDoc", "HalloDoc\HalloDoc.csproj", "{1B087E16-C600-4C27-A157-804637F9C628}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDoc.Entity", "HalloDoc.Entity\HalloDoc.Entity.csproj", "{C45A066D-D223-4B3A-B609-94585B8D1B3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalloDoc.Entity", "HalloDoc.Entity\HalloDoc.Entity.csproj", "{C45A066D-D223-4B3A-B609-94585B8D1B3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalloDoc.Repository", "HalloDoc.Repository\HalloDoc.Repository.csproj", "{869558B5-A8B7-4226-966B-459F593FD30C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalloDoc.Repository", "HalloDoc.Repository\HalloDoc.Repository.csproj", "{869558B5-A8B7-4226-966B-459F593FD30C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

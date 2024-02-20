@@ -24,6 +24,17 @@ namespace HalloDoc.Entity.AdminDashTable
         [StringLength(70)]
         public string? Requestor { get; set; }
 
+        [Column("PhysicianName")]
+        [StringLength(100)]
+        public string? PhysicianName { get; set; }
+
+        [Column("DateOfService")]
+        public DateTime? DateOfService { get; set; }
+
+        [Column("Region")]
+        [StringLength(50)]
+        public string? Region { get; set; }
+
         [Column("Request Date")]
         public DateTime? RequestedDate { get; set; }
 

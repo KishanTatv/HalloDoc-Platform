@@ -11,6 +11,10 @@ namespace HalloDoc.Repository.Interface
 
     public interface IAdmin
     {
-        IEnumerable<tableData> GetTableData();
+        IEnumerable<tableData> GetTableData(int StatusId);
+
+        IEnumerable<tableData> GetTableWithPhyData(int StatusId);
+
+        int TotalCountPatient(int statusId);
     }
 }

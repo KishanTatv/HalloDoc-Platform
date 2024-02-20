@@ -99,21 +99,35 @@ namespace HalloDoc.Controllers
             return RedirectToAction("PatientForgotpass");
         }
 
-        public IActionResult NewPassword()
+
+        [HttpGet]
+        [Route("Patient/NewPassword/{email}")]
+        public IActionResult NewPassword(string email)
         {
             return View();
         }
 
+
+
         [HttpPost]
-        public IActionResult NewPassword(ClientInformation user, string email)
+        [Route("Patient/NewPassword/{email}")]
+        public IActionResult NewPassword(string email,ClientInformation user)
         {
-            if(user.Password == user.ConfirmPassword)
+            if (patient.CheckExistAspUser(email))
             {
-                patient.newPasswordCreate(user, email);
+                if (user.Password == user.ConfirmPassword)
+                {
+                    patient.newPasswordCreate(user, email);
+                    TempData["Error"] = "Password Changed succesfully!!";
+                }
+                else
+                {
+                    TempData["Error"] = "Password and ConfirmPassword not match";
+                }
             }
             else
             {
-                TempData["Error"] = "Password and ConfirmPassword not match";
+                TempData["Error"] = "Anything Wrong!!";
             }
             return View();
         }

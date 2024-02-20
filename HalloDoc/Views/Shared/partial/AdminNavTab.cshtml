@@ -6,26 +6,19 @@
 
 <nav class="shadow-sm bg-body-tertiary rounded collapse show" id="collapseExample">
     <div class="Dash-nav nav nav-underline nav-item text-info" id="nav-tab" role="tablist">
-        <span class="nav-link ps-3 bg-transparent active show" id="nav-home-tab" data-bs-toggle="tab"
-              data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-              aria-selected="true">Dashbord</span>
-        <span class="nav-link ps-3 bg-transparent" id="nav-loc-provider-tab" data-bs-toggle="tab"
-              data-bs-target="#nav-loc-provider" type="button" role="tab" aria-controls="nav-loc-provider"
-              aria-selected="false">Provider Location</span>
-        <span class="nav-link ps-3 bg-transparent" id="nav-profile-tab" data-bs-toggle="tab"
-              data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
-              aria-selected="false">My Profile</span>
-        <span class="nav-link ps-3 bg-transparent" id="nav-provider-tab" data-bs-toggle="tab"
-              data-bs-target="#nav-provider" type="button" role="tab" aria-controls="nav-provider"
-              aria-selected="false">Provider</span>
-        <span class="nav-link ps-3 bg-transparent" id="nav-partners-tab" data-bs-toggle="tab"
-              data-bs-target="#nav-partners" type="button" role="tab" aria-controls="nav-partners"
-              aria-selected="false">Partners</span>
-        <span class="nav-link ps-3 bg-transparent" id="nav-access-tab" data-bs-toggle="tab"
-              data-bs-target="#nav-access" type="button" role="tab" aria-controls="nav-access"
-              aria-selected="false">Access</span>
-        <span class="nav-link ps-3 bg-transparent" id="nav-records-tab" data-bs-toggle="tab"
-              data-bs-target="#nav-records" type="button" role="tab" aria-controls="nav-records"
-              aria-selected="false">Records</span>
+        <a class="nav-link ps-3 bg-transparent active show" 
+              aria-selected="true" asp-action="Dashbord" asp-controller="AdminDash">Dashbord</a>
+        <a class="nav-link ps-3 bg-transparent"
+              aria-selected="false" asp-action="Provider" asp-controller="AdminDash">Provider Location</a>
+        <a class="nav-link ps-3 bg-transparent" 
+              aria-selected="false" asp-action="" asp-controller="AdminDash">My Profile</a>
+        <a class="nav-link ps-3 bg-transparent" 
+              aria-selected="false" asp-action="" asp-controller="AdminDash">Provider</a>
+        <a class="nav-link ps-3 bg-transparent"
+              aria-selected="false" asp-action="" asp-controller="AdminDash">Partners</a>
+        <a class="nav-link ps-3 bg-transparent"
+              aria-selected="false" asp-action="" asp-controller="AdminDash">Access</a>
+        <a class="nav-link ps-3 bg-transparent"
+              aria-selected="false" asp-action="" asp-controller="AdminDash">Records</a>
     </div>
 </nav>

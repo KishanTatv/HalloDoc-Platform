@@ -22,16 +22,15 @@ namespace HalloDoc.Repository.Implement
 
         }
 
-        public IEnumerable<tableData> GetTableData()
+        public IEnumerable<tableData> GetTableData(int StatusId)
         {
             IEnumerable<tableData> data = from r in _context.Requests
-                                          join f in _context.Requestclients on r.Requestid equals f.Requestid into rf
-                                          from f in rf.DefaultIfEmpty()
-                                          where r.Status == 1
+                                          join f in _context.Requestclients on r.Requestid equals f.Requestid 
+                                          where r.Status == StatusId
                                           orderby r.Createddate descending
                                           select new tableData
                                           {
-                                              Name = r.Firstname + " " + r.Lastname,
+                                              Name = f.Firstname + " " + f.Lastname,
                                               Dob = f.Dob,
                                               ReqTypeId = r.Requesttypeid,
                                               Requestor = r.Firstname + "," + r.Lastname,
@@ -41,6 +40,35 @@ namespace HalloDoc.Repository.Implement
                                               Notes = r.Symptoms,
                                           };
             return data;
+        }
+
+        public IEnumerable<tableData> GetTableWithPhyData(int StatusId)
+        {
+            IEnumerable<tableData> data = from r in _context.Requests
+                                          join f in _context.Requestclients on r.Requestid equals f.Requestid
+                                          join s in _context.Physicians on r.Physicianid equals s.Physicianid
+                                          where r.Status == StatusId
+                                          orderby r.Createddate descending
+                                          select new tableData
+                                          {
+                                              Name = f.Firstname + " " + f.Lastname,
+                                              Dob = f.Dob,
+                                              ReqTypeId = r.Requesttypeid,
+                                              Requestor = r.Firstname + "," + r.Lastname,
+                                              PhysicianName = s.Firstname + ", " + s.Lastname,
+                                              DateOfService = s.Createddate,
+                                              RequestedDate = r.Createddate,
+                                              Phonenumber = f.Phonenumber,
+                                              Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
+                                              Notes = r.Symptoms,
+                                          };
+            return data;
+        }
+
+        public int TotalCountPatient(int statusId)
+        {
+            int Tnum = _context.Requests.Where(x => x.Status== statusId).Count();
+            return Tnum;
         }
     }
 }

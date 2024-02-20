@@ -1,5 +1,5 @@
-﻿using HalloDoc.Entity.Models;
-using HalloDoc.Repository.Implement;
+﻿
+using HalloDoc.Entity.Models;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +15,13 @@ namespace HalloDoc.Controllers
             this.patient = patient;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult Login()
         {
             return View();

@@ -107,7 +107,7 @@ namespace HalloDoc.Controllers
             {
                 var userEmail = FInfo.clientInformation.Email;
                 var subject = "Create your Account";
-                string link = Url.Action("CreatePatient", "Patient", new { email = userEmail }, Request.Scheme);
+                string link = Url.Action("CreatePatient", "Patient");
                 var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />" + link;
                 patient.sendMail(userEmail, subject, body);
 
@@ -132,7 +132,7 @@ namespace HalloDoc.Controllers
                     }
                 }
             }
-            return RedirectToAction("PatientLogin");
+            return RedirectToAction("PatientLogin", "Patient");
         }
 
 
@@ -157,7 +157,7 @@ namespace HalloDoc.Controllers
             {
                 var userEmail = FInfo.clientInformation.Email;
                 var subject = "Create your Account";
-                string link = Url.Action("CreatePatient", "Patient", new { email = userEmail }, Request.Scheme);
+                string link = Url.Action("CreatePatient", "Patient");
                 var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />" + link;
                 patient.sendMail(userEmail, subject, body);
 
@@ -167,7 +167,7 @@ namespace HalloDoc.Controllers
                 Concierge con = patient.AddConcierge(FInfo);
                 patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
             }
-            return RedirectToAction("PatientLogin");
+            return RedirectToAction("PatientLogin", "Patient");
         }
 
 
@@ -193,7 +193,7 @@ namespace HalloDoc.Controllers
             {
                 var userEmail = FInfo.clientInformation.Email;
                 var subject = "Create your Account";
-                string link = Url.Action("CreatePatient", "Patient", new { email = userEmail }, Request.Scheme);
+                string link = Url.Action("CreatePatient", "Patient");
                 var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />" + link;
                 patient.sendMail(userEmail, subject, body);
 
@@ -203,7 +203,7 @@ namespace HalloDoc.Controllers
                 Business bus = patient.AddBussiness(FInfo);
                 patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
             }
-            return RedirectToAction("PatientLogin");
+            return RedirectToAction("PatientLogin", "Patient");
         }
 
 

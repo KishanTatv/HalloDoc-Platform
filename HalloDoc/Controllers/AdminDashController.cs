@@ -34,8 +34,26 @@ namespace HalloDoc.Controllers
 
         public IActionResult Dashbord()
         {
-            IEnumerable<tableData> data = _Admin.GetTableData();  
-            return View(data);
+            IEnumerable<tableData> newReq = _Admin.GetTableData(1);  
+            IEnumerable<tableData> pendingReq = _Admin.GetTableWithPhyData(2);
+
+
+            int ToatlNew = _Admin.TotalCountPatient(1);
+            int TotalPending = _Admin.TotalCountPatient(2);
+            int TotalActive = _Admin.TotalCountPatient(3);
+            int TotalConclude = _Admin.TotalCountPatient(4);
+            int TotalToclose = _Admin.TotalCountPatient(5);
+            int TotalUnpaid = _Admin.TotalCountPatient(6);
+            List<int> countList = new List<int>();
+            countList.Add(ToatlNew); countList.Add(TotalPending); countList.Add(TotalActive); countList.Add(TotalConclude); countList.Add(TotalToclose);  countList.Add(TotalUnpaid);   
+
+            var dashData = new DashTable { Tdata = newReq, ToatlCount = countList};
+            return View(dashData);
+        }
+
+        public IActionResult Provider()
+        {
+            return View();
         }
     }
 }

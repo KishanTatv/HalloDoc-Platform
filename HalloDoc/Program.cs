@@ -14,6 +14,7 @@ builder.Services.AddDbContext<HalloDocDbContext>(options =>
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddScoped<IPatient, PatientRepo>();
+builder.Services.AddScoped<IPatient, PatientRepo>();
 builder.Services.AddScoped<IAdmin, AdminRepo>();
 
 builder.Services.AddSession(options =>
