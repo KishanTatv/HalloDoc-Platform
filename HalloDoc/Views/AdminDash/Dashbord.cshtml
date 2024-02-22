@@ -1,4 +1,4 @@
-﻿@using static HalloDoc.Controllers.AdminDashController;
+﻿
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -14,74 +14,77 @@
 
 
 
-
 <div class="MainContent pt-0 min-vh-100">
     <div class="tab-content" id="nav-tabContent">
 
         <partial name="partial/AdminNavTab" />
 
         <div class="container-fluid overflow-hidden mt-3">
-            <div class="row gx-2 nav">
-                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardN active" idC="CardN-tab" data-bs-toggle="tab" data-bs-target="#CardN-tab-pane"  aria-selected="true">
-                    <div class="d-flex p-2">
+            <div class="row gx-3 nav">
+                <div class="col-4 col-sm-4 col-lg-2 active">
+                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardN " asp-action="Dashbord" asp-route-id="1" asp-controller="AdminDash">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_new.jpg">
                             <strong class="Dash-name">NEW</strong>
                             <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[0] </h5>
                         </div>
-                    </div>
-                </button>
-                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardP" id="CardP-tab" data-bs-toggle="tab" data-bs-target="#CardP-tab-pane"  aria-selected="false">
-                    <div class="d-flex p-2">
+                    </a>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-2 ">
+                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardP" asp-action="Dashbord" asp-route-id="2" asp-controller="AdminDash">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_pending.jpg">
                             <strong class="Dash-name">PENDING</strong>
                             <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[1] </h5>
                         </div>
-                    </div>
-                </button>
-                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardA" id="CardA-tab" data-bs-toggle="tab" data-bs-target="#CardA-tab-pane"  aria-selected="false">
-                    <div class="d-flex p-2">
+                    </a>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-2 ">
+
+                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardA" asp-action="Dashbord" asp-route-id="3" asp-controller="AdminDash">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_active.png">
                             <strong class="Dash-name">ACTIVE</strong>
                             <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[2] </h5>
                         </div>
-                    </div>
-                </button>
-                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardC" id="CardC-tab" data-bs-toggle="tab" data-bs-target="#CardC-tab-pane"  aria-selected="false">
-                    <div class="d-flex p-2">
+                    </a>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-2 ">
+
+                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardC" asp-action="Dashbord" asp-route-id="4" asp-controller="AdminDash">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_conclude.png">
                             <strong class="Dash-name">CONCLUDE</strong>
                             <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[3] </h5>
                         </div>
-                    </div>
-                </button>
-                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardT" id="CardT-tab" data-bs-toggle="tab" data-bs-target="#CardT-tab-pane"  aria-selected="false">
-                    <div class="d-flex p-2">
+                    </a>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-2 ">
+
+                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardT" asp-action="Dashbord" asp-route-id="5" asp-controller="AdminDash">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_toclose.png">
                             <strong class="Dash-name">To CLOSE</strong>
                             <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
                         </div>
-                    </div>
-                </button>
-                <button class="col-4 col-sm-4 col-lg-2 rounded-3 DashCardU" id="CardU-tab" data-bs-toggle="tab" data-bs-target="#CardU-tab-pane"  aria-selected="false">
-                    <div class="d-flex p-2">
+                    </a>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-2 ">
+
+                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardU" asp-action="Dashbord" asp-route-id="6" asp-controller="AdminDash">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_unpaid.png">
                             <strong class="Dash-name">UNPAID</strong>
                             <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
                         </div>
-                    </div>
-                </button>
+                    </a>
+                </div>
             </div>
         </div>
         <div class="d-flex justify-content-between m-3">
@@ -92,7 +95,7 @@
                 <button type="button" class="btn btn-info text-light"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
                 <button type="button" class="btn btn-info text-light"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></button>
                 <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
-                <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></button>
+                <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
                 <button type="button" class="btn btn-info text-light"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></button>
             </div>
         </div>
@@ -101,7 +104,7 @@
             <div class="row">
                 <div class="col-lg-4 ">
                     <div class="d-flex ms-2">
-                        <input type="text" class="form-control me-2" placeholder="Search Patient">
+                        <input type="text" id="InputSearch" class="form-control me-2" placeholder="Search Patient" onkeyup="SearchPatient()">
                         <select class="form-select" id="validationDefault04">
                             <option selected disabled value="">All Regions</option>
                             <option>District of Columbia</option>
@@ -120,162 +123,288 @@
                     <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-purple"></i>vip</span>
                 </div>
             </div>
-            <div class="table-responsive mt-2">        
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="CardN-tab-pane" role="tabpanel" aria-labelledby="CardN-tab" tabindex="0">
-                                <table class="table">
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Date of Birth</th>
-                                            <th scope="col">Requestor</th>
-                                            <th scope="col">Requested Date</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Notes</th>
-                                            <th scope="col">Chat With</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
+            <div class="table-responsive mt-2">
+                <table id="tableD" class="table">
+                    <tbody>
+                        <tr class="table-secondary">
+                            <th scope="col">Name</th>
+                            @if (ViewBag.dTable != 6)
+                            {
+                                <th scope="col">Date of Birth</th>
+                            }
+                            @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
+                            {
+                                <th scope="col">Requestor</th>
+                            }
+                            @if (ViewBag.dTable == 1)
+                            {
+                                <th scope="col">Requested Date</th>
+                            }
+                            @if (ViewBag.dTable == 5)
+                            {
+                                <th scope="col">Region</th>
+                            }
+                            @if (ViewBag.dTable != 1 )
+                            {
+                                <th scope="col">Physician Name</th>
+                            }
+                            @if (ViewBag.dTable != 1)
+                            {
+                                <th scope="col">Date of Service</th>
+                            }
+                            @if (ViewBag.dTable != 5)
+                            {
+                                <th scope="col">Phone</th>
+                            }
+                            <th scope="col">Address</th>
+                            @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
+                            {
+                                <th scope="col">Notes</th>
+                            }
+                            <th scope="col">Chat With</th>
+                            <th scope="col">Action</th>
+                        </tr>
 
-                                        @foreach (var item in Model.Tdata)
+                        @foreach (var item in Model.Tdata)
+                        {
+                            <tr class=" @Enum.GetName(typeof(HalloEnum.reqTypebg), item.ReqTypeId)">
+                                <td class="text-light" scope="row">
+                                    <p class="d-flex justify-content-between">
+                                        @item.Name
+                                        <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
+                                    </p>
+                                </td>
+                                @if (ViewBag.dTable != 6)
+                                {
+                                    <td class="text-light"> @item.Dob </td>
+                                }
+                                @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
+                                {
+                                    <td class="text-light"> @Enum.GetName(typeof(HalloEnum.repestType), @item.ReqTypeId) @item.Requestor</td>
+                                }
+                                @if (ViewBag.dTable == 1)
+                                {
+                                    <td class="text-light"> @item.RequestedDate</td>
+                                }
+                                @if (ViewBag.dTable == 5)
+                                {
+                                    <td class="text-light">@item.Region</td>
+                                }
+                                @if (ViewBag.dTable != 1)
+                                {
+                                    <td class="text-light">@item.PhysicianName</td>
+                                }
+                                @if (ViewBag.dTable != 1)
+                                {
+                                    <td class="text-light">@item.DateOfService</td>
+                                }
+                                @if (ViewBag.dTable != 5)
+                                {
+                                    <td>
+                                        <button class="btn btn-outline-light p-0 ps-1 pe-1"> <i class="bi bi-telephone text-light"></i> @item.Phonenumber </button>
+                                        <p class="text-light m-0">(Patient)</p>
+
+                                        @if (item.ReqTypeId != 2)
                                         {
-                                            <tr class=" @Enum.GetName(typeof(reqTypebg), item.ReqTypeId)">
-                                                <th class="text-light" scope="row">
-                                                    <p class="d-flex justify-content-between">
-                                                        @item.Name
-                                                        <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
-                                                    </p>
-                                                </th>
-                                                <td class="text-light"> @item.Dob</td>
-                                                <td class="text-light"> @Enum.GetName(typeof(repestType), @item.ReqTypeId) @item.Requestor</td>
-                                                <td class="text-light"> @item.RequestedDate</td>
-                                                <td><button class="btn btn-outline-light p-0 ps-1 pe-1"> <i class="bi bi-telephone text-light"></i> @item.Phonenumber</button> <p class="text-light m-0">(@Enum.GetName(typeof(repestType),item.ReqTypeId))</p></td>
-                                                <td class="text-light"> @item.Address</td>
-                                                <td class="text-light"> @item.Notes</td>
-                                                <td><button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        Actions
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item" href="#">Assign Case</a></li>
-                                                        <li><a class="dropdown-item" href="#">Cancel Case</a></li>
-                                                        <li><a class="dropdown-item" href="#">View Case</a></li>
-                                                        <li><a class="dropdown-item" href="#">View Notes</a></li>
-                                                        <li><a class="dropdown-item" href="#">Block Patient</a></li>
-                                                    </ul>
-                                                </td>
-                                            </tr>
+                                            <button class="btn btn-outline-light p-0 ps-1 pe-1"> <i class="bi bi-telephone text-light"></i> @item.ReqPhonenumber </button>
+                                            <p class="text-light m-0">(@Enum.GetName(typeof(HalloEnum.repestType),item.ReqTypeId))</p>
+
                                         }
-                                    </tbody>
-                                </table>
-                            </div>
-                            
-                            <div class="tab-pane fade" id="CardP-tab-pane" role="tabpanel" aria-labelledby="CardP-tab" tabindex="0">
-                                <table class="table">
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Date of Birth</th>
-                                            <th scope="col">Requestor</th>
-                                            <th scope="col">Physician Name</th>
-                                            <th scope="col">Date of Service</th>
-                                            <th scope="col">Requested Date</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Notes</th>
-                                            <th scope="col">Chat With</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    </td>
+                                }
+                                <td class="text-light">
+                                    @if (item.city != null)
+                                    {
+                                        @item.Address
+                                    }
+                                    else
+                                    {
+                                        <p>-</p>
+                                    }
+                                </td>
+                                @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
+                                {
+                                    <td class="text-light"> @item.Notes</td>
+                                }
+                                <td><button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button></td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        @if (ViewBag.dTable == 1)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" data-bs-toggle="modal"
+                                                   data-bs-target="#AssignCase">Assign Case</a>
+                                            </li>
+                                        }
+                                        @if (ViewBag.dTable == 1)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" data-bs-toggle="modal"
+                                                   data-bs-target="#@item.Name">Cancel Case</a>
+                                            </li>
+                                        }
+                                        <li><a class="dropdown-item" asp-action="ViewCase" asp-route-id="@item.ReqClientId" asp-controller="AdminDash">View Case</a></li>
+                                        @if (ViewBag.dTable != 1)
+                                        {
+                                            <li><a class="dropdown-item" href="#">View Uploads</a></li>
+                                        }
+                                        <li><a class="dropdown-item" href="#">View Notes</a></li>
+                                        @if (ViewBag.dTable == 1)
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" data-bs-toggle="modal"
+                                                   data-bs-target="#BlockPatient">Block Patient</a>
+                                            </li>
+                                        }
+                                        @if (ViewBag.dTable == 2)
+                                        {
+                                            <li><a class="dropdown-item" href="#">Transfer</a></li>
+                                        }
+                                        @if (ViewBag.dTable == 5)
+                                        {
+                                            <li><a class="dropdown-item" href="#">Close Case</a></li>
+                                        }
+                                        @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                                        {
+                                            <li><a class="dropdown-item" href="#">Order</a></li>
+                                            <li><a class="dropdown-item" href="#">Doctors Notes</a></li>
+                                        }
+                                        @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
+                                        {
+                                            <li><a class="dropdown-item" href="#">Clear Case</a></li>
+                                        }
+                                        @if (ViewBag.dTable == 2)
+                                        {
+                                            <li><a class="dropdown-item" href="#">Send Agreement</a></li>
+                                        }
+                                        @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                                        {
+                                            <li><a class="dropdown-item" href="#">Encounter</a></li>
+                                        }
 
-                            <div class="tab-pane fade" id="CardA-tab-pane" role="tabpanel" aria-labelledby="CardA-tab" tabindex="0">
-                                <table class="table">
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Date of Birth</th>
-                                            <th scope="col">Requestor</th>
-                                            <th scope="col">Physician Name</th>
-                                            <th scope="col">Date of Service</th>
-                                            <th scope="col">Requested Date</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Notes</th>
-                                            <th scope="col">Chat With</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    </ul>
+                                </td>
 
-                            <div class="tab-pane fade" id="CardC-tab-pane" role="tabpanel" aria-labelledby="CardC-tab" tabindex="0">
-                                <table class="table">
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Date of Birth</th>
-                                            <th scope="col">Physician Name</th>
-                                            <th scope="col">Date of Service</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Chat With</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                
+                                <div class="modal fade" id="@item.Name" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog  modal-dialog-centered">
+                                        <div class="modal-content rounded-4">
+                                            <div class="modal-header bg-info p-2">
+                                                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Cancellation</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Patient Name : <span class="text-info"> @item.Name </span>
+                                                <div class="text-center pt-2">
+                                                    <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
+                                                        <select class="form-select" id="validationDefault04">
+                                                            <option selected disabled value="">Reasons for Cancellation</option>
+                                                            <option>1....</option>
+                                                            <option>2...</option>
+                                                            <option>3... </option>
+                                                            <option>4...</option>
+                                                        </select>
+                                                        <div class="form-floating mt-2">
+                                                            <textarea type="text" class="form-control bg-transparent h-25"
+                                                                      placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                                                                      aria-describedby="button-addon2"> </textarea>
+                                                            <label for="ms-3 text-info">Provide Aditional Notes</label>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer p-1">
+                                                <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
+                                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="tab-pane fade" id="CardT-tab-pane" role="tabpanel" aria-labelledby="CardT-tab" tabindex="0">
-                                <table class="table">
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Date of Birth</th>
-                                            <th scope="col">Region</th>
-                                            <th scope="col">Physician Name</th>
-                                            <th scope="col">Date of Service</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Notes</th>
-                                            <th scope="col">Chat With</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                <div class="modal fade" id="BlockPatient" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog  modal-dialog-centered">
+                                        <div class="modal-content rounded-4">
+                                            <div class="modal-header bg-info p-2">
+                                                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Block</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Patient Name : <span class="text-info"> @item.Name </span>
+                                                <div class="text-center pt-2">
+                                                    <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
+                                                        <div class="form-floating mt-2">
+                                                            <textarea type="text" class="form-control bg-transparent h-25"
+                                                                      placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                                                                      aria-describedby="button-addon2"> </textarea>
+                                                            <label for="ms-3 text-info">Reason for Block Request</label>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer p-1">
+                                                <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
+                                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <div class="tab-pane fade" id="CardU-tab-pane" role="tabpanel" aria-labelledby="CardU-tab" tabindex="0">
-                                <table class="table">
-                                    <tbody>
-                                        <tr class="table-secondary">
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Physician Name</th>
-                                            <th scope="col">Date of Service</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Chat With</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                        </div>
-                   
-
+                                <div class="modal fade" id="AssignCase" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog  modal-dialog-centered">
+                                        <div class="modal-content rounded-4">
+                                            <div class="modal-header bg-info p-2">
+                                                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Assign Request</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>To assign this request, search and select another Physician</p>
+                                                <div class="text-center pt-2">
+                                                    <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
+                                                        <select class="form-select" id="validationDefault04">
+                                                            <option selected disabled value="">Narrow Search by Region</option>
+                                                            <option>District of Columbia</option>
+                                                            <option>Maryland</option>
+                                                            <option>New York</option>
+                                                            <option>Virginia</option>
+                                                        </select>
+                                                        <select class="form-select mt-2" id="validationDefault04">
+                                                            <option selected disabled value="">Select Physician</option>
+                                                            <option>1..</option>
+                                                        </select>
+                                                        <div class="form-floating mt-2">
+                                                            <textarea type="text" class="form-control bg-transparent h-25"
+                                                                      placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                                                                      aria-describedby="button-addon2"> </textarea>
+                                                            <label for="ms-3 text-info">Description</label>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer p-1">
+                                                <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
+                                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
-
     </div>
 </div>
 
-
 <script asp-append-version="true">
-    let DashCardN = document.getElementsByClassName("DashCardN");
-    DashCardN..click(function () {
-        console.log("hi");
-    };
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('dash').classList.add('underLine');
+    });
 </script>

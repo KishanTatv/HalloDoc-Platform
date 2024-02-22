@@ -1,5 +1,6 @@
 ﻿using HalloDoc.Entity.AdminDashTable;
 using HalloDoc.Entity.Data;
+using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,12 @@ namespace HalloDoc.Repository.Implement
 
         }
 
+        public Requestclient GetClientById(int id)
+        {
+            var userData = _context.Requestclients.FirstOrDefault(x => x.Requestclientid == id);
+            return userData;
+        }
+
         public IEnumerable<tableData> GetTableData(int StatusId)
         {
             IEnumerable<tableData> data = from r in _context.Requests
@@ -32,11 +39,14 @@ namespace HalloDoc.Repository.Implement
                                           {
                                               Name = f.Firstname + " " + f.Lastname,
                                               Dob = f.Dob,
+                                              ReqClientId = f.Requestclientid,
                                               ReqTypeId = r.Requesttypeid,
                                               Requestor = r.Firstname + "," + r.Lastname,
                                               RequestedDate = r.Createddate,
                                               Phonenumber = f.Phonenumber,
+                                              ReqPhonenumber = r.Phonenumber,
                                               Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
+                                              city = f.City,
                                               Notes = r.Symptoms,
                                           };
             return data;
@@ -44,23 +54,26 @@ namespace HalloDoc.Repository.Implement
 
         public IEnumerable<tableData> GetTableWithPhyData(int StatusId)
         {
-            IEnumerable<tableData> data = from r in _context.Requests
-                                          join f in _context.Requestclients on r.Requestid equals f.Requestid
-                                          join s in _context.Physicians on r.Physicianid equals s.Physicianid
-                                          where r.Status == StatusId
-                                          orderby r.Createddate descending
+            IEnumerable<tableData> data = from r in _context.Requestclients
+                                          join f in _context.Requests on r.Requestid equals f.Requestid
+                                          join s in _context.Physicians on f.Physicianid equals s.Physicianid
+                                          where f.Status == StatusId
+                                          orderby f.Createddate descending
                                           select new tableData
                                           {
-                                              Name = f.Firstname + " " + f.Lastname,
-                                              Dob = f.Dob,
-                                              ReqTypeId = r.Requesttypeid,
-                                              Requestor = r.Firstname + "," + r.Lastname,
+                                              Name = r.Firstname + " " + r.Lastname,
+                                              Dob = r.Dob,
+                                              ReqClientId = r.Requestclientid,
+                                              ReqTypeId = f.Requesttypeid,
+                                              Requestor = f.Firstname + "," + f.Lastname,
                                               PhysicianName = s.Firstname + ", " + s.Lastname,
-                                              DateOfService = s.Createddate,
-                                              RequestedDate = r.Createddate,
-                                              Phonenumber = f.Phonenumber,
-                                              Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
-                                              Notes = r.Symptoms,
+                                              DateOfService = f.Accepteddate,
+                                              RequestedDate = f.Createddate,
+                                              Phonenumber = r.Phonenumber,
+                                              ReqPhonenumber = f.Phonenumber,
+                                              Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
+                                              city = r.City,
+                                              Notes = f.Symptoms,
                                           };
             return data;
         }

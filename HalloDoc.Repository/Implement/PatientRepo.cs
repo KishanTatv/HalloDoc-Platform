@@ -34,6 +34,12 @@ namespace HalloDoc.Repository.Implement
             return _context.Aspnetusers.Any(u => u.Email == email);
         }
 
+        public Requestclient GetClientById(int id)
+        {
+            var userData = _context.Requestclients.FirstOrDefault(x => x.Requestclientid == id);
+            return userData;
+        }
+
         public Aspnetuser AddAspUser(ClientInformation client)
         {
             Aspnetuser asp = new Aspnetuser
@@ -55,6 +61,7 @@ namespace HalloDoc.Repository.Implement
                 Aspnetuserid = Aspid,
                 Firstname = client.Firstname,
                 Lastname = client.Lastname,
+                Dob = client.Dob,
                 Mobile = client.Phonenumber,
                 Email = client.Email,
                 Street = client.Street,
@@ -136,6 +143,7 @@ namespace HalloDoc.Repository.Implement
                 Firstname = fInfo.clientInformation.Firstname,
                 Lastname = fInfo.clientInformation.Lastname,
                 Mobile = fInfo.clientInformation.Phonenumber,
+                Dob = fInfo.clientInformation.Dob,
                 Email = fInfo.clientInformation.Email,
                 Street = fInfo.clientInformation.Street,
                 City = fInfo.clientInformation.City,
@@ -271,6 +279,7 @@ namespace HalloDoc.Repository.Implement
             user.Firstname = userInfo.User.Firstname;
             user.Lastname = userInfo.User.Lastname;
             user.Mobile = userInfo.User.Phonenumber;
+            user.Dob = userInfo.User.Dob;
             user.Street = userInfo.User.Street;
             user.City = userInfo.User.City;
             user.State = userInfo.User.State;

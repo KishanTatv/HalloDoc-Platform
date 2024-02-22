@@ -71,7 +71,7 @@ namespace HalloDoc.Controllers
         {
             var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
             var ReqFile = patient.GetRequestsFileswithReq(UserEmail, id);
-            var UserData = patient.GetUserByEmail(UserEmail);
+            var UserData = patient.GetClientById(id);
 
             var PatientDash = new PatientDash { ReqWithFiles = ReqFile, User = UserData };
             return View(PatientDash);

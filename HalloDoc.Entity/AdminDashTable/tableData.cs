@@ -10,6 +10,9 @@ namespace HalloDoc.Entity.AdminDashTable
 {
     public class tableData
     {
+        [Column("ReqclientId")]
+        public int? ReqClientId { get; set; }
+
         [Column("name")]
         [StringLength(100)]
         public string? Name { get; set; }
@@ -42,9 +45,17 @@ namespace HalloDoc.Entity.AdminDashTable
         [StringLength(23)]
         public string? Phonenumber { get; set; }
 
+        [Column("reqnumber")]
+        [StringLength(23)]
+        public string? ReqPhonenumber { get; set; }
+
         [Column("Address")]
         [StringLength(100)]
         public string? Address { get; set; }
+
+        [Column("city")]
+        [StringLength(50)]
+        public string? city { get; set; }
 
         [Column("Notes")]
         [StringLength(100)]

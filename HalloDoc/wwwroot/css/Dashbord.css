@@ -8,6 +8,12 @@
     color: white;
 }
 
+.underLine {
+    color: #0dcaf0;
+    border-bottom: 3px solid #0dcaf0;
+}
+
+
 
 .nav-link, .nav-link:hover {
     color: rgba(56, 56, 56, 0.842);
