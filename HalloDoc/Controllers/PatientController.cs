@@ -10,6 +10,7 @@ using System.Net.Mail;
 using System.Net;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using HalloDoc.Models;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace HalloDoc.Controllers
 {
@@ -40,6 +41,14 @@ namespace HalloDoc.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public ActionResult CheckEmail(string email)
+        {
+            bool emailExists = patient.CheckExistAspUser(email);
+            return Json(new { exists = emailExists });
+        }
+
 
         [HttpPost]
         [ActionName("PatientVerification")]

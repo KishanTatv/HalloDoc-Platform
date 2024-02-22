@@ -15,6 +15,7 @@ namespace HalloDoc.Repository.Interface
     {
         bool CheckExistAspUser(string email);
 
+
         int FindUserId(string email);
 
 

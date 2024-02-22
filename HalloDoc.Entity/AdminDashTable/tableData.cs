@@ -17,8 +17,17 @@ namespace HalloDoc.Entity.AdminDashTable
         [StringLength(100)]
         public string? Name { get; set; }
 
-        [Column("Dob")]
-        public DateOnly? Dob { get; set; }
+        [Column("Age")]
+        public int? Age { get; set; }
+
+        [Column("strmonth", TypeName = "character varying")]
+        public string? Strmonth { get; set; }
+
+        [Column("intdate")]
+        public int? Intdate { get; set; }
+
+        [Column("intyear")]
+        public int? Intyear { get; set; }
 
         [Column("ReqTypeId")]
         public int? ReqTypeId { get; set; }

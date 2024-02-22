@@ -29,7 +29,7 @@ namespace HalloDoc.Repository.Implement
             return userData;
         }
 
-        public IEnumerable<tableData> GetTableData(int StatusId)
+        public IEnumerable<tableData> GetTableData(int StatusId, int page, int pageSize)
         {
             IEnumerable<tableData> data = from r in _context.Requests
                                           join f in _context.Requestclients on r.Requestid equals f.Requestid 
@@ -38,7 +38,10 @@ namespace HalloDoc.Repository.Implement
                                           select new tableData
                                           {
                                               Name = f.Firstname + " " + f.Lastname,
-                                              Dob = f.Dob,
+                                              Intdate = f.Intdate,
+                                              Strmonth = f.Strmonth,
+                                              Intyear = f.Intyear,
+                                              Age = System.DateTime.Now.Year - f.Intyear,
                                               ReqClientId = f.Requestclientid,
                                               ReqTypeId = r.Requesttypeid,
                                               Requestor = r.Firstname + "," + r.Lastname,
@@ -49,10 +52,10 @@ namespace HalloDoc.Repository.Implement
                                               city = f.City,
                                               Notes = r.Symptoms,
                                           };
-            return data;
+            return data.Skip(page * pageSize).Take(pageSize).ToList();
         }
 
-        public IEnumerable<tableData> GetTableWithPhyData(int StatusId)
+        public IEnumerable<tableData> GetTableDataPending(int StatusId)
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
@@ -62,7 +65,39 @@ namespace HalloDoc.Repository.Implement
                                           select new tableData
                                           {
                                               Name = r.Firstname + " " + r.Lastname,
-                                              Dob = r.Dob,
+                                              Intdate = r.Intdate,
+                                              Strmonth = r.Strmonth,
+                                              Intyear = r.Intyear,
+                                              Age = System.DateTime.Now.Year - r.Intyear,
+                                              ReqClientId = r.Requestclientid,
+                                              ReqTypeId = f.Requesttypeid,
+                                              Requestor = f.Firstname + "," + f.Lastname,
+                                              PhysicianName = s.Firstname + ", " + s.Lastname,
+                                              DateOfService = f.Accepteddate,
+                                              RequestedDate = f.Createddate,
+                                              Phonenumber = r.Phonenumber,
+                                              ReqPhonenumber = f.Phonenumber,
+                                              Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
+                                              city = r.City,
+                                              Notes = f.Symptoms,
+                                          };
+            return data.ToList();
+        }
+
+        public IEnumerable<tableData> GetTableDataActive()
+        {
+            IEnumerable<tableData> data = from r in _context.Requestclients
+                                          join f in _context.Requests on r.Requestid equals f.Requestid
+                                          join s in _context.Physicians on f.Physicianid equals s.Physicianid
+                                          where f.Status == 4 || f.Status == 5
+                                          orderby f.Createddate descending
+                                          select new tableData
+                                          {
+                                              Name = r.Firstname + " " + r.Lastname,
+                                              Intdate = r.Intdate,
+                                              Strmonth = r.Strmonth,
+                                              Intyear = r.Intyear,
+                                              Age = System.DateTime.Now.Year - r.Intyear,
                                               ReqClientId = r.Requestclientid,
                                               ReqTypeId = f.Requesttypeid,
                                               Requestor = f.Firstname + "," + f.Lastname,
@@ -78,10 +113,105 @@ namespace HalloDoc.Repository.Implement
             return data;
         }
 
-        public int TotalCountPatient(int statusId)
+        public IEnumerable<tableData> GetTableDataConclude()
         {
-            int Tnum = _context.Requests.Where(x => x.Status== statusId).Count();
-            return Tnum;
+            IEnumerable<tableData> data = from r in _context.Requestclients
+                                          join f in _context.Requests on r.Requestid equals f.Requestid
+                                          join s in _context.Physicians on f.Physicianid equals s.Physicianid
+                                          where f.Status == 6
+                                          orderby f.Createddate descending
+                                          select new tableData
+                                          {
+                                              Name = r.Firstname + " " + r.Lastname,
+                                              Intdate = r.Intdate,
+                                              Strmonth = r.Strmonth,
+                                              Intyear = r.Intyear,
+                                              Age = System.DateTime.Now.Year - r.Intyear,
+                                              ReqClientId = r.Requestclientid,
+                                              ReqTypeId = f.Requesttypeid,
+                                              Requestor = f.Firstname + "," + f.Lastname,
+                                              PhysicianName = s.Firstname + ", " + s.Lastname,
+                                              DateOfService = f.Accepteddate,
+                                              RequestedDate = f.Createddate,
+                                              Phonenumber = r.Phonenumber,
+                                              ReqPhonenumber = f.Phonenumber,
+                                              Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
+                                              city = r.City,
+                                              Notes = f.Symptoms,
+                                          };
+            return data;
+        }
+
+        
+
+        public IEnumerable<tableData> GetTableDataToclose()
+        {
+            IEnumerable<tableData> data = from r in _context.Requestclients
+                                          join f in _context.Requests on r.Requestid equals f.Requestid
+                                          where f.Status == 3 || f.Status == 7 || f.Status == 8
+                                          orderby f.Createddate descending
+                                          select new tableData
+                                          {
+                                              Name = r.Firstname + " " + r.Lastname,
+                                              Intdate = r.Intdate,
+                                              Strmonth = r.Strmonth,
+                                              Intyear = r.Intyear,
+                                              Age = System.DateTime.Now.Year - r.Intyear,
+                                              ReqClientId = r.Requestclientid,
+                                              ReqTypeId = f.Requesttypeid,
+                                              Requestor = f.Firstname + "," + f.Lastname,
+                                              DateOfService = f.Accepteddate,
+                                              RequestedDate = f.Createddate,
+                                              Phonenumber = r.Phonenumber,
+                                              ReqPhonenumber = f.Phonenumber,
+                                              Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
+                                              city = r.City,
+                                              Notes = f.Symptoms,
+                                          };
+            return data;
+        }
+
+        public IEnumerable<tableData> GetTableDataUnpaid()
+        {
+            IEnumerable<tableData> data = from r in _context.Requestclients
+                                          join f in _context.Requests on r.Requestid equals f.Requestid
+                                          join s in _context.Physicians on f.Physicianid equals s.Physicianid
+                                          where f.Status == 9
+                                          orderby f.Createddate descending
+                                          select new tableData
+                                          {
+                                              Name = r.Firstname + " " + r.Lastname,
+                                              Intdate = r.Intdate,
+                                              Strmonth = r.Strmonth,
+                                              Intyear = r.Intyear,
+                                              Age = System.DateTime.Now.Year - r.Intyear,
+                                              ReqClientId = r.Requestclientid,
+                                              ReqTypeId = f.Requesttypeid,
+                                              Requestor = f.Firstname + "," + f.Lastname,
+                                              PhysicianName = s.Firstname + ", " + s.Lastname,
+                                              DateOfService = f.Accepteddate,
+                                              RequestedDate = f.Createddate,
+                                              Phonenumber = r.Phonenumber,
+                                              ReqPhonenumber = f.Phonenumber,
+                                              Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
+                                              city = r.City,
+                                              Notes = f.Symptoms,
+                                          };
+            return data;
+        }
+
+        public List<int> TotalCountPatient()
+        {
+            int Tnew = _context.Requests.Where(x => x.Status == 1).Count();
+            int Tpending = _context.Requests.Where(x => x.Status == 2).Count();
+            int Tactive = _context.Requests.Where(x => x.Status == 4 || x.Status == 5).Count();
+            int Tconclide = _context.Requests.Where(x => x.Status == 6).Count();
+            int Tclose = _context.Requests.Where(x => x.Status == 3 || x.Status == 7 || x.Status == 8).Count();
+            int Tunpaid = _context.Requests.Where(x => x.Status == 9).Count();
+            List<int> countList = new List<int>();
+            countList.Add(Tnew); countList.Add(Tpending); countList.Add(Tactive); countList.Add(Tconclide); countList.Add(Tclose); countList.Add(Tunpaid);
+
+            return countList;
         }
     }
 }

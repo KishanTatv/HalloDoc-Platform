@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.VisualBasic;
 
 namespace HalloDoc.Entity.RequestForm
 {
@@ -18,7 +19,7 @@ namespace HalloDoc.Entity.RequestForm
         public string? Lastname { get; set; }
 
         [Column("Dob")]
-        public DateOnly? Dob { get; set; }
+        public DateTime Dob { get; set; }
 
         [Column("phonenumber")]
         [StringLength(23)]
@@ -26,6 +27,7 @@ namespace HalloDoc.Entity.RequestForm
 
         [Column("email")]
         [StringLength(50)]
+        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
         [Required(ErrorMessage = "Please enter email")]
         public string? Email { get; set; }
 
@@ -55,7 +57,7 @@ namespace HalloDoc.Entity.RequestForm
         public string? State { get; set; }
 
         [Column("zipcode")]
-        [StringLength(10)]
+        [RegularExpression(@"0*[1-9][0-9]*", ErrorMessage = "only number enter.")]
         public string? Zipcode { get; set; }
 
         [Column("Locroom")]

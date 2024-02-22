@@ -26,7 +26,6 @@ namespace HalloDoc.Controllers
 
 
         [HttpGet]
-        [Route("PatientRequest/PatientReq")]
         public IActionResult PatientReq()
         {
             ViewBag.ShowAdditionalInput = false;

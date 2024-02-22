@@ -23,22 +23,22 @@
                 <h5>Patient Information</h5>
                 <div class="form-floating">
                     <textarea type="text" class="form-control bg-transparent border border-info h-25"
-                              placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                              placeholder="Detail info" rows="3" aria-label="Detail info"
                               aria-describedby="button-addon2" asp-for="Symptoms"> </textarea>
                     <label for="ms-3 text-info">Enter Brief Detail of Symptoms(options)</label>
                 </div>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="Firstname">
+                        <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="Firstname">
                         <label class="ms-3">First Name</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="Lastname">
+                        <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="Lastname">
                         <label class="ms-3">Last Name</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="date" class="form-control bg-transparent" id="floatingInputValue"
-                               placeholder="Date of birth" value="12/05/2023" asp-for="Dob">
+                               placeholder="Date of birth" asp-for="Dob">
                         <label class="ms-3">Date of Birth</label>
                     </div>
                 </div>
@@ -73,25 +73,26 @@
                 <h5>Patient Location</h5>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street" asp-for="Street">
+                        <input type="text" class="form-control bg-transparent" placeholder="street" asp-for="Street">
                         <label class="ms-3">Street</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2 ">
-                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="city" asp-for="City">
+                        <input type="text" class="form-control bg-transparent" placeholder="city" asp-for="City">
                         <label class="ms-3">City</label>
                     </div>
                 </div>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="state" asp-for="State">
+                        <input type="text" class="form-control bg-transparent" placeholder="state" asp-for="State">
                         <label class="ms-3">State</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="number" class="form-control bg-transparent" id="floatingInput" placeholder="zipCode" asp-for="Zipcode">
+                        <input type="text" maxlength="6" class="form-control bg-transparent" placeholder="zipCode" asp-for="Zipcode">
                         <label class="ms-3">Zip Code</label>
+                        <span asp-validation-for="Zipcode" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="roomSuite" asp-for="Locroom">
+                        <input type="text" class="form-control bg-transparent" placeholder="roomSuite" asp-for="Locroom">
                         <label class="ms-3">Room # / Suite(optional)</label>
                     </div>
                     @if (ViewBag.DefaultFieldValue == "reqMap")
@@ -109,7 +110,7 @@
                     <h5>Relation</h5>
                     <div class="row form-floating">
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="Relation with Patient" asp-for="relation">
+                            <input type="text" class="form-control bg-transparent" placeholder="Relation with Patient" asp-for="relation">
                             <label class="ms-3">Relation with Patient (optional)</label>
                         </div>
                     </div>

@@ -23,54 +23,84 @@ namespace HalloDoc.Controllers
             return View();
         }
 
-        public IActionResult Dashbord(int id)
+        public IActionResult Dashbord(int id,int page = 0)
         {
-            IEnumerable<tableData> Req;
-            if (id == 1 || id ==0)
+            int pageSize = 5;
+            var Tcount = _Admin.TotalCountPatient();
+
+            IEnumerable<tableData> Req = new List<tableData>();
+
+            //new
+            if (id == 1)
             {
                 ViewBag.dTable = 1;
-                Req = _Admin.GetTableData(1);
+                Req = _Admin.GetTableData(1,page,pageSize);
             }
-            else
+
+            //pending
+            if (id == 2)
             {
                 ViewBag.dTable = id;
-                Req = _Admin.GetTableWithPhyData(id);
+                Req = _Admin.GetTableDataPending(id);
             }
 
-            int ToatlNew = _Admin.TotalCountPatient(1);
-            int TotalPending = _Admin.TotalCountPatient(2);
-            int TotalActive = _Admin.TotalCountPatient(3);
-            int TotalConclude = _Admin.TotalCountPatient(4);
-            int TotalToclose = _Admin.TotalCountPatient(5);
-            int TotalUnpaid = _Admin.TotalCountPatient(6);
-            List<int> countList = new List<int>();
-            countList.Add(ToatlNew); countList.Add(TotalPending); countList.Add(TotalActive); countList.Add(TotalConclude); countList.Add(TotalToclose);  countList.Add(TotalUnpaid);
+            //Active
+            else if(id == 3)
+            {
+                ViewBag.dTable = id;
+                Req = _Admin.GetTableDataActive();
+            }
 
+            //conclude
+            else if (id == 4)
+            {
+                ViewBag.dTable = id;
+                Req = _Admin.GetTableDataConclude();
+            }
 
-            var dashData = new DashTable { Tdata= Req ,ToatlCount = countList};
+            //To-close
+            else if (id == 5)
+            {
+                ViewBag.dTable = id;
+                Req = _Admin.GetTableDataToclose();
+            }
+
+            //Unpaid
+            else if( id == 6)
+            {
+                ViewBag.dTable = id;
+                Req = _Admin.GetTableDataUnpaid();
+            }
+
+            else {
+                ViewBag.dTable = 1;
+                Req = _Admin.GetTableData(1, page, pageSize);
+            }
+
+            var dashData = new DashTable { Tdata= Req.ToList() ,ToatlCount = Tcount};
             return View(dashData);
         }
 
         public IActionResult ExportAll()
         {
-            IEnumerable<tableData> data = _Admin.GetTableData(1);
+            //IEnumerable<tableData> data = _Admin.GetTableData(1);
 
-            using (var workbook = new XLWorkbook())
-            {
-                var worksheet = workbook.Worksheets.Add("TableData");
+            //using (var workbook = new XLWorkbook())
+            //{
+            //    var worksheet = workbook.Worksheets.Add("TableData");
 
-                worksheet.Cell(1, 1).Value = "Name";
-                worksheet.Cell(1, 2).Value = "Date of Birth";
+            //    worksheet.Cell(1, 1).Value = "Name";
+            //    worksheet.Cell(1, 2).Value = "Date of Birth";
 
-                int row = 2;
-                foreach (var item in data)
-                {
-                    worksheet.Cell(row, 1).Value = item.Name;
-                    row++;
-                }
+            //    int row = 2;
+            //    foreach (var item in data)
+            //    {
+            //        worksheet.Cell(row, 1).Value = item.Name;
+            //        row++;
+            //    }
 
-                workbook.SaveAs("MyTableData.xlsx");
-            }
+            //    workbook.SaveAs("MyTableData.xlsx");
+            //}
             return View();
         }
 

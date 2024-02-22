@@ -34,6 +34,7 @@ namespace HalloDoc.Repository.Implement
             return _context.Aspnetusers.Any(u => u.Email == email);
         }
 
+
         public Requestclient GetClientById(int id)
         {
             var userData = _context.Requestclients.FirstOrDefault(x => x.Requestclientid == id);
@@ -61,7 +62,9 @@ namespace HalloDoc.Repository.Implement
                 Aspnetuserid = Aspid,
                 Firstname = client.Firstname,
                 Lastname = client.Lastname,
-                Dob = client.Dob,
+                Intdate = client.Dob.Day,
+                Strmonth = client.Dob.ToString("MMMM"),
+                Intyear = client.Dob.Year,
                 Mobile = client.Phonenumber,
                 Email = client.Email,
                 Street = client.Street,
@@ -108,7 +111,9 @@ namespace HalloDoc.Repository.Implement
                 Firstname = client.Firstname,
                 Lastname = client.Lastname,
                 Phonenumber = client.Phonenumber,
-                Dob = client.Dob,
+                Intdate = client.Dob.Day,
+                Strmonth = client.Dob.ToString("MMMM"),
+                Intyear = client.Dob.Year,
                 Email = client.Email,
                 Street = client.Street,
                 City = client.City,
@@ -143,7 +148,9 @@ namespace HalloDoc.Repository.Implement
                 Firstname = fInfo.clientInformation.Firstname,
                 Lastname = fInfo.clientInformation.Lastname,
                 Mobile = fInfo.clientInformation.Phonenumber,
-                Dob = fInfo.clientInformation.Dob,
+                Intdate = fInfo.clientInformation.Dob.Day,
+                Strmonth = fInfo.clientInformation.Dob.ToString("MMMM"),
+                Intyear = fInfo.clientInformation.Dob.Year,
                 Email = fInfo.clientInformation.Email,
                 Street = fInfo.clientInformation.Street,
                 City = fInfo.clientInformation.City,
@@ -184,7 +191,9 @@ namespace HalloDoc.Repository.Implement
                 Firstname = fInfo.clientInformation.Firstname,
                 Lastname = fInfo.clientInformation.Lastname,
                 Phonenumber = fInfo.clientInformation.Phonenumber,
-                Dob = fInfo.clientInformation.Dob,
+                Intdate = fInfo.clientInformation.Dob.Day,
+                Strmonth = fInfo.clientInformation.Dob.ToString("MMMM"),
+                Intyear = fInfo.clientInformation.Dob.Year,
                 Email = fInfo.clientInformation.Email,
                 Street = fInfo.clientInformation.Street,
                 City = fInfo.clientInformation.City,
@@ -279,7 +288,8 @@ namespace HalloDoc.Repository.Implement
             user.Firstname = userInfo.User.Firstname;
             user.Lastname = userInfo.User.Lastname;
             user.Mobile = userInfo.User.Phonenumber;
-            user.Dob = userInfo.User.Dob;
+            user.Intdate = userInfo.User.Dob.Day;
+            user.Strmonth = userInfo.User.Dob.ToString("MMMM");
             user.Street = userInfo.User.Street;
             user.City = userInfo.User.City;
             user.State = userInfo.User.State;
@@ -294,7 +304,9 @@ namespace HalloDoc.Repository.Implement
             reqClient.Firstname = userInfo.User.Firstname;
             reqClient.Lastname = userInfo.User.Lastname;
             reqClient.Phonenumber = userInfo.User.Phonenumber;
-            reqClient.Dob = userInfo.User.Dob;
+            reqClient.Intdate = userInfo.User.Dob.Day;
+            reqClient.Strmonth = userInfo.User.Dob.ToString("MMMM");
+            reqClient.Intyear = userInfo.User.Dob.Year;
             reqClient.Street = userInfo.User.Street;
             reqClient.City = userInfo.User.City;
             reqClient.State = userInfo.User.State;

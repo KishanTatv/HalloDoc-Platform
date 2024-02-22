@@ -104,6 +104,15 @@ public partial class Requestclient
 
     public DateOnly? Dob { get; set; }
 
+    [Column("strmonth", TypeName = "character varying")]
+    public string? Strmonth { get; set; }
+
+    [Column("intdate")]
+    public int? Intdate { get; set; }
+
+    [Column("intyear")]
+    public int? Intyear { get; set; }
+
     [ForeignKey("Regionid")]
     [InverseProperty("Requestclients")]
     public virtual Region? Region { get; set; }
