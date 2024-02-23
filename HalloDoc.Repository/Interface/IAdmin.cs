@@ -15,17 +15,20 @@ namespace HalloDoc.Repository.Interface
 
         Requestclient GetClientById(int id);
 
-        IEnumerable<tableData> GetTableData(int StatusId, int page, int pageSize);
 
-        IEnumerable<tableData> GetTableDataPending(int StatusId);
 
-        IEnumerable<tableData> GetTableDataActive();
+        //Dashbord table Data 
+        IEnumerable<tableData> GetTableData(int page, int pageSize);
 
-        IEnumerable<tableData> GetTableDataConclude();
+        IEnumerable<tableData> GetTableDataPending(int page, int pageSize);
 
-        IEnumerable<tableData> GetTableDataToclose();
+        IEnumerable<tableData> GetTableDataActive(int page, int pageSize);
 
-        IEnumerable<tableData> GetTableDataUnpaid();
+        IEnumerable<tableData> GetTableDataConclude(int page, int pageSize);
+
+        IEnumerable<tableData> GetTableDataToclose(int page, int pageSize);
+
+        IEnumerable<tableData> GetTableDataUnpaid(int page, int pageSize);
 
 
         List<int> TotalCountPatient();

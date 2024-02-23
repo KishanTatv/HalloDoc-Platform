@@ -1,4 +1,7 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Wordprocessing;
 using HalloDoc.Entity.AdminDashTable;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +26,21 @@ namespace HalloDoc.Controllers
             return View();
         }
 
-        public IActionResult Dashbord(int id,int page = 0)
+
+        public IActionResult Dashbord()
+        
+        {
+            ViewBag.dTable = 1;
+            var Tcount = _Admin.TotalCountPatient();
+
+            IEnumerable<tableData> Req;
+            Req = _Admin.GetTableData(0, 5);
+            var dashData = new DashTable {Tdata = Req ,ToatlCount = Tcount };
+            return View(dashData);
+        }
+
+
+        public IActionResult DashbordData(int id,int page)
         {
             int pageSize = 5;
             var Tcount = _Admin.TotalCountPatient();
@@ -34,51 +51,51 @@ namespace HalloDoc.Controllers
             if (id == 1)
             {
                 ViewBag.dTable = 1;
-                Req = _Admin.GetTableData(1,page,pageSize);
+                Req = _Admin.GetTableData(page,pageSize);
             }
 
             //pending
             if (id == 2)
             {
                 ViewBag.dTable = id;
-                Req = _Admin.GetTableDataPending(id);
+                Req = _Admin.GetTableDataPending(page, pageSize);
             }
 
             //Active
             else if(id == 3)
             {
                 ViewBag.dTable = id;
-                Req = _Admin.GetTableDataActive();
+                Req = _Admin.GetTableDataActive(page, pageSize);
             }
 
             //conclude
             else if (id == 4)
             {
                 ViewBag.dTable = id;
-                Req = _Admin.GetTableDataConclude();
+                Req = _Admin.GetTableDataConclude(page, pageSize);
             }
 
             //To-close
             else if (id == 5)
             {
                 ViewBag.dTable = id;
-                Req = _Admin.GetTableDataToclose();
+                Req = _Admin.GetTableDataToclose(page, pageSize);
             }
 
             //Unpaid
             else if( id == 6)
             {
                 ViewBag.dTable = id;
-                Req = _Admin.GetTableDataUnpaid();
+                Req = _Admin.GetTableDataUnpaid(page, pageSize);
             }
 
             else {
                 ViewBag.dTable = 1;
-                Req = _Admin.GetTableData(1, page, pageSize);
+                Req = _Admin.GetTableData(page, pageSize);
             }
 
-            var dashData = new DashTable { Tdata= Req.ToList() ,ToatlCount = Tcount};
-            return View(dashData);
+            var dashData = new DashTable { Tdata= Req.ToList() };
+            return PartialView("TablePartial", dashData);
         }
 
         public IActionResult ExportAll()

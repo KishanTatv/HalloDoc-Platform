@@ -51,6 +51,11 @@
         background-color: #203f9a;
     }
 
+.new-active {
+    color: white;
+    background-color: #203f9a;
+}
+
 .DashCardP {
     color: #3096c5;
     border: 1px solid #3096c5;
@@ -61,6 +66,11 @@
         color: white;
         background-color: #3096c5;
     }
+
+.Pending-active {
+    color: white;
+    background-color: #3096c5;
+}
 
 .DashCardA {
     color: #2f7e3c;
@@ -73,6 +83,11 @@
         background-color: #2f7e3c;
     }
 
+.Active-active {
+    color: white;
+    background-color: #2f7e3c;
+}
+
 .DashCardC {
     color: #a4246e;
     border: 1px solid #a4246e;
@@ -83,6 +98,11 @@
         color: white;
         background-color: #a4246e;
     }
+
+.Conclude-active {
+    color: white;
+    background-color: #a4246e;
+}
 
 .DashCardT {
     color: #136bb2;
@@ -95,6 +115,11 @@
         background-color: #136bb2;
     }
 
+.ToClose-active {
+    color: white;
+    background-color: #136bb2;
+}
+
 
 .DashCardU {
     color: #8a68ad;
@@ -106,6 +131,11 @@
         color: white;
         background-color: #8a68ad;
     }
+
+.Unpaid-active {
+    color: white;
+    background-color: #8a68ad;
+}
 
 .bg-lighinfo {
     background-color: #d4f7ffbd;

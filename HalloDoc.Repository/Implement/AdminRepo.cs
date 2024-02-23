@@ -29,11 +29,13 @@ namespace HalloDoc.Repository.Implement
             return userData;
         }
 
-        public IEnumerable<tableData> GetTableData(int StatusId, int page, int pageSize)
+
+        #region New Request
+        public IEnumerable<tableData> GetTableData(int page, int pageSize)
         {
             IEnumerable<tableData> data = from r in _context.Requests
                                           join f in _context.Requestclients on r.Requestid equals f.Requestid 
-                                          where r.Status == StatusId
+                                          where r.Status == 1
                                           orderby r.Createddate descending
                                           select new tableData
                                           {
@@ -42,6 +44,7 @@ namespace HalloDoc.Repository.Implement
                                               Strmonth = f.Strmonth,
                                               Intyear = f.Intyear,
                                               Age = System.DateTime.Now.Year - f.Intyear,
+                                              Email = f.Email,
                                               ReqClientId = f.Requestclientid,
                                               ReqTypeId = r.Requesttypeid,
                                               Requestor = r.Firstname + "," + r.Lastname,
@@ -54,13 +57,16 @@ namespace HalloDoc.Repository.Implement
                                           };
             return data.Skip(page * pageSize).Take(pageSize).ToList();
         }
+        #endregion
 
-        public IEnumerable<tableData> GetTableDataPending(int StatusId)
+
+        #region Pending Request
+        public IEnumerable<tableData> GetTableDataPending(int page, int pageSize)
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
                                           join s in _context.Physicians on f.Physicianid equals s.Physicianid
-                                          where f.Status == StatusId
+                                          where f.Status == 2
                                           orderby f.Createddate descending
                                           select new tableData
                                           {
@@ -81,10 +87,13 @@ namespace HalloDoc.Repository.Implement
                                               city = r.City,
                                               Notes = f.Symptoms,
                                           };
-            return data.ToList();
+            return data.Skip(page * pageSize).Take(pageSize).ToList();
         }
+        #endregion
 
-        public IEnumerable<tableData> GetTableDataActive()
+
+        #region Active Request
+        public IEnumerable<tableData> GetTableDataActive(int page, int pageSize)
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
@@ -110,10 +119,13 @@ namespace HalloDoc.Repository.Implement
                                               city = r.City,
                                               Notes = f.Symptoms,
                                           };
-            return data;
+            return data.Skip(page * pageSize).Take(pageSize).ToList();
         }
+        #endregion
 
-        public IEnumerable<tableData> GetTableDataConclude()
+
+        #region Conclude Request
+        public IEnumerable<tableData> GetTableDataConclude(int page, int pageSize)
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
@@ -139,12 +151,13 @@ namespace HalloDoc.Repository.Implement
                                               city = r.City,
                                               Notes = f.Symptoms,
                                           };
-            return data;
+            return data.Skip(page * pageSize).Take(pageSize).ToList();
         }
+        #endregion
 
-        
 
-        public IEnumerable<tableData> GetTableDataToclose()
+        #region Toclose Request
+        public IEnumerable<tableData> GetTableDataToclose(int page, int pageSize)
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
@@ -168,10 +181,13 @@ namespace HalloDoc.Repository.Implement
                                               city = r.City,
                                               Notes = f.Symptoms,
                                           };
-            return data;
+            return data.Skip(page * pageSize).Take(pageSize).ToList();
         }
+        #endregion
 
-        public IEnumerable<tableData> GetTableDataUnpaid()
+
+        #region Unpaid Request
+        public IEnumerable<tableData> GetTableDataUnpaid(int page, int pageSize)
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
@@ -197,8 +213,9 @@ namespace HalloDoc.Repository.Implement
                                               city = r.City,
                                               Notes = f.Symptoms,
                                           };
-            return data;
+            return data.Skip(page * pageSize).Take(pageSize).ToList();
         }
+        #endregion
 
         public List<int> TotalCountPatient()
         {

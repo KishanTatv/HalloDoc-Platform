@@ -6,11 +6,11 @@ namespace HalloDoc.Entity.RequestForm
     public class PatientDash
     {
         //public IEnumerable<Request> Requests { get; set; }
-        public ClientInformation User { get; set; }
+        public User User { get; set; }
 
         public IEnumerable<RequestWithFile> ReqWithFiles { get; set; }
 
-        public Requestclient  Requestclient { get; set; } 
+        public Requestclient reqclient { get; set; }    
 
     }
 }

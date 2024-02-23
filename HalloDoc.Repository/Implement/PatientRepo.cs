@@ -37,7 +37,13 @@ namespace HalloDoc.Repository.Implement
 
         public Requestclient GetClientById(int id)
         {
-            var userData = _context.Requestclients.FirstOrDefault(x => x.Requestclientid == id);
+            var userData = _context.Requestclients.FirstOrDefault(x => x.Requestid == id);
+            return userData;
+        }
+
+        public User GetUserById(int id)
+        {
+            var userData = _context.Users.FirstOrDefault(x => x.Userid == id);
             return userData;
         }
 
@@ -287,9 +293,9 @@ namespace HalloDoc.Repository.Implement
             User user = _context.Users.FirstOrDefault(u => u.Email == email);
             user.Firstname = userInfo.User.Firstname;
             user.Lastname = userInfo.User.Lastname;
-            user.Mobile = userInfo.User.Phonenumber;
-            user.Intdate = userInfo.User.Dob.Day;
-            user.Strmonth = userInfo.User.Dob.ToString("MMMM");
+            user.Mobile = userInfo.User.Mobile;
+            user.Intdate = userInfo.User.Intdate;
+            user.Strmonth = userInfo.User.Strmonth;
             user.Street = userInfo.User.Street;
             user.City = userInfo.User.City;
             user.State = userInfo.User.State;
@@ -301,16 +307,16 @@ namespace HalloDoc.Repository.Implement
         public void UpdateRequestClient(PatientDash userInfo,string email)
         {
             Requestclient reqClient = _context.Requestclients.FirstOrDefault(u => u.Email == email);
-            reqClient.Firstname = userInfo.User.Firstname;
-            reqClient.Lastname = userInfo.User.Lastname;
-            reqClient.Phonenumber = userInfo.User.Phonenumber;
-            reqClient.Intdate = userInfo.User.Dob.Day;
-            reqClient.Strmonth = userInfo.User.Dob.ToString("MMMM");
-            reqClient.Intyear = userInfo.User.Dob.Year;
-            reqClient.Street = userInfo.User.Street;
-            reqClient.City = userInfo.User.City;
-            reqClient.State = userInfo.User.State;
-            reqClient.Zipcode = userInfo.User.Zipcode;
+            reqClient.Firstname = userInfo.reqclient.Firstname;
+            reqClient.Lastname = userInfo.reqclient.Lastname;
+            reqClient.Phonenumber = userInfo.reqclient.Phonenumber;
+            reqClient.Intdate = userInfo.reqclient.Intdate;
+            reqClient.Strmonth = userInfo.reqclient.Strmonth;
+            reqClient.Intyear = userInfo.reqclient.Intyear;
+            reqClient.Street = userInfo.reqclient.Street;
+            reqClient.City = userInfo.reqclient.City;
+            reqClient.State = userInfo.reqclient.State;
+            reqClient.Zipcode = userInfo.reqclient.Zipcode;
             _context.Requestclients.Update(reqClient);
             _context.SaveChanges();
         }

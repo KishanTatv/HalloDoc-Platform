@@ -12,464 +12,161 @@
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
 
 
-
 <div class="MainContent pt-0 min-vh-100">
-    <div class="tab-content" id="nav-tabContent">
 
-        <partial name="partial/AdminNavTab" />
+    <partial name="partial/AdminNavTab" />
 
-        <div class="container-fluid overflow-hidden mt-3">
-            <div class="row g-3 nav">
-                <div class="col-4 col-sm-4 col-lg-2 active">
-                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardN" asp-action="Dashbord" asp-route-id="1" asp-controller="AdminDash">
-                        <div class=" p-0">
-                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                 src="~/image/Dash_new.jpg">
-                            <strong class="Dash-name">NEW</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[0] </h5>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-4 col-sm-4 col-lg-2 ">
-                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardP" asp-action="Dashbord" asp-route-id="2" asp-controller="AdminDash">
-                        <div class=" p-0">
-                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                 src="~/image/Dash_pending.jpg">
-                            <strong class="Dash-name">PENDING</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[1] </h5>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-4 col-sm-4 col-lg-2 ">
-                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardA" asp-action="Dashbord" asp-route-id="3" asp-controller="AdminDash">
-                        <div class=" p-0">
-                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                 src="~/image/Dash_active.png">
-                            <strong class="Dash-name">ACTIVE</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[2] </h5>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-4 col-sm-4 col-lg-2 ">
-
-                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardC" asp-action="Dashbord" asp-route-id="4" asp-controller="AdminDash">
-                        <div class=" p-0">
-                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                 src="~/image/Dash_conclude.png">
-                            <strong class="Dash-name">CONCLUDE</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[3] </h5>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-4 col-sm-4 col-lg-2 ">
-
-                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardT" asp-action="Dashbord" asp-route-id="5" asp-controller="AdminDash">
-                        <div class=" p-0">
-                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                 src="~/image/Dash_toclose.png">
-                            <strong class="Dash-name">To CLOSE</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-4 col-sm-4 col-lg-2 ">
-
-                    <a class="d-flex p-2 text-decoration-none rounded-3 DashCardU" asp-action="Dashbord" asp-route-id="6" asp-controller="AdminDash">
-                        <div class=" p-0">
-                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                 src="~/image/Dash_unpaid.png">
-                            <strong class="Dash-name">UNPAID</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-between m-3">
-            <div>
-                <h5>Patient <span class="text-primary"> ( @Enum.GetName(typeof(HalloEnum.DashName), ViewBag.dTable) )</span> </h5>
-            </div>
-            <div>
-                <button type="button" class="btn btn-info text-light"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
-                <button type="button" class="btn btn-info text-light"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></button>
-                <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
-                <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
-                <button type="button" class="btn btn-info text-light"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></button>
-            </div>
-        </div>
-
-        <div class="bg-light rounded-3 m-3 pt-2">
-            <div class="row">
-                <div class="col-lg-4 ">
-                    <div class="d-flex ms-2">
-                        <input type="text" id="InputSearch" class="form-control me-2" placeholder="Search Patient" onkeyup="SearchPatient()">
-                        <select class="form-select" id="validationDefault04">
-                            <option selected disabled value="">All Regions</option>
-                            <option>District of Columbia</option>
-                            <option>Maryland</option>
-                            <option>New York</option>
-                            <option>Virginia</option>
-                        </select>
+    <div class="container-fluid overflow-hidden mt-3">
+        <div class="row g-3 nav">
+            <div class="col-4 col-sm-4 col-lg-2 active">
+                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardN" onclick="newDash()" data-id="1">
+                    <div class=" p-0">
+                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                             src="~/image/Dash_new.jpg">
+                        <strong class="Dash-name">NEW</strong>
+                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[0] </h5>
                     </div>
                 </div>
-                <div class="col-lg d-flex justify-content-end align-self-center">
-                    <span class="btn btn-outline-secondary p-0 ps-1 pe-1 me-2 h-50 text-dashide">All</span>
-                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-success"></i>Patient</span>
-                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-orange"></i>Family/Friend</span>
-                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-pink"></i>Bussiness</span>
-                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-blue"></i>Concierge</span>
-                    <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-purple"></i>vip</span>
+            </div>
+            <div class="col-4 col-sm-4 col-lg-2 ">
+                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardP" onclick="penDash()" data-id="2">
+                    <div class=" p-0">
+                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                             src="~/image/Dash_pending.jpg">
+                        <strong class="Dash-name">PENDING</strong>
+                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[1] </h5>
+                    </div>
                 </div>
             </div>
-            <div class="table-responsive mt-2">
-                <table id="tableD" class="table">
-                    <tbody>
-                        <tr class="table-secondary">
-                            <th class="d-none d-sm-table-cell" scope="col">Name</th>
-                            @if (ViewBag.dTable != 6)
-                            {
-                                <th class="d-none d-sm-table-cell" scope="col">Date of Birth</th>
-                            }
-                            @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
-                            {
-                                <th class="d-none d-sm-table-cell" scope="col">Requestor</th>
-                            }
-                            @if (ViewBag.dTable == 1)
-                            {
-                                <th class="d-none d-sm-table-cell" scope="col">Requested Date</th>
-                            }
-                            @if (ViewBag.dTable == 5)
-                            {
-                                <th class="d-none d-sm-table-cell" scope="col">Region</th>
-                            }
-                            @if (ViewBag.dTable != 1)
-                            {
-                                <th class="d-none d-sm-table-cell" scope="col">Physician Name</th>
-                            }
-                            @if (ViewBag.dTable != 1)
-                            {
-                                <th class="d-none d-sm-table-cell" scope="col">Date of Service</th>
-                            }
-                            @if (ViewBag.dTable != 5)
-                            {
-                                <th class="d-none d-sm-table-cell" scope="col">Phone</th>
-                            }
-                            <th class="d-none d-sm-table-cell" scope="col">Address</th>
-                            @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
-                            {
-                                <th class="d-none d-sm-table-cell" scope="col">Notes</th>
-                            }
-                            <th class="d-none d-sm-table-cell" scope="col">Chat With</th>
-                            <th class="d-none d-sm-table-cell" scope="col">Action</th>
-                        </tr>
 
-                        @foreach (var item in Model.Tdata)
-                        {
-                            <tr class=" @Enum.GetName(typeof(HalloEnum.reqTypebg), item.ReqTypeId)">
-                                <td class="text-light d-none d-sm-table-cell" scope="row">
-                                    <p class="d-flex justify-content-between">
-                                        @item.Name
-                                        <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
-                                    </p>
-                                </td>
-                                @if (ViewBag.dTable != 6)
-                                {
-                                    <td class="text-light d-none d-sm-table-cell"> @item.Strmonth.Substring(0,3) @item.Intdate , @item.Intyear (@item.Age) </td>
-                                }
-                                @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
-                                {
-                                    <td class="text-light d-none d-sm-table-cell"> @Enum.GetName(typeof(HalloEnum.repestType), @item.ReqTypeId) @item.Requestor</td>
-                                }
-                                @if (ViewBag.dTable == 1)
-                                {
-                                    <td class="text-light d-none d-sm-table-cell"> @item.RequestedDate</td>
-                                }
-                                @if (ViewBag.dTable == 5)
-                                {
-                                    <td class="text-light d-none d-sm-table-cell">@item.Region</td>
-                                }
-                                @if (ViewBag.dTable != 1)
-                                {
-                                    <td class="text-light d-none d-sm-table-cell">@item.PhysicianName</td>
-                                }
-                                @if (ViewBag.dTable != 1)
-                                {
-                                    <td class="text-light d-none d-sm-table-cell">@item.DateOfService</td>
-                                }
-                                @if (ViewBag.dTable != 5)
-                                {
-                                    <td class="d-none d-sm-table-cell">
-                                        <button class="btn btn-outline-light p-0 ps-1 pe-1"> <i class="bi bi-telephone text-light"></i> @item.Phonenumber </button>
-                                        <p class="text-light m-0">(Patient)</p>
-
-                                        @if (item.ReqTypeId != 2)
-                                        {
-                                            <button class="btn btn-outline-light p-0 ps-1 pe-1"> <i class="bi bi-telephone text-light"></i> @item.ReqPhonenumber </button>
-                                            <p class="text-light m-0">(@Enum.GetName(typeof(HalloEnum.repestType),item.ReqTypeId))</p>
-
-                                        }
-                                    </td>
-                                }
-                                <td class="text-light d-none d-sm-table-cell">
-                                    @if (item.city != null)
-                                    {
-                                        @item.Address
-                                    }
-                                    else
-                                    {
-                                        <p>-</p>
-                                    }
-                                </td>
-                                @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
-                                {
-                                    <td class="text-light d-none d-sm-table-cell"> @item.Notes</td>
-                                }
-                                <td class="d-none d-sm-table-cell"><button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button></td>
-                                <td class="d-none d-sm-table-cell">
-                                    <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Actions
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        @if (ViewBag.dTable == 1)
-                                        {
-                                            <li>
-                                                <a class="dropdown-item" data-bs-toggle="modal"
-                                                   data-bs-target="#AssignCase">Assign Case</a>
-                                            </li>
-                                        }
-                                        @if (ViewBag.dTable == 1)
-                                        {
-                                            <li>
-                                                <a class="dropdown-item" data-bs-toggle="modal"
-                                                   data-bs-target="#@item.Name">Cancel Case</a>
-                                            </li>
-                                        }
-                                        <li><a class="dropdown-item" asp-action="ViewCase" asp-route-id="@item.ReqClientId" asp-controller="AdminDash">View Case</a></li>
-                                        @if (ViewBag.dTable != 1)
-                                        {
-                                            <li><a class="dropdown-item" href="#">View Uploads</a></li>
-                                        }
-                                        <li><a class="dropdown-item" href="#">View Notes</a></li>
-                                        @if (ViewBag.dTable == 1)
-                                        {
-                                            <li>
-                                                <a class="dropdown-item" data-bs-toggle="modal"
-                                                   data-bs-target="#BlockPatient">Block Patient</a>
-                                            </li>
-                                        }
-                                        @if (ViewBag.dTable == 2)
-                                        {
-                                            <li><a class="dropdown-item" href="#">Transfer</a></li>
-                                        }
-                                        @if (ViewBag.dTable == 5)
-                                        {
-                                            <li><a class="dropdown-item" href="#">Close Case</a></li>
-                                        }
-                                        @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
-                                        {
-                                            <li><a class="dropdown-item" href="#">Order</a></li>
-                                            <li><a class="dropdown-item" href="#">Doctors Notes</a></li>
-                                        }
-                                        @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
-                                        {
-                                            <li><a class="dropdown-item" href="#">Clear Case</a></li>
-                                        }
-                                        @if (ViewBag.dTable == 2)
-                                        {
-                                            <li><a class="dropdown-item" href="#">Send Agreement</a></li>
-                                        }
-                                        @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
-                                        {
-                                            <li><a class="dropdown-item" href="#">Encounter</a></li>
-                                        }
-
-                                    </ul>
-                                </td>
-
-
-                                <td scope="col" class="text-center d-table-cell d-md-none px-5 " data-bs-toggle="collapse" data-bs-target="#div-@item.ReqClientId">
-                                    <div class="d-flex flex-column">
-                                        <div class="d-flex justify-content-between mb-3">
-                                            <span>@item.Name</span>
-                                            <span class="d-flex align-items-center gap-2">
-                                              
-                                            </span>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <span>@item.Address</span>
-                                            <span class="btn border-primary text-primary">Map Location</span>
-                                        </div>
-
-                                    </div>
-                                </td>
-                                <td class="text-center d-md-none accordion-body collapse td1 " id="div-@item.ReqClientId">
-                                    <div class="d-flex flex-column px-3">
-                                        <div class="d-flex flex-column px-5 viewcaseM new">
-                                            <button class="btn text-nowrap btn-light state">View Case</button>
-                                        </div>
-                                        <div class="d-flex mb-3 flex-column">
-                                            <span class="d-inline-flex"><i class="bi bi-clock text-primary"></i><span class="text-secondary mx-2"> Wait Time:</span>Dec 5, 2023 08:52 AM</span>
-                                            <span class="d-inline-flex"><i class="bi bi-calendar3 text-primary"></i><span class="text-secondary mx-2"> Date of Birth:</span></span>
-                                            <span class="d-inline-flex"><i class="bi bi-envelope text-primary"></i><span class="text-secondary mx-2"> Email:</span>gjhl</span>
-                                            <span class="d-inline-flex"><i class="bi bi-telephone text-primary"></i><span class="text-secondary mx-2"> Patient:</span>gdf</span>
-                                            <span class="d-inline-flex"><i class="bi bi-person text-primary"></i><span class="text-secondary mx-2"> Requestor:</span>ggfsdgf</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between row">
-                                            <button class="btn btn-primary col-5 mb-2">Assign Case</button>
-                                            <button class="btn btn-danger col-5 mb-2">Cancel Case</button>
-                                            <button class="btn btn-success col-5 mb-2">View Notes</button>
-                                            <button class="btn btn-danger col-5 mb-2">Block Patient</button>
-                                            <button class="btn btn-success col-5 mb-2">Email</button>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <div class="modal fade" id="@item.Name" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog  modal-dialog-centered">
-                                        <div class="modal-content rounded-4">
-                                            <div class="modal-header bg-info p-2">
-                                                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Cancellation</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Patient Name : <span class="text-info"> @item.Name </span>
-                                                <div class="text-center pt-2">
-                                                    <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
-                                                        <select class="form-select" id="validationDefault04">
-                                                            <option selected disabled value="">Reasons for Cancellation</option>
-                                                            <option>1....</option>
-                                                            <option>2...</option>
-                                                            <option>3... </option>
-                                                            <option>4...</option>
-                                                        </select>
-                                                        <div class="form-floating mt-2">
-                                                            <textarea type="text" class="form-control bg-transparent h-25"
-                                                                      placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
-                                                                      aria-describedby="button-addon2"> </textarea>
-                                                            <label for="ms-3 text-info">Provide Aditional Notes</label>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer p-1">
-                                                <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
-                                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="modal fade" id="BlockPatient" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog  modal-dialog-centered">
-                                        <div class="modal-content rounded-4">
-                                            <div class="modal-header bg-info p-2">
-                                                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Block</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Patient Name : <span class="text-info"> @item.Name </span>
-                                                <div class="text-center pt-2">
-                                                    <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
-                                                        <div class="form-floating mt-2">
-                                                            <textarea type="text" class="form-control bg-transparent h-25"
-                                                                      placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
-                                                                      aria-describedby="button-addon2"> </textarea>
-                                                            <label for="ms-3 text-info">Reason for Block Request</label>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer p-1">
-                                                <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
-                                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="modal fade" id="AssignCase" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog  modal-dialog-centered">
-                                        <div class="modal-content rounded-4">
-                                            <div class="modal-header bg-info p-2">
-                                                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Assign Request</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>To assign this request, search and select another Physician</p>
-                                                <div class="text-center pt-2">
-                                                    <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
-                                                        <select class="form-select" id="validationDefault04">
-                                                            <option selected disabled value="">Narrow Search by Region</option>
-                                                            <option>District of Columbia</option>
-                                                            <option>Maryland</option>
-                                                            <option>New York</option>
-                                                            <option>Virginia</option>
-                                                        </select>
-                                                        <select class="form-select mt-2" id="validationDefault04">
-                                                            <option selected disabled value="">Select Physician</option>
-                                                            <option>1..</option>
-                                                        </select>
-                                                        <div class="form-floating mt-2">
-                                                            <textarea type="text" class="form-control bg-transparent h-25"
-                                                                      placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
-                                                                      aria-describedby="button-addon2"> </textarea>
-                                                            <label for="ms-3 text-info">Description</label>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer p-1">
-                                                <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
-                                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-end">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+            <div class="col-4 col-sm-4 col-lg-2 ">
+                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardA" onclick="actDash()" data-id="3">
+                    <div class=" p-0">
+                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                             src="~/image/Dash_active.png">
+                        <strong class="Dash-name">ACTIVE</strong>
+                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[2] </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 col-sm-4 col-lg-2 ">
+                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardC" onclick="conDash()" data-id="4">
+                    <div class=" p-0">
+                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                             src="~/image/Dash_conclude.png">
+                        <strong class="Dash-name">CONCLUDE</strong>
+                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[3] </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 col-sm-4 col-lg-2 ">
+                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardT" onclick="tocDash()" data-id="5">
+                    <div class=" p-0">
+                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                             src="~/image/Dash_toclose.png">
+                        <strong class="Dash-name">To CLOSE</strong>
+                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 col-sm-4 col-lg-2 ">
+                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardU" onclick="unpDash()" data-id="6">
+                    <div class=" p-0">
+                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                             src="~/image/Dash_unpaid.png">
+                        <strong class="Dash-name">UNPAID</strong>
+                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    
+        <div id="partial">
+            @Html.Partial("TablePartial")
+        </div>
 </div>
 
 
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('dash').classList.add('underLine');
+        document.querySelector(".DashCardN").classList.add("new-active");
     });
+
+    function newDash() {
+        document.querySelector(".DashCardN").classList.add("new-active");
+        document.querySelector(".DashCardP").classList.remove("Pending-active");
+        document.querySelector(".DashCardA").classList.remove("Active-active");
+        document.querySelector(".DashCardC").classList.remove("Conclude-active");
+        document.querySelector(".DashCardT").classList.remove("ToClose-active");
+        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
+    }
+    function penDash() {
+        document.querySelector(".DashCardN").classList.remove("new-active");
+        document.querySelector(".DashCardP").classList.add("Pending-active");
+        document.querySelector(".DashCardA").classList.remove("Active-active");
+        document.querySelector(".DashCardC").classList.remove("Conclude-active");
+        document.querySelector(".DashCardT").classList.remove("ToClose-active");
+        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
+    }
+    function actDash() {
+        document.querySelector(".DashCardN").classList.remove("new-active");
+        document.querySelector(".DashCardP").classList.remove("Pending-active");
+        document.querySelector(".DashCardA").classList.add("Active-active");
+        document.querySelector(".DashCardC").classList.remove("Conclude-active");
+        document.querySelector(".DashCardT").classList.remove("ToClose-active");
+        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
+    }
+    function conDash() {
+        document.querySelector(".DashCardN").classList.remove("new-active");
+        document.querySelector(".DashCardP").classList.remove("Pending-active");
+        document.querySelector(".DashCardA").classList.remove("Active-active");
+        document.querySelector(".DashCardC").classList.add("Conclude-active");
+        document.querySelector(".DashCardT").classList.remove("ToClose-active");
+        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
+    }
+    function tocDash() {
+        document.querySelector(".DashCardN").classList.remove("new-active");
+        document.querySelector(".DashCardP").classList.remove("Pending-active");
+        document.querySelector(".DashCardA").classList.remove("Active-active");
+        document.querySelector(".DashCardC").classList.remove("Conclude-active");
+        document.querySelector(".DashCardT").classList.add("ToClose-active");
+        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
+    }
+    function unpDash() {
+        document.querySelector(".DashCardN").classList.remove("new-active");
+        document.querySelector(".DashCardP").classList.remove("Pending-active");
+        document.querySelector(".DashCardA").classList.remove("Active-active");
+        document.querySelector(".DashCardC").classList.remove("Conclude-active");
+        document.querySelector(".DashCardT").classList.remove("ToClose-active");
+        document.querySelector(".DashCardU").classList.add("Unpaid-active");
+    }
 </script>
 
-@*
+
 <script asp-append-version="true">
     $(document).ready(function () {
+        //$.ajax({
+        //    url: '/AdminDash/DashbordData',
+        //    method: 'POST',
+        //    data: { id: "1" },
+        //    success: function (response) {
+        //        $("#partial").html(response);
+        //    },
+        //    error: function (xhr, status, error) {
+        //        console.error(xhr.responseText);
+        //    }
+        //});
+
         $('.DashCard').click(function () {
             var id = $(this).data('id');
             $.ajax({
-                url: '/AdminDash/Dashbord',
+                url: '/AdminDash/DashbordData',
                 method: 'POST',
-                data: { id : id },
+                data: { id: id },
                 success: function (response) {
-
+                    $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
@@ -478,4 +175,3 @@
         });
     });
 </script>
-*@

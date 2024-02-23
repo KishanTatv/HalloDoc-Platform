@@ -44,7 +44,7 @@ namespace HalloDoc.Controllers
                 Requestclient UserData  = patient.GetUserByEmail(UserEmail);
                 IEnumerable<RequestWithFile> ReqFile = patient.GetRequestsFiles(UserEmail);
 
-                var PatientDash = new PatientDash { ReqWithFiles = ReqFile, Requestclient = UserData };
+                var PatientDash = new PatientDash { ReqWithFiles = ReqFile, reqclient = UserData };
                 return View(PatientDash);
             }
             return RedirectToAction("PatientLogin", "Patient");
@@ -71,9 +71,9 @@ namespace HalloDoc.Controllers
         {
             var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
             var ReqFile = patient.GetRequestsFileswithReq(UserEmail, id);
-            var UserData = patient.GetClientById(id);
+            Requestclient UserData = patient.GetClientById(id);
 
-            var PatientDash = new PatientDash { ReqWithFiles = ReqFile, Requestclient = UserData };
+            var PatientDash = new PatientDash { ReqWithFiles = ReqFile, reqclient = UserData };
             return View(PatientDash);
         }
 

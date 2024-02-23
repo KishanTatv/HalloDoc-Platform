@@ -68,6 +68,8 @@ namespace HalloDoc.Repository.Interface
         Requestclient GetUserByEmail(string email);
         Requestclient GetClientById(int id);
 
+        User GetUserById(int id);
+
         IEnumerable<RequestWithFile> GetRequestsFiles(string email);
 
         IEnumerable<RequestWithFile> GetRequestsFileswithReq(string email, int reqId);

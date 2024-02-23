@@ -17,6 +17,10 @@ namespace HalloDoc.Entity.AdminDashTable
         [StringLength(100)]
         public string? Name { get; set; }
 
+        [Column("email")]
+        [StringLength(50)]
+        public string Email { get; set; }
+
         [Column("Age")]
         public int? Age { get; set; }
 
