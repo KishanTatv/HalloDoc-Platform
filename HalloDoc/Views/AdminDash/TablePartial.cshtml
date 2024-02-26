@@ -11,7 +11,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
     </div>
     <div>
         <button type="button" class="btn btn-info text-light"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
-        <button type="button" class="btn btn-info text-light"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></button>
+        <div class="btn btn-info text-light NewReq" data-reqid ="1"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></div>
         <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
         <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
         <button type="button" class="btn btn-info text-light"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></button>
@@ -47,7 +47,9 @@ For more information on enabling MVC for empty projects, visit https://go.micros
         <table id="tableD" class="table MedicalLG">
             <tbody>
                 <tr class="table-secondary">
-                    <th scope="col">Name</th>
+                    <th scope="col">
+                            Name
+                    </th>
                     @if (ViewBag.dTable != 6)
                     {
                         <th scope="col">Date of Birth</th>
@@ -84,7 +86,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     <th scope="col">Chat With</th>
                     <th scope="col">Action</th>
                 </tr>
-
+                
                 @foreach (var item in Model.Tdata)
                 {
                     <tr class=" @Enum.GetName(typeof(HalloEnum.reqTypebg), item.ReqTypeId)">
@@ -94,9 +96,10 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                 <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
                             </p>
                         </td>
+                        
                         @if (ViewBag.dTable != 6)
                         {
-                            <td class="text-light "> @item.Strmonth.Substring(0, 3) @item.Intdate , @item.Intyear (@item.Age) </td>
+                            <td class="text-light "> @item.Strmonth @item.Intdate , @item.Intyear (@item.Age) </td>
                         }
                         @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
                         {
@@ -140,7 +143,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                 }
                             </td>
                         }
-                        <td class="text-light ">
+                       <td class="text-light ">
                             @if (item.city != null)
                             {
                                 @item.Address
@@ -174,8 +177,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                     </li>
                                 }
                                 <li>
-                                    <a class="dropdown-item" asp-action="ViewCase" asp-route-id="@item.ReqClientId"
-                                       asp-controller="AdminDash">View Case</a>
+                                    <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> View Case </div>
                                 </li>
                                 @if (ViewBag.dTable != 1)
                                 {
@@ -417,6 +419,40 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 method: 'POST',
                 data: { id: id, page: page },
                 success: function (response) {
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.ViewCase').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/ViewCase',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    const rowCount = document.querySelector('.row');
+                    rowCount.classList.add('d-none');
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.NewReq').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/NewRequest',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    const rowCount = document.querySelector('.row');
+                    rowCount.classList.add('d-none');
                     $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {

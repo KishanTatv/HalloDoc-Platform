@@ -23,10 +23,10 @@ namespace HalloDoc.Repository.Implement
 
         }
 
-        public Requestclient GetClientById(int id)
+        public Request GetClientById(int id)
         {
-            var userData = _context.Requestclients.FirstOrDefault(x => x.Requestclientid == id);
-            return userData;
+            var reqData = _context.Requests.FirstOrDefault(x => x.Requestid == id);
+            return reqData;
         }
 
 
@@ -45,6 +45,7 @@ namespace HalloDoc.Repository.Implement
                                               Intyear = f.Intyear,
                                               Age = System.DateTime.Now.Year - f.Intyear,
                                               Email = f.Email,
+                                              RequestId = f.Requestid,
                                               ReqClientId = f.Requestclientid,
                                               ReqTypeId = r.Requesttypeid,
                                               Requestor = r.Firstname + "," + r.Lastname,
@@ -75,6 +76,7 @@ namespace HalloDoc.Repository.Implement
                                               Strmonth = r.Strmonth,
                                               Intyear = r.Intyear,
                                               Age = System.DateTime.Now.Year - r.Intyear,
+                                              RequestId = f.Requestid,
                                               ReqClientId = r.Requestclientid,
                                               ReqTypeId = f.Requesttypeid,
                                               Requestor = f.Firstname + "," + f.Lastname,
@@ -107,6 +109,7 @@ namespace HalloDoc.Repository.Implement
                                               Strmonth = r.Strmonth,
                                               Intyear = r.Intyear,
                                               Age = System.DateTime.Now.Year - r.Intyear,
+                                              RequestId = f.Requestid,
                                               ReqClientId = r.Requestclientid,
                                               ReqTypeId = f.Requesttypeid,
                                               Requestor = f.Firstname + "," + f.Lastname,
@@ -139,6 +142,7 @@ namespace HalloDoc.Repository.Implement
                                               Strmonth = r.Strmonth,
                                               Intyear = r.Intyear,
                                               Age = System.DateTime.Now.Year - r.Intyear,
+                                              RequestId = f.Requestid,
                                               ReqClientId = r.Requestclientid,
                                               ReqTypeId = f.Requesttypeid,
                                               Requestor = f.Firstname + "," + f.Lastname,

@@ -65,7 +65,7 @@ namespace HalloDoc.Repository.Interface
 
 
         //Get User
-        Requestclient GetUserByEmail(string email);
+        User GetUserByEmail(string email);
         Requestclient GetClientById(int id);
 
         User GetUserById(int id);

@@ -2,11 +2,11 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model HalloDoc.Entity.Models.Requestclient;
+@model HalloDoc.Entity.Models.Request;
 
 @{
     ViewData["Title"] = "Patient Dashbord";
-    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    Layout = "";
 }
 
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
@@ -16,8 +16,6 @@
 <div class="MainContent pt-0 min-vh-100">
     <div class="tab-content" id="nav-tabContent">
 
-        <partial name="partial/AdminNavTab" />
-
         <div class="HContainer m-auto">
             <div class="d-flex justify-content-between">
                 <h4 class="m-0 mt-1">View Reservation</h4>
@@ -26,88 +24,87 @@
                 </a>
             </div>
 
-            <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="ViewNotes" asp-route-id="@Model.Requestclientid" asp-controller="AdminDash" method="post" enctype="multipart/form-data">
-                <div class="mb-4">
-                    <h5>Patient Information</h5>
+            <div class="mb-4">
+                <h5>Patient Information</h5>
 
-                    <div>
-                        <p class="m-0">Confirmation Number</p>
-                        <h5 class="text-info">87685854</h5>
+                <div>
+                    <p class="m-0">Confirmation Number</p>
+                    <h5 class="text-info">87685854</h5>
+                </div>
+                <div class="form-floating">
+                    <textarea type="text" class="form-control bg-transparent h-25"
+                              placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                              aria-describedby="button-addon2" asp-for="Symptoms"> </textarea>
+                    <label for="ms-3 text-info">Patient Notes</label>
+                </div>
+
+                <hr />
+
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="Firstname">
+                        <label class="ms-3">First Name</label>
                     </div>
-                    <div class="form-floating">
-                        <textarea type="text" class="form-control bg-transparent h-25"
-                                  placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
-                                  aria-describedby="button-addon2"> </textarea>
-                        <label for="ms-3 text-info">Patient Notes</label>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="Lastname">
+                        <label class="ms-3">Last Name</label>
                     </div>
-
-                    <hr />
-
-                    <div class="row form-floating">
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="Firstname">
-                            <label class="ms-3">First Name</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="Lastname">
-                            <label class="ms-3">Last Name</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="date" class="form-control bg-transparent" id="floatingInputValue"
-                                   placeholder="Date of birth" value="12/05/2023" asp-for="Dob">
-                            <label class="ms-3">Date of Birth</label>
-                        </div>
-                        <div class="col-md-6  mt-2">
-                            <div class="row">
-                                <div class="col form-floating">
-                                    <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="Phonenumber" />
-                                </div>
-                                <div class="col-2 from-floating">
-                                    <a class="btn btn-outline-info p-3 ps-4 pe-4 text-info"> <i class="bi bi-telephone text-info"></i> </a>
-                                </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="date" class="form-control bg-transparent"
+                               placeholder="Date of birth" />
+                        <label class="ms-3">Date of Birth</label>
+                    </div>
+                    <div class="col-md-6  mt-2">
+                        <div class="row">
+                            <div class="col form-floating">
+                                <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="Phonenumber" />
+                            </div>
+                            <div class="col-2 from-floating">
+                                <a class="btn btn-outline-info p-3 ps-4 pe-4 text-info"> <i class="bi bi-telephone text-info"></i> </a>
                             </div>
                         </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="Email">
-                            <label class="ms-3">Email</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <a class="btn btn-outline-info p-3 ps-4 pe-4 text-info"> Edit </a>
-                        </div>
                     </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="Email">
+                        <label class="ms-3">Email</label>
+                    </div>@*
+                    <div class="col-md-6 form-floating mt-2">
+                    <a class="btn btn-outline-info p-3 ps-4 pe-4 text-info"> Edit </a>
+                    </div>*@
                 </div>
+            </div>
 
-                <div class="mt-4 mb-4">
-                    <h5>Location Information</h5>
-                    <div class="row form-floating">
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street" asp-for="Street">
-                            <label class="ms-3">Region</label>
-                        </div>
-                        <div class="col-md-6 mt-2 ">
-                            <div class="row">
-                                <div class="col-8 form-floating">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="city" asp-for="City">
-                                    <label class="ms-3">Bussiness Name/Address</label>
-                                </div>
-                                <div class="col form-floating">
-                                    <a class="btn btn-outline-info p-3" href="https://maps.google.co.in/maps" target="_blank"> <i class="bi bi-geo-alt"></i></a>
-                                </div>
+            <div class="mt-4 mb-4">
+                <h5>Location Information</h5>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street">
+                        <label class="ms-3">Region</label>
+                    </div>
+                    <div class="col-md-6 mt-2 ">
+                        <div class="row">
+                            <div class="col-8 form-floating">
+                                <input type="text" class="form-control bg-transparent" placeholder="city">
+                                <label class="ms-3">Bussiness Name/Address</label>
+                            </div>
+                            <div class="col form-floating">
+                                <a class="btn btn-outline-info p-3" href="https://maps.google.co.in/maps" target="_blank"> <i class="bi bi-geo-alt"></i></a>
                             </div>
                         </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="roomSuite">
-                            <label class="ms-3">Room # / Suite(optional)</label>
-                        </div>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" placeholder="roomSuite" asp-for="Locroom">
+                        <label class="ms-3">Room # / Suite(optional)</label>
                     </div>
                 </div>
+            </div>
 
 
-                <div class="d-flex justify-content-end mt-4 mb-4">
-                    <button type="submit" class="btn btn-info text-light me-4" name="Upload">View Notes</button>
-                    <button type="button" class="btn btn-danger">Cancel</button>
-                </div>
-            </form>
+            <div class="d-flex justify-content-end mt-4 mb-4">
+                <button type="button" class="btn btn-info text-light me-3">Assign</button>
+                <div class="btn btn-info text-light me-3 viewNote" data-caseid="1"> View Notes</div>
+                <button type="button" class="btn btn-danger">Cancel</button>
+            </div>
         </div>
     </div>
 </div>
@@ -117,5 +114,27 @@
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('dash').classList.add('underLine');
+    });
+</script>
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.viewNote').click(function () {
+            var caseid = $(this).data('caseid');
+
+            $.ajax({
+                url: '/AdminDash/ViewNotes',
+                method: 'POST',
+                data: { caseid: caseid },
+                success: function (response) {
+                    const rowCount = document.querySelector('.row');
+                    rowCount.classList.add('d-none');
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
     });
 </script>

@@ -13,7 +13,7 @@ namespace HalloDoc.Repository.Interface
     public interface IAdmin
     {
 
-        Requestclient GetClientById(int id);
+        Request GetClientById(int id);
 
 
 

@@ -307,16 +307,16 @@ namespace HalloDoc.Repository.Implement
         public void UpdateRequestClient(PatientDash userInfo,string email)
         {
             Requestclient reqClient = _context.Requestclients.FirstOrDefault(u => u.Email == email);
-            reqClient.Firstname = userInfo.reqclient.Firstname;
-            reqClient.Lastname = userInfo.reqclient.Lastname;
-            reqClient.Phonenumber = userInfo.reqclient.Phonenumber;
-            reqClient.Intdate = userInfo.reqclient.Intdate;
-            reqClient.Strmonth = userInfo.reqclient.Strmonth;
-            reqClient.Intyear = userInfo.reqclient.Intyear;
-            reqClient.Street = userInfo.reqclient.Street;
-            reqClient.City = userInfo.reqclient.City;
-            reqClient.State = userInfo.reqclient.State;
-            reqClient.Zipcode = userInfo.reqclient.Zipcode;
+            reqClient.Firstname = userInfo.User.Firstname;
+            reqClient.Lastname = userInfo.User.Lastname;
+            reqClient.Phonenumber = userInfo.User.Mobile;
+            reqClient.Intdate = userInfo.User.Intdate;
+            reqClient.Strmonth = userInfo.User.Strmonth;
+            reqClient.Intyear = userInfo.User.Intyear;
+            reqClient.Street = userInfo.User.Street;
+            reqClient.City = userInfo.User.City;
+            reqClient.State = userInfo.User.State;
+            reqClient.Zipcode = userInfo.User.Zipcode;
             _context.Requestclients.Update(reqClient);
             _context.SaveChanges();
         }
@@ -372,9 +372,9 @@ namespace HalloDoc.Repository.Implement
 
 
         //specific data return
-        public Requestclient GetUserByEmail(string email)
+        public User GetUserByEmail(string email)
         {
-            var userData = _context.Requestclients.FirstOrDefault(x => x.Email == email);
+            var userData = _context.Users.FirstOrDefault(x => x.Email == email);
             return userData;
         }
 

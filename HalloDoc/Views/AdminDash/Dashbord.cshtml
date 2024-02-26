@@ -17,6 +17,7 @@
     <partial name="partial/AdminNavTab" />
 
     <div class="container-fluid overflow-hidden mt-3">
+
         <div class="row g-3 nav">
             <div class="col-4 col-sm-4 col-lg-2 active">
                 <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardN" onclick="newDash()" data-id="1">
@@ -83,7 +84,7 @@
     </div>
     
         <div id="partial">
-            @Html.Partial("TablePartial")
+            @*@Html.Partial("TablePartial")*@
         </div>
 </div>
 
@@ -92,6 +93,7 @@
     window.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('dash').classList.add('underLine');
         document.querySelector(".DashCardN").classList.add("new-active");
+        newDash();
     });
 
     function newDash() {
@@ -147,17 +149,17 @@
 
 <script asp-append-version="true">
     $(document).ready(function () {
-        //$.ajax({
-        //    url: '/AdminDash/DashbordData',
-        //    method: 'POST',
-        //    data: { id: "1" },
-        //    success: function (response) {
-        //        $("#partial").html(response);
-        //    },
-        //    error: function (xhr, status, error) {
-        //        console.error(xhr.responseText);
-        //    }
-        //});
+        $.ajax({
+                url: '/AdminDash/DashbordData',
+                method: 'POST',
+                data: { id: "1" },
+                success: function (response) {
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
 
         $('.DashCard').click(function () {
             var id = $(this).data('id');

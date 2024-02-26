@@ -1,5 +1,4 @@
-﻿
-@*
+﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
@@ -7,7 +6,7 @@
 
 @{
     ViewData["Title"] = "Patient Dashbord";
-    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";   
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
 }
 
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
@@ -186,16 +185,16 @@
                             <h5>General Information</h5>
                             <div class="row form-floating ">
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="reqclient.Firstname">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="User.Firstname">
                                     <label class="ms-3">Your First Name</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="reqclient.Lastname">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="User.Lastname">
                                     <label class="ms-3">Your Last Name</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
                                     <input type="date" class="form-control bg-transparent" id="floatingInputValue"
-                                           placeholder="Date of birth" asp-for="reqclient.Dob">
+                                           placeholder="Date of birth" asp-for="User.Dob">
                                     <label class="ms-3">Date Of Birth</label>
                                 </div>
                             </div>
@@ -213,11 +212,11 @@
                                         <label class="ms-3">Type</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="reqclient.Phonenumber" />
+                                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="User.Mobile" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="email" id="email" class="form-control bg-transparent" asp-for="reqclient.Email">
+                                    <input type="email" id="emailId" class="form-control bg-transparent" asp-for="User.Email">
                                     <label class="ms-3">Email</label>
                                 </div>
                             </div>
@@ -227,21 +226,21 @@
                             <h5> Location Information </h5>
                             <div class="row form-floating">
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street" asp-for="reqclient.Street">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street" asp-for="User.Street">
                                     <label class="ms-3">Street</label>
                                 </div>
                                 <div class="col-md d-flex form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="city" asp-for="reqclient.City">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="city" asp-for="User.City">
                                     <label class="ms-3">City</label>
                                 </div>
                             </div>
                             <div class="row form-floating">
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="state" asp-for="reqclient.State">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="state" asp-for="User.State">
                                     <label class="ms-3">State</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="number" class="form-control bg-transparent" id="floatingInput" placeholder="zipCode" asp-for="reqclient.Zipcode">
+                                    <input type="number" class="form-control bg-transparent" id="floatingInput" placeholder="zipCode" asp-for="User.Zipcode">
                                     <label class="ms-3">Zip Code</label>
                                 </div>
                             </div>
@@ -249,7 +248,9 @@
 
 
                         <div class="d-flex justify-content-end mt-4 mb-4">
-                            <button type="submit" class="btn btn-info ps-4 pe-4">Edit</button>
+                            <button id="editbtn" type="button" class="btn btn-info ps-4 pe-4" onclick="EditEnable()">Edit</button>
+                            <button type="submit" id="submitbtn" class="btn btn-info d-none ps-4 pe-4 me-3">Submit</button>
+                            <button id="cancelbtn" class="btn btn-danger d-none ps-4 pe-4">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -257,3 +258,32 @@
         </div>
     </div>
 </div>
+
+
+<script asp-append-version="true">
+    let inputs = document.querySelectorAll('input');
+
+    // Loop through each input element and set disabled attribute
+    inputs.forEach(input => {
+        input.disabled = true;
+    });
+
+    function EditEnable() {
+        const edit = document.getElementById('editbtn');
+        const submit = document.getElementById('submitbtn');
+        const cancel = document.getElementById('cancelbtn');
+        edit.classList.add('d-none');
+        submit.classList.remove('d-none');
+        cancel.classList.remove('d-none');
+        const inputs = document.querySelectorAll('input');
+
+        // Loop through each input element and set disabled attribute
+        inputs.forEach(input => {
+            input.disabled = false;
+        });
+
+        const emailId = document.getElementById('emailid');
+        emailId.disabled = true;
+    }
+
+</script>

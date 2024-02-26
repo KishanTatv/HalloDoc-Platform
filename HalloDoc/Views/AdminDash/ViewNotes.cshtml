@@ -2,9 +2,11 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
+@model HalloDoc.Entity.AdminDash.AllNotes;
+
 @{
     ViewData["Title"] = "Patient Dashbord";
-    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    Layout = "";
 }
 
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
@@ -13,8 +15,6 @@
 
 <div class="MainContent pt-0 min-vh-100">
     <div class="tab-content" id="nav-tabContent">
-
-        <partial name="partial/AdminNavTab" />
         <div class="HContainer m-auto">
             <div class="d-flex justify-content-between mt-4">
                 <h4 class="m-0 mt-1">Notes</h4>
@@ -23,36 +23,50 @@
                 </a>
             </div>
 
-            <form asp-action="PatientReq" asp-controller="PatientRequest" method="post" enctype="multipart/form-data">
-                <div class="container-fluid">
-                    <div class="row form-floating g-3">
-                        <div class="col-md form-control rounded shadow p-2 me-4 mb-3 bg-body-tertiary rounded">
-                            <h5>Transfer Notes</h5>
-                            <p>Admin Transfered to Dr.AGOLA on 27/09/2023 at 9:06 AM </p>
+            <form asp-action="ViewNotedata" asp-controller="AdminDash" method="post" enctype="multipart/form-data">
+                <div class="container mt-4 mb-5">
+                    <div class="row gx-5 gy-3">
+                        <div class="col-md-6 ">
+                            <div class="row rounded shadow bg-body-tertiary rounded p-3">
+                                <div class="col-1"> <i class="bi bi-arrow-left-right"></i> </div>
+                                <div class="col">
+                                    <h5>Transfer Notes</h5>
+                                    <p class="m-0">Admin Transfered to Dr.AGOLA on 27/09/2023 at 9:06 AM </p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md form-control rounded shadow p-2 ms-4 mb-3 bg-body-tertiary rounded">
-                            <h5>Physician Notes</h5>
-                            <p>test add, conclude</p>
+                        <div class="col-md-6">
+                            <div class="row rounded shadow bg-body-tertiary rounded p-3">
+                                <div class="col-1"> <i class="bi bi-person-fill center"></i> </div>
+                                <div class="col">
+                                    <h5>Physician Notes</h5>
+                                    <p class="m-0">test add, conclude</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row rounded shadow bg-body-tertiary rounded p-3">
+                                <div class="col-1"> <i class="bi bi-person-check"></i> </div>
+                                <div class="col">
+                                    <h5>Admin Notes</h5>
+                                    <p class="m-0">-</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row form-floating g-2">
-                        <div class="col-md-6 form-control rounded shadow p-2 me-4 mb-5 bg-body-tertiary rounded">
-                            <h5>Admin Notes</h5>
-                            <p>-</p>
-                        </div>
+                </div>
+
+                <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                    <div class="form-floating">
+                        <textarea type="text" class="form-control bg-transparent h-100"
+                                  placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                                  aria-describedby="button-addon2" asp-for="AdminNotes"> </textarea>
+                        <label for="ms-3 text-info">Admin Notes</label>
                     </div>
-                    <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
-                        <div class="form-floating">
-                            <textarea type="text" class="form-control bg-transparent h-100"
-                                      placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
-                                      aria-describedby="button-addon2"> </textarea>
-                            <label for="ms-3 text-info">Admin Notes</label>
-                        </div>
 
 
-                        <div class="d-flex justify-content-end mt-4 mb-2">
-                            <button type="submit" class="btn btn-info text-light me-4" name="Upload">Save Changes</button>
-                        </div>
+                    <div class="d-flex justify-content-end mt-4 mb-2">
+                        <button type="submit" class="btn btn-info text-light me-4" name="Upload">Save Changes</button>
                     </div>
                 </div>
             </form>

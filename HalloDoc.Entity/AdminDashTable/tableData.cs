@@ -10,6 +10,9 @@ namespace HalloDoc.Entity.AdminDashTable
 {
     public class tableData
     {
+        [Column("ReqId")]
+        public int? RequestId { get; set; }
+
         [Column("ReqclientId")]
         public int? ReqClientId { get; set; }
 
