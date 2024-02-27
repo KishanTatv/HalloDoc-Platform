@@ -5,404 +5,362 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 }
 
 
-<div class="d-flex justify-content-between m-3">
-    <div>
-        <h5>Patient <span class="text-primary"> ( @Enum.GetName(typeof(HalloEnum.DashName), ViewBag.dTable) )</span> </h5>
-    </div>
-    <div>
-        <button type="button" class="btn btn-info text-light"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
-        <div class="btn btn-info text-light NewReq" data-reqid ="1"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></div>
-        <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
-        <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
-        <button type="button" class="btn btn-info text-light"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></button>
-    </div>
-</div>
+<div class="table-responsive mt-2">
+    <table id="tableD" class="table MedicalLG">
+        <tbody>
+            <tr class="table-secondary">
+                <th scope="col">
+                    Name
+                </th>
+                @if (ViewBag.dTable != 6)
+                {
+                    <th scope="col">Date of Birth</th>
+                }
+                @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
+                {
+                    <th scope="col">Requestor</th>
+                }
+                @if (ViewBag.dTable == 1)
+                {
+                    <th scope="col">Requested Date</th>
+                }
+                @if (ViewBag.dTable == 5)
+                {
+                    <th scope="col">Region</th>
+                }
+                @if (ViewBag.dTable != 1)
+                {
+                    <th scope="col">Physician Name</th>
+                }
+                @if (ViewBag.dTable != 1)
+                {
+                    <th scope="col">Date of Service</th>
+                }
+                @if (ViewBag.dTable != 5)
+                {
+                    <th scope="col">Phone</th>
+                }
+                <th scope="col">Address</th>
+                @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
+                {
+                    <th scope="col">Notes</th>
+                }
+                <th scope="col">Chat With</th>
+                <th scope="col">Action</th>
+            </tr>
 
+            @foreach (var item in Model.Tdata)
+            {
+                <tr class=" @Enum.GetName(typeof(HalloEnum.reqTypebg), item.ReqTypeId)">
+                    <td class="text-light " scope="row">
+                        <p class="d-flex justify-content-between">
+                            @item.Name
+                            <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
+                        </p>
+                    </td>
 
-<div class="bg-light rounded-3 m-3 pt-2">
-    <div class="row">
-        <div class="col-lg-4 ">
-            <div class="d-flex ms-2">
-                <input type="text" id="InputSearch" class="form-control me-2" placeholder="Search Patient" onkeyup="SearchPatient()">
-                <select class="form-select" id="validationDefault04">
-                    <option selected disabled value="">All Regions</option>
-                    <option>District of Columbia</option>
-                    <option>Maryland</option>
-                    <option>New York</option>
-                    <option>Virginia</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-lg d-flex justify-content-end align-self-center">
-            <span class="btn btn-outline-secondary p-0 ps-1 pe-1 me-2 h-50 text-dashide">All</span>
-            <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-success"></i>Patient</span>
-            <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-orange"></i>Family/Friend</span>
-            <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-pink"></i>Bussiness</span>
-            <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-blue"></i>Concierge</span>
-            <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-purple"></i>vip</span>
-        </div>
-    </div>
-
-    <div class="table-responsive mt-2">
-        <table id="tableD" class="table MedicalLG">
-            <tbody>
-                <tr class="table-secondary">
-                    <th scope="col">
-                            Name
-                    </th>
                     @if (ViewBag.dTable != 6)
                     {
-                        <th scope="col">Date of Birth</th>
+                        <td class="text-light "> @item.Strmonth @item.Intdate , @item.Intyear (@item.Age) </td>
                     }
                     @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
                     {
-                        <th scope="col">Requestor</th>
+                        <td class="text-light ">
+                            @Enum.GetName(typeof(HalloEnum.repestType), @item.ReqTypeId) @item.Requestor
+                        </td>
                     }
                     @if (ViewBag.dTable == 1)
                     {
-                        <th scope="col">Requested Date</th>
+                        <td class="text-light "> @item.RequestedDate</td>
                     }
                     @if (ViewBag.dTable == 5)
                     {
-                        <th scope="col">Region</th>
+                        <td class="text-light ">@item.Region</td>
                     }
                     @if (ViewBag.dTable != 1)
                     {
-                        <th scope="col">Physician Name</th>
+                        <td class="text-light ">@item.PhysicianName</td>
                     }
                     @if (ViewBag.dTable != 1)
                     {
-                        <th scope="col">Date of Service</th>
+                        <td class="text-light ">@item.DateOfService</td>
                     }
                     @if (ViewBag.dTable != 5)
                     {
-                        <th scope="col">Phone</th>
-                    }
-                    <th scope="col">Address</th>
-                    @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
-                    {
-                        <th scope="col">Notes</th>
-                    }
-                    <th scope="col">Chat With</th>
-                    <th scope="col">Action</th>
-                </tr>
-                
-                @foreach (var item in Model.Tdata)
-                {
-                    <tr class=" @Enum.GetName(typeof(HalloEnum.reqTypebg), item.ReqTypeId)">
-                        <td class="text-light " scope="row">
-                            <p class="d-flex justify-content-between">
-                                @item.Name
-                                <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
-                            </p>
-                        </td>
-                        
-                        @if (ViewBag.dTable != 6)
-                        {
-                            <td class="text-light "> @item.Strmonth @item.Intdate , @item.Intyear (@item.Age) </td>
-                        }
-                        @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
-                        {
-                            <td class="text-light ">
-                                @Enum.GetName(typeof(HalloEnum.repestType), @item.ReqTypeId) @item.Requestor
-                            </td>
-                        }
-                        @if (ViewBag.dTable == 1)
-                        {
-                            <td class="text-light "> @item.RequestedDate</td>
-                        }
-                        @if (ViewBag.dTable == 5)
-                        {
-                            <td class="text-light ">@item.Region</td>
-                        }
-                        @if (ViewBag.dTable != 1)
-                        {
-                            <td class="text-light ">@item.PhysicianName</td>
-                        }
-                        @if (ViewBag.dTable != 1)
-                        {
-                            <td class="text-light ">@item.DateOfService</td>
-                        }
-                        @if (ViewBag.dTable != 5)
-                        {
-                            <td>
+                        <td>
+                            <button class="btn btn-outline-light p-0 ps-1 pe-1">
+                                <i class="bi bi-telephone text-light"></i>
+                                @item.Phonenumber
+                            </button>
+                            <p class="text-light m-0">(Patient)</p>
+
+                            @if (item.ReqTypeId != 2)
+                            {
                                 <button class="btn btn-outline-light p-0 ps-1 pe-1">
                                     <i class="bi bi-telephone text-light"></i>
-                                    @item.Phonenumber
+                                    @item.ReqPhonenumber
                                 </button>
-                                <p class="text-light m-0">(Patient)</p>
+                                <p class="text-light m-0">(@Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))</p>
 
-                                @if (item.ReqTypeId != 2)
-                                {
-                                    <button class="btn btn-outline-light p-0 ps-1 pe-1">
-                                        <i class="bi bi-telephone text-light"></i>
-                                        @item.ReqPhonenumber
-                                    </button>
-                                    <p class="text-light m-0">(@Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))</p>
-
-                                }
-                            </td>
-                        }
-                       <td class="text-light ">
-                            @if (item.city != null)
-                            {
-                                @item.Address
-                            }
-                            else
-                            {
-                                <p>-</p>
                             }
                         </td>
-                        @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
+                    }
+                    <td class="text-light ">
+                        @if (item.city != null)
                         {
-                            <td class="text-light "> @item.Notes</td>
+                            @item.Address
                         }
-                        <td><button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button></td>
-                        <td>
-                            <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                Actions
-                            </button>
-                            <ul class="dropdown-menu">
-                                @if (ViewBag.dTable == 1)
-                                {
-                                    <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#AssignCase">Assign Case</a>
-                                    </li>
-                                }
-                                @if (ViewBag.dTable == 1)
-                                {
-                                    <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#@item.Name">Cancel Case</a>
-                                    </li>
-                                }
+                        else
+                        {
+                            <p>-</p>
+                        }
+                    </td>
+                    @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
+                    {
+                        <td class="text-light "> @item.Notes</td>
+                    }
+                    <td><button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button></td>
+                    <td>
+                        <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            Actions
+                        </button>
+                        <ul class="dropdown-menu">
+                            @if (ViewBag.dTable == 1)
+                            {
                                 <li>
-                                    <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> View Case </div>
+                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#AssignCase">Assign Case</a>
                                 </li>
-                                @if (ViewBag.dTable != 1)
-                                {
-                                    <li><a class="dropdown-item" href="#">View Uploads</a></li>
-                                }
-                                <li><a class="dropdown-item" href="#">View Notes</a></li>
-                                @if (ViewBag.dTable == 1)
-                                {
-                                    <li>
-                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#BlockPatient">
-                                            Block
-                                            Patient
-                                        </a>
-                                    </li>
-                                }
-                                @if (ViewBag.dTable == 2)
-                                {
-                                    <li><a class="dropdown-item" href="#">Transfer</a></li>
-                                }
-                                @if (ViewBag.dTable == 5)
-                                {
-                                    <li><a class="dropdown-item" href="#">Close Case</a></li>
-                                }
-                                @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
-                                {
-                                    <li><a class="dropdown-item" href="#">Order</a></li>
-                                    <li><a class="dropdown-item" href="#">Doctors Notes</a></li>
-                                }
-                                @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
-                                {
-                                    <li><a class="dropdown-item" href="#">Clear Case</a></li>
-                                }
-                                @if (ViewBag.dTable == 2)
-                                {
-                                    <li><a class="dropdown-item" href="#">Send Agreement</a></li>
-                                }
-                                @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
-                                {
-                                    <li><a class="dropdown-item" href="#">Encounter</a></li>
-                                }
+                            }
+                            @if (ViewBag.dTable == 1)
+                            {
+                                <li>
+                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#case-@item.RequestId"> Cancel Case @item.RequestId </a>
+                                </li>
+                            }
+                            <li>
+                                <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> View Case </div>
+                            </li>
+                            @if (ViewBag.dTable != 1)
+                            {
+                                <li><a class="dropdown-item" href="#">View Uploads</a></li>
+                            }
+                            <li><a class="dropdown-item" href="#">View Notes</a></li>
+                            @if (ViewBag.dTable == 1)
+                            {
+                                <li>
+                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#BlockPatient">
+                                        Block
+                                        Patient
+                                    </a>
+                                </li>
+                            }
+                            @if (ViewBag.dTable == 2)
+                            {
+                                <li><a class="dropdown-item" href="#">Transfer</a></li>
+                            }
+                            @if (ViewBag.dTable == 5)
+                            {
+                                <li><a class="dropdown-item" href="#">Close Case</a></li>
+                            }
+                            @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                            {
+                                <li><a class="dropdown-item" href="#">Order</a></li>
+                                <li><a class="dropdown-item" href="#">Doctors Notes</a></li>
+                            }
+                            @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
+                            {
+                                <li><a class="dropdown-item" href="#">Clear Case</a></li>
+                            }
+                            @if (ViewBag.dTable == 2)
+                            {
+                                <li><a class="dropdown-item" href="#">Send Agreement</a></li>
+                            }
+                            @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                            {
+                                <li><a class="dropdown-item" href="#">Encounter</a></li>
+                            }
 
-                            </ul>
+                        </ul>
 
-                            <div class="modal fade" id="@item.Name" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog  modal-dialog-centered">
-                                    <div class="modal-content rounded-4">
-                                        <div class="modal-header bg-info p-2">
-                                            <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Cancellation</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal fade" id="case-@item.RequestId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered">
+                                <div class="modal-content rounded-4">
+                                    <div class="modal-header bg-info p-2">
+                                        <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Cancellation</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Patient Name : <span class="text-info"> @item.Name  </span>
+                                        <div class="text-center pt-2">
+                                            <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
+                                                <select class="form-select" id="validationDefault04">
+                                                    <option selected disabled value="">Reasons for Cancellation</option>
+                                                    <option>1....</option>
+                                                    <option>2...</option>
+                                                    <option>3... </option>
+                                                    <option>4...</option>
+                                                </select>
+                                                <div class="form-floating mt-2">
+                                                    <textarea type="text" class="form-control bg-transparent h-25"
+                                                              placeholder="Detail info" name="CancelNotes" id="CancelNotes" rows="3" aria-label="Detail info"
+                                                              aria-describedby="button-addon2"> </textarea>
+                                                    <label for="ms-3 text-info">Provide Aditional Notes</label>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <div class="modal-body">
-                                            Patient Name : <span class="text-info"> @item.Name </span>
-                                            <div class="text-center pt-2">
-                                                <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
-                                                    <select class="form-select" id="validationDefault04">
-                                                        <option selected disabled value="">Reasons for Cancellation</option>
-                                                        <option>1....</option>
-                                                        <option>2...</option>
-                                                        <option>3... </option>
-                                                        <option>4...</option>
-                                                    </select>
-                                                    <div class="form-floating mt-2">
-                                                        <textarea type="text" class="form-control bg-transparent h-25"
-                                                                  placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
-                                                                  aria-describedby="button-addon2"> </textarea>
-                                                        <label for="ms-3 text-info">Provide Aditional Notes</label>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer p-1">
-                                            <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
-                                            <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
-                                        </div>
+                                    </div>
+                                    <div class="modal-footer p-1">
+                                        <div class="btn btn-secondary btn-info text-light cancelCase" data-reqid="@item.RequestId">Continue</div>
+                                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="modal fade" id="BlockPatient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog  modal-dialog-centered">
-                                    <div class="modal-content rounded-4">
-                                        <div class="modal-header bg-info p-2">
-                                            <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Block</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Patient Name : <span class="text-info"> @item.Name </span>
-                                            <div class="text-center pt-2">
-                                                <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
-                                                    <div class="form-floating mt-2">
-                                                        <textarea type="text" class="form-control bg-transparent h-25"
-                                                                  placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
-                                                                  aria-describedby="button-addon2"> </textarea>
-                                                        <label for="ms-3 text-info">Reason for Block Request</label>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer p-1">
-                                            <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
-                                            <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal fade" id="AssignCase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog  modal-dialog-centered">
-                                    <div class="modal-content rounded-4">
-                                        <div class="modal-header bg-info p-2">
-                                            <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Assign Request</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>To assign this request, search and select another Physician</p>
-                                            <div class="text-center pt-2">
-                                                <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
-                                                    <select class="form-select" id="validationDefault04">
-                                                        <option selected disabled value="">Narrow Search by Region</option>
-                                                        <option>District of Columbia</option>
-                                                        <option>Maryland</option>
-                                                        <option>New York</option>
-                                                        <option>Virginia</option>
-                                                    </select>
-                                                    <select class="form-select mt-2" id="validationDefault04">
-                                                        <option selected disabled value="">Select Physician</option>
-                                                        <option>1..</option>
-                                                    </select>
-                                                    <div class="form-floating mt-2">
-                                                        <textarea type="text" class="form-control bg-transparent h-25"
-                                                                  placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
-                                                                  aria-describedby="button-addon2"> </textarea>
-                                                        <label for="ms-3 text-info">Description</label>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer p-1">
-                                            <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
-                                            <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-        <div class="accordion accordion-flush MediaclSM" id="accordionFlushExample">
-            @foreach (var item in Model.Tdata)
-            {
-                <div class="accordion-item">
-                    <div class="accordion-header bg-lighinfo p-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <span>@item.Name</span>
-                            <span class="d-flex align-items-center gap-2">
-                                Ptient
-                            </span>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <span>@item.Address</span>
-                            <span class="btn btn-outline-info rounded-pill" type="button" data-bs-toggle="collapse"
-                                  data-bs-target="#flush-@item.ReqClientId" aria-expanded="false" aria-controls="flush-collapseOne">Map Location</span>
+
+                        <div class="modal fade" id="BlockPatient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered">
+                                <div class="modal-content rounded-4">
+                                    <div class="modal-header bg-info p-2">
+                                        <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Block</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Patient Name : <span class="text-info"> @item.Name </span>
+                                        <div class="text-center pt-2">
+                                            <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
+                                                <div class="form-floating mt-2">
+                                                    <textarea type="text" class="form-control bg-transparent h-25"
+                                                              placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                                                              aria-describedby="button-addon2"> </textarea>
+                                                    <label for="ms-3 text-info">Reason for Block Request</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer p-1">
+                                        <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
+                                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="modal fade" id="AssignCase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog  modal-dialog-centered">
+                                <div class="modal-content rounded-4">
+                                    <div class="modal-header bg-info p-2">
+                                        <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Assign Request</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>To assign this request, search and select another Physician</p>
+                                        <div class="text-center pt-2">
+                                            <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
+                                                <select class="form-select" id="validationDefault04">
+                                                    <option selected disabled value="">Narrow Search by Region</option>
+                                                    <option>District of Columbia</option>
+                                                    <option>Maryland</option>
+                                                    <option>New York</option>
+                                                    <option>Virginia</option>
+                                                </select>
+                                                <select class="form-select mt-2" id="validationDefault04">
+                                                    <option selected disabled value="">Select Physician</option>
+                                                    <option>1..</option>
+                                                </select>
+                                                <div class="form-floating mt-2">
+                                                    <textarea type="text" class="form-control bg-transparent h-25"
+                                                              placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                                                              aria-describedby="button-addon2"> </textarea>
+                                                    <label for="ms-3 text-info">Description</label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer p-1">
+                                        <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
+                                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="accordion accordion-flush MediaclSM" id="accordionFlushExample">
+        @foreach (var item in Model.Tdata)
+        {
+            <div class="accordion-item">
+                <div class="accordion-header bg-lighinfo p-2">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>@item.Name</span>
+                        <span class="d-flex align-items-center gap-2">
+                            Ptient
+                        </span>
                     </div>
-                    <div id="flush-@item.ReqClientId" class="accordion-collapse collapse bg-lighinfo"
-                         data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">
-                            <div class="d-flex flex-column px-3">
-                                <div class="d-flex flex-column px-5 position-relative new">
-                                    <button class="btn text-nowrap btn-light state">View Case</button>
-                                </div>
-                                <div class="d-flex mb-3 flex-column">
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-clock text-primary"></i><span class="text-secondary mx-2">
-                                            Wait Time:
-                                        </span>Dec 5, 2023 08:52 AM
-                                    </span>
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-calendar3 text-primary"></i><span class="text-secondary mx-2"> Date of Birth: </span> @item.Strmonth.Substring(0, 3) @item.Intdate , @item.Intyear (@item.Age)
-                                    </span>
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-envelope text-primary"></i><span class="text-secondary mx-2"> Email: </span> @item.Email
-                                    </span>
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-telephone text-primary"></i><span class="text-secondary mx-2"> Patient:</span>  @item.Name
-                                    </span>
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-person text-primary"></i><span class="text-secondary mx-2">
-                                            Requestor:
-                                        </span> @item.Requestor
-                                    </span>
-                                </div>
-                                <div class="d-flex justify-content-between row">
-                                    <button class="btn btn-primary col-5 mb-2">Assign Case</button>
-                                    <button class="btn btn-danger col-5 mb-2">Cancel Case</button>
-                                    <button class="btn btn-success col-5 mb-2">View Notes</button>
-                                    <button class="btn btn-danger col-5 mb-2">Block Patient</button>
-                                    <button class="btn btn-success col-5 mb-2">Email</button>
-                                </div>
+                    <div class="d-flex justify-content-between">
+                        <span>@item.Address</span>
+                        <span class="btn btn-outline-info rounded-pill" type="button" data-bs-toggle="collapse"
+                              data-bs-target="#flush-@item.ReqClientId" aria-expanded="false" aria-controls="flush-collapseOne">Map Location</span>
+                    </div>
+                </div>
+                <div id="flush-@item.ReqClientId" class="accordion-collapse collapse bg-lighinfo"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-column px-3">
+                            <div class="d-flex flex-column px-5 position-relative new">
+                                <button class="btn text-nowrap btn-light state">View Case</button>
+                            </div>
+                            <div class="d-flex mb-3 flex-column">
+                                <span class="d-inline-flex">
+                                    <i class="bi bi-clock text-primary"></i><span class="text-secondary mx-2">
+                                        Wait Time:
+                                    </span>Dec 5, 2023 08:52 AM
+                                </span>
+                                <span class="d-inline-flex">
+                                    <i class="bi bi-calendar3 text-primary"></i><span class="text-secondary mx-2"> Date of Birth: </span> @item.Strmonth.Substring(0, 3) @item.Intdate , @item.Intyear (@item.Age)
+                                </span>
+                                <span class="d-inline-flex">
+                                    <i class="bi bi-envelope text-primary"></i><span class="text-secondary mx-2"> Email: </span> @item.Email
+                                </span>
+                                <span class="d-inline-flex">
+                                    <i class="bi bi-telephone text-primary"></i><span class="text-secondary mx-2"> Patient:</span>  @item.Name
+                                </span>
+                                <span class="d-inline-flex">
+                                    <i class="bi bi-person text-primary"></i><span class="text-secondary mx-2">
+                                        Requestor:
+                                    </span> @item.Requestor
+                                </span>
+                            </div>
+                            <div class="d-flex justify-content-between row">
+                                <button class="btn btn-primary col-5 mb-2">Assign Case</button>
+                                <button class="btn btn-danger col-5 mb-2">Cancel Case</button>
+                                <button class="btn btn-success col-5 mb-2">View Notes</button>
+                                <button class="btn btn-danger col-5 mb-2">Block Patient</button>
+                                <button class="btn btn-success col-5 mb-2">Email</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            }
-        </div>
-
+            </div>
+        }
     </div>
+
 </div>
 
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-end me-3 pb-2">
-        <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-        <li class="page-item"><a class="page-link" data-id="@ViewBag.dTable" data-page="0">1</a></li>
-        <li class="page-item"><a class="page-link" data-id="@ViewBag.dTable" data-page="1">2</a></li>
-        <li class="page-item"><a class="page-link" data-id="@ViewBag.dTable" data-page="2">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-        </li>
+        @if (ViewBag.Tcount > 5)
+        {
+            @for (int i = 1; i <= (ViewBag.Tcount / 5) + 1; i++)
+            {
+                <li class="page-item"><div class="page-link" data-id="@ViewBag.dTable" data-page="@(i - 1)">@i</div></li>
+            }
+        }
     </ul>
 </nav>
 
@@ -435,7 +393,11 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 data: { reqid: reqid },
                 success: function (response) {
                     const rowCount = document.querySelector('.row');
+                    const dashf = document.querySelector('.DashFun');
+                    const dashs = document.querySelector('.DashSearch');
                     rowCount.classList.add('d-none');
+                    dashf.classList.add('d-none');
+                    dashs.classList.add('d-none');
                     $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
@@ -444,21 +406,21 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             });
         });
 
-        $('.NewReq').click(function () {
+        $('.cancelCase').click(function () {
+            var note = document.querySelector("#CancelNotes").value;
             var reqid = $(this).data('reqid');
             $.ajax({
-                url: '/AdminDash/NewRequest',
+                url: '/AdminDash/CancelReq',
                 method: 'POST',
-                data: { reqid: reqid },
+                data: { note: note, reqid: reqid },
                 success: function (response) {
-                    const rowCount = document.querySelector('.row');
-                    rowCount.classList.add('d-none');
-                    $("#partial").html(response);
+                    console.log("done");
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
         });
+
     });
 </script>

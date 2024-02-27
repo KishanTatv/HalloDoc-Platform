@@ -1,9 +1,11 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
+using HalloDoc.HelperClass;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -30,11 +32,8 @@ namespace HalloDoc.Controllers
 
         public IActionResult Dashbord()
         {
-            //ViewBag.dTable = 1;
             var Tcount = _Admin.TotalCountPatient();
 
-            //IEnumerable<tableData> Req;
-            //Req = _Admin.GetTableData(0, 5);
             var dashData = new DashTable {ToatlCount = Tcount };
             return View(dashData);
         }
@@ -42,59 +41,58 @@ namespace HalloDoc.Controllers
 
         public IActionResult DashbordData(int id,int page)
         {
-
-
+            var Tcount = _Admin.TotalCountPatient();
             int pageSize = 5;
 
             IEnumerable<tableData> Req=new List<tableData>();
 
-            ////new
+            //new
             if (id==1)
             {
+                ViewBag.Tcount = Tcount[0];
                 ViewBag.dTable = id;
                 Req = _Admin.GetTableData(page, pageSize);
-            }  
-
-                ////pending
-                //else if (id == 2)
-                //{
-                //    ViewBag.dTable = id;
-                //    Req = _Admin.GetTableDataPending(page, pageSize);
-                //}
-
-            ////Active
-            else if (id == 3)
-            {
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableDataActive(page, pageSize);
             }
 
-            ////conclude
-            else if (id == 4)
+            //pending
+            else if (id == 2)
             {
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableDataConclude(page, pageSize);
-            }
-
-            ////To-close
-            else if (id == 5)
-            {
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableDataToclose(page, pageSize);
-            }
-
-            ////Unpaid
-            else if (id == 6)
-            {
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableDataUnpaid(page, pageSize);
-            }
-            else 
-            {
+                ViewBag.Tcount = Tcount[1];
                 ViewBag.dTable = id;
                 Req = _Admin.GetTableDataPending(page, pageSize);
             }
 
+            //Active
+            else if (id == 3)
+            {
+                ViewBag.Tcount = Tcount[2];
+                ViewBag.dTable = id;
+                Req = _Admin.GetTableDataActive(page, pageSize);
+            }
+
+            //conclude
+            else if (id == 4)
+            {
+                ViewBag.Tcount = Tcount[3];
+                ViewBag.dTable = id;
+                Req = _Admin.GetTableDataConclude(page, pageSize);
+            }
+
+            //To-close
+            else if (id == 5)
+            {
+                ViewBag.Tcount = Tcount[4];
+                ViewBag.dTable = id;
+                Req = _Admin.GetTableDataToclose(page, pageSize);
+            }
+
+            //Unpaid
+            else if (id == 6)
+            {
+                ViewBag.Tcount = Tcount[5];
+                ViewBag.dTable = id;
+                Req = _Admin.GetTableDataUnpaid(page, pageSize);
+            }
 
 
             var dashData = new DashTable { Tdata= Req.ToList() };
@@ -128,28 +126,39 @@ namespace HalloDoc.Controllers
         [ActionName("ViewCase")]
         public IActionResult ViewCase(int reqid)
         {
+            ViewData["reqid"] = reqid;
             var data = _Admin.GetClientById(reqid);
             return View(data); 
         }
 
 
         [ActionName("ViewNotes")]
-        public IActionResult ViewNotes(int caseid)
+        public IActionResult ViewNotes(int reqid)
         {
+            ViewData["reqid"] = reqid;
+            var data = _Admin.getAllNotes(reqid);
+            return View(data);
+        }
+
+
+        public IActionResult ViewNotedata(string note, int reqid)
+        {
+            _Admin.addNote(reqid, note);
             return View();
         }
 
-        [HttpPost]
-        public IActionResult ViewNotedata(AllNotes note)
+        public IActionResult CancelReq(string note, int reqid)
         {
-            return View(ViewNotes);
+            short Cancelstatus = 6;
+            _Admin.CancelRequest(reqid, note, Cancelstatus);
+            return View();
         }
+
 
         public IActionResult NewRequest(int reqid)
         {
             return View();
         }
-
 
         public IActionResult Provider()
         {

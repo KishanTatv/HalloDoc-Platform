@@ -102,7 +102,6 @@ namespace HalloDoc.Repository.Implement
                 Phonenumber = client.Phonenumber,
                 Email = client.Email,
                 Locroom = client.Locroom,
-                Symptoms = client.Symptoms,
             };
             _context.Requests.Add(req);
             _context.SaveChanges();
@@ -121,6 +120,7 @@ namespace HalloDoc.Repository.Implement
                 Strmonth = client.Dob.ToString("MMMM"),
                 Intyear = client.Dob.Year,
                 Email = client.Email,
+                Notes = client.Symptoms,
                 Street = client.Street,
                 City = client.City,
                 State = client.State,
@@ -181,7 +181,6 @@ namespace HalloDoc.Repository.Implement
                 Email = fInfo.PatientEmail,
                 Confirmationnumber = "M" + Guid.NewGuid().ToString().Substring(0, 9).ToUpper(),
                 Locroom = fInfo.clientInformation.Locroom,
-                Symptoms = fInfo.clientInformation.Symptoms
             };
             _context.Requests.Add(request);
             _context.SaveChanges();
@@ -201,6 +200,7 @@ namespace HalloDoc.Repository.Implement
                 Strmonth = fInfo.clientInformation.Dob.ToString("MMMM"),
                 Intyear = fInfo.clientInformation.Dob.Year,
                 Email = fInfo.clientInformation.Email,
+                Notes = fInfo.clientInformation.Symptoms,
                 Street = fInfo.clientInformation.Street,
                 City = fInfo.clientInformation.City,
                 State = fInfo.clientInformation.State,

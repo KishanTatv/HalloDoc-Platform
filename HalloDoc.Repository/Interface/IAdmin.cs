@@ -1,4 +1,5 @@
-﻿using HalloDoc.Entity.AdminDashTable;
+﻿using HalloDoc.Entity.AdminDash;
+using HalloDoc.Entity.AdminDashTable;
 using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using System;
@@ -13,7 +14,7 @@ namespace HalloDoc.Repository.Interface
     public interface IAdmin
     {
 
-        Request GetClientById(int id);
+        Requestclient GetClientById(int id);
 
 
 
@@ -32,5 +33,15 @@ namespace HalloDoc.Repository.Interface
 
 
         List<int> TotalCountPatient();
+
+
+
+        //note
+
+        void addNote(int reqid, string note);
+
+        ViewNotesViewModel getAllNotes(int reqid);
+
+        void CancelRequest(int reqid, string note, short Cancelstatus);
     }
 }

@@ -1,4 +1,5 @@
-﻿using HalloDoc.Entity.AdminDashTable;
+﻿using HalloDoc.Entity.AdminDash;
+using HalloDoc.Entity.AdminDashTable;
 using HalloDoc.Entity.Data;
 using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
@@ -23,9 +24,9 @@ namespace HalloDoc.Repository.Implement
 
         }
 
-        public Request GetClientById(int id)
+        public Requestclient GetClientById(int id)
         {
-            var reqData = _context.Requests.FirstOrDefault(x => x.Requestid == id);
+            var reqData = _context.Requestclients.Where(x => x.Requestid == id).Include(x => x.Request).FirstOrDefault();
             return reqData;
         }
 
@@ -34,7 +35,7 @@ namespace HalloDoc.Repository.Implement
         public IEnumerable<tableData> GetTableData(int page, int pageSize)
         {
             IEnumerable<tableData> data = from r in _context.Requests
-                                          join f in _context.Requestclients on r.Requestid equals f.Requestid 
+                                          join f in _context.Requestclients on r.Requestid equals f.Requestid
                                           where r.Status == 1
                                           orderby r.Createddate descending
                                           select new tableData
@@ -233,6 +234,49 @@ namespace HalloDoc.Repository.Implement
             countList.Add(Tnew); countList.Add(Tpending); countList.Add(Tactive); countList.Add(Tconclide); countList.Add(Tclose); countList.Add(Tunpaid);
 
             return countList;
+        }
+
+
+
+        public void addNote(int reqid, string note)
+        {
+            Requestnote reqNote = new Requestnote()
+            {
+                Requestid = reqid,
+                Adminnotes = note,
+                Createddate = DateTime.Now,
+                Createdby = "yash"
+            };
+            _context.Requestnotes.Add(reqNote);
+            _context.SaveChanges();
+        }
+
+        public ViewNotesViewModel getAllNotes(int reqid)
+        {
+            List<Requeststatuslog> reqLog = _context.Requeststatuslogs.Where(x => x.Requestid == reqid).ToList();
+            List<Requestnote> reqNote = _context.Requestnotes.Where(x => x.Requestid == reqid).ToList();
+            ViewNotesViewModel viewNote = new ViewNotesViewModel();
+            viewNote.reqLog = reqLog;
+            viewNote.reqNote = reqNote;
+            return viewNote;
+        }
+
+        public void CancelRequest(int reqid, string note, short Cancelstatus)
+        {
+            Requeststatuslog reqStatus = new Requeststatuslog()
+            {
+                Requestid = reqid,
+                Notes = note,
+                Status = Cancelstatus,
+                Createddate = System.DateTime.Now
+            };
+            _context.Requeststatuslogs.Add(reqStatus);
+
+            Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
+            req.Status = Cancelstatus;
+            _context.Requests.Update(req);
+
+            _context.SaveChanges();
         }
     }
 }
