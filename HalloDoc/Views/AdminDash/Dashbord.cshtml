@@ -16,88 +16,90 @@
 
     <partial name="partial/AdminNavTab" />
 
-    <div class="container-fluid overflow-hidden">
 
-        <div class="row g-3 nav pt-4">
-            <div class="col-4 col-sm-4 col-lg-2 active">
-                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardN" onclick="newDash()" data-id="1">
-                    <div class=" p-0">
-                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                             src="~/image/Dash_new.jpg">
-                        <strong class="Dash-name">NEW</strong>
-                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[0] </h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4 col-sm-4 col-lg-2 ">
-                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardP" onclick="penDash()" data-id="2">
-                    <div class=" p-0">
-                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                             src="~/image/Dash_pending.jpg">
-                        <strong class="Dash-name">PENDING</strong>
-                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[1] </h5>
-                    </div>
-                </div>
-            </div>
+    <div class="dashHead">
+        <div class="container-fluid overflow-hidden">
 
-            <div class="col-4 col-sm-4 col-lg-2 ">
-                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardA" onclick="actDash()" data-id="3">
-                    <div class=" p-0">
-                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                             src="~/image/Dash_active.png">
-                        <strong class="Dash-name">ACTIVE</strong>
-                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[2] </h5>
+            <div class="row g-3 nav pt-4">
+                <div class="col-4 col-sm-4 col-lg-2 active">
+                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardN" onclick="newDash()" data-id="1">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_new.jpg">
+                            <strong class="Dash-name">NEW</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[0] </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-2 ">
+                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardP" onclick="penDash()" data-id="2">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_pending.jpg">
+                            <strong class="Dash-name">PENDING</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[1] </h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-4 col-sm-4 col-lg-2 ">
+                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardA" onclick="actDash()" data-id="3">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_active.png">
+                            <strong class="Dash-name">ACTIVE</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[2] </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-2 ">
+                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardC" onclick="conDash()" data-id="4">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_conclude.png">
+                            <strong class="Dash-name">CONCLUDE</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[3] </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-2 ">
+                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardT" onclick="tocDash()" data-id="5">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_toclose.png">
+                            <strong class="Dash-name">To CLOSE</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 col-sm-4 col-lg-2 ">
+                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardU" onclick="unpDash()" data-id="6">
+                        <div class=" p-0">
+                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                 src="~/image/Dash_unpaid.png">
+                            <strong class="Dash-name">UNPAID</strong>
+                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-4 col-sm-4 col-lg-2 ">
-                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardC" onclick="conDash()" data-id="4">
-                    <div class=" p-0">
-                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                             src="~/image/Dash_conclude.png">
-                        <strong class="Dash-name">CONCLUDE</strong>
-                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[3] </h5>
-                    </div>
-                </div>
+        </div>
+
+
+
+        <div class="d-flex justify-content-between DashFun m-3">
+            <div>
+                <h5>Patient <span class="text-primary dNameCard"> </span> </h5>
             </div>
-            <div class="col-4 col-sm-4 col-lg-2 ">
-                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardT" onclick="tocDash()" data-id="5">
-                    <div class=" p-0">
-                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                             src="~/image/Dash_toclose.png">
-                        <strong class="Dash-name">To CLOSE</strong>
-                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
-                    </div>
-                </div>
-            </div>
-            <div class="col-4 col-sm-4 col-lg-2 ">
-                <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardU" onclick="unpDash()" data-id="6">
-                    <div class=" p-0">
-                        <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                             src="~/image/Dash_unpaid.png">
-                        <strong class="Dash-name">UNPAID</strong>
-                        <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
-                    </div>
-                </div>
+            <div>
+                <button type="button" class="btn btn-info text-light"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
+                <div class="btn btn-info text-light NewReq" data-reqid="1"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></div>
+                <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
+                <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
+                <button type="button" class="btn btn-info text-light"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></button>
             </div>
         </div>
     </div>
-
-
-
-    <div class="d-flex justify-content-between DashFun m-3">
-        <div>
-            <h5>Patient <span class="text-primary dNameCard"> </span> </h5>
-        </div>
-        <div>
-            <button type="button" class="btn btn-info text-light"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
-            <div class="btn btn-info text-light NewReq" data-reqid="1"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></div>
-            <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
-            <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
-            <button type="button" class="btn btn-info text-light"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></button>
-        </div>
-    </div>
-
 
     <div class="bg-light rounded-3 pt-2">
         <div class="row DashSearch">
@@ -122,7 +124,7 @@
                 <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-purple"></i>vip</span>
             </div>
         </div>
-        
+
         <div id="partial">
             @*@Html.Partial("TablePartial")*@
         </div>
@@ -215,11 +217,9 @@
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    const rowCount = document.querySelector('.row');
-                    const dashf = document.querySelector('.DashFun');
+                    const dashHead = document.querySelector('.dashHead');
                     const dashs = document.querySelector('.DashSearch');
-                    rowCount.classList.add('d-none');
-                    dashf.classList.add('d-none');
+                    dashHead.classList.add('d-none');
                     dashs.classList.add('d-none');
                     $("#partial").html(response);
                 },

@@ -12,13 +12,12 @@
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
 
 
-
 <div class="MainContent pt-0 min-vh-100">
     <div class="tab-content" id="nav-tabContent">
         <div class="HContainer m-auto pt-4">
             <div class="d-flex justify-content-between mt-4">
                 <h4 class="m-0">Notes</h4>
-                <div class="btn w-5 btn-info rounded bg-transparent m-2 text-info backViewCase">
+                <div class="btn w-5 btn-info rounded bg-transparent m-2 text-info backViewCase" data-reqid="@Model.RequestId">
                     <strong class="pe-2">&lt Back</strong>
                 </div>
             </div>
@@ -32,7 +31,7 @@
                                 <h5>Transfer Notes</h5>
                                 @foreach (var notes in Model.reqLog)
                                 {
-                                        <p class="m-0"> @notes.Notes </p>
+                                    <p class="m-0"> @notes.Notes </p>
                                 }
                             </div>
                         </div>
@@ -67,39 +66,34 @@
             <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
                 <div class="form-floating">
                     <textarea type="text" class="form-control bg-transparent h-100 adminNote"
-                              placeholder="Detail info" id="AdminNotes" name="AdminNotes" rows="3" aria-label="Detail info" data-adminote=""
+                              placeholder="Detail info" id="note" name="note" rows="3" aria-label="Detail info" data-adminote=""
                               aria-describedby="button-addon2"> </textarea>
                     <label for="ms-3 text-info">Admin Notes</label>
                 </div>
 
-
                 <div class="d-flex justify-content-end mt-4 mb-2">
-                    <div class="btn btn-info text-light me-4 saveCng" name="Upload">Save Changes</div>
+                    <div class="btn btn-info text-light me-4 saveCng" data-reqid="@Model.RequestId">Save Changes</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
-
 <script asp-append-version="true">
     $(document).ready(function () {
         $('.saveCng').click(function () {
-            var note = document.querySelector("#AdminNotes").value;
-            var reqid = @ViewData["reqid"];
+            var note = document.querySelector("#note").value;
+            var reqid = $(this).data('reqid');
             $.ajax({
                 url: '/AdminDash/ViewNotedata',
                 method: 'POST',
                 data: { note: note, reqid: reqid },
                 success: function (response) {
-                    const rowCount = document.querySelector('.row');
-                    const dashf = document.querySelector('.DashFun');
+                    const dashHead = document.querySelector('.dashHead');
                     const dashs = document.querySelector('.DashSearch');
-                    rowCount.classList.add('d-none');
-                    dashf.classList.add('d-none');
+                    dashHead.classList.add('d-none');
                     dashs.classList.add('d-none');
-                    console .log("done");
+                    $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
@@ -108,17 +102,15 @@
         });
 
         $('.backViewCase').click(function () {
-            var reqid = @ViewData["reqid"];
+            var reqid = $(this).data('reqid');
             $.ajax({
                 url: '/AdminDash/ViewCase',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    const rowCount = document.querySelector('.row');
-                    const dashf = document.querySelector('.DashFun');
+                    const dashHead = document.querySelector('.dashHead');
                     const dashs = document.querySelector('.DashSearch');
-                    rowCount.classList.add('d-none');
-                    dashf.classList.add('d-none');
+                    dashHead.classList.add('d-none');
                     dashs.classList.add('d-none');
                     $("#partial").html(response);
                 },

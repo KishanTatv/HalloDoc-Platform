@@ -30,6 +30,8 @@ public partial class HalloDocDbContext : DbContext
 
     public virtual DbSet<Business> Businesses { get; set; }
 
+    public virtual DbSet<Casetag> Casetags { get; set; }
+
     public virtual DbSet<Concierge> Concierges { get; set; }
 
     public virtual DbSet<Emaillog> Emaillogs { get; set; }
@@ -141,6 +143,11 @@ public partial class HalloDocDbContext : DbContext
             entity.HasOne(d => d.ModifiedbyNavigation).WithMany(p => p.BusinessModifiedbyNavigations).HasConstraintName("business_modifiedby_fkey");
 
             entity.HasOne(d => d.Region).WithMany(p => p.Businesses).HasConstraintName("business_regionid_fkey");
+        });
+
+        modelBuilder.Entity<Casetag>(entity =>
+        {
+            entity.Property(e => e.Casetagid).ValueGeneratedOnAdd();
         });
 
         modelBuilder.Entity<Concierge>(entity =>

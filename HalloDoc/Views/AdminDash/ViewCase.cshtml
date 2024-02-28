@@ -11,8 +11,6 @@
 
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
 
-
-
 <div class="MainContent pt-0 min-vh-100">
     <div class="tab-content" id="nav-tabContent">
 
@@ -103,7 +101,7 @@
 
                 <div class="d-flex justify-content-end mt-4 mb-4">
                     <button type="button" class="btn btn-info text-light me-3">Assign</button>
-                    <div class="btn btn-info text-light me-3 viewNote" data-caseid="1"> View Notes</div>
+                    <div class="btn btn-info text-light me-3 viewNote" data-reqid="@Model.Requestid"> View Notes</div>
                     <button type="button" class="btn btn-danger">Cancel</button>
                 </div>
             </div>
@@ -122,17 +120,15 @@
 <script asp-append-version="true">
     $(document).ready(function () {
         $('.viewNote').click(function () {
-            var reqid = @ViewData["reqid"];
+            var reqid = $(this).data('reqid');
             $.ajax({
                 url: '/AdminDash/ViewNotes',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    const rowCount = document.querySelector('.row');
-                    const dashf = document.querySelector('.DashFun');
+                    const dashHead = document.querySelector('.dashHead');
                     const dashs = document.querySelector('.DashSearch');
-                    rowCount.classList.add('d-none');
-                    dashf.classList.add('d-none');
+                    dashHead.classList.add('d-none');
                     dashs.classList.add('d-none');
                     $("#partial").html(response);
                 },

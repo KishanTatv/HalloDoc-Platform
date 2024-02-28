@@ -4,7 +4,6 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 @{
 }
 
-
 <div class="table-responsive mt-2">
     <table id="tableD" class="table MedicalLG">
         <tbody>
@@ -129,13 +128,13 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
-                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#AssignCase">Assign Case</a>
+                                    <a class="dropdown-item assignModel" data-bs-toggle="modal" data-bs-target="#assign-@item.RequestId"> Assign Case @item.RequestId</a>
                                 </li>
                             }
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
-                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#case-@item.RequestId"> Cancel Case @item.RequestId </a>
+                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cancel-@item.RequestId"> Cancel Case @item.RequestId </a>
                                 </li>
                             }
                             <li>
@@ -183,9 +182,9 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
                         </ul>
 
-                        <div class="modal fade" id="case-@item.RequestId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="cancel-@item.RequestId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog  modal-dialog-centered">
-                                <div class="modal-content rounded-4">
+                                <form asp-action="CancelReq" asp-route-reqid="@item.RequestId" method="post" class="modal-content rounded-4">
                                     <div class="modal-header bg-info p-2">
                                         <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Cancellation</h1>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -193,28 +192,28 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                     <div class="modal-body">
                                         Patient Name : <span class="text-info"> @item.Name  </span>
                                         <div class="text-center pt-2">
-                                            <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
-                                                <select class="form-select" id="validationDefault04">
-                                                    <option selected disabled value="">Reasons for Cancellation</option>
-                                                    <option>1....</option>
-                                                    <option>2...</option>
-                                                    <option>3... </option>
-                                                    <option>4...</option>
+                                            <div>
+                                                <select class="form-select" name="tag" id="validationDefault04">
+                                                    <option selected disabled>Reasons for Cancellation</option>
+                                                    @foreach (var tagName in Model.Casetags)
+                                                    {
+                                                        <option value="@tagName.Name" class="CancelReason"> @tagName.Name </option>
+                                                    }
                                                 </select>
                                                 <div class="form-floating mt-2">
-                                                    <textarea type="text" class="form-control bg-transparent h-25"
-                                                              placeholder="Detail info" name="CancelNotes" id="CancelNotes" rows="3" aria-label="Detail info"
+                                                    <textarea type="text" class="form-control bg-transparent h-25 CancelNotes"
+                                                              placeholder="Detail info" name="CancelNotes" rows="3" aria-label="Detail info"
                                                               aria-describedby="button-addon2"> </textarea>
                                                     <label for="ms-3 text-info">Provide Aditional Notes</label>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer p-1">
-                                        <div class="btn btn-secondary btn-info text-light cancelCase" data-reqid="@item.RequestId">Continue</div>
+                                        <button type="submit" class="btn btn-secondary btn-info text-light cancelCase" data-reqid="@item.RequestId">Continue</button>
                                         <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
 
@@ -246,7 +245,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             </div>
                         </div>
 
-                        <div class="modal fade" id="AssignCase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="assign-@item.RequestId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog  modal-dialog-centered">
                                 <div class="modal-content rounded-4">
                                     <div class="modal-header bg-info p-2">
@@ -257,16 +256,19 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                         <p>To assign this request, search and select another Physician</p>
                                         <div class="text-center pt-2">
                                             <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
-                                                <select class="form-select" id="validationDefault04">
-                                                    <option selected disabled value="">Narrow Search by Region</option>
-                                                    <option>District of Columbia</option>
-                                                    <option>Maryland</option>
-                                                    <option>New York</option>
-                                                    <option>Virginia</option>
+                                                <select class="form-select RegOption" data-id="@item.RequestId">
+                                                    <option selected disabled>Narrow Search by Region</option>
+                                                    @foreach (var regName in Model.Regions)
+                                                    {
+                                                        <option value="@regName.Regionid">@regName.Name</option>
+                                                    }
                                                 </select>
                                                 <select class="form-select mt-2" id="validationDefault04">
-                                                    <option selected disabled value="">Select Physician</option>
-                                                    <option>1..</option>
+                                                    <option selected disabled>Select Physician</option>
+                                                    @*@foreach (var phy in @Phylist)
+                                                    {
+                                                        <option>1..</option>
+                                                    }*@
                                                 </select>
                                                 <div class="form-floating mt-2">
                                                     <textarea type="text" class="form-control bg-transparent h-25"
@@ -284,11 +286,13 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                 </div>
                             </div>
                         </div>
+
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
 
     <div class="accordion accordion-flush MediaclSM" id="accordionFlushExample">
         @foreach (var item in Model.Tdata)
@@ -392,11 +396,9 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    const rowCount = document.querySelector('.row');
-                    const dashf = document.querySelector('.DashFun');
+                    const dashHead = document.querySelector('.dashHead');
                     const dashs = document.querySelector('.DashSearch');
-                    rowCount.classList.add('d-none');
-                    dashf.classList.add('d-none');
+                    dashHead.classList.add('d-none');
                     dashs.classList.add('d-none');
                     $("#partial").html(response);
                 },
@@ -406,15 +408,37 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             });
         });
 
-        $('.cancelCase').click(function () {
-            var note = document.querySelector("#CancelNotes").value;
-            var reqid = $(this).data('reqid');
+        $(document).on('click', '.assignModel', function () {
             $.ajax({
-                url: '/AdminDash/CancelReq',
+                type: 'GET',
+                cache: false,
+                processData: false,
+                success: function (output) {
+                    $('#assign').html(output).modal('show');
+                },
+                error: function (output) {
+                    alert("fail");
+                }
+            });
+        });
+
+
+        $('.RegOption').blur(function () {
+            console.log($(this).attr('data-id'));
+            var region = $(this).val();
+            console.log(region);
+            $.ajax({
+                url: '/AdminDash/CheckPhysician',
                 method: 'POST',
-                data: { note: note, reqid: reqid },
+                data: { region: region },
                 success: function (response) {
-                    console.log("done");
+                    console.log("success");
+                    console.log(response);
+                    $("#RegOption").empty().append($("<option></option>").val("[-]").html("Select Physician"));
+                },
+                complete: function (response) {
+                    console.log("complete");
+                    console.log(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

@@ -2,9 +2,11 @@
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Spreadsheet;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
+using HalloDoc.Entity.Models;
 using HalloDoc.HelperClass;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -94,9 +96,11 @@ namespace HalloDoc.Controllers
                 Req = _Admin.GetTableDataUnpaid(page, pageSize);
             }
 
+            var caseTag = _Admin.getAllCaseTag();
+            var region = _Admin.getAllRegion();
+            var dashData = new DashTable { Tdata= Req.ToList(), Casetags = caseTag, Regions = region };
 
-            var dashData = new DashTable { Tdata= Req.ToList() };
-            return PartialView("TablePartial", dashData);
+            return PartialView("TablePartial", dashData );
         }
 
         public IActionResult ExportAll()
@@ -126,7 +130,6 @@ namespace HalloDoc.Controllers
         [ActionName("ViewCase")]
         public IActionResult ViewCase(int reqid)
         {
-            ViewData["reqid"] = reqid;
             var data = _Admin.GetClientById(reqid);
             return View(data); 
         }
@@ -135,7 +138,6 @@ namespace HalloDoc.Controllers
         [ActionName("ViewNotes")]
         public IActionResult ViewNotes(int reqid)
         {
-            ViewData["reqid"] = reqid;
             var data = _Admin.getAllNotes(reqid);
             return View(data);
         }
@@ -143,17 +145,29 @@ namespace HalloDoc.Controllers
 
         public IActionResult ViewNotedata(string note, int reqid)
         {
-            _Admin.addNote(reqid, note);
-            return View();
+            if(note != null)
+            {
+                _Admin.addNote(reqid, note);
+            }
+            var data = _Admin.getAllNotes(reqid);
+            return PartialView("ViewNotes", data);
         }
 
-        public IActionResult CancelReq(string note, int reqid)
+        public IActionResult CancelReq(string CancelNotes, string tag, int reqid)
         {
             short Cancelstatus = 6;
-            _Admin.CancelRequest(reqid, note, Cancelstatus);
-            return View();
+            if(tag != null)
+            {
+                _Admin.CancelRequest(reqid, CancelNotes, tag, Cancelstatus);
+            }
+            return RedirectToAction("Dashbord");
         }
 
+        public IActionResult CheckPhysician(int region)
+        {
+            var phy = _Admin.GetAvaliablePhysician(region);
+            return Json(new { physician=phy });
+        }
 
         public IActionResult NewRequest(int reqid)
         {

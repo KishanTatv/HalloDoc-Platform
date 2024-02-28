@@ -11,5 +11,9 @@ namespace HalloDoc.Entity.AdminDashTable
     {
         public IEnumerable<tableData> Tdata { get; set; } 
         public List<int> ToatlCount { get; set; }   
+
+        public List<Casetag> Casetags { get; set; }
+
+        public List<Region> Regions { get; set; }
     }
 }

@@ -256,17 +256,24 @@ namespace HalloDoc.Repository.Implement
             List<Requeststatuslog> reqLog = _context.Requeststatuslogs.Where(x => x.Requestid == reqid).ToList();
             List<Requestnote> reqNote = _context.Requestnotes.Where(x => x.Requestid == reqid).ToList();
             ViewNotesViewModel viewNote = new ViewNotesViewModel();
+            viewNote.RequestId = reqid;
             viewNote.reqLog = reqLog;
             viewNote.reqNote = reqNote;
             return viewNote;
         }
 
-        public void CancelRequest(int reqid, string note, short Cancelstatus)
+        public List<Casetag> getAllCaseTag()
+        {
+           var CaseTagData = _context.Casetags.ToList();
+            return CaseTagData;
+        }
+
+        public void CancelRequest(int reqid, string note, string reason, short Cancelstatus)
         {
             Requeststatuslog reqStatus = new Requeststatuslog()
             {
                 Requestid = reqid,
-                Notes = note,
+                Notes = reason + note,
                 Status = Cancelstatus,
                 Createddate = System.DateTime.Now
             };
@@ -277,6 +284,18 @@ namespace HalloDoc.Repository.Implement
             _context.Requests.Update(req);
 
             _context.SaveChanges();
+        }
+
+        public List<Region> getAllRegion()
+        {
+            var region = _context.Regions.ToList();
+            return region;
+        }
+
+        public List<Physician> GetAvaliablePhysician(int regionId)
+        {
+            var phyList = _context.Physicians.Where(x => x.Regionid == regionId).ToList();
+            return phyList;
         }
     }
 }

@@ -42,6 +42,15 @@ namespace HalloDoc.Repository.Interface
 
         ViewNotesViewModel getAllNotes(int reqid);
 
-        void CancelRequest(int reqid, string note, short Cancelstatus);
+        List<Casetag> getAllCaseTag();
+
+        void CancelRequest(int reqid, string note, string reason, short Cancelstatus);
+
+
+        //region
+
+        List<Region> getAllRegion();
+
+        List<Physician> GetAvaliablePhysician(int regionId);
     }
 }
