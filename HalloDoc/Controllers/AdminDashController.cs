@@ -25,7 +25,7 @@ namespace HalloDoc.Controllers
             this._Admin = _Admin;
         }
 
-        
+
         public IActionResult Index()
         {
             return View();
@@ -36,71 +36,61 @@ namespace HalloDoc.Controllers
         {
             var Tcount = _Admin.TotalCountPatient();
 
-            var dashData = new DashTable {ToatlCount = Tcount };
+            var dashData = new DashTable { ToatlCount = Tcount };
+            if(ViewBag.dTable != null)
+            {
+                DashbordData(ViewBag.dTable, 0);
+            }
             return View(dashData);
         }
 
 
-        public IActionResult DashbordData(int id,int page)
+        public IActionResult DashbordData(int id, int page)
         {
             var Tcount = _Admin.TotalCountPatient();
             int pageSize = 5;
 
-            IEnumerable<tableData> Req=new List<tableData>();
+            IEnumerable<tableData> Req = new List<tableData>();
 
-            //new
-            if (id==1)
+            switch (id)
             {
-                ViewBag.Tcount = Tcount[0];
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableData(page, pageSize);
-            }
-
-            //pending
-            else if (id == 2)
-            {
-                ViewBag.Tcount = Tcount[1];
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableDataPending(page, pageSize);
-            }
-
-            //Active
-            else if (id == 3)
-            {
-                ViewBag.Tcount = Tcount[2];
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableDataActive(page, pageSize);
-            }
-
-            //conclude
-            else if (id == 4)
-            {
-                ViewBag.Tcount = Tcount[3];
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableDataConclude(page, pageSize);
-            }
-
-            //To-close
-            else if (id == 5)
-            {
-                ViewBag.Tcount = Tcount[4];
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableDataToclose(page, pageSize);
-            }
-
-            //Unpaid
-            else if (id == 6)
-            {
-                ViewBag.Tcount = Tcount[5];
-                ViewBag.dTable = id;
-                Req = _Admin.GetTableDataUnpaid(page, pageSize);
+                case 1:   //New
+                    ViewBag.TPage = Math.Ceiling((double)Tcount[0] / 5);
+                    ViewBag.dTable = id;
+                    Req = _Admin.GetTableData(page, pageSize);
+                    break;
+                case 2:   //Pending
+                    ViewBag.TPage = Math.Ceiling((double)Tcount[1] / 5);
+                    ViewBag.dTable = id;
+                    Req = _Admin.GetTableDataPending(page, pageSize);
+                    break;
+                case 3:   //Active
+                    ViewBag.TPage = Math.Ceiling((double)Tcount[2] / 5);
+                    ViewBag.dTable = id;
+                    Req = _Admin.GetTableDataActive(page, pageSize);
+                    break;
+                case 4:  //Conclude
+                    ViewBag.TPage = Math.Ceiling((double)Tcount[3] / 5);
+                    ViewBag.dTable = id;
+                    Req = _Admin.GetTableDataConclude(page, pageSize);
+                    break;
+                case 5:   //To-close
+                    ViewBag.TPage = Math.Ceiling((double)Tcount[4] / 5);
+                    ViewBag.dTable = id;
+                    Req = _Admin.GetTableDataToclose(page, pageSize);
+                    break;
+                case 6:   //Unpaid
+                    ViewBag.TPage = Math.Ceiling((double)Tcount[5] / 5);
+                    ViewBag.dTable = id;
+                    Req = _Admin.GetTableDataUnpaid(page, pageSize);
+                    break;
             }
 
             var caseTag = _Admin.getAllCaseTag();
             var region = _Admin.getAllRegion();
-            var dashData = new DashTable { Tdata= Req.ToList(), Casetags = caseTag, Regions = region };
+            var dashData = new DashTable { Tdata = Req.ToList(), Casetags = caseTag, Regions = region };
 
-            return PartialView("TablePartial", dashData );
+            return PartialView("TablePartial", dashData);
         }
 
         public IActionResult ExportAll()
@@ -127,38 +117,40 @@ namespace HalloDoc.Controllers
         }
 
 
-        [ActionName("ViewCase")]
-        public IActionResult ViewCase(int reqid)
+        [ActionName("A_ViewCase")]
+        public IActionResult A_ViewCase(int reqid)
         {
             var data = _Admin.GetClientById(reqid);
-            return View(data); 
+            return View(data);
         }
 
 
-        [ActionName("ViewNotes")]
-        public IActionResult ViewNotes(int reqid)
+        [ActionName("A_ViewNotes")]
+        public IActionResult A_ViewNotes(int reqid)
         {
             var data = _Admin.getAllNotes(reqid);
             return View(data);
         }
 
-
         public IActionResult ViewNotedata(string note, int reqid)
         {
-            if(note != null)
+            if (note != null)
             {
                 _Admin.addNote(reqid, note);
             }
             var data = _Admin.getAllNotes(reqid);
-            return PartialView("ViewNotes", data);
+            return PartialView("A_ViewNotes", data);
         }
 
-        public IActionResult CancelReq(string CancelNotes, string tag, int reqid)
+        public IActionResult CancelReq(string CancelNote, string tag, int reqid)
         {
-            short Cancelstatus = 6;
-            if(tag != null)
+            int AdminId = (int)HttpContext.Session.GetInt32("SessionKeyAdminId");
+            short Cancelstatus = 3;
+            if (tag != null)
             {
-                _Admin.CancelRequest(reqid, CancelNotes, tag, Cancelstatus);
+                string CancelNotes = tag + CancelNote;
+                _Admin.AddreqLogStatus(reqid, CancelNotes, AdminId, Cancelstatus);
+                _Admin.updateReqStatus(reqid, Cancelstatus);
             }
             return RedirectToAction("Dashbord");
         }
@@ -166,8 +158,40 @@ namespace HalloDoc.Controllers
         public IActionResult CheckPhysician(int region)
         {
             var phy = _Admin.GetAvaliablePhysician(region);
-            return Json(new { physician=phy });
+            return Json(new { physician = phy });
         }
+
+        public IActionResult AssignReq(string AssignNote, int phyId, int reqid)
+        {
+            int AdminId = (int)HttpContext.Session.GetInt32("SessionKeyAdminId");
+            short Assignstatus = 2;
+            if (phyId != null)
+            {
+                _Admin.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId);
+                _Admin.updateReqStatusWithPhysician(reqid, phyId, Assignstatus);
+            }
+            return RedirectToAction("Dashbord");
+        }
+
+        public IActionResult popup_blockcase(int reqid)
+        {
+            var data = _Admin.GetClientById(reqid);
+            return PartialView("popup_blockcase", data);
+        }
+
+        public IActionResult BlockReq(int reqid, string note)
+        {
+            short Blockstatus = 11;
+            _Admin.AddBlockRequest(reqid, note);
+            _Admin.updateReqStatus(reqid, 11);
+            return RedirectToAction("Dashbord");
+        }
+
+        public IActionResult A_ViewUploads(int reqid)
+        {
+            return View();
+        }
+
 
         public IActionResult NewRequest(int reqid)
         {

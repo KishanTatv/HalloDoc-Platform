@@ -14,6 +14,13 @@ namespace HalloDoc.Repository.Interface
     public interface IAdmin
     {
 
+        //login
+        bool CheckExistAdmin(string email);
+        int getAdminId(string email);
+        string getAdminUserName(string email);
+
+
+
         Requestclient GetClientById(int id);
 
 
@@ -44,7 +51,12 @@ namespace HalloDoc.Repository.Interface
 
         List<Casetag> getAllCaseTag();
 
-        void CancelRequest(int reqid, string note, string reason, short Cancelstatus);
+        void AddreqLogStatus(int reqid, string note, int adminId, short status);
+        void AddreqLogStatus(int reqid, string note, short status, int adminId, int tranPhyId);
+
+        void updateReqStatus(int reqid, short status);
+
+        void updateReqStatusWithPhysician(int reqid, int phyId,short status);
 
 
         //region
@@ -52,5 +64,9 @@ namespace HalloDoc.Repository.Interface
         List<Region> getAllRegion();
 
         List<Physician> GetAvaliablePhysician(int regionId);
+
+
+        //block req
+        void AddBlockRequest(int reqId, string note);
     }
 }

@@ -142,16 +142,18 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             </li>
                             @if (ViewBag.dTable != 1)
                             {
-                                <li><a class="dropdown-item" href="#">View Uploads</a></li>
+                                <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId">View Uploads</div></li>
                             }
-                            <li><a class="dropdown-item" href="#">View Notes</a></li>
+                            <li>
+                                <div class="dropdown-item viewNote" data-reqid="@item.RequestId">View Notes</div>
+                            </li>
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
-                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#BlockPatient">
+                                    <div class="dropdown-item blockCase" data-reqid="@item.RequestId">
                                         Block
                                         Patient
-                                    </a>
+                                    </div>
                                 </li>
                             }
                             @if (ViewBag.dTable == 2)
@@ -202,7 +204,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                                 </select>
                                                 <div class="form-floating mt-2">
                                                     <textarea type="text" class="form-control bg-transparent h-25 CancelNotes"
-                                                              placeholder="Detail info" name="CancelNotes" rows="3" aria-label="Detail info"
+                                                              placeholder="Detail info" name="CancelNote" rows="3" aria-label="Detail info"
                                                               aria-describedby="button-addon2"> </textarea>
                                                     <label for="ms-3 text-info">Provide Aditional Notes</label>
                                                 </div>
@@ -217,45 +219,17 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             </div>
                         </div>
 
-                        <div class="modal fade" id="BlockPatient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog  modal-dialog-centered">
-                                <div class="modal-content rounded-4">
-                                    <div class="modal-header bg-info p-2">
-                                        <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Block</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Patient Name : <span class="text-info"> @item.Name </span>
-                                        <div class="text-center pt-2">
-                                            <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
-                                                <div class="form-floating mt-2">
-                                                    <textarea type="text" class="form-control bg-transparent h-25"
-                                                              placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
-                                                              aria-describedby="button-addon2"> </textarea>
-                                                    <label for="ms-3 text-info">Reason for Block Request</label>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer p-1">
-                                        <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
-                                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="modal fade" id="assign-@item.RequestId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog  modal-dialog-centered">
-                                <div class="modal-content rounded-4">
-                                    <div class="modal-header bg-info p-2">
-                                        <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Assign Request</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>To assign this request, search and select another Physician</p>
-                                        <div class="text-center pt-2">
-                                            <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
+                                <form asp-action="AssignReq" asp-route-reqid="@item.RequestId" method="post">
+                                    <div class="modal-content rounded-4">
+                                        <div class="modal-header bg-info p-2">
+                                            <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Assign Request</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>To assign this request, search and select another Physician</p>
+                                            <div class="text-center pt-2">
                                                 <select class="form-select RegOption" data-id="@item.RequestId">
                                                     <option selected disabled>Narrow Search by Region</option>
                                                     @foreach (var regName in Model.Regions)
@@ -263,27 +237,23 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                                         <option value="@regName.Regionid">@regName.Name</option>
                                                     }
                                                 </select>
-                                                <select class="form-select mt-2" id="validationDefault04">
+                                                <select class="form-select mt-2 PhyOption" name="phyId">
                                                     <option selected disabled>Select Physician</option>
-                                                    @*@foreach (var phy in @Phylist)
-                                                    {
-                                                        <option>1..</option>
-                                                    }*@
                                                 </select>
                                                 <div class="form-floating mt-2">
                                                     <textarea type="text" class="form-control bg-transparent h-25"
-                                                              placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                                                              placeholder="Detail info" name="AssignNote" rows="3" aria-label="Detail info"
                                                               aria-describedby="button-addon2"> </textarea>
                                                     <label for="ms-3 text-info">Description</label>
                                                 </div>
-                                            </form>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer p-1">
+                                            <button type="submit" class="btn btn-secondary btn-info text-light">Continue</button>
+                                            <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
                                         </div>
                                     </div>
-                                    <div class="modal-footer p-1">
-                                        <button type="button" class="btn btn-secondary btn-info text-light">Continue</button>
-                                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
 
@@ -358,13 +328,10 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-end me-3 pb-2">
-        @if (ViewBag.Tcount > 5)
-        {
-            @for (int i = 1; i <= (ViewBag.Tcount / 5) + 1; i++)
+        @for (int i = 1; i <= ViewBag.TPage; i++)
             {
                 <li class="page-item"><div class="page-link" data-id="@ViewBag.dTable" data-page="@(i - 1)">@i</div></li>
             }
-        }
     </ul>
 </nav>
 
@@ -392,7 +359,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
         $('.ViewCase').click(function () {
             var reqid = $(this).data('reqid');
             $.ajax({
-                url: '/AdminDash/ViewCase',
+                url: '/AdminDash/A_ViewCase',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
@@ -408,16 +375,21 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             });
         });
 
-        $(document).on('click', '.assignModel', function () {
+        $('.viewNote').click(function () {
+            var reqid = $(this).data('reqid');
             $.ajax({
-                type: 'GET',
-                cache: false,
-                processData: false,
-                success: function (output) {
-                    $('#assign').html(output).modal('show');
+                url: '/AdminDash/A_ViewNotes',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    const dashHead = document.querySelector('.dashHead');
+                    const dashs = document.querySelector('.DashSearch');
+                    dashHead.classList.add('d-none');
+                    dashs.classList.add('d-none');
+                    $("#partial").html(response);
                 },
-                error: function (output) {
-                    alert("fail");
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
                 }
             });
         });
@@ -426,19 +398,54 @@ For more information on enabling MVC for empty projects, visit https://go.micros
         $('.RegOption').blur(function () {
             console.log($(this).attr('data-id'));
             var region = $(this).val();
-            console.log(region);
             $.ajax({
                 url: '/AdminDash/CheckPhysician',
                 method: 'POST',
                 data: { region: region },
                 success: function (response) {
-                    console.log("success");
                     console.log(response);
-                    $("#RegOption").empty().append($("<option></option>").val("[-]").html("Select Physician"));
+                    $(".PhyOption").empty().append($('<option disabled selected>Select Physician</option>'));
+                    //console.log(response.physician[0]["firstname"]);
+                    $.each(response.physician, function (index, item) {
+                        $(".PhyOption").append($('<option></option>').val(item.physicianid).text(item.firstname));
+                    });
                 },
-                complete: function (response) {
-                    console.log("complete");
-                    console.log(response);
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+
+        $('.blockCase').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/popup_blockcase',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    $(".PartialPopup").html(response);
+                    var my = new bootstrap.Modal(document.getElementById('blockCase'));
+                    my.show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.ViewUpload').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/A_ViewUploads',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    const dashHead = document.querySelector('.dashHead');
+                    const dashs = document.querySelector('.DashSearch');
+                    dashHead.classList.add('d-none');
+                    dashs.classList.add('d-none');
+                    $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

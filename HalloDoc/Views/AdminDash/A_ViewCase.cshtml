@@ -22,7 +22,7 @@
                 </a>
             </div>
 
-            <div class=" rounded shadow bg-body-tertiary p-4 rounded-3">
+            <div class=" rounded shadow p-4 rounded-3">
                 <div class="mb-4">
                     <h5>Patient Information</h5>
 
@@ -122,7 +122,7 @@
         $('.viewNote').click(function () {
             var reqid = $(this).data('reqid');
             $.ajax({
-                url: '/AdminDash/ViewNotes',
+                url: '/AdminDash/A_ViewNotes',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {

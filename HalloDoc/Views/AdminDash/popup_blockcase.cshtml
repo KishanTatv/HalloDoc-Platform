@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model HalloDoc.Entity.Models.Requestclient;
+
+@{
+}
+
+<div class="modal fade" id="blockCase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-info p-2">
+                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Block</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Patient Name : <span class="text-info"> @Model.Firstname @Model.Lastname </span>
+                <div class="text-center pt-2">
+                    <form asp-action="CheckPatientReq" asp-controller="PatientRequest">
+                        <div class="form-floating mt-2">
+                            <textarea type="text" class="form-control bg-transparent h-25"
+                                      placeholder="Detail info" id="blockReq" rows="3" aria-label="Detail info"
+                                      aria-describedby="button-addon2"> </textarea>
+                            <label for="ms-3 text-info">Reason for Block Request</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer p-1">
+                <button type="submit" class="btn btn-secondary btn-info text-light blockReq" data-reqid="@Model.Requestid">Continue</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.blockReq').click(function () {
+            var reqid = $(this).data('reqid');
+            var note = $('#blockReq').val();
+            $.ajax({
+                url: '/AdminDash/BlockReq',
+                method: 'POST',
+                data: { reqid: reqid, note: note },
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

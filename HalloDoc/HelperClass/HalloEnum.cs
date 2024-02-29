@@ -6,14 +6,15 @@
         {
             Unassigned = 1,
             Accepted,
+            Cancelled,
             MDEnRoute,
             MDOnSite,
             Conclude,
-            Cancelled,
             CancelledByPatient,
             Closed,
             Unpaid,
             Clear,
+            Block,
             CancelledByProvider, CCUploadedByClient, CCApprovedByAdmin
         }
 

@@ -1,0 +1,109 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@{
+    Layout = "";
+}
+
+<div class="MainContent pt-0 min-vh-100">
+    <div class="tab-content" id="nav-tabContent">
+
+        <div class="HContainer m-auto pt-4">
+            <div class="d-flex justify-content-between">
+                <h4 class="m-0"> Documents </h4>
+                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+                    <strong class="pe-2">&lt Back</strong>
+                </a>
+            </div>
+
+            <div class=" rounded shadow p-4 rounded-3">
+                <div class="mb-4">
+                    <h5>Patient Name</h5>
+
+                    <div>
+
+                        <span class="text-info w-25"> name </span> <span>(87685854)</span>
+                    </div>
+                    <div>
+                        <span>check here to review and add files that you or the client/Member has attached to the Request.</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 mb-4">
+                    <div class="d-flex m-auto">
+                        <div class="p-0 w-100">
+                            <input type="text" class="form-control bg-transparent" id="selectedFile" placeholder="select File"
+                                   disabled>
+                            <label class="ms-3"></label>
+                        </div>
+                        <div>
+                            <label class="btn btn-outline-info d-flex ">
+                                <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
+                                <i class="bi bi-cloud-arrow-up border-info"></i>
+                                <span class="upload_txt ms-2">Upload</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <form class="form" asp-controller="PatientDash" asp-action="DownloadAllFile" method="post">
+                    <div class="d-flex justify-content-between">
+                        <h5>Documents</h5>
+
+                        <div>
+                            <button type="submit" class="btn w-5 btn-info rounded bg-transparent m-2 text-info">
+                                Download All
+                            </button>
+                            <button type="submit" class="btn w-5 btn-info rounded bg-transparent m-2 text-info">
+                                Delete All
+                            </button>
+                            <button type="submit" class="btn w-5 btn-info rounded bg-transparent m-2 text-info">
+                                Send Mail
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="toggleAllCheck">
+                                        </div>
+                                    </th>
+                                    <th scope="col">Documner</th>
+                                    <th scope="col">Upload Date<i class="bi bi-arrow-up ms-1"></i></th>
+                                    <th scope="col" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input name="selectCheckFile" class="form-check-input checkboxClass" type="checkbox" id="flexCheckDefault">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p><i class="bi bi-file-earmark-pdf-fill text-danger"></i> Filename</p>
+                                    </td>
+                                    <td>
+                                        <p>UploadDate.ToString("MMMM dd, yyyy")</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="Filename" asp-controller="PatientDash" asp-action="DownloadDocument">
+                                            <i class="bi bi-cloud-check"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

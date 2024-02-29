@@ -62,7 +62,7 @@ namespace HalloDoc.Controllers
                     {
                         string userName = patient.userFullName(user.Email);
                         HttpContext.Session.SetString("SessionKeyEmail", user.Email);
-                        HttpContext.Session.SetString("SessionKeyClientName", userName);
+                        HttpContext.Session.SetString("SessionKeyName", userName);
                         return RedirectToAction("Dashbord", "PatientDash");
                     }
                     else

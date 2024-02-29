@@ -36,14 +36,14 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
 
         <div class="d-flex align-self-baseline">
-            @if (Context.Session.GetString("SessionKeyClientName") != null)
+            @if (Context.Session.GetString("SessionKeyName") != null)
             {
                 <p class="logInInfo text-secondary mt-4 me-3"></p>
 
                 <span class="mt-4 pe-3 headerName">
                     <span>Welcome</span>
                     <strong class="text-dark">
-                        @Context.Session.GetString("SessionKeyClientName")
+                        @Context.Session.GetString("SessionKeyName")
                     </strong>
                 </span>
 

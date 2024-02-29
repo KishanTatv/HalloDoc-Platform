@@ -24,6 +24,23 @@ namespace HalloDoc.Repository.Implement
 
         }
 
+        public bool CheckExistAdmin(string email)
+        {
+            return _context.Admins.Any(u => u.Email == email);
+        }
+        public int getAdminId(string email)
+        {
+            return _context.Admins.FirstOrDefault(u => u.Email == email).Adminid;
+        }
+        public string getAdminUserName(string email)
+        {
+            string fName = _context.Admins.FirstOrDefault(u => u.Email == email).Firstname;
+            string lName = _context.Admins.FirstOrDefault(u => u.Email == email).Lastname;
+            string name = fName + " " + lName;
+            return name;
+        }
+
+
         public Requestclient GetClientById(int id)
         {
             var reqData = _context.Requestclients.Where(x => x.Requestid == id).Include(x => x.Request).FirstOrDefault();
@@ -166,6 +183,8 @@ namespace HalloDoc.Repository.Implement
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
+                                          join p in _context.Physicians on f.Physicianid equals p.Physicianid into preq
+                                          from p in preq.DefaultIfEmpty()
                                           where f.Status == 3 || f.Status == 7 || f.Status == 8
                                           orderby f.Createddate descending
                                           select new tableData
@@ -268,21 +287,52 @@ namespace HalloDoc.Repository.Implement
             return CaseTagData;
         }
 
-        public void CancelRequest(int reqid, string note, string reason, short Cancelstatus)
+        public void AddreqLogStatus(int reqid, string note, int adminId, short status)
         {
             Requeststatuslog reqStatus = new Requeststatuslog()
             {
                 Requestid = reqid,
-                Notes = reason + note,
-                Status = Cancelstatus,
+                Notes = note,
+                Status = status,
+                Adminid = adminId,
                 Createddate = System.DateTime.Now
             };
             _context.Requeststatuslogs.Add(reqStatus);
+            _context.SaveChanges();
+        }
+        
+        public void AddreqLogStatus(int reqid, string note, short status, int adminId, int tranPhyId)
+        {
+            Requeststatuslog reqStatus = new Requeststatuslog()
+            {
+                Requestid = reqid,
+                Notes = note,
+                Status = status,
+                Adminid = adminId,
+                Transtophysicianid = tranPhyId,
+                Createddate = System.DateTime.Now
+            };
+            _context.Requeststatuslogs.Add(reqStatus);
+            _context.SaveChanges();
+        }
 
+
+        public void updateReqStatus(int reqid, short status)
+        {
             Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
-            req.Status = Cancelstatus;
+            req.Status = status;
+            req.Modifieddate = System.DateTime.Now;
             _context.Requests.Update(req);
+            _context.SaveChanges();
+        }
 
+        public void updateReqStatusWithPhysician(int reqid, int phyId, short status)
+        {
+            Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
+            req.Status = status;
+            req.Physicianid = phyId;
+            req.Modifieddate = System.DateTime.Now;
+            _context.Requests.Update(req);
             _context.SaveChanges();
         }
 
@@ -296,6 +346,23 @@ namespace HalloDoc.Repository.Implement
         {
             var phyList = _context.Physicians.Where(x => x.Regionid == regionId).ToList();
             return phyList;
+        }
+
+
+        public void AddBlockRequest(int reqId, string note)
+        {
+            string email = _context.Requestclients.FirstOrDefault(x => x.Requestid == reqId).Email;
+            string phoneNum = _context.Requestclients.FirstOrDefault(x => x.Requestid == reqId).Phonenumber;
+
+            Blockrequest req = new Blockrequest()
+            {
+                Requestid = reqId.ToString(),
+                Reason = note,
+                Email = email,
+                Phonenumber = phoneNum,
+            };
+            _context.Blockrequests.Add(req);
+            _context.SaveChanges();
         }
     }
 }

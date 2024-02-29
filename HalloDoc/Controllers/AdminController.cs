@@ -8,11 +8,11 @@ namespace HalloDoc.Controllers
     public class AdminController : Controller
     {
         private readonly ILogger<AdminController> _logger;
-        private readonly IPatient patient;
-        public AdminController(ILogger<AdminController> logger, IPatient patient)
+        private readonly IAdmin _admin;
+        public AdminController(ILogger<AdminController> logger, IAdmin admin)
         {
             _logger = logger;
-            this.patient = patient;
+            this._admin = admin;
         }
 
         [HttpGet]
@@ -30,16 +30,18 @@ namespace HalloDoc.Controllers
 
         [HttpPost]
         [ActionName("verifyAdmin")]
-        public IActionResult verifyAdmin(Aspnetuser user)
+        public IActionResult verifyAdmin(Admin admin)
         {
-            if (user.Email != null)
+            if (admin.Email != null)
             {
-                if (patient.CheckExistAspUser(user.Email))
+                if (_admin.CheckExistAdmin(admin.Email))
                 {
-                    string userName = patient.userFullName(user.Email);
-                    HttpContext.Session.SetString("SessionKeyEmail", user.Email);
-                    HttpContext.Session.SetString("SessionKeyClientName", userName);
-                    return RedirectToAction("Index", "Home");
+                    string userName = _admin.getAdminUserName(admin.Email);
+                    int AdminId = _admin.getAdminId(admin.Email);
+                    HttpContext.Session.SetString("SessionKeyEmail", admin.Email);
+                    HttpContext.Session.SetString("SessionKeyName", userName);
+                    HttpContext.Session.SetInt32("SessionKeyAdminId", AdminId);
+                    return RedirectToAction("Dashbord", "AdminDash");
                 }
                 else
                 {
@@ -50,7 +52,7 @@ namespace HalloDoc.Controllers
             {
                 TempData["Error"] = "Email Required";
             }
-            return RedirectToAction("PatientLogin");
+            return RedirectToAction("Login", "Admin");
         }
 
 
