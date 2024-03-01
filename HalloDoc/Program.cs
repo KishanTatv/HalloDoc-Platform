@@ -13,6 +13,7 @@ builder.Services.AddDbContext<HalloDocDbContext>(options =>
 );
 
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddScoped<IGenral, GenralRepo>();
 builder.Services.AddScoped<IPatient, PatientRepo>();
 builder.Services.AddScoped<IPatient, PatientRepo>();
 builder.Services.AddScoped<IAdmin, AdminRepo>();

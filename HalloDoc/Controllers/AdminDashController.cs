@@ -7,6 +7,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
 using HalloDoc.Entity.Models;
+using HalloDoc.Entity.RequestForm;
 using HalloDoc.HelperClass;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +19,12 @@ namespace HalloDoc.Controllers
     public class AdminDashController : Controller
     {
         private readonly ILogger<AdminDashController> _logger;
+        private readonly IGenral _Genral;
         private readonly IAdmin _Admin;
-        public AdminDashController(ILogger<AdminDashController> logger, IAdmin _Admin)
+        public AdminDashController(ILogger<AdminDashController> logger, IGenral _Genral, IAdmin _Admin)
         {
             _logger = logger;
+            this._Genral = _Genral;
             this._Admin = _Admin;
         }
 
@@ -39,7 +42,8 @@ namespace HalloDoc.Controllers
             var dashData = new DashTable { ToatlCount = Tcount };
             if(ViewBag.dTable != null)
             {
-                DashbordData(ViewBag.dTable, 0);
+                DashbordData(2, 0);
+                return PartialView("TablePartial", dashData);
             }
             return View(dashData);
         }
@@ -165,12 +169,12 @@ namespace HalloDoc.Controllers
         {
             int AdminId = (int)HttpContext.Session.GetInt32("SessionKeyAdminId");
             short Assignstatus = 2;
-            if (phyId != null)
+            if (phyId != 0)
             {
                 _Admin.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId);
                 _Admin.updateReqStatusWithPhysician(reqid, phyId, Assignstatus);
             }
-            return RedirectToAction("Dashbord");
+                return RedirectToAction("Dashbord");
         }
 
         public IActionResult popup_blockcase(int reqid)
@@ -189,7 +193,8 @@ namespace HalloDoc.Controllers
 
         public IActionResult A_ViewUploads(int reqid)
         {
-            return View();
+            var reqFile = _Genral.GetRequestsFileswithReq(reqid);
+            return View(reqFile);
         }
 
 

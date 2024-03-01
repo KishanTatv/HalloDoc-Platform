@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model HalloDoc.Entity.RequestForm.PatientDash;
+@model List<HalloDoc.Entity.Models.Request>;
 
 @{
     ViewData["Title"] = "View Document";
@@ -34,11 +34,11 @@
                         </a>
                     </div>
                     <div class="rounded shadow p-4 bg-body-tertiary ">
-                        <form class="mb-5" asp-route-id="@Model.ReqWithFiles.FirstOrDefault().Requestid" asp-action="UploadDoc" asp-controller="PatientDash" method="post" enctype="multipart/form-data">
+                        <form class="mb-5" asp-route-id="@Model.FirstOrDefault().Requestid" asp-action="UploadDoc" asp-controller="Home" method="post" enctype="multipart/form-data">
                             <div class="mb-4">
                                 <p>Patient Name</p>
                                 <div class="d-flex">
-                                    <h5 class="text-info">@Model.reqclient.Firstname  @Model.reqclient.Lastname</h5>
+                                    <h5 class="text-info">@Model.FirstOrDefault().Requestclients.FirstOrDefault().Firstname  </h5>
                                     <h6>(54654684)</h6>
                                 </div>
                                 <p>Check here for any files that you or the doctors of your subsequent requestor have attached for you to review.</p>
@@ -61,7 +61,7 @@
                         </form>
 
                         <div class="MedicalLG">
-                            <form class="form" asp-controller="PatientDash" asp-action="DownloadAllFile" method="post">
+                            <form class="form" asp-controller="Home" asp-action="DownloadAllFile" method="post">
                                 <div class="d-flex justify-content-between">
                                     <h5>Documents</h5>
 
@@ -86,7 +86,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var item in Model.ReqWithFiles)
+                                            @foreach (var item in Model.FirstOrDefault().Requestwisefiles)
                                             {
                                                 <tr>
                                                     <td>
@@ -98,13 +98,13 @@
                                                         <p><i class="bi bi-file-earmark-pdf-fill text-danger"></i> @item.Filename</p>
                                                     </td>
                                                     <td>
-                                                        <p>@item.Firstname</p>
+                                                        <p>@Model.FirstOrDefault().Requestclients.FirstOrDefault().Firstname  @Model.FirstOrDefault().Requestclients.FirstOrDefault().Lastname</p>
                                                     </td>
                                                     <td>
-                                                        <p>@item.UploadDate.ToString("MMMM dd, yyyy")</p>
+                                                        <p>@item.Createddate.ToString("MMMM dd, yyyy")</p>
                                                     </td>
                                                     <td class="text-center">
-                                                        <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="PatientDash" asp-action="DownloadDocument">
+                                                        <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="Home" asp-action="DownloadDocument">
                                                             <i class="bi bi-cloud-check"></i>
                                                         </a>
                                                     </td>
@@ -117,7 +117,7 @@
                         </div>
 
                         <div class="MediaclSM">
-                            <form class="form" asp-controller="PatientDash" asp-action="DownloadAllFile" method="post">
+                            <form class="form" asp-controller="Home" asp-action="DownloadAllFile" method="post">
                                 <div class="d-flex justify-content-between">
                                     <h5>Documents</h5>
                                     <button type="submit" class="btn w-5 btn-info rounded bg-transparent m-2 text-info">
@@ -126,7 +126,7 @@
                                 </div>
                                 <div>
                                     <div class="accordion accordion-flush" id="accordionFlushExample">
-                                        @foreach (var item in Model.ReqWithFiles)
+                                        @foreach (var item in Model.FirstOrDefault().Requestwisefiles)
                                         {
                                             <div class="accordion-item">
                                                 <h2 class="accordion-header">
@@ -138,12 +138,12 @@
                                                 <div id="flush-@item.Requestwisefileid" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
                                                     <div class="accordion-body">
                                                         <p class="mt-1">
-                                                            @item.Firstname
+                                                            @Model.FirstOrDefault().Requestclients.FirstOrDefault().Firstname @Model.FirstOrDefault().Requestclients.FirstOrDefault().Lastname
                                                         </p>
                                                         <p class="mt-1">
-                                                        <p>@item.UploadDate.ToString("MMMM dd, yyyy")</p>
+                                                        <p>@item.Createddate.ToString("MMMM dd, yyyy")</p>
                                                         </p>
-                                                        <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="PatientDash" asp-action="DownloadDocument">
+                                                        <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="Home" asp-action="DownloadDocument">
                                                             <i class="bi bi-cloud-check"></i>
                                                         </a>
                                                     </div>

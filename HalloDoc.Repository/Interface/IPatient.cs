@@ -26,7 +26,6 @@ namespace HalloDoc.Repository.Interface
         Request AddRequest(ClientInformation clientInformation, int userId);
         void AddRequestClient(ClientInformation clientInformation, int requestId);
 
-        void AddDocFile(IFormFile DocFile, int reqId);
 
 
         //other form
@@ -66,14 +65,10 @@ namespace HalloDoc.Repository.Interface
 
         //Get User
         User GetUserByEmail(string email);
-        Requestclient GetClientById(int id);
 
         User GetUserById(int id);
 
-        IEnumerable<RequestWithFile> GetRequestsFiles(string email);
-
-        IEnumerable<RequestWithFile> GetRequestsFileswithReq(string email, int reqId);
-       
+        IEnumerable<RequestWithFile> GetRequestsFiles(string email);       
 
     }
 }

@@ -18,6 +18,10 @@
                 <strong class="pe-2">&lt Back</strong>
             </a>
         </div>
+        @if (TempData["Msg"] != null)
+        {
+            <p class="text-danger text-center">@TempData["Msg"]</p>
+        }
         <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="FamilyReq" asp-controller="PatientRequest" method="post" enctype="multipart/form-data">
             <div class="mb-4">
                 <h5>Family/Friend Information</h5>

@@ -13,10 +13,13 @@ namespace HalloDoc.Controllers
     {
         private readonly ILogger<PatientRequestController> _logger;
         private readonly IPatient patient;
-        public PatientRequestController(ILogger<PatientRequestController> logger, IPatient patient)
+        private readonly IGenral genral;
+
+        public PatientRequestController(ILogger<PatientRequestController> logger, IPatient patient, IGenral genral)
         {
             _logger = logger;
             this.patient = patient;
+            this.genral = genral;
         }
 
         public IActionResult Index()
@@ -78,7 +81,7 @@ namespace HalloDoc.Controllers
                         using (var stream = System.IO.File.Create(filePath))
                         {
                             await File.CopyToAsync(stream);
-                            patient.AddDocFile(File, request.Requestid);
+                            genral.AddDocFile(File, request.Requestid);
                         }
                     }
                 }
@@ -96,42 +99,50 @@ namespace HalloDoc.Controllers
         [HttpPost]
         public async Task<IActionResult> FamilyReq(FormFCB FInfo, List<IFormFile> DocFile)
         {
-            Request request;
-            if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
+            if (genral.checkBlockReq(FInfo.PatientEmail))
             {
-                int userId = patient.FindUserId(FInfo.clientInformation.Email);
-                request = patient.AddFcbRequest(FInfo, userId, 3);
+                TempData["Msg"] = "Blocked Request !";
+                return View();
             }
             else
             {
-                var userEmail = FInfo.clientInformation.Email;
-                var subject = "Create your Account";
-                string link = Url.Action("CreatePatient", "Patient");
-                var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />" + link;
-                patient.sendMail(userEmail, subject, body);
-
-                User user = patient.AddFcbUser(FInfo);
-                request = patient.AddFcbRequest(FInfo, user.Userid, 3);
-                patient.AddFcbRequestClient(FInfo, request.Requestid);
-            }
-
-            if (DocFile != null)
-            {
-                foreach (var File in DocFile)
+                Request request;
+                if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
                 {
-                    if (File != null && File.Length > 0)
+                    int userId = patient.FindUserId(FInfo.clientInformation.Email);
+                    request = patient.AddFcbRequest(FInfo, userId, 3);
+                }
+                else
+                {
+                    var userEmail = FInfo.clientInformation.Email;
+                    var subject = "Create your Account";
+                    string link = Url.Action("CreatePatient", "Patient");
+                    var body = $"Hi,<br /><br />Please click on the following link to create your account:<br /><br />" + link;
+                    patient.sendMail(userEmail, subject, body);
+
+                    User user = patient.AddFcbUser(FInfo);
+                    request = patient.AddFcbRequest(FInfo, user.Userid, 3);
+                    patient.AddFcbRequestClient(FInfo, request.Requestid);
+                }
+
+                if (DocFile != null)
+                {
+                    foreach (var File in DocFile)
                     {
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
-                        //Using Buffering
-                        using (var stream = System.IO.File.Create(filePath))
+                        if (File != null && File.Length > 0)
                         {
-                            await File.CopyToAsync(stream);
-                            patient.AddDocFile(File, request.Requestid);
+                            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
+                            //Using Buffering
+                            using (var stream = System.IO.File.Create(filePath))
+                            {
+                                await File.CopyToAsync(stream);
+                                genral.AddDocFile(File, request.Requestid);
+                            }
                         }
                     }
                 }
+                return RedirectToAction("PatientLogin", "Patient");
             }
-            return RedirectToAction("PatientLogin", "Patient");
         }
 
 

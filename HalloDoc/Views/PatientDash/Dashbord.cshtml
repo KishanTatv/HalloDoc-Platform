@@ -84,7 +84,7 @@
                                             @item.Createddate.ToString("MMMM dd, yyyy")
                                         </td>
                                         <td>
-                                            @Enum.GetName(typeof(HalloEnum.Status), item.Status)
+                                            <a class="text-decoration-none text-black" asp-route-id="@item.Requestid" asp-controller="PatientDash" asp-action="ViewDocument"> @Enum.GetName(typeof(HalloEnum.Status), item.Status) </a>
                                         </td>
                                         <td class="text-center">
                                             @if (@item.FileCount != 0)

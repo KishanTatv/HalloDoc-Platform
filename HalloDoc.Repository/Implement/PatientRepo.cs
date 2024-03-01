@@ -34,13 +34,6 @@ namespace HalloDoc.Repository.Implement
             return _context.Aspnetusers.Any(u => u.Email == email);
         }
 
-
-        public Requestclient GetClientById(int id)
-        {
-            var userData = _context.Requestclients.FirstOrDefault(x => x.Requestid == id);
-            return userData;
-        }
-
         public User GetUserById(int id)
         {
             var userData = _context.Users.FirstOrDefault(x => x.Userid == id);
@@ -130,19 +123,6 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-
-        public void AddDocFile(IFormFile DocFile, int reqId)
-        {
-            Requestwisefile reqFile = new Requestwisefile
-            {
-                Requestid = reqId,
-                Filename = DocFile.FileName,
-                Createddate = System.DateTime.Now,
-                Doctype = 1
-            };
-            _context.Requestwisefiles.Add(reqFile);
-            _context.SaveChanges();
-        }
 
 
 
@@ -392,28 +372,6 @@ namespace HalloDoc.Repository.Implement
                               Firstname = r.Firstname + " " + r.Lastname,
                               Status = r.Status,
                               FileCount = _context.Requestwisefiles.Where(u => u.Requestid == r.Requestid).Count(),
-                          };
-            return reqFile;
-        }
-
-
-        public IEnumerable<RequestWithFile> GetRequestsFileswithReq(string email, int reqId)
-        {
-            var reqFile = from u in _context.Users
-                          join r in _context.Requests on u.Userid equals r.Userid
-                          join f in _context.Requestwisefiles on r.Requestid equals f.Requestid into rf
-                          from f in rf.DefaultIfEmpty()
-                          where (r.Email == email) && (f.Requestid == reqId)
-                          orderby r.Createddate descending
-                          select new RequestWithFile
-                          {
-                              Requestwisefileid = f.Requestwisefileid,
-                              Requestid = r.Requestid,
-                              Createddate = r.Createddate,
-                              Firstname = r.Firstname + " " + r.Firstname,
-                              UploadDate = f.Createddate,
-                              Status = r.Status,
-                              Filename = f.Filename,
                           };
             return reqFile;
         }

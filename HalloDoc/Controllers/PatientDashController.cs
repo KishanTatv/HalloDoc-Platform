@@ -10,11 +10,13 @@ namespace HalloDoc.Controllers
     public class PatientDashController : Controller
     {
         private readonly ILogger<PatientDashController> _logger;
+        private readonly IGenral genral;
         private readonly IPatient patient;
 
-        public PatientDashController(ILogger<PatientDashController> logger, IPatient patient)
+        public PatientDashController(ILogger<PatientDashController> logger, IGenral genral, IPatient patient)
         {
             _logger = logger;
+            this.genral = genral;
             this.patient = patient;
         }
 
@@ -70,80 +72,13 @@ namespace HalloDoc.Controllers
         public async Task<IActionResult> ViewDocument(int id)
         {
             var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
-            var ReqFile = patient.GetRequestsFileswithReq(UserEmail, id);
-            Requestclient UserData = patient.GetClientById(id);
+            var ReqFile = genral.GetRequestsFileswithReq(id);
+            Requestclient UserData = genral.GetClientById(id);
 
-            var PatientDash = new PatientDash { ReqWithFiles = ReqFile, reqclient = UserData };
-            return View(PatientDash);
+            //var PatientDash = new PatientDash { ReqWithFiles = ReqFile, reqclient = UserData };
+            return View(ReqFile);
         }
 
-
-        [Route("UploadDoc/{id ?}")]
-        [ActionName("UploadDoc")]
-        public async Task<IActionResult> UploadDoc(List<IFormFile> DocFile, int id)
-        {
-            foreach (var File in DocFile)
-            {
-                if (File != null && File.Length > 0)
-                {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
-                    //Using Buffering
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await File.CopyToAsync(stream);
-                        patient.AddDocFile(File, id);
-                    }
-                }
-            }
-            return RedirectToAction("ViewDocument", "PatientDash", new { id = id });
-        }
-
-
-        [Route("DownloadDocument/{file ?}")]
-        [ActionName("DownloadDocument")]
-        public IActionResult DownloadDocument(string file)
-        {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", file);
-            if (System.IO.File.Exists(path))
-            {
-                var mimeType = "application/....";
-                return File(new FileStream(path, FileMode.Open), mimeType, file);
-            }
-            else
-            {
-                Console.WriteLine($"File not found: {path}");
-                return NotFound();
-            }
-        }
-
-
-        [HttpPost]
-        [ActionName("DownloadAllFile")]
-        public IActionResult DownloadAllFile()
-        {
-            //var fileList = AllFileByReqid(id);
-            var fileList = Request.Form["selectCheckFile"].ToList();
-            var zipName = $"MyFiles_{DateTime.Now:yyyyMMdd-HHmmss}.zip";
-
-            using (var ms = new MemoryStream())
-            {
-                using (var zipArchive = new ZipArchive(ms, ZipArchiveMode.Create, true))
-                {
-                    foreach (var file in fileList)
-                    {
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\uploads", file);
-                        var entry = zipArchive.CreateEntry(file);
-                        using (var entryStream = entry.Open())
-                        using (var fileStream = new FileStream(path, FileMode.Open))
-                        {
-                            fileStream.CopyTo(entryStream);
-                        }
-                    }
-                }
-
-                return File(ms.ToArray(), "application/zip", zipName);
-            }
-        }
 
         public IActionResult Error()
         {
