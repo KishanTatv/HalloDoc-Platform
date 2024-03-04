@@ -43,10 +43,11 @@ namespace HalloDoc.Controllers
             var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
             if (UserEmail != null)
             {
-                User UserData  = patient.GetUserByEmail(UserEmail);
+                //User UserData  = patient.GetUserByEmail(UserEmail);
+                ClientInformation client = patient.getClientProfile(UserEmail);
                 IEnumerable<RequestWithFile> ReqFile = patient.GetRequestsFiles(UserEmail);
 
-                var PatientDash = new PatientDash { ReqWithFiles = ReqFile, User = UserData };
+                var PatientDash = new PatientDash { ReqWithFiles = ReqFile, clientInfo = client };
                 return View(PatientDash);
             }
             return RedirectToAction("PatientLogin", "Patient");
@@ -56,7 +57,7 @@ namespace HalloDoc.Controllers
 
         [HttpPost]
         [ActionName("UpadteProfile")]
-        public IActionResult UpadteProfile([Bind("User")] PatientDash userInfo)
+        public IActionResult UpadteProfile(PatientDash userInfo)
         {
             var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
 
@@ -71,12 +72,20 @@ namespace HalloDoc.Controllers
         [ActionName("ViewDocument")]
         public async Task<IActionResult> ViewDocument(int id)
         {
+
             var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
-            var ReqFile = genral.GetRequestsFileswithReq(id);
-            Requestclient UserData = genral.GetClientById(id);
+            if (UserEmail != null)
+            {
+                var ReqFile = genral.GetRequestsFileswithReq(id);
+                Requestclient UserData = genral.GetClientById(id);
+                return View(ReqFile);
+            }
+            else
+            {
+                return RedirectToAction("PatientLogin", "Patient");
+            }
 
             //var PatientDash = new PatientDash { ReqWithFiles = ReqFile, reqclient = UserData };
-            return View(ReqFile);
         }
 
 

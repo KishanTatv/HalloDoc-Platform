@@ -15,7 +15,7 @@ namespace HalloDoc.Repository.Interface
     {
         bool CheckExistAspUser(string email);
 
-
+        string CheckAspPassword(string email);
         int FindUserId(string email);
 
 
@@ -26,6 +26,7 @@ namespace HalloDoc.Repository.Interface
         Request AddRequest(ClientInformation clientInformation, int userId);
         void AddRequestClient(ClientInformation clientInformation, int requestId);
 
+        ClientInformation getClientProfile(string email);
 
 
         //other form
@@ -40,7 +41,7 @@ namespace HalloDoc.Repository.Interface
 
 
         //create Patient
-        Aspnetuser createonlyAsp(Aspnetuser user);
+        Aspnetuser createonlyAsp(ClientInformation user);
         void updateUserIdWithAsp(int aspId, string email);
 
         //User full name

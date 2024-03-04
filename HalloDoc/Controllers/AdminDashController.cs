@@ -198,6 +198,22 @@ namespace HalloDoc.Controllers
         }
 
 
+        public IActionResult deleteDoc(string file, int reqid)
+        {
+            _Admin.DeleteDocFile(file, reqid);
+            return RedirectToAction("A_ViewUploads", new { reqid = reqid });
+        }
+
+
+        public IActionResult deleteAllDoc(List<string> file, int reqid)
+        {
+            for(var i=0; i<file.Count(); i++)
+            {
+                _Admin.DeleteDocFile(file[i], reqid);
+            }
+            return View();
+        }
+
         public IActionResult NewRequest(int reqid)
         {
             return View();

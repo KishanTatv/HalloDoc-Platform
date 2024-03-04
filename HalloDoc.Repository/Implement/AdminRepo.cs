@@ -365,5 +365,16 @@ namespace HalloDoc.Repository.Implement
             _context.Blockrequests.Add(req);
             _context.SaveChanges();
         }
+
+        public void DeleteDocFile(string file, int reqid)
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = true;
+
+            Requestwisefile filedata = _context.Requestwisefiles.FirstOrDefault(u => u.Requestid == reqid && u.Filename == file);
+            filedata.Isdeleted = bitArray;
+            _context.Requestwisefiles.Update(filedata);
+            _context.SaveChanges();
+        }
     }
 }

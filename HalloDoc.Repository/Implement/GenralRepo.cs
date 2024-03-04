@@ -6,10 +6,12 @@ using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HalloDoc.Repository.Implement
 {
@@ -59,8 +61,16 @@ namespace HalloDoc.Repository.Implement
 
         public List<Request> GetRequestsFileswithReq(int reqId)
         {
-            var reqFile = _context.Requests.Where(x => x.Requestid == reqId).Include(x=>x.Requestclients).Include(x => x.Requestwisefiles).ToList();
-            return reqFile;
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = false;
+
+            var allReqFile = _context.Requests.Where(x => x.Requestid == reqId).ToList();
+            var allReqFile1 = _context.Requests.Where(x => x.Requestid == reqId).Include(x=>x.Requestclients).Include(x => x.Requestwisefiles.Where(x => x.Isdeleted == bitArray)).ToList();
+
+            //var reqFile = allReqFile.Where(x => !x.Isdeleted[0]).ToList();
+            //var reqFile = allReqFile.FirstOrDefault().Requestwisefiles.Where(x => !x.Isdeleted[0]).ToList();
+
+            return allReqFile1;
         }
 
         public void AddDocFile(IFormFile DocFile, int reqId)

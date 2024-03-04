@@ -25,7 +25,7 @@ namespace HalloDoc.Controllers
 
 
         [ActionName("UploadDoc")]
-        public async Task<IActionResult> UploadDoc(List<IFormFile> DocFile, int id)
+        public async Task<IActionResult> UploadDoc(ICollection<IFormFile> DocFile, int id)
         {
             foreach (var File in DocFile)
             {
@@ -41,13 +41,44 @@ namespace HalloDoc.Controllers
                 }
             }
 
-            int AdminId = (int)HttpContext.Session.GetInt32("SessionKeyAdminId");
-            if (AdminId == null)
+            if (HttpContext.Session.GetInt32("SessionKeyAdminId") == null)
             {
                 return RedirectToAction("ViewDocument", "PatientDash", new { id = id });
             }
             return RedirectToAction("A_ViewUploads", "AdminDash", new { reqid = id });
         }
+
+
+
+
+
+        //public async Task<IActionResult> UploadDocFiles(List<IFormFile> DocFile, int id)
+        //{
+        //    //Using Buffering
+        //    foreach (var File in DocFile)
+        //    {
+        //        if (File != null && File.Length > 0)
+        //        {
+        //            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", File.FileName);
+        //            //Using Buffering
+        //            using (var stream = System.IO.File.Create(filePath))
+        //            {
+        //                await File.CopyToAsync(stream);
+        //                _genral.AddDocFile(File, id);
+        //            }
+        //        }
+        //    }
+
+
+        //    //int AdminId = (int)HttpContext.Session.GetInt32("SessionKeyAdminId");
+        //    //if (AdminId == null)
+        //    //{
+        //    //    return RedirectToAction("ViewDocument", "PatientDash", new { id = id });
+        //    //}
+        //    //return RedirectToAction("A_ViewUploads", "AdminDash", new { reqid = id });
+        //    return RedirectToAction("ViewDocument", "PatientDash");
+        //}
+
 
         [HttpPost]
         [ActionName("DownloadAllFile")]

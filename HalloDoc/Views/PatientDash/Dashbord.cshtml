@@ -185,16 +185,16 @@
                             <h5>General Information</h5>
                             <div class="row form-floating ">
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="User.Firstname">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="clientInfo.Firstname">
                                     <label class="ms-3">Your First Name</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="User.Lastname">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="clientInfo.Lastname">
                                     <label class="ms-3">Your Last Name</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
                                     <input type="date" class="form-control bg-transparent" id="floatingInputValue"
-                                           placeholder="Date of birth" asp-for="User.Dob">
+                                           placeholder="Date of birth" asp-for="clientInfo.Dob">
                                     <label class="ms-3">Date Of Birth</label>
                                 </div>
                             </div>
@@ -212,11 +212,11 @@
                                         <label class="ms-3">Type</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="User.Mobile" />
+                                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="clientInfo.Phonenumber" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="email" id="emailId" class="form-control bg-transparent" asp-for="User.Email">
+                                    <input type="email" id="emailId" class="form-control bg-transparent" asp-for="clientInfo.Email">
                                     <label class="ms-3">Email</label>
                                 </div>
                             </div>
@@ -226,21 +226,21 @@
                             <h5> Location Information </h5>
                             <div class="row form-floating">
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street" asp-for="User.Street">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street" asp-for="clientInfo.Street">
                                     <label class="ms-3">Street</label>
                                 </div>
                                 <div class="col-md d-flex form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="city" asp-for="User.City">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="city" asp-for="clientInfo.City">
                                     <label class="ms-3">City</label>
                                 </div>
                             </div>
                             <div class="row form-floating">
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="state" asp-for="User.State">
+                                    <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="state" asp-for="clientInfo.State">
                                     <label class="ms-3">State</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="number" class="form-control bg-transparent" id="floatingInput" placeholder="zipCode" asp-for="User.Zipcode">
+                                    <input type="number" class="form-control bg-transparent" id="floatingInput" placeholder="zipCode" asp-for="clientInfo.Zipcode">
                                     <label class="ms-3">Zip Code</label>
                                 </div>
                             </div>

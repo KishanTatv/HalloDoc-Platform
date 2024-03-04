@@ -60,10 +60,18 @@ namespace HalloDoc.Controllers
                 {
                     if (patient.CheckExistAspUser(user.Email))
                     {
-                        string userName = patient.userFullName(user.Email);
-                        HttpContext.Session.SetString("SessionKeyEmail", user.Email);
-                        HttpContext.Session.SetString("SessionKeyName", userName);
-                        return RedirectToAction("Dashbord", "PatientDash");
+                        //if (user.Passwordhash.GetHashCode().ToString() == patient.CheckAspPassword(user.Email))
+                        //{
+                            string userName = patient.userFullName(user.Email);
+                            HttpContext.Session.SetString("SessionKeyEmail", user.Email);
+                            HttpContext.Session.SetString("SessionKeyName", userName);
+                            return RedirectToAction("Dashbord", "PatientDash");
+
+                        //}
+                        //else
+                        //{
+                        //    TempData["Error"] = "Password Not Matched";
+                        //}
                     }
                     else
                     {
@@ -115,7 +123,7 @@ namespace HalloDoc.Controllers
 
         [HttpPost]
         [Route("Patient/NewPassword/{email}")]
-        public IActionResult NewPassword(string email,ClientInformation user)
+        public IActionResult NewPassword(string email, ClientInformation user)
         {
             if (patient.CheckExistAspUser(email))
             {
@@ -147,7 +155,7 @@ namespace HalloDoc.Controllers
 
         [HttpPost]
         [ActionName("CreatePatient")]
-        public IActionResult CreatePatient(Aspnetuser user)
+        public IActionResult CreatePatient(ClientInformation user)
         {
             if (ModelState.IsValid)
             {
@@ -158,10 +166,18 @@ namespace HalloDoc.Controllers
                 }
                 else
                 {
-                    Aspnetuser asp = patient.createonlyAsp(user);
-                    patient.updateUserIdWithAsp(asp.Id, asp.Email);
-                    TempData["Msg"] = "Your Account created Successfully!!";
-                    return View();
+                    if (user.Password == user.ConfirmPassword)
+                    {
+                        Aspnetuser asp = patient.createonlyAsp(user);
+                        patient.updateUserIdWithAsp(asp.Id, asp.Email);
+                        TempData["Msg"] = "Your Account created Successfully!!";
+                        return View();
+                    }
+                    else
+                    {
+                        TempData["Msg"] = "Password not matched!";
+                        return View();
+                    }
                 }
             }
             else

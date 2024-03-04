@@ -68,5 +68,8 @@ namespace HalloDoc.Repository.Interface
 
         //block req
         void AddBlockRequest(int reqId, string note);
+
+        //delete doc
+        void DeleteDocFile(string file, int reqid);
     }
 }

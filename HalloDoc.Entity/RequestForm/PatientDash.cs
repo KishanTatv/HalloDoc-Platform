@@ -12,5 +12,7 @@ namespace HalloDoc.Entity.RequestForm
 
         public Requestclient reqclient { get; set; }    
 
+        public ClientInformation clientInfo { get; set; }
+
     }
 }

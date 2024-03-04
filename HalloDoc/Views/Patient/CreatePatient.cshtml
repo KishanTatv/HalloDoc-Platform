@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model HalloDoc.Entity.Models.Aspnetuser;
+@model HalloDoc.Entity.RequestForm.ClientInformation;
 
 @{
     ViewData["Title"] = "Create Account";
@@ -26,13 +26,13 @@
 
     <div class="form-floating mb-3">
         <input type="password" class="form-control bg-transparent focus-ring focus-ring-info  position-relative"
-               id="Password" placeholder="name@example.com">
+               id="Password" asp-for="Password" >
         <label for="floatingInput">Password</label>
     </div>
 
     <div class="form-floating mb-3">
         <input type="password" class="form-control bg-transparent focus-ring focus-ring-info  position-relative"
-               id="confirmPassword" placeholder="name@example.com" asp-for="Passwordhash">
+               id="confirmPassword" asp-for="ConfirmPassword">
         <label for="floatingInput">Confirm Password</label>
     </div>
 

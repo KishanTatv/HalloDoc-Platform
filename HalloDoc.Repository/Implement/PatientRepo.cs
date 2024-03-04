@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,6 +15,7 @@ using System.Net.Mail;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace HalloDoc.Repository.Implement
 {
@@ -32,6 +34,11 @@ namespace HalloDoc.Repository.Implement
         public bool CheckExistAspUser(string email)
         {
             return _context.Aspnetusers.Any(u => u.Email == email);
+        }
+
+        public string CheckAspPassword(string email)
+        {
+            return _context.Aspnetusers.FirstOrDefault(u => u.Email == email).Passwordhash;
         }
 
         public User GetUserById(int id)
@@ -243,13 +250,14 @@ namespace HalloDoc.Repository.Implement
 
 
         //create Patient
-        public Aspnetuser createonlyAsp(Aspnetuser user)
+        public Aspnetuser createonlyAsp(ClientInformation user)
         {
             Aspnetuser asp = new Aspnetuser
             {
                 Email = user.Email,
-                Passwordhash = user.Passwordhash,
+                Passwordhash = user.ConfirmPassword.GetHashCode().ToString(),
             };
+            Console.WriteLine(user.ConfirmPassword.GetHashCode().ToString());
             _context.Aspnetusers.Add(asp);
             _context.SaveChanges();
 
@@ -266,37 +274,55 @@ namespace HalloDoc.Repository.Implement
 
 
 
-        //update profile
+        // profile
+        public ClientInformation getClientProfile(string email)
+        {
+            var data = _context.Requestclients.Where(r => r.Email == email)
+                .Select(r => new ClientInformation
+                {
+                    Firstname = r.Firstname,
+                    Lastname = r.Lastname,
+                    Email = r.Email,
+                    Phonenumber = r.Phonenumber,
+                    Dob = new DateTime((int)r.Intyear, DateTime.ParseExact(r.Strmonth, "MMMM", CultureInfo.CurrentCulture).Month, (int)r.Intdate),
+                    Street = r.Street,
+                    City = r.City,
+                    State = r.State,
+                    Zipcode = r.Zipcode,
+                }).FirstOrDefault();
+            return data;
+        }
 
         public void UpdateUser(PatientDash userInfo, string email)
         {
             User user = _context.Users.FirstOrDefault(u => u.Email == email);
-            user.Firstname = userInfo.User.Firstname;
-            user.Lastname = userInfo.User.Lastname;
-            user.Mobile = userInfo.User.Mobile;
-            user.Intdate = userInfo.User.Intdate;
-            user.Strmonth = userInfo.User.Strmonth;
-            user.Street = userInfo.User.Street;
-            user.City = userInfo.User.City;
-            user.State = userInfo.User.State;
-            user.Zipcode = userInfo.User.Zipcode;
+            user.Firstname = userInfo.clientInfo.Firstname;
+            user.Lastname = userInfo.clientInfo.Lastname;
+            user.Mobile = userInfo.clientInfo.Phonenumber;
+            user.Intdate = userInfo.clientInfo.Dob.Day;
+            user.Strmonth = userInfo.clientInfo.Dob.ToString("MMMM");
+            user.Intyear = userInfo.clientInfo.Dob.Year;
+            user.Street = userInfo.clientInfo.Street;
+            user.City = userInfo.clientInfo.City;
+            user.State = userInfo.clientInfo.State;
+            user.Zipcode = userInfo.clientInfo.Zipcode;
             _context.Users.Update(user);
             _context.SaveChanges();
         }
 
-        public void UpdateRequestClient(PatientDash userInfo,string email)
+        public void UpdateRequestClient(PatientDash userInfo, string email)
         {
             Requestclient reqClient = _context.Requestclients.FirstOrDefault(u => u.Email == email);
-            reqClient.Firstname = userInfo.User.Firstname;
-            reqClient.Lastname = userInfo.User.Lastname;
-            reqClient.Phonenumber = userInfo.User.Mobile;
-            reqClient.Intdate = userInfo.User.Intdate;
-            reqClient.Strmonth = userInfo.User.Strmonth;
-            reqClient.Intyear = userInfo.User.Intyear;
-            reqClient.Street = userInfo.User.Street;
-            reqClient.City = userInfo.User.City;
-            reqClient.State = userInfo.User.State;
-            reqClient.Zipcode = userInfo.User.Zipcode;
+            reqClient.Firstname = userInfo.clientInfo.Firstname;
+            reqClient.Lastname = userInfo.clientInfo.Lastname;
+            reqClient.Phonenumber = userInfo.clientInfo.Phonenumber;
+            reqClient.Intdate = userInfo.clientInfo.Dob.Day;
+            reqClient.Strmonth = userInfo.clientInfo.Dob.ToString("MMMM");
+            reqClient.Intyear = userInfo.clientInfo.Dob.Year;
+            reqClient.Street = userInfo.clientInfo.Street;
+            reqClient.City = userInfo.clientInfo.City;
+            reqClient.State = userInfo.clientInfo.State;
+            reqClient.Zipcode = userInfo.clientInfo.Zipcode;
             _context.Requestclients.Update(reqClient);
             _context.SaveChanges();
         }
@@ -307,7 +333,7 @@ namespace HalloDoc.Repository.Implement
         //User full name
         public string userFullName(string email)
         {
-             string userName = _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Firstname + " "+ _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Lastname; ;
+            string userName = _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Firstname + " " + _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Lastname; ;
             return userName;
         }
 
@@ -318,11 +344,11 @@ namespace HalloDoc.Repository.Implement
             var toAddress = new MailAddress(email);
             var subject = Sub;
             var body = bodyMsg;
-            var message = new MailMessage(fromAddress, toAddress) 
-            { 
-                Subject = subject, 
-                Body = body, 
-                IsBodyHtml = true 
+            var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
             };
             try
             {
@@ -347,7 +373,7 @@ namespace HalloDoc.Repository.Implement
             Aspnetuser asp = _context.Aspnetusers.FirstOrDefault(u => u.Email == email);
             asp.Passwordhash = user.ConfirmPassword;
             _context.Aspnetusers.Update(asp);
-            _context.SaveChanges(); 
+            _context.SaveChanges();
         }
 
 
