@@ -128,13 +128,13 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
-                                    <a class="dropdown-item assignModel" data-bs-toggle="modal" data-bs-target="#assign-@item.RequestId"> Assign Case @item.RequestId</a>
+                                    <a class="dropdown-item assignModel" data-bs-toggle="modal" data-bs-target="#assign-@item.RequestId"> Assign Case </a>
                                 </li>
                             }
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
-                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cancel-@item.RequestId"> Cancel Case @item.RequestId </a>
+                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#cancel-@item.RequestId"> Cancel Case </a>
                                 </li>
                             }
                             <li>
@@ -142,7 +142,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             </li>
                             @if (ViewBag.dTable != 1)
                             {
-                                <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId">View Uploads</div></li>
+                                <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId">View Uploads </div></li>
                             }
                             <li>
                                 <div class="dropdown-item viewNote" data-reqid="@item.RequestId">View Notes</div>
@@ -166,7 +166,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             }
                             @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
                             {
-                                <li><a class="dropdown-item" href="#">Order</a></li>
+                                <li><div class="dropdown-item OrderCase" data-reqid="@item.RequestId">Order</div></li>
                                 <li><a class="dropdown-item" href="#">Doctors Notes</a></li>
                             }
                             @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
@@ -359,7 +359,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
         $('.ViewCase').click(function () {
             var reqid = $(this).data('reqid');
             $.ajax({
-                url: '/AdminDash/A_ViewCase',
+                url: '/AdminDash/ViewCase',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
@@ -378,7 +378,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
         $('.viewNote').click(function () {
             var reqid = $(this).data('reqid');
             $.ajax({
-                url: '/AdminDash/A_ViewNotes',
+                url: '/AdminDash/ViewNotes',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
@@ -437,7 +437,26 @@ For more information on enabling MVC for empty projects, visit https://go.micros
         $('.ViewUpload').click(function () {
             var reqid = $(this).data('reqid');
             $.ajax({
-                url: '/AdminDash/A_ViewUploads',
+                url: '/AdminDash/ViewUploads',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    const dashHead = document.querySelector('.dashHead');
+                    const dashs = document.querySelector('.DashSearch');
+                    dashHead.classList.add('d-none');
+                    dashs.classList.add('d-none');
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.OrderCase').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/SendOrder',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {

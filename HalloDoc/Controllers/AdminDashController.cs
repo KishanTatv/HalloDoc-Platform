@@ -1,18 +1,8 @@
-﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Drawing.Spreadsheet;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
+﻿
 using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
-using HalloDoc.Entity.Models;
-using HalloDoc.Entity.RequestForm;
-using HalloDoc.HelperClass;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HalloDoc.Controllers
 {
@@ -38,9 +28,10 @@ namespace HalloDoc.Controllers
         public IActionResult Dashbord()
         {
             var Tcount = _Admin.TotalCountPatient();
+            var region = _Admin.getAllRegion();
 
-            var dashData = new DashTable { ToatlCount = Tcount };
-            if(ViewBag.dTable != null)
+            var dashData = new DashTable { ToatlCount = Tcount, Regions = region };
+            if (ViewBag.dTable != null)
             {
                 DashbordData(2, 0);
                 return PartialView("TablePartial", dashData);
@@ -59,32 +50,32 @@ namespace HalloDoc.Controllers
             switch (id)
             {
                 case 1:   //New
-                    ViewBag.TPage = Math.Ceiling((double)Tcount[0] / 5);
+                    ViewBag.TPage = Math.Ceiling(Tcount[0] / 5.0);
                     ViewBag.dTable = id;
                     Req = _Admin.GetTableData(page, pageSize);
                     break;
                 case 2:   //Pending
-                    ViewBag.TPage = Math.Ceiling((double)Tcount[1] / 5);
+                    ViewBag.TPage = Math.Ceiling(Tcount[1] / 5.0);
                     ViewBag.dTable = id;
                     Req = _Admin.GetTableDataPending(page, pageSize);
                     break;
                 case 3:   //Active
-                    ViewBag.TPage = Math.Ceiling((double)Tcount[2] / 5);
+                    ViewBag.TPage = Math.Ceiling(Tcount[2] / 5.0);
                     ViewBag.dTable = id;
                     Req = _Admin.GetTableDataActive(page, pageSize);
                     break;
                 case 4:  //Conclude
-                    ViewBag.TPage = Math.Ceiling((double)Tcount[3] / 5);
+                    ViewBag.TPage = Math.Ceiling(Tcount[3] / 5.0);
                     ViewBag.dTable = id;
                     Req = _Admin.GetTableDataConclude(page, pageSize);
                     break;
                 case 5:   //To-close
-                    ViewBag.TPage = Math.Ceiling((double)Tcount[4] / 5);
+                    ViewBag.TPage = Math.Ceiling(Tcount[4] / 5.0);
                     ViewBag.dTable = id;
                     Req = _Admin.GetTableDataToclose(page, pageSize);
                     break;
                 case 6:   //Unpaid
-                    ViewBag.TPage = Math.Ceiling((double)Tcount[5] / 5);
+                    ViewBag.TPage = Math.Ceiling(Tcount[5] / 5.0);
                     ViewBag.dTable = id;
                     Req = _Admin.GetTableDataUnpaid(page, pageSize);
                     break;
@@ -121,19 +112,20 @@ namespace HalloDoc.Controllers
         }
 
 
-        [ActionName("A_ViewCase")]
-        public IActionResult A_ViewCase(int reqid)
+        [ActionName("ViewCase")]
+        public IActionResult ViewCase(int reqid)
         {
             var data = _Admin.GetClientById(reqid);
-            return View(data);
+            return PartialView("_AViewCase", data);
         }
 
 
-        [ActionName("A_ViewNotes")]
-        public IActionResult A_ViewNotes(int reqid)
+        #region viewNote
+        [ActionName("ViewNotes")]
+        public IActionResult ViewNotes(int reqid)
         {
             var data = _Admin.getAllNotes(reqid);
-            return View(data);
+            return PartialView("_AViewNotes", data);
         }
 
         public IActionResult ViewNotedata(string note, int reqid)
@@ -142,9 +134,10 @@ namespace HalloDoc.Controllers
             {
                 _Admin.addNote(reqid, note);
             }
-            var data = _Admin.getAllNotes(reqid);
-            return PartialView("A_ViewNotes", data);
+            return RedirectToAction("ViewNotes", new { reqid = reqid });
         }
+        #endregion
+
 
         public IActionResult CancelReq(string CancelNote, string tag, int reqid)
         {
@@ -159,6 +152,7 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Dashbord");
         }
 
+        #region Assign Physician
         public IActionResult CheckPhysician(int region)
         {
             var phy = _Admin.GetAvaliablePhysician(region);
@@ -174,8 +168,9 @@ namespace HalloDoc.Controllers
                 _Admin.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId);
                 _Admin.updateReqStatusWithPhysician(reqid, phyId, Assignstatus);
             }
-                return RedirectToAction("Dashbord");
+            return RedirectToAction("Dashbord");
         }
+        #endregion
 
         public IActionResult popup_blockcase(int reqid)
         {
@@ -191,26 +186,67 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Dashbord");
         }
 
-        public IActionResult A_ViewUploads(int reqid)
+        #region ViewUpload
+        public IActionResult ViewUploads(int reqid)
         {
             var reqFile = _Genral.GetRequestsFileswithReq(reqid);
-            return View(reqFile);
+            return PartialView("_AViewUploads", reqFile);
         }
 
 
         public IActionResult deleteDoc(string file, int reqid)
         {
-            _Admin.DeleteDocFile(file, reqid);
-            return RedirectToAction("A_ViewUploads", new { reqid = reqid });
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file);
+            if (System.IO.File.Exists(filePath))
+            {
+                _Admin.DeleteDocFile(file, reqid);
+            }
+            else
+            {
+                Console.WriteLine("File path not found");
+                return NotFound();
+            }
+            return RedirectToAction("ViewUploads", new { reqid = reqid });
         }
 
 
         public IActionResult deleteAllDoc(List<string> file, int reqid)
         {
-            for(var i=0; i<file.Count(); i++)
+            for (var i = 0; i < file.Count(); i++)
             {
-                _Admin.DeleteDocFile(file[i], reqid);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file[i]);
+                if (System.IO.File.Exists(filePath))
+                {
+                    _Admin.DeleteDocFile(file[i], reqid);
+                }
+                else
+                {
+                    Console.WriteLine("File path not found");
+                    return NotFound();
+                }
             }
+            return RedirectToAction("ViewUploads", new { reqid = reqid });
+        }
+
+        public IActionResult SendMailDoc(List<string> file, int reqid)
+        {
+            string recEmail = _Genral.getClientEmailbyReqId(reqid);\
+            _Genral.SendEmailOffice365(recEmail, "xcvsdf", "sdffds");
+            return RedirectToAction("ViewUploads", new { reqid = reqid }); 
+        }
+
+        #endregion
+
+
+        public IActionResult SendOrder(int reqid)
+        {
+            var profession = _Admin.getAllHealthProfession();
+            var Order = new OrderViewModel { Healthprofessionaltype = profession, requestId = reqid };
+            return PartialView("_ASendOrder", Order);
+        }
+
+        public IActionResult checkHealthProfessional(string profession)
+        {
             return View();
         }
 

@@ -104,7 +104,7 @@
         $('.backViewCase').click(function () {
             var reqid = $(this).data('reqid');
             $.ajax({
-                url: '/AdminDash/A_ViewCase',
+                url: '/AdminDash/ViewCase',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {

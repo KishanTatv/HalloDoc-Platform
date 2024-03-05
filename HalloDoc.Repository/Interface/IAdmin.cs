@@ -71,5 +71,9 @@ namespace HalloDoc.Repository.Interface
 
         //delete doc
         void DeleteDocFile(string file, int reqid);
+
+
+        // health profession
+        List<Healthprofessionaltype> getAllHealthProfession();
     }
 }

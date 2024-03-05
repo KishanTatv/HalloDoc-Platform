@@ -16,6 +16,10 @@ namespace HalloDoc.Repository.Interface
 
         Requestclient GetClientById(int id);
 
+        string getClientEmailbyReqId(int reqid);
+
+        Task SendEmailOffice365(string recEmail, string subject, string body);
+
         //IEnumerable<RequestWithFile> GetRequestsFileswithReq(int reqId);
         List<Request> GetRequestsFileswithReq(int reqId);
 

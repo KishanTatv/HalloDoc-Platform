@@ -107,10 +107,10 @@
                 <input type="text" id="InputSearch" class="form-control me-2" placeholder="Search Patient" onkeyup="SearchPatient()">
                 <select class="form-select" id="validationDefault04">
                     <option selected disabled value="">All Regions</option>
-                    <option>District of Columbia</option>
-                    <option>Maryland</option>
-                    <option>New York</option>
-                    <option>Virginia</option>
+                    @foreach (var regName in Model.Regions)
+                    {
+                        <option value="@regName.Regionid">@regName.Name</option>
+                    }
                 </select>
             </div>
             <div class=" d-flex align-self-center p-0 ">

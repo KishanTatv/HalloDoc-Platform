@@ -122,7 +122,7 @@
         $('.viewNote').click(function () {
             var reqid = $(this).data('reqid');
             $.ajax({
-                url: '/AdminDash/A_ViewNotes',
+                url: '/AdminDash/ViewNotes',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {

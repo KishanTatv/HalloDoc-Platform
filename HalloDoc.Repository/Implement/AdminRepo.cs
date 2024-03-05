@@ -48,6 +48,23 @@ namespace HalloDoc.Repository.Implement
         }
 
 
+        #region Request Count
+        public List<int> TotalCountPatient()
+        {
+            int Tnew = _context.Requests.Where(x => x.Status == 1).Count();
+            int Tpending = _context.Requests.Where(x => x.Status == 2).Count();
+            int Tactive = _context.Requests.Where(x => x.Status == 4 || x.Status == 5).Count();
+            int Tconclide = _context.Requests.Where(x => x.Status == 6).Count();
+            int Tclose = _context.Requests.Where(x => x.Status == 3 || x.Status == 7 || x.Status == 8).Count();
+            int Tunpaid = _context.Requests.Where(x => x.Status == 9).Count();
+            List<int> countList = new List<int>();
+            countList.Add(Tnew); countList.Add(Tpending); countList.Add(Tactive); countList.Add(Tconclide); countList.Add(Tclose); countList.Add(Tunpaid);
+
+            return countList;
+        }
+        #endregion
+
+
         #region New Request
         public IEnumerable<tableData> GetTableData(int page, int pageSize)
         {
@@ -195,6 +212,7 @@ namespace HalloDoc.Repository.Implement
                                               Strmonth = r.Strmonth,
                                               Intyear = r.Intyear,
                                               Age = System.DateTime.Now.Year - r.Intyear,
+                                              RequestId = r.Requestid,
                                               ReqClientId = r.Requestclientid,
                                               ReqTypeId = f.Requesttypeid,
                                               Requestor = f.Firstname + "," + f.Lastname,
@@ -241,20 +259,6 @@ namespace HalloDoc.Repository.Implement
             return data.Skip(page * pageSize).Take(pageSize).ToList();
         }
         #endregion
-
-        public List<int> TotalCountPatient()
-        {
-            int Tnew = _context.Requests.Where(x => x.Status == 1).Count();
-            int Tpending = _context.Requests.Where(x => x.Status == 2).Count();
-            int Tactive = _context.Requests.Where(x => x.Status == 4 || x.Status == 5).Count();
-            int Tconclide = _context.Requests.Where(x => x.Status == 6).Count();
-            int Tclose = _context.Requests.Where(x => x.Status == 3 || x.Status == 7 || x.Status == 8).Count();
-            int Tunpaid = _context.Requests.Where(x => x.Status == 9).Count();
-            List<int> countList = new List<int>();
-            countList.Add(Tnew); countList.Add(Tpending); countList.Add(Tactive); countList.Add(Tconclide); countList.Add(Tclose); countList.Add(Tunpaid);
-
-            return countList;
-        }
 
 
 
@@ -375,6 +379,14 @@ namespace HalloDoc.Repository.Implement
             filedata.Isdeleted = bitArray;
             _context.Requestwisefiles.Update(filedata);
             _context.SaveChanges();
+        }
+
+
+
+        public List<Healthprofessionaltype> getAllHealthProfession()
+        {
+            var data = _context.Healthprofessionaltypes.ToList();
+            return data;
         }
     }
 }

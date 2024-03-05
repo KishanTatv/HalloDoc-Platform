@@ -32,21 +32,21 @@
 
                 <div class="mb-4">
                     <form id="uploadDataFile">
-                    <div class="d-flex m-auto">
-                        <div class="p-0 w-100">
-                            <input type="text" class="form-control bg-transparent" id="selectedFile" placeholder="select File"
-                                   disabled>
-                            <label class="ms-3"></label>
+                        <div class="d-flex m-auto">
+                            <div class="p-0 w-100">
+                                <input type="text" class="form-control bg-transparent" id="selectedFile" placeholder="select File"
+                                       disabled>
+                                <label class="ms-3"></label>
+                            </div>
+                            <div>
+                                <label class="btn btn-outline-info d-flex ">
+                                    <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
+                                    <input id="SpBtnUpload" data-reqid="@Model.FirstOrDefault().Requestid" style="display:none" />
+                                    <i class="bi bi-cloud-arrow-up border-info"></i>
+                                    <span class="upload_txt ms-2">Upload</span>@Model.FirstOrDefault().Requestid
+                                </label>
+                            </div>
                         </div>
-                        <div>
-                            <label class="btn btn-outline-info d-flex ">
-                                <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
-                                <input id="SpBtnUpload" data-reqid="@Model.FirstOrDefault().Requestid" style="display:none" />
-                                <i class="bi bi-cloud-arrow-up border-info"></i>
-                                <span class="upload_txt ms-2">Upload</span>@Model.FirstOrDefault().Requestid
-                            </label>
-                        </div>
-                    </div>
                     </form>
                 </div>
 
@@ -61,7 +61,7 @@
                             <button type="button" onclick="deleteall()" class="btn w-5 btn-info rounded bg-transparent m-2 text-info deleteBtn" value="@Model.FirstOrDefault().Requestid">
                                 Delete All
                             </button>
-                            <button type="submit" class="btn w-5 btn-info rounded bg-transparent m-2 text-info">
+                            <button type="button" onclick="sendMail()" class="btn w-5 btn-info rounded bg-transparent m-2 text-info sendMailFile" value="@Model.FirstOrDefault().Requestid">
                                 Send Mail
                             </button>
                         </div>
@@ -152,7 +152,7 @@
 
         $('.ViewCase').click(function () {
             $.ajax({
-                url: '/AdminDash/A_ViewCase',
+                url: '/AdminDash/ViewCase',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
@@ -186,7 +186,7 @@
                 method: 'POST',
                 data: { reqid: reqid, file: file },
                 success: function (response) {
-                    console.log("success");
+                    $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
@@ -196,9 +196,7 @@
 
     });
 
-
-    function deleteall() {
-        var reqid = $(".deleteBtn").val();
+    function fileList() {
         let files = [];
         let inputs = $(".checkboxClass");
         for (var i = 0; i < inputs.length; i++) {
@@ -206,13 +204,33 @@
                 files.push(inputs[i].value);
             }
         }
-        console.log(reqid);
+        return files;
+    }
+    function deleteall() {
+        var reqid = $(".deleteBtn").val();
+        var files = fileList();
         $.ajax({
             url: '/AdminDash/deleteAllDoc',
             method: 'POST',
             data: { file: files, reqid: reqid },
             success: function (response) {
-                console.log("success");
+                $("#partial").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
+    function sendMail() {
+        var reqid = $(".sendMailFile").val();
+        var files = fileList();
+        $.ajax({
+            url: '/AdminDash/SendMailDoc',
+            method: 'POST',
+            data: { file: files, reqid: reqid },
+            success: function (response) {
+                console.log("hg");
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

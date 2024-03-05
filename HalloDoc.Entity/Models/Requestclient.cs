@@ -102,8 +102,6 @@ public partial class Requestclient
     [Precision(11, 8)]
     public decimal? Longitude { get; set; }
 
-    public DateOnly? Dob { get; set; }
-
     [Column("strmonth", TypeName = "character varying")]
     public string? Strmonth { get; set; }
 

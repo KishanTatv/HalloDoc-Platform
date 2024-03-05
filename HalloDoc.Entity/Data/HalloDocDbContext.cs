@@ -36,6 +36,12 @@ public partial class HalloDocDbContext : DbContext
 
     public virtual DbSet<Emaillog> Emaillogs { get; set; }
 
+    public virtual DbSet<Healthprofessional> Healthprofessionals { get; set; }
+
+    public virtual DbSet<Healthprofessionaltype> Healthprofessionaltypes { get; set; }
+
+    public virtual DbSet<Orderdetail> Orderdetails { get; set; }
+
     public virtual DbSet<Physician> Physicians { get; set; }
 
     public virtual DbSet<Physicianlocation> Physicianlocations { get; set; }
@@ -163,6 +169,23 @@ public partial class HalloDocDbContext : DbContext
         modelBuilder.Entity<Emaillog>(entity =>
         {
             entity.HasKey(e => e.Emaillogid).HasName("emaillog_pkey");
+        });
+
+        modelBuilder.Entity<Healthprofessional>(entity =>
+        {
+            entity.HasKey(e => e.Vendorid).HasName("healthprofessionals_pkey");
+
+            entity.HasOne(d => d.ProfessionNavigation).WithMany(p => p.Healthprofessionals).HasConstraintName("healthprofessionals_profession_fkey");
+        });
+
+        modelBuilder.Entity<Healthprofessionaltype>(entity =>
+        {
+            entity.HasKey(e => e.Healthprofessionalid).HasName("healthprofessionaltype_pkey");
+        });
+
+        modelBuilder.Entity<Orderdetail>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("orderdetails_pkey");
         });
 
         modelBuilder.Entity<Physician>(entity =>

@@ -90,9 +90,6 @@ public partial class User
     [Column("isrequestwithemail", TypeName = "bit(1)")]
     public BitArray? Isrequestwithemail { get; set; }
 
-    [Column("dob")]
-    public DateOnly? Dob { get; set; }
-
     [ForeignKey("Aspnetuserid")]
     [InverseProperty("Users")]
     public virtual Aspnetuser? Aspnetuser { get; set; }

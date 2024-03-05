@@ -1,0 +1,113 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HalloDoc.Entity.AdminDash.OrderViewModel;
+
+@{
+}
+
+<div class="MainContent pt-0 min-vh-100">
+    <div class="tab-content" id="nav-tabContent">
+
+        <div class="HContainer m-auto pt-4">
+            <div class="d-flex justify-content-between">
+                <h4 class="m-0">Send Order</h4>
+                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+                    <strong class="pe-2">&lt Back</strong>
+                </a>
+            </div>
+
+            <div class=" rounded shadow p-4 rounded-3">
+                <div class="mb-4">
+                    <h5>Patient Information</h5>
+
+                    <div class="row">
+                        <div class="col-md-6 form-floating mt-2">
+                            <select class="form-select p-0 ps-3 professionOption">
+                                <option selected disabled>Select Profession</option>
+                                @foreach (var profession in Model.Healthprofessionaltype)
+                                {
+                                    <option value="@profession.Professionname">@profession.Professionname</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <select class="form-select p-0 ps-3 bussinessOption">
+                                <option selected disabled>Bussiness</option>
+                                <option>131</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent" placeholder="business contact">
+                            <label class="ms-3">Business Contact</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="email" class="form-control bg-transparent" placeholder="email">
+                            <label class="ms-3">Email</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent" placeholder="fax number">
+                            <label class="ms-3">Fax Number</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-floating">
+                    <textarea type="text" class="form-control bg-transparent h-25"
+                              placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                              aria-describedby="button-addon2"> </textarea>
+                    <label for="ms-3 text-info">Prescription or Order details</label>
+                </div>
+
+                <div class="mt-4 mb-4">
+                    <div class="row">
+                        <div class="col-md-6 form-floating mt-2">
+                            <label class="p-0 ps-3 text-secondary">Fax Number</label>
+                            <select class="form-select ps-3">
+                                <option selected disabled>Not required</option>
+                                <option>123</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="d-flex justify-content-end mt-4 mb-4">
+                    <div class="btn btn-info text-light me-3 viewNote"> Submit </div>
+                    <button type="button" class="btn btn-danger">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.professionOption').blur(function () {
+            console.log($(this).attr('data-id'));
+            var profession = $(this).val();
+            $.ajax({
+                url: '/AdminDash/checkHealthProfessional',
+                method: 'POST',
+                data: { profession: profession },
+                success: function (response) {
+                    console.log(response);
+                    $(".bussinessOption").empty().append($('
+                        //< option disabled selected > Bussiness < /option>'));
+                        //console.log(response.physician[0]["firstname"]);
+                        //$.each(response.physician, function (index, item) {
+                        //    $(".PhyOption").append($('
+                        //        < option > </option>').val(item.physicianid).text(item.firstname));
+                        //});
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+    });
+</script>
