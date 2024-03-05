@@ -14,11 +14,13 @@ namespace HalloDoc.Repository.Interface
     {
         bool checkBlockReq(string email);
 
+        string userFullName(string email);
+
         Requestclient GetClientById(int id);
 
         string getClientEmailbyReqId(int reqid);
 
-        Task SendEmailOffice365(string recEmail, string subject, string body);
+        Task SendEmailOffice365(string recEmail, string subject, string body, List<string> attachment);
 
         //IEnumerable<RequestWithFile> GetRequestsFileswithReq(int reqId);
         List<Request> GetRequestsFileswithReq(int reqId);

@@ -9,10 +9,12 @@ namespace HalloDoc.Controllers
     {
         private readonly ILogger<AdminController> _logger;
         private readonly IAdmin _admin;
-        public AdminController(ILogger<AdminController> logger, IAdmin admin)
+        private readonly IGenral _genral;
+        public AdminController(ILogger<AdminController> logger, IAdmin admin, IGenral genral)
         {
             _logger = logger;
-            this._admin = admin;
+            _admin = admin;
+            _genral = genral;
         }
 
         [HttpGet]
@@ -30,13 +32,13 @@ namespace HalloDoc.Controllers
 
         [HttpPost]
         [ActionName("verifyAdmin")]
-        public IActionResult verifyAdmin(Admin admin)
+        public IActionResult verifyAdmin(Aspnetuser admin)
         {
             if (admin.Email != null)
             {
                 if (_admin.CheckExistAdmin(admin.Email))
                 {
-                    string userName = _admin.getAdminUserName(admin.Email);
+                    string userName = _genral.userFullName(admin.Email);
                     int AdminId = _admin.getAdminId(admin.Email);
                     HttpContext.Session.SetString("SessionKeyEmail", admin.Email);
                     HttpContext.Session.SetString("SessionKeyName", userName);

@@ -230,8 +230,10 @@ namespace HalloDoc.Controllers
 
         public IActionResult SendMailDoc(List<string> file, int reqid)
         {
-            string recEmail = _Genral.getClientEmailbyReqId(reqid);\
-            _Genral.SendEmailOffice365(recEmail, "xcvsdf", "sdffds");
+            string recEmail = _Genral.getClientEmailbyReqId(reqid);
+            string subject = "Documnet files";
+            string body = "Check attached document...";
+            _Genral.SendEmailOffice365(recEmail, subject, body, file);
             return RedirectToAction("ViewUploads", new { reqid = reqid }); 
         }
 

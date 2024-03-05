@@ -17,12 +17,14 @@ namespace HalloDoc.Controllers
     public class PatientController : Controller
     {
         private readonly ILogger<PatientController> _logger;
-        private readonly IPatient patient;
+        private readonly IPatient _patient;
+        private readonly IGenral _genral;
 
-        public PatientController(ILogger<PatientController> logger, IPatient patient)
+        public PatientController(ILogger<PatientController> logger, IPatient patient, IGenral genral)
         {
             _logger = logger;
-            this.patient = patient;
+            _patient = patient;
+            _genral = genral;
         }
 
         public IActionResult PatientSite()
@@ -45,7 +47,7 @@ namespace HalloDoc.Controllers
         [HttpPost]
         public ActionResult CheckEmail(string email)
         {
-            bool emailExists = patient.CheckExistAspUser(email);
+            bool emailExists = _patient.CheckExistAspUser(email);
             return Json(new { exists = emailExists });
         }
 
@@ -58,11 +60,11 @@ namespace HalloDoc.Controllers
             {
                 if (user.Email != null)
                 {
-                    if (patient.CheckExistAspUser(user.Email))
+                    if (_patient.CheckExistAspUser(user.Email))
                     {
                         //if (user.Passwordhash.GetHashCode().ToString() == patient.CheckAspPassword(user.Email))
                         //{
-                            string userName = patient.userFullName(user.Email);
+                            string userName = _genral.userFullName(user.Email);
                             HttpContext.Session.SetString("SessionKeyEmail", user.Email);
                             HttpContext.Session.SetString("SessionKeyName", userName);
                             return RedirectToAction("Dashbord", "PatientDash");
@@ -95,13 +97,13 @@ namespace HalloDoc.Controllers
         [HttpPost]
         public IActionResult ResetPassEmail(Aspnetuser user)
         {
-            if (patient.CheckExistAspUser(user.Email))
+            if (_patient.CheckExistAspUser(user.Email))
             {
                 var userEmail = user.Email;
                 var subject = "Password reset request";
                 string link = Url.Action("NewPassword", "Patient", new { email = userEmail }, Request.Scheme);
                 var body = $"Hi,<br /><br />Please click on the following link to change your password credential:<br /><br />" + link;
-                patient.sendMail(userEmail, subject, body);
+                _patient.sendMail(userEmail, subject, body);
                 TempData["Msg"] = "please check your Email";
             }
             else
@@ -125,11 +127,11 @@ namespace HalloDoc.Controllers
         [Route("Patient/NewPassword/{email}")]
         public IActionResult NewPassword(string email, ClientInformation user)
         {
-            if (patient.CheckExistAspUser(email))
+            if (_patient.CheckExistAspUser(email))
             {
                 if (user.Password == user.ConfirmPassword)
                 {
-                    patient.newPasswordCreate(user, email);
+                    _patient.newPasswordCreate(user, email);
                     TempData["Error"] = "Password Changed succesfully!!";
                 }
                 else
@@ -159,7 +161,7 @@ namespace HalloDoc.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (patient.CheckExistAspUser(user.Email))
+                if (_patient.CheckExistAspUser(user.Email))
                 {
                     TempData["Msg"] = "Alredy Account! Try to Login..";
                     return View();
@@ -168,8 +170,8 @@ namespace HalloDoc.Controllers
                 {
                     if (user.Password == user.ConfirmPassword)
                     {
-                        Aspnetuser asp = patient.createonlyAsp(user);
-                        patient.updateUserIdWithAsp(asp.Id, asp.Email);
+                        Aspnetuser asp = _patient.createonlyAsp(user);
+                        _patient.updateUserIdWithAsp(asp.Id, asp.Email);
                         TempData["Msg"] = "Your Account created Successfully!!";
                         return View();
                     }

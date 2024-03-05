@@ -44,8 +44,7 @@ namespace HalloDoc.Repository.Interface
         Aspnetuser createonlyAsp(ClientInformation user);
         void updateUserIdWithAsp(int aspId, string email);
 
-        //User full name
-        string userFullName(string email);
+
 
         //sendMail ResetPassword
         void sendMail(string email, string Sub, string bodyMsg);

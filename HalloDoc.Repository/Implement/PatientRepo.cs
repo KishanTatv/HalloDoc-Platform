@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -330,13 +331,6 @@ namespace HalloDoc.Repository.Implement
 
 
 
-        //User full name
-        public string userFullName(string email)
-        {
-            string userName = _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Firstname + " " + _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Lastname; ;
-            return userName;
-        }
-
         //sendMailResetPassword
         public void sendMail(string email, string Sub, string bodyMsg)
         {
@@ -386,6 +380,9 @@ namespace HalloDoc.Repository.Implement
 
         public IEnumerable<RequestWithFile> GetRequestsFiles(string email)
         {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = false;
+
             var reqFile = from r in _context.Requests
                           join f in _context.Users on r.Userid equals f.Userid into rf
                           from f in rf.DefaultIfEmpty()
@@ -397,7 +394,7 @@ namespace HalloDoc.Repository.Implement
                               Createddate = r.Createddate,
                               Firstname = r.Firstname + " " + r.Lastname,
                               Status = r.Status,
-                              FileCount = _context.Requestwisefiles.Where(u => u.Requestid == r.Requestid).Count(),
+                              FileCount = _context.Requestwisefiles.Where(u => u.Requestid == r.Requestid && u.Isdeleted == bitArray).Count(),
                           };
             return reqFile;
         }

@@ -35,6 +35,13 @@ namespace HalloDoc.Repository.Implement
             return _context.Blockrequests.Any(u => u.Email == email);
         }
 
+        //User full name
+        public string userFullName(string email)
+        {
+            string userName = _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Firstname + " " + _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Lastname; ;
+            return userName;
+        }
+
         public Requestclient GetClientById(int id)
         {
             var userData = _context.Requestclients.FirstOrDefault(x => x.Requestid == id);
@@ -48,7 +55,7 @@ namespace HalloDoc.Repository.Implement
 
 
         #region SendMail Office365
-        public Task SendEmailOffice365(string recEmail, string subject, string body)
+        public Task SendEmailOffice365(string recEmail, string subject, string body, List<string> attachment)
         {
             string SenderEmail = _config["credntial:Email"];
             string Pass = _config["credntial:Pass"];
@@ -56,15 +63,29 @@ namespace HalloDoc.Repository.Implement
             SmtpClient smtpClient = new SmtpClient("smtp.office365.com", 587)
             {
                 EnableSsl = true,
-                UseDefaultCredentials = true,
                 Credentials = new NetworkCredential(SenderEmail, Pass),
             };
 
             try
             {
-                return smtpClient.SendMailAsync(new MailMessage(from: SenderEmail, to: recEmail, subject, body));
+                var mailMsg = new MailMessage(SenderEmail, recEmail);
+                mailMsg.Subject = subject;
+                mailMsg.Body = body;
+
+                if (attachment != null)
+                {
+                    foreach (var file in attachment)
+                    {
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file);
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            mailMsg.Attachments.Add(new Attachment(filePath));
+                        }
+                    }
+                }
+                return smtpClient.SendMailAsync(mailMsg);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 return null;
