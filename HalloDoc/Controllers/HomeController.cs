@@ -11,11 +11,13 @@ namespace HalloDoc.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IGenral _genral;
+        private readonly IAdmin _admin;
 
-        public HomeController(ILogger<HomeController> logger, IGenral genral)
+        public HomeController(ILogger<HomeController> logger, IGenral genral, IAdmin admin)
         {
             _logger = logger;
             _genral = genral;
+            _admin = admin;
         }
 
         public IActionResult Index()
@@ -41,7 +43,7 @@ namespace HalloDoc.Controllers
                 }
             }
 
-            if (HttpContext.Session.GetInt32("SessionKeyAdminId") == null)
+            if (_admin.getAdminId(Request.Cookies["CookieEmail"]) == null)
             {
                 return RedirectToAction("ViewDocument", "PatientDash", new { id = id });
             }

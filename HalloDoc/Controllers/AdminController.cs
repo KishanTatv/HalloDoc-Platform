@@ -36,13 +36,10 @@ namespace HalloDoc.Controllers
         {
             if (admin.Email != null)
             {
-                if (_admin.CheckExistAdmin(admin.Email))
+                if (_genral.CheckExistAspUser(admin.Email))
                 {
                     string userName = _genral.userFullName(admin.Email);
                     int AdminId = _admin.getAdminId(admin.Email);
-                    HttpContext.Session.SetString("SessionKeyEmail", admin.Email);
-                    HttpContext.Session.SetString("SessionKeyName", userName);
-                    HttpContext.Session.SetInt32("SessionKeyAdminId", AdminId);
                     return RedirectToAction("Dashbord", "AdminDash");
                 }
                 else

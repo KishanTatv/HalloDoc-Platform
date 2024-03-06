@@ -13,7 +13,6 @@ namespace HalloDoc.Repository.Interface
 {
     public  interface IPatient
     {
-        bool CheckExistAspUser(string email);
 
         string CheckAspPassword(string email);
         int FindUserId(string email);
@@ -21,6 +20,7 @@ namespace HalloDoc.Repository.Interface
 
         //for patient
         Aspnetuser AddAspUser(ClientInformation clientInformation);
+        void AddAspnetUserRole(int aspid);
         User AddUser(ClientInformation clientInformation, int AspUserId);
 
         Request AddRequest(ClientInformation clientInformation, int userId);

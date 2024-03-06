@@ -31,12 +31,6 @@ namespace HalloDoc.Repository.Implement
 
         }
 
-
-        public bool CheckExistAspUser(string email)
-        {
-            return _context.Aspnetusers.Any(u => u.Email == email);
-        }
-
         public string CheckAspPassword(string email)
         {
             return _context.Aspnetusers.FirstOrDefault(u => u.Email == email).Passwordhash;
@@ -53,13 +47,24 @@ namespace HalloDoc.Repository.Implement
             Aspnetuser asp = new Aspnetuser
             {
                 Email = client.Email,
-                Username = client.Firstname + client.Lastname,
+                Username = client.Firstname + " " + client.Lastname,
                 Passwordhash = client.Password,
                 Phonenumber = client.Phonenumber,
             };
             _context.Aspnetusers.Add(asp);
             _context.SaveChanges();
             return asp;
+        }
+
+        public void AddAspnetUserRole(int aspid)
+        {
+            Aspnetuserrole aspRole = new Aspnetuserrole
+            {
+                Userid = aspid,
+                Roleid = 3
+            };
+            _context.Aspnetuserroles.Add(aspRole);
+            _context.SaveChanges();
         }
 
         public User AddUser(ClientInformation client, int Aspid)

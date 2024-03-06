@@ -15,7 +15,6 @@ namespace HalloDoc.Repository.Interface
     {
 
         //login
-        bool CheckExistAdmin(string email);
         int getAdminId(string email);
         string getAdminUserName(string email);
 
@@ -75,5 +74,6 @@ namespace HalloDoc.Repository.Interface
 
         // health profession
         List<Healthprofessionaltype> getAllHealthProfession();
+        List<Healthprofessional> getHealthProfessionBussiness(int professionTypeId);
     }
 }

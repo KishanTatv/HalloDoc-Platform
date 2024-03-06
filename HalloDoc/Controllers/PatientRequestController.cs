@@ -57,7 +57,7 @@ namespace HalloDoc.Controllers
         public async Task<IActionResult> PatientReq(ClientInformation Clientinfo, List<IFormFile> DocFile)
         {
             Request request;
-            if (patient.CheckExistAspUser(Clientinfo.Email))
+            if (genral.CheckExistAspUser(Clientinfo.Email))
             {
                 int userId = patient.FindUserId(Clientinfo.Email);
                 request = patient.AddRequest(Clientinfo, userId);
@@ -68,6 +68,7 @@ namespace HalloDoc.Controllers
                 User user = patient.AddUser(Clientinfo, AspUser.Id);
                 request = patient.AddRequest(Clientinfo, user.Userid);
                 patient.AddRequestClient(Clientinfo, request.Requestid);
+                patient.AddAspnetUserRole(AspUser.Id);
             }
 
             if (DocFile != null)
@@ -107,7 +108,7 @@ namespace HalloDoc.Controllers
             else
             {
                 Request request;
-                if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
+                if (genral.CheckExistAspUser(FInfo.clientInformation.Email))
                 {
                     int userId = patient.FindUserId(FInfo.clientInformation.Email);
                     request = patient.AddFcbRequest(FInfo, userId, 3);
@@ -156,7 +157,7 @@ namespace HalloDoc.Controllers
         public async Task<IActionResult> ConciergeReq(FormFCB FInfo)
         {
             Request request;
-            if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
+            if (genral.CheckExistAspUser(FInfo.clientInformation.Email))
             {
                 int userId = patient.FindUserId(FInfo.clientInformation.Email);
                 request = patient.AddFcbRequest(FInfo, userId, 4);
@@ -192,7 +193,7 @@ namespace HalloDoc.Controllers
         public async Task<IActionResult> BussinessReq(FormFCB FInfo)
         {
             Request request;
-            if (patient.CheckExistAspUser(FInfo.clientInformation.Email))
+            if (genral.CheckExistAspUser(FInfo.clientInformation.Email))
             {
                 int userId = patient.FindUserId(FInfo.clientInformation.Email);
                 request = patient.AddFcbRequest(FInfo, userId, 1);

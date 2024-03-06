@@ -1,5 +1,6 @@
 ﻿using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
+using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using System.IO.Compression;
 
 namespace HalloDoc.Controllers
 {
+    [CustomAuthorize("Patient")]
     public class PatientDashController : Controller
     {
         private readonly ILogger<PatientDashController> _logger;
@@ -40,17 +42,12 @@ namespace HalloDoc.Controllers
         [HttpGet]
         public async Task<IActionResult> Dashbord()
         {
-            var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
-            if (UserEmail != null)
-            {
-                //User UserData  = patient.GetUserByEmail(UserEmail);
-                ClientInformation client = patient.getClientProfile(UserEmail);
-                IEnumerable<RequestWithFile> ReqFile = patient.GetRequestsFiles(UserEmail);
+            string UserEmail = Request.Cookies["CookieEmail"];
+            ClientInformation client = patient.getClientProfile(UserEmail);
+            IEnumerable<RequestWithFile> ReqFile = patient.GetRequestsFiles(UserEmail);
 
-                var PatientDash = new PatientDash { ReqWithFiles = ReqFile, clientInfo = client };
-                return View(PatientDash);
-            }
-            return RedirectToAction("PatientLogin", "Patient");
+            var PatientDash = new PatientDash { ReqWithFiles = ReqFile, clientInfo = client };
+            return View(PatientDash);
         }
 
 
@@ -59,7 +56,7 @@ namespace HalloDoc.Controllers
         [ActionName("UpadteProfile")]
         public IActionResult UpadteProfile(PatientDash userInfo)
         {
-            var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
+            string UserEmail = Request.Cookies["CookieEmail"];
 
             patient.UpdateUser(userInfo, UserEmail);
             patient.UpdateRequestClient(userInfo, UserEmail);
@@ -73,7 +70,7 @@ namespace HalloDoc.Controllers
         public async Task<IActionResult> ViewDocument(int id)
         {
 
-            var UserEmail = HttpContext.Session.GetString("SessionKeyEmail");
+            string UserEmail = Request.Cookies["CookieEmail"];
             if (UserEmail != null)
             {
                 var ReqFile = genral.GetRequestsFileswithReq(id);

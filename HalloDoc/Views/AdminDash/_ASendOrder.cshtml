@@ -27,7 +27,7 @@
                                 <option selected disabled>Select Profession</option>
                                 @foreach (var profession in Model.Healthprofessionaltype)
                                 {
-                                    <option value="@profession.Professionname">@profession.Professionname</option>
+                                    <option value="@profession.Healthprofessionalid">@profession.Professionname</option>
                                 }
                             </select>
                         </div>
@@ -95,13 +95,11 @@
                 data: { profession: profession },
                 success: function (response) {
                     console.log(response);
-                    $(".bussinessOption").empty().append($('
-                        //< option disabled selected > Bussiness < /option>'));
-                        //console.log(response.physician[0]["firstname"]);
-                        //$.each(response.physician, function (index, item) {
-                        //    $(".PhyOption").append($('
-                        //        < option > </option>').val(item.physicianid).text(item.firstname));
-                        //});
+                    $(".bussinessOption").empty().append($('<option disabled selected > Bussiness < /option>'));
+                    console.log(response);
+                    $.each(response, function (index, item) {
+                        $(".PhyOption").append($('<option> </option>').val(item.vendorname).text(item.vendorname));
+                    });
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

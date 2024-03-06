@@ -30,6 +30,17 @@ namespace HalloDoc.Repository.Implement
         }
 
 
+        public bool CheckExistAspUser(string email)
+        {
+            return _context.Aspnetusers.Any(u => u.Email == email);
+        }
+
+        public Aspnetuser getUserRole(string email)
+        {
+            var user = _context.Aspnetusers.Include(x => x.Aspnetuserrole).ThenInclude(x => x.Role).FirstOrDefault(x => x.Email == email);
+            return user;
+        }
+
         public bool checkBlockReq(string email)
         {
             return _context.Blockrequests.Any(u => u.Email == email);
@@ -38,7 +49,7 @@ namespace HalloDoc.Repository.Implement
         //User full name
         public string userFullName(string email)
         {
-            string userName = _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Firstname + " " + _context.Users.FirstOrDefault(u => u.Email.Equals(email)).Lastname; ;
+            string userName = _context.Aspnetusers.FirstOrDefault(u => u.Email.Equals(email)).Username;
             return userName;
         }
 

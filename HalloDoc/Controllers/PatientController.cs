@@ -11,6 +11,10 @@ using System.Net;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using HalloDoc.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
+using HalloDoc.Repository.Service.Interface;
+using HalloDoc.Repository.Service;
+using Windows.Web.Http;
+using Microsoft.Net.Http.Headers;
 
 namespace HalloDoc.Controllers
 {
@@ -19,12 +23,14 @@ namespace HalloDoc.Controllers
         private readonly ILogger<PatientController> _logger;
         private readonly IPatient _patient;
         private readonly IGenral _genral;
+        private readonly IJwtToken _jwtToken;
 
-        public PatientController(ILogger<PatientController> logger, IPatient patient, IGenral genral)
+        public PatientController(ILogger<PatientController> logger, IPatient patient, IGenral genral, IJwtToken jwtToken)
         {
             _logger = logger;
             _patient = patient;
             _genral = genral;
+            _jwtToken = jwtToken;
         }
 
         public IActionResult PatientSite()
@@ -47,27 +53,42 @@ namespace HalloDoc.Controllers
         [HttpPost]
         public ActionResult CheckEmail(string email)
         {
-            bool emailExists = _patient.CheckExistAspUser(email);
+            bool emailExists = _genral.CheckExistAspUser(email);
             return Json(new { exists = emailExists });
         }
 
 
         [HttpPost]
         [ActionName("PatientVerification")]
-        public IActionResult PatientVerification(Aspnetuser user)
+        public IActionResult PatientVerification(Aspnetuser user) 
         {
             if (ModelState.IsValid)
             {
                 if (user.Email != null)
                 {
-                    if (_patient.CheckExistAspUser(user.Email))
+                    if (_genral.CheckExistAspUser(user.Email))
                     {
                         //if (user.Passwordhash.GetHashCode().ToString() == patient.CheckAspPassword(user.Email))
                         //{
-                            string userName = _genral.userFullName(user.Email);
-                            HttpContext.Session.SetString("SessionKeyEmail", user.Email);
-                            HttpContext.Session.SetString("SessionKeyName", userName);
+                        string userName = _genral.userFullName(user.Email);
+                        Aspnetuser asp = _genral.getUserRole(user.Email);
+
+                        Console.WriteLine(user.Passwordhash.GetHashCode().ToString());
+                        var UserToken = _jwtToken.GenrateJwtToken(asp);
+                        Response.Cookies.Append("HalloCookie", UserToken);
+                        Response.Cookies.Append("CookieEmail", user.Email);
+                        Response.Cookies.Append("CookieUserName", userName);
+                        Response.Cookies.Append("CookieRole", asp.Aspnetuserrole.Role.Name);
+
+                        if (asp.Aspnetuserrole.Role.Name == "Patient")
+                        {
                             return RedirectToAction("Dashbord", "PatientDash");
+                        }
+                        else if(asp.Aspnetuserrole.Role.Name == "Admin")
+                        {
+                            return RedirectToAction("Dashbord", "AdminDash");
+                        }
+
 
                         //}
                         //else
@@ -97,7 +118,7 @@ namespace HalloDoc.Controllers
         [HttpPost]
         public IActionResult ResetPassEmail(Aspnetuser user)
         {
-            if (_patient.CheckExistAspUser(user.Email))
+            if (_genral.CheckExistAspUser(user.Email))
             {
                 var userEmail = user.Email;
                 var subject = "Password reset request";
@@ -127,7 +148,7 @@ namespace HalloDoc.Controllers
         [Route("Patient/NewPassword/{email}")]
         public IActionResult NewPassword(string email, ClientInformation user)
         {
-            if (_patient.CheckExistAspUser(email))
+            if (_genral.CheckExistAspUser(email))
             {
                 if (user.Password == user.ConfirmPassword)
                 {
@@ -161,7 +182,7 @@ namespace HalloDoc.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (_patient.CheckExistAspUser(user.Email))
+                if (_genral.CheckExistAspUser(user.Email))
                 {
                     TempData["Msg"] = "Alredy Account! Try to Login..";
                     return View();
@@ -171,6 +192,7 @@ namespace HalloDoc.Controllers
                     if (user.Password == user.ConfirmPassword)
                     {
                         Aspnetuser asp = _patient.createonlyAsp(user);
+                        _patient.AddAspnetUserRole(asp.Id);
                         _patient.updateUserIdWithAsp(asp.Id, asp.Email);
                         TempData["Msg"] = "Your Account created Successfully!!";
                         return View();
@@ -191,7 +213,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult logOut()
         {
-            HttpContext.Session.Clear();
+            Response.Cookies.Delete("HalloCookie");
             return View("PatientLogin");
         }
 

@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HalloDoc.Entity.Models;
 
-[PrimaryKey("Userid", "Roleid")]
 [Table("aspnetuserroles")]
 public partial class Aspnetuserrole
 {
@@ -14,11 +13,14 @@ public partial class Aspnetuserrole
     [Column("userid")]
     public int Userid { get; set; }
 
-    [Key]
     [Column("roleid")]
     public int Roleid { get; set; }
 
-    [ForeignKey("Userid")]
+    [ForeignKey("Roleid")]
     [InverseProperty("Aspnetuserroles")]
+    public virtual Aspnetrole Role { get; set; } = null!;
+
+    [ForeignKey("Userid")]
+    [InverseProperty("Aspnetuserrole")]
     public virtual Aspnetuser User { get; set; } = null!;
 }

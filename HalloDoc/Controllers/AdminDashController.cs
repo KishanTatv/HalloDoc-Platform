@@ -1,11 +1,14 @@
 ﻿
 using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
+using HalloDoc.Entity.Models;
+using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HalloDoc.Controllers
 {
+    [CustomAuthorize("Admin")]
     public class AdminDashController : Controller
     {
         private readonly ILogger<AdminDashController> _logger;
@@ -141,7 +144,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult CancelReq(string CancelNote, string tag, int reqid)
         {
-            int AdminId = (int)HttpContext.Session.GetInt32("SessionKeyAdminId");
+            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
             short Cancelstatus = 3;
             if (tag != null)
             {
@@ -161,7 +164,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult AssignReq(string AssignNote, int phyId, int reqid)
         {
-            int AdminId = (int)HttpContext.Session.GetInt32("SessionKeyAdminId");
+            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
             short Assignstatus = 2;
             if (phyId != 0)
             {
@@ -247,9 +250,10 @@ namespace HalloDoc.Controllers
             return PartialView("_ASendOrder", Order);
         }
 
-        public IActionResult checkHealthProfessional(string profession)
+        public IActionResult checkHealthProfessional(int profession)
         {
-            return View();
+            var profbus = _Admin.getHealthProfessionBussiness(profession); 
+            return Json(new { Healthprofessional = profbus });
         }
 
         public IActionResult NewRequest(int reqid)

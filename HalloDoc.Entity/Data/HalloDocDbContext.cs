@@ -123,11 +123,17 @@ public partial class HalloDocDbContext : DbContext
 
         modelBuilder.Entity<Aspnetuserrole>(entity =>
         {
-            entity.HasKey(e => new { e.Userid, e.Roleid }).HasName("aspnetuserroles_pkey");
+            entity.HasKey(e => e.Userid).HasName("aspnetuserroles_pkey");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Aspnetuserroles)
+            entity.Property(e => e.Userid).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Aspnetuserroles)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("aspnetuserroles_userid_fkey");
+                .HasConstraintName("fk_aspnetrole");
+
+            entity.HasOne(d => d.User).WithOne(p => p.Aspnetuserrole)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_aspnetuserrole");
         });
 
         modelBuilder.Entity<Blockrequest>(entity =>

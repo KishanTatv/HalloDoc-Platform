@@ -24,14 +24,7 @@ namespace HalloDoc.Repository.Implement
 
         }
 
-        public bool CheckExistAdmin(string email)
-        {
-            return _context.Admins.Any(u => u.Email == email);
-        }
-        public int getAdminId(string email)
-        {
-            return _context.Admins.FirstOrDefault(u => u.Email == email).Adminid;
-        }
+
         public string getAdminUserName(string email)
         {
             string fName = _context.Admins.FirstOrDefault(u => u.Email == email).Firstname;
@@ -40,6 +33,10 @@ namespace HalloDoc.Repository.Implement
             return name;
         }
 
+        public int getAdminId(string email)
+        {
+            return _context.Admins.FirstOrDefault(u => u.Email == email).Adminid;
+        }
 
         public Requestclient GetClientById(int id)
         {
@@ -386,6 +383,12 @@ namespace HalloDoc.Repository.Implement
         public List<Healthprofessionaltype> getAllHealthProfession()
         {
             var data = _context.Healthprofessionaltypes.ToList();
+            return data;
+        }
+
+        public List<Healthprofessional> getHealthProfessionBussiness(int professionTypeId)
+        {
+            var data = _context.Healthprofessionals.Where(x => x.Profession == professionTypeId).ToList();
             return data;
         }
     }

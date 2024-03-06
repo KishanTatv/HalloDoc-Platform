@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using HalloDoc.Repository.Interface;
 using HalloDoc.Repository.Implement;
 using HalloDoc.Entity.Data;
+using HalloDoc.Repository.Service.Interface;
+using HalloDoc.Repository.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,12 +19,13 @@ builder.Services.AddScoped<IGenral, GenralRepo>();
 builder.Services.AddScoped<IPatient, PatientRepo>();
 builder.Services.AddScoped<IPatient, PatientRepo>();
 builder.Services.AddScoped<IAdmin, AdminRepo>();
+builder.Services.AddScoped<IJwtToken, JwtToken>();
 
-builder.Services.AddSession(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+//builder.Services.AddSession(options =>
+//{
+//    options.Cookie.HttpOnly = true;
+//    options.Cookie.IsEssential = true;
+//});
 
 
 
@@ -41,8 +44,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseCookiePolicy();
 app.UseAuthorization();
-app.UseSession();
+//app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
