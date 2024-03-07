@@ -75,5 +75,6 @@ namespace HalloDoc.Repository.Interface
         // health profession
         List<Healthprofessionaltype> getAllHealthProfession();
         List<Healthprofessional> getHealthProfessionBussiness(int professionTypeId);
+        Healthprofessional getVendorDetail(int vendorid);
     }
 }

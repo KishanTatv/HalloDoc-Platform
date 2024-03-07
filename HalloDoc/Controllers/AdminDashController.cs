@@ -1,4 +1,6 @@
 ﻿
+using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
 using HalloDoc.Entity.Models;
@@ -28,6 +30,7 @@ namespace HalloDoc.Controllers
         }
 
 
+        #region Main Dashbord 
         public IActionResult Dashbord()
         {
             var Tcount = _Admin.TotalCountPatient();
@@ -84,12 +87,13 @@ namespace HalloDoc.Controllers
                     break;
             }
 
-            var caseTag = _Admin.getAllCaseTag();
             var region = _Admin.getAllRegion();
-            var dashData = new DashTable { Tdata = Req.ToList(), Casetags = caseTag, Regions = region };
+            var dashData = new DashTable { Tdata = Req.ToList(), Regions = region };
 
             return PartialView("TablePartial", dashData);
         }
+
+        #endregion
 
         public IActionResult ExportAll()
         {
@@ -142,20 +146,49 @@ namespace HalloDoc.Controllers
         #endregion
 
 
+        #region CancelCase
+        public IActionResult PopupCancelcase(int reqid)
+        {
+            var client = _Admin.GetClientById(reqid);
+            var caseTag = _Admin.getAllCaseTag();
+            var popupModel = new popupModel { Requestclient = client, Casetags = caseTag };
+            return PartialView("PopupCancelcase", popupModel);
+        }
+
         public IActionResult CancelReq(string CancelNote, string tag, int reqid)
         {
-            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
-            short Cancelstatus = 3;
             if (tag != null)
             {
+                int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                short Cancelstatus = 3;
                 string CancelNotes = tag + CancelNote;
                 _Admin.AddreqLogStatus(reqid, CancelNotes, AdminId, Cancelstatus);
                 _Admin.updateReqStatus(reqid, Cancelstatus);
+                return Json(new { value = "Ok" });
             }
-            return RedirectToAction("Dashbord");
+            else
+            {
+                TempData["msg"] = "Please Select Reason !";
+                var client = _Admin.GetClientById(reqid);
+                var caseTag = _Admin.getAllCaseTag();
+                var popupModel = new popupModel { Requestclient = client, Casetags = caseTag };
+                return PartialView("PopupCancelcase", popupModel);
+            }
+
         }
+        #endregion
+
 
         #region Assign Physician
+
+        public IActionResult PopupAssigncase(int reqid)
+        {
+            var client = _Admin.GetClientById(reqid);
+            var region = _Admin.getAllRegion();
+            var popupModel = new popupModel { Requestclient = client, Regions = region};
+            return PartialView("PopupAssigncase", popupModel);
+        }
+
         public IActionResult CheckPhysician(int region)
         {
             var phy = _Admin.GetAvaliablePhysician(region);
@@ -164,30 +197,51 @@ namespace HalloDoc.Controllers
 
         public IActionResult AssignReq(string AssignNote, int phyId, int reqid)
         {
-            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
-            short Assignstatus = 2;
             if (phyId != 0)
             {
+                int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                short Assignstatus = 2;
                 _Admin.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId);
                 _Admin.updateReqStatusWithPhysician(reqid, phyId, Assignstatus);
+                return Json(new { value = "Ok" });
             }
-            return RedirectToAction("Dashbord");
+            else
+            {
+                TempData["msg"] = "Please Select Physician !";
+                var client = _Admin.GetClientById(reqid);
+                var region = _Admin.getAllRegion();
+                var popupModel = new popupModel { Requestclient = client, Regions = region};
+                return PartialView("PopupAssigncase", popupModel);
+            }
         }
         #endregion
 
-        public IActionResult popup_blockcase(int reqid)
+
+        #region Block Case
+        public IActionResult PopupBlockcase(int reqid)
         {
             var data = _Admin.GetClientById(reqid);
-            return PartialView("popup_blockcase", data);
+            return PartialView("PopupBlockcase", data);
         }
 
         public IActionResult BlockReq(int reqid, string note)
         {
-            short Blockstatus = 11;
-            _Admin.AddBlockRequest(reqid, note);
-            _Admin.updateReqStatus(reqid, 11);
-            return RedirectToAction("Dashbord");
+            if (note != null)
+            {
+                short Blockstatus = 11;
+                _Admin.AddBlockRequest(reqid, note);
+                _Admin.updateReqStatus(reqid, 11);
+                return Json(new { value = "Ok" });
+            }
+            else
+            {
+                TempData["msg"] = "Please Enter Note !";
+                var data = _Admin.GetClientById(reqid);
+                return PartialView("PopupBlockcase", data);
+            }
         }
+        #endregion
+
 
         #region ViewUpload
         public IActionResult ViewUploads(int reqid)
@@ -237,12 +291,13 @@ namespace HalloDoc.Controllers
             string subject = "Documnet files";
             string body = "Check attached document...";
             _Genral.SendEmailOffice365(recEmail, subject, body, file);
-            return RedirectToAction("ViewUploads", new { reqid = reqid }); 
+            return RedirectToAction("ViewUploads", new { reqid = reqid });
         }
 
         #endregion
 
 
+        #region SendOrder
         public IActionResult SendOrder(int reqid)
         {
             var profession = _Admin.getAllHealthProfession();
@@ -252,9 +307,18 @@ namespace HalloDoc.Controllers
 
         public IActionResult checkHealthProfessional(int profession)
         {
-            var profbus = _Admin.getHealthProfessionBussiness(profession); 
+            var profbus = _Admin.getHealthProfessionBussiness(profession);
             return Json(new { Healthprofessional = profbus });
         }
+
+        public IActionResult UpdateSendOrder(int vendorid, int reqid)
+        {
+            var profession = _Admin.getAllHealthProfession();
+            var vendor = _Admin.getVendorDetail(vendorid);
+            var order = new OrderViewModel { Healthprofessionaltype = profession, vendorDetail = vendor, requestId = reqid };
+            return PartialView("_ASendOrder", order);
+        }
+        #endregion
 
         public IActionResult NewRequest(int reqid)
         {

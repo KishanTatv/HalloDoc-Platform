@@ -1,0 +1,76 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model HalloDoc.Entity.AdminDashTable.popupModel;
+
+@{
+}
+
+<div class="modal fade" id="cancelCase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-info p-2">
+                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Confirm Cancellation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Patient Name : <span class="text-info"> @Model.Requestclient.Firstname @Model.Requestclient.Lastname </span>
+                <div class="text-center pt-2">
+                    <div>
+                        <select class="form-select tag" name="tag" id="validationDefault04">
+                            <option selected disabled>Reasons for Cancellation</option>
+                            @foreach (var tagName in Model.Casetags)
+                            {
+                                <option value="@tagName.Name" class="CancelReason"> @tagName.Name </option>
+                            }
+                        </select>
+                        <div class="form-floating mt-2">
+                            <textarea type="text" class="form-control bg-transparent h-25 CancelNotes"
+                                      placeholder="Detail info" name="CancelNote" rows="3" aria-label="Detail info"
+                                      aria-describedby="button-addon2"> </textarea>
+                            <label for="ms-3 text-info">Provide Aditional Notes</label>
+                        </div>
+                        @if (TempData["msg"] != null)
+                        {
+                            <p class="text-danger">@TempData["msg"]</p>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer p-1">
+                <button type="submit" class="btn btn-secondary btn-info text-light cancelCase" data-reqid="@Model.Requestclient.Requestid">Continue</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.cancelCase').click(function () {
+            var reqid = $(this).data('reqid');
+            var CancelNote = $('.CancelNotes').val();
+            var tag = $('.tag').val();
+            $.ajax({
+                url: '/AdminDash/CancelReq',
+                method: 'POST',
+                data: { CancelNote: CancelNote, tag: tag, reqid: reqid },
+                success: function (response) {
+                    if (response.value == null) {
+                        $(".PartialPopup").html(response);
+                        var my = new bootstrap.Modal(document.getElementById('cancelCase'));
+                        my.show();
+                    } else {
+                        window.location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+    });
+</script>

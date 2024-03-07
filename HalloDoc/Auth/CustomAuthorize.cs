@@ -1,10 +1,13 @@
 ﻿using HalloDoc.Entity.Models;
+using HalloDoc.Repository.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,16 +26,29 @@ namespace HalloDoc.Repository
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             string Hallocookie = context.HttpContext.Request.Cookies["HalloCookie"];
+            var jswtService = context.HttpContext.RequestServices.GetService<IJwtToken>();
 
-
-            if (Hallocookie == null)
+            if (jswtService == null)
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "PatientLogin" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "SubmitReq" }));
                 return;
             }
 
-            var role = context.HttpContext.Request.Cookies["CookieRole"];
-            if (_role != role)
+            if(Hallocookie == null || !jswtService.ValidateToken(Hallocookie, out JwtSecurityToken jwtSecurityToken))
+            {
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "SubmitReq" }));
+                return;
+            }
+
+            var roleClaims = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
+            if(roleClaims == null)
+            {
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "SubmitReq" }));
+                return;
+            }
+
+            //var role = context.HttpContext.Request.Cookies["CookieRole"];
+            if (_role != roleClaims.Value || string.IsNullOrWhiteSpace(_role))
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "PatientLogin" }));
                 return;

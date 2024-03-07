@@ -391,5 +391,10 @@ namespace HalloDoc.Repository.Implement
             var data = _context.Healthprofessionals.Where(x => x.Profession == professionTypeId).ToList();
             return data;
         }
+
+        public Healthprofessional getVendorDetail(int vendorid)
+        {
+            return _context.Healthprofessionals.FirstOrDefault(x => x.Vendorid == vendorid);
+        }
     }
 }

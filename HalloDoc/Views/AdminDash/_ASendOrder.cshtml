@@ -32,9 +32,8 @@
                             </select>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <select class="form-select p-0 ps-3 bussinessOption">
+                            <select class="form-select p-0 ps-3 bussinessOption" data-id="@Model.requestId">
                                 <option selected disabled>Bussiness</option>
-                                <option>131</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
@@ -46,7 +45,7 @@
                             <label class="ms-3">Email</label>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="fax number">
+                            <input type="text" class="form-control bg-transparent" placeholder="fax number" asp-for="vendorDetail.Faxnumber">
                             <label class="ms-3">Fax Number</label>
                         </div>
                     </div>
@@ -87,19 +86,33 @@
 <script asp-append-version="true">
     $(document).ready(function () {
         $('.professionOption').blur(function () {
-            console.log($(this).attr('data-id'));
             var profession = $(this).val();
             $.ajax({
                 url: '/AdminDash/checkHealthProfessional',
                 method: 'POST',
                 data: { profession: profession },
                 success: function (response) {
-                    console.log(response);
-                    $(".bussinessOption").empty().append($('<option disabled selected > Bussiness < /option>'));
-                    console.log(response);
-                    $.each(response, function (index, item) {
-                        $(".PhyOption").append($('<option> </option>').val(item.vendorname).text(item.vendorname));
+                    //console.log(response.healthprofessional[0]["vendorname"]);
+                    $(".bussinessOption").empty().append($('<option disabled selected> Bussiness </option>'));
+                    $.each(response.healthprofessional, function (index, item) {
+                        $(".bussinessOption").append($('<option></option>').val(item.vendorid).text(item.vendorname));
                     });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.bussinessOption').blur(function () {
+            var reqid = $(this).attr('data-id');
+            var vendorid = $(this).val();
+            $.ajax({
+                url: '/AdminDash/UpdateSendOrder',
+                method: 'POST',
+                data: { vendorid: vendorid, reqid: reqid },
+                success: function (response) {
+                    console.log("done");
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

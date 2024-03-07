@@ -12,6 +12,6 @@ namespace HalloDoc.Repository.Service.Interface
     {
         string GenrateJwtToken(Aspnetuser aspnetuser);
 
-        bool ValidateToken(string token, JwtSecurityToken jwtSecurityToken);
+        bool ValidateToken(string token, out JwtSecurityToken jwtSecurityToken);
     }
 }

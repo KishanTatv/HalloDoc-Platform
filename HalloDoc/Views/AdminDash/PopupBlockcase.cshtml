@@ -26,6 +26,10 @@
                         </div>
                     </form>
                 </div>
+                @if (TempData["msg"] != null)
+                {
+                    <p class="text-danger m-0">@TempData["msg"]</p>
+                }
             </div>
             <div class="modal-footer p-1">
                 <button type="submit" class="btn btn-secondary btn-info text-light blockReq" data-reqid="@Model.Requestid">Continue</button>
@@ -46,7 +50,13 @@
                 method: 'POST',
                 data: { reqid: reqid, note: note },
                 success: function (response) {
-                    console.log(response);
+                    if(response.value==null){
+                        $(".PartialPopup").html(response);
+                        var my = new bootstrap.Modal(document.getElementById('blockCase'));
+                        my.show();
+                    }else{
+                        window.location.reload();
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

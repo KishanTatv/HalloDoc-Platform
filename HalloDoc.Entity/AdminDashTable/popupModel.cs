@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace HalloDoc.Entity.AdminDashTable
 {
-    public class DashTable
+    public class popupModel
     {
-        public IEnumerable<tableData> Tdata { get; set; } 
-        public List<int> ToatlCount { get; set; }   
-
+        public Requestclient Requestclient { get; set; }
+        public List<Casetag> Casetags { get; set; }
         public List<Region> Regions { get; set; }
     }
 }

@@ -1,0 +1,97 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model HalloDoc.Entity.AdminDashTable.popupModel;
+
+@{
+}
+
+<div class="modal fade" id="assignCase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-info p-2">
+                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Assign Request</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>To assign this request, search and select another Physician</p>
+                <div class="text-center pt-2">
+                    <select class="form-select RegOption" data-id="@Model.Requestclient.Requestid">
+                        <option selected disabled>Narrow Search by Region</option>
+                        @foreach (var regName in Model.Regions)
+                        {
+                            <option value="@regName.Regionid">@regName.Name</option>
+                        }
+                    </select>
+                    <select class="form-select mt-2 PhyOption" name="phyId">
+                        <option selected disabled>Select Physician</option>
+                    </select>
+                    <div class="form-floating mt-2">
+                        <textarea type="text" class="form-control bg-transparent h-25 AssignNote"
+                                  placeholder="Detail info" name="AssignNote" rows="3" aria-label="Detail info"
+                                  aria-describedby="button-addon2"> </textarea>
+                        <label for="ms-3 text-info">Description</label>
+                    </div>
+                </div>
+                @if (TempData["msg"] != null)
+                {
+                    <p class="text-danger m-0">@TempData["msg"]</p>
+                }
+            </div>
+            <div class="modal-footer p-1">
+                <button type="submit" class="btn btn-secondary btn-info text-light AssignCase" data-reqid="@Model.Requestclient.Requestid">Continue</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.RegOption').blur(function () {
+            console.log($(this).attr('data-id'));
+            var region = $(this).val();
+            $.ajax({
+                url: '/AdminDash/CheckPhysician',
+                method: 'POST',
+                data: { region: region },
+                success: function (response) {
+                    $(".PhyOption").empty().append($('<option disabled selected>Select Physician</option>'));
+                    //console.log(response.physician[0]["firstname"]);
+                    $.each(response.physician, function (index, item) {
+                        $(".PhyOption").append($('<option></option>').val(item.physicianid).text(item.firstname));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.AssignCase').click(function () {
+            var reqid = $(this).data('reqid');
+            var AssignNote = $('.AssignNote').val();
+            var phyId = $('.PhyOption').val();
+            $.ajax({
+                url: '/AdminDash/AssignReq',
+                method: 'POST',
+                data: { AssignNote: AssignNote, phyId: phyId, reqid: reqid },
+                success: function (response) {
+                    if (response.value == null) {
+                        $(".PartialPopup").html(response);
+                        var my = new bootstrap.Modal(document.getElementById('assignCase'));
+                        my.show();
+                    } else {
+                        window.location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+    });
+</script>

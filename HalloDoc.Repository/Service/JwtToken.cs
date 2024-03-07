@@ -45,8 +45,10 @@ namespace HalloDoc.Repository.Service
 
         }
 
-        public bool ValidateToken(string token, JwtSecurityToken jwtSecurityToken)
+        public bool ValidateToken(string token,out JwtSecurityToken jwtSecurityToken)
         {
+            jwtSecurityToken = null;
+
             if (token == null)
                 return false;
 
@@ -63,8 +65,8 @@ namespace HalloDoc.Repository.Service
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Iconfig["Jwt:Key"]))
                 }, out SecurityToken validatedToken);
 
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                if(jwtToken != null)
+                jwtSecurityToken = (JwtSecurityToken)validatedToken;
+                if(jwtSecurityToken != null)
                 {
                     return true;
                 }

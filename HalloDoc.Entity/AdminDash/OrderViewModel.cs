@@ -15,6 +15,7 @@ namespace HalloDoc.Entity.AdminDash
 
         public IEnumerable<Healthprofessional> Healthprofessional { get; set; }
 
-        public Orderdetail Orderdetail { get; set; }    
+        public Healthprofessional vendorDetail { get; set; }
+
     }
 }
