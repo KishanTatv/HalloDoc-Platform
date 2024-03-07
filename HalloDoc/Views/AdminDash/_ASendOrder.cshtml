@@ -1,5 +1,5 @@
 ﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @model HalloDoc.Entity.AdminDash.OrderViewModel;
 
@@ -12,7 +12,8 @@
         <div class="HContainer m-auto pt-4">
             <div class="d-flex justify-content-between">
                 <h4 class="m-0">Send Order</h4>
-                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash"
+                   asp-action="Dashbord">
                     <strong class="pe-2">&lt Back</strong>
                 </a>
             </div>
@@ -23,7 +24,7 @@
 
                     <div class="row">
                         <div class="col-md-6 form-floating mt-2">
-                            <select class="form-select p-0 ps-3 professionOption">
+                            <select class="form-select p-0 ps-3" id="professionOption">
                                 <option selected disabled>Select Profession</option>
                                 @foreach (var profession in Model.Healthprofessionaltype)
                                 {
@@ -32,39 +33,47 @@
                             </select>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <select class="form-select p-0 ps-3 bussinessOption" data-id="@Model.requestId">
+                            <select class="form-select p-0 ps-3" id="bussinessOption" data-id="@Model.requestId">
                                 <option selected disabled>Bussiness</option>
                             </select>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="business contact">
+                            <input type="text" class="form-control bg-transparent busCon" placeholder="business contact"
+                                   asp-for="vendorDetail.Businesscontact">
                             <label class="ms-3">Business Contact</label>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="email" class="form-control bg-transparent" placeholder="email">
+                            <input type="email" class="form-control bg-transparent VenEmail" placeholder="email"
+                                   asp-for="vendorDetail.Email">
                             <label class="ms-3">Email</label>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="fax number" asp-for="vendorDetail.Faxnumber">
+                            <input type="text" class="form-control bg-transparent VenFax" placeholder="fax number"
+                                   asp-for="vendorDetail.Faxnumber">
                             <label class="ms-3">Fax Number</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-floating">
-                    <textarea type="text" class="form-control bg-transparent h-25"
-                              placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                    <textarea type="text" class="form-control bg-transparent h-25 prescription" placeholder="Detail info"
+                              id="floatingInput" rows="3" aria-label="Detail info"
                               aria-describedby="button-addon2"> </textarea>
                     <label for="ms-3 text-info">Prescription or Order details</label>
                 </div>
+                @if (TempData["msg"] != null)
+                {
+                    <p class="text-danger m-0">@TempData["msg"]</p>
+                }
 
                 <div class="mt-4 mb-4">
                     <div class="row">
                         <div class="col-md-6 form-floating mt-2">
-                            <label class="p-0 ps-3 text-secondary">Fax Number</label>
-                            <select class="form-select ps-3">
+                            <label class="p-0 ps-3 text-secondary">Number Of Refill</label>
+                            <select class="form-select ps-3 refil">
                                 <option selected disabled>Not required</option>
-                                <option>123</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
                             </select>
                         </div>
                     </div>
@@ -72,7 +81,7 @@
 
 
                 <div class="d-flex justify-content-end mt-4 mb-4">
-                    <div class="btn btn-info text-light me-3 viewNote"> Submit </div>
+                    <div class="btn btn-info text-light me-3 SendOrder" data-id="@Model.requestId"> Submit </div>
                     <button type="button" class="btn btn-danger">Cancel</button>
                 </div>
             </div>
@@ -85,7 +94,7 @@
 
 <script asp-append-version="true">
     $(document).ready(function () {
-        $('.professionOption').blur(function () {
+        $('#professionOption').change(function () {
             var profession = $(this).val();
             $.ajax({
                 url: '/AdminDash/checkHealthProfessional',
@@ -93,9 +102,9 @@
                 data: { profession: profession },
                 success: function (response) {
                     //console.log(response.healthprofessional[0]["vendorname"]);
-                    $(".bussinessOption").empty().append($('<option disabled selected> Bussiness </option>'));
+                    $("#bussinessOption").empty().append($('<option disabled selected> Bussiness </option>'));
                     $.each(response.healthprofessional, function (index, item) {
-                        $(".bussinessOption").append($('<option></option>').val(item.vendorid).text(item.vendorname));
+                        $("#bussinessOption").append($('<option></option>').val(item.vendorid).text(item.vendorname));
                     });
                 },
                 error: function (xhr, status, error) {
@@ -104,15 +113,36 @@
             });
         });
 
-        $('.bussinessOption').blur(function () {
+        $('#bussinessOption').change(function () {
             var reqid = $(this).attr('data-id');
-            var vendorid = $(this).val();
+            var vendorid = $('#bussinessOption').val();
             $.ajax({
                 url: '/AdminDash/UpdateSendOrder',
                 method: 'POST',
                 data: { vendorid: vendorid, reqid: reqid },
                 success: function (response) {
-                    console.log("done");
+                    console.log(response.healthprofessional);
+                    $(".VenFax").val(response.healthprofessional.faxnumber);
+                    $(".VenEmail").val(response.healthprofessional.email);
+                    $(".busCon").val(response.healthprofessional.businesscontact)
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.SendOrder').click(function () {
+            var reqid = $(this).attr('data-id');
+            var vendorid = $('#bussinessOption').val();
+            var prescription = $('.prescription').val();
+            var refil = $('.refil').val();
+            $.ajax({
+                url: '/AdminDash/AddOrder',
+                method: 'POST',
+                data: { vendorid: vendorid, reqid: reqid, prescription: prescription, refil: refil },
+                success: function (response) {
+                    console.log("ok");
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

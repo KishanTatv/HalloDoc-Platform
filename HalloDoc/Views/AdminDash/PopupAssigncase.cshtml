@@ -11,11 +11,27 @@
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content rounded-4">
             <div class="modal-header bg-info p-2">
-                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">Assign Request</h1>
+                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">
+                    @if (ViewBag.PhyCase == "AssignPhy")
+                    {
+                        <span> Assign Request</span >
+                    }
+                    @if (ViewBag.PhyCase == "TransferPhy")
+                    {
+                        <span>Transfer Request</span>
+                    }
+                </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>To assign this request, search and select another Physician</p>
+                 @if (ViewBag.PhyCase == "AssignPhy")
+                {
+                    <p>To assign this request, search and select another Physician</p>
+                }
+                @if (ViewBag.PhyCase == "TransferPhy")
+                {
+                      <p>To transfer this request, search and select another Physician</p>
+                }
                 <div class="text-center pt-2">
                     <select class="form-select RegOption" data-id="@Model.Requestclient.Requestid">
                         <option selected disabled>Narrow Search by Region</option>
@@ -40,7 +56,7 @@
                 }
             </div>
             <div class="modal-footer p-1">
-                <button type="submit" class="btn btn-secondary btn-info text-light AssignCase" data-reqid="@Model.Requestclient.Requestid">Continue</button>
+                <button type="submit" class="btn btn-secondary btn-info text-light AssignCase" data-reqid="@Model.Requestclient.Requestid" data-phycase="@ViewBag.PhyCase">Continue</button>
                 <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
             </div>
         </div>
@@ -72,12 +88,13 @@
 
         $('.AssignCase').click(function () {
             var reqid = $(this).data('reqid');
+            var phycase = $(this).data('phycase');
             var AssignNote = $('.AssignNote').val();
             var phyId = $('.PhyOption').val();
             $.ajax({
                 url: '/AdminDash/AssignReq',
                 method: 'POST',
-                data: { AssignNote: AssignNote, phyId: phyId, reqid: reqid },
+                data: { AssignNote: AssignNote, phycase: phycase, phyId: phyId, reqid: reqid },
                 success: function (response) {
                     if (response.value == null) {
                         $(".PartialPopup").html(response);

@@ -128,7 +128,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
-                                    <div class="dropdown-item AssignCase" data-reqid="@item.RequestId"> Assign Case </div>
+                                    <div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="AssignPhy"> Assign Case </div>
                                 </li>
                             }
                             @if (ViewBag.dTable == 1)
@@ -145,12 +145,12 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                 <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId">View Uploads </div></li>
                             }
                             <li>
-                                <div class="dropdown-item viewNote" data-reqid="@item.RequestId">View Notes</div>
+                                <div class="dropdown-item ViewNote" data-reqid="@item.RequestId">View Notes</div>
                             </li>
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
-                                    <div class="dropdown-item blockCase" data-reqid="@item.RequestId">
+                                    <div class="dropdown-item BlockCase" data-reqid="@item.RequestId">
                                         Block
                                         Patient
                                     </div>
@@ -158,7 +158,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             }
                             @if (ViewBag.dTable == 2)
                             {
-                                <li><a class="dropdown-item" href="#">Transfer</a></li>
+                                <li><div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="TransferPhy">Transfer</div></li>
                             }
                             @if (ViewBag.dTable == 5)
                             {
@@ -302,7 +302,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             });
         });
 
-        $('.viewNote').click(function () {
+        $('.ViewNote').click(function () {
             var reqid = $(this).data('reqid');
             $.ajax({
                 url: '/AdminDash/ViewNotes',
@@ -321,7 +321,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             });
         });
 
-        $('.blockCase').click(function () {
+        $('.BlockCase').click(function () {
             var reqid = $(this).data('reqid');
             $.ajax({
                 url: '/AdminDash/PopupBlockcase',
@@ -340,10 +340,11 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
         $('.AssignCase').click(function () {
             var reqid = $(this).data('reqid');
+            var phyCase = $(this).data('phycase');
             $.ajax({
                 url: '/AdminDash/PopupAssigncase',
                 method: 'POST',
-                data: { reqid: reqid },
+                data: { reqid: reqid, phyCase: phyCase },
                 success: function (response) {
                     $(".PartialPopup").html(response);
                     var my = new bootstrap.Modal(document.getElementById('assignCase'));
@@ -409,6 +410,23 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 }
             });
         });
+
+        //$('.TransferCase').click(function () {
+        //    var reqid = $(this).data('reqid');
+        //    $.ajax({
+        //        url: '/AdminDash/PopupAssigncase',
+        //        method: 'POST',
+        //        data: { reqid: reqid },
+        //        success: function (response) {
+        //            $(".PartialPopup").html(response);
+        //            var my = new bootstrap.Modal(document.getElementById('transferCase'));
+        //            my.show();
+        //        },
+        //        error: function (xhr, status, error) {
+        //            console.error(xhr.responseText);
+        //        }
+        //    });
+        //});
 
     });
 </script>

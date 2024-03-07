@@ -285,7 +285,7 @@ namespace HalloDoc.Repository.Implement
 
         public List<Casetag> getAllCaseTag()
         {
-           var CaseTagData = _context.Casetags.ToList();
+            var CaseTagData = _context.Casetags.ToList();
             return CaseTagData;
         }
 
@@ -302,7 +302,7 @@ namespace HalloDoc.Repository.Implement
             _context.Requeststatuslogs.Add(reqStatus);
             _context.SaveChanges();
         }
-        
+
         public void AddreqLogStatus(int reqid, string note, short status, int adminId, int tranPhyId)
         {
             Requeststatuslog reqStatus = new Requeststatuslog()
@@ -395,6 +395,25 @@ namespace HalloDoc.Repository.Implement
         public Healthprofessional getVendorDetail(int vendorid)
         {
             return _context.Healthprofessionals.FirstOrDefault(x => x.Vendorid == vendorid);
+        }
+
+        public void AddOrderDetail(int vendorid, int adminid, int reqid, string prescription, int refil)
+        {
+            Healthprofessional vendor = getVendorDetail(vendorid);
+            Orderdetail order = new Orderdetail
+            {
+                Vendorid = vendorid,
+                Requestid = reqid,
+                Faxnumber = vendor.Faxnumber,
+                Email = vendor.Email,
+                Businesscontact = vendor.Businesscontact,
+                Prescription = prescription,
+                Noofrefill = refil,
+                Createddate = DateTime.Now,
+                Createdby = adminid.ToString(),
+            };
+            _context.Orderdetails.Add(order);
+            _context.SaveChanges();
         }
     }
 }

@@ -95,6 +95,7 @@ namespace HalloDoc.Controllers
 
         #endregion
 
+
         public IActionResult ExportAll()
         {
             //IEnumerable<tableData> data = _Admin.GetTableData(1);
@@ -140,8 +141,14 @@ namespace HalloDoc.Controllers
             if (note != null)
             {
                 _Admin.addNote(reqid, note);
+                return Json(new { value = "Ok" });
             }
-            return RedirectToAction("ViewNotes", new { reqid = reqid });
+            else
+            {
+                TempData["msg"] = "Please Enter Note!";
+                var data = _Admin.getAllNotes(reqid);
+                return PartialView("_AViewNotes", data);
+            }
         }
         #endregion
 
@@ -181,11 +188,19 @@ namespace HalloDoc.Controllers
 
         #region Assign Physician
 
-        public IActionResult PopupAssigncase(int reqid)
+        public IActionResult PopupAssigncase(int reqid, string phyCase)
         {
             var client = _Admin.GetClientById(reqid);
             var region = _Admin.getAllRegion();
-            var popupModel = new popupModel { Requestclient = client, Regions = region};
+            var popupModel = new popupModel { Requestclient = client, Regions = region };
+            if (phyCase == "AssignPhy")
+            {
+                ViewBag.PhyCase = "AssignPhy";
+            }
+            else if (phyCase == "TransferPhy")
+            {
+                ViewBag.PhyCase = "TransferPhy";
+            }
             return PartialView("PopupAssigncase", popupModel);
         }
 
@@ -195,13 +210,20 @@ namespace HalloDoc.Controllers
             return Json(new { physician = phy });
         }
 
-        public IActionResult AssignReq(string AssignNote, int phyId, int reqid)
+        public IActionResult AssignReq(string AssignNote, string phycase, int phyId, int reqid)
         {
             if (phyId != 0)
             {
                 int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
                 short Assignstatus = 2;
-                _Admin.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId);
+                if (phycase == "AssignPhy")
+                {
+                    _Admin.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId);
+                }
+                else if(phycase == "TransferPhy")
+                {
+
+                }
                 _Admin.updateReqStatusWithPhysician(reqid, phyId, Assignstatus);
                 return Json(new { value = "Ok" });
             }
@@ -210,7 +232,7 @@ namespace HalloDoc.Controllers
                 TempData["msg"] = "Please Select Physician !";
                 var client = _Admin.GetClientById(reqid);
                 var region = _Admin.getAllRegion();
-                var popupModel = new popupModel { Requestclient = client, Regions = region};
+                var popupModel = new popupModel { Requestclient = client, Regions = region };
                 return PartialView("PopupAssigncase", popupModel);
             }
         }
@@ -313,12 +335,35 @@ namespace HalloDoc.Controllers
 
         public IActionResult UpdateSendOrder(int vendorid, int reqid)
         {
-            var profession = _Admin.getAllHealthProfession();
             var vendor = _Admin.getVendorDetail(vendorid);
-            var order = new OrderViewModel { Healthprofessionaltype = profession, vendorDetail = vendor, requestId = reqid };
-            return PartialView("_ASendOrder", order);
+            return Json(new { Healthprofessional = vendor });
+        }
+
+        public IActionResult AddOrder(int vendorid, int reqid, string prescription, int refil)
+        {
+            if (prescription != null)
+            {
+                int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                _Admin.AddOrderDetail(vendorid, AdminId, reqid, prescription, refil);
+                return Json(new { value = "Ok" });
+            }
+            else
+            {
+                TempData["msg"] = "Please Add Prescription !";
+                return View();
+            }
         }
         #endregion
+
+
+        //public IActionResult PopupTransfercase(int reqid)
+        //{
+        //    var client = _Admin.GetClientById(reqid);
+        //    var region = _Admin.getAllRegion();
+        //    var popupModel = new popupModel { Requestclient = client, Regions = region };
+        //    return PartialView("PopupTransfercase", popupModel);
+        //}
+
 
         public IActionResult NewRequest(int reqid)
         {
