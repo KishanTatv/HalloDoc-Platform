@@ -31,6 +31,11 @@ namespace HalloDoc.Repository.Implement
 
         }
 
+        public int getRegionId(string state)
+        {
+            return _context.Regions.FirstOrDefault(x => x.Name.ToLower() == state.ToLower()).Regionid;
+        }
+
         public string CheckAspPassword(string email)
         {
             return _context.Aspnetusers.FirstOrDefault(u => u.Email == email).Passwordhash;
@@ -80,6 +85,7 @@ namespace HalloDoc.Repository.Implement
                 Intyear = client.Dob.Year,
                 Mobile = client.Phonenumber,
                 Email = client.Email,
+                Regionid = getRegionId(client.State),
                 Street = client.Street,
                 City = client.City,
                 State = client.State,
@@ -155,6 +161,7 @@ namespace HalloDoc.Repository.Implement
                 Strmonth = fInfo.clientInformation.Dob.ToString("MMMM"),
                 Intyear = fInfo.clientInformation.Dob.Year,
                 Email = fInfo.clientInformation.Email,
+                Regionid = getRegionId(fInfo.clientInformation.State),
                 Street = fInfo.clientInformation.Street,
                 City = fInfo.clientInformation.City,
                 State = fInfo.clientInformation.State,
@@ -319,6 +326,7 @@ namespace HalloDoc.Repository.Implement
             user.Intdate = userInfo.clientInfo.Dob.Day;
             user.Strmonth = userInfo.clientInfo.Dob.ToString("MMMM");
             user.Intyear = userInfo.clientInfo.Dob.Year;
+            user.Regionid = getRegionId(userInfo.clientInfo.State);
             user.Street = userInfo.clientInfo.Street;
             user.City = userInfo.clientInfo.City;
             user.State = userInfo.clientInfo.State;

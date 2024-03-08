@@ -31,6 +31,7 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="Firstname">
                         <label class="ms-3">First Name</label>
+                        <span asp-validation-for="Firstname" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="Lastname">
@@ -40,6 +41,7 @@
                         <input type="date" class="form-control bg-transparent" 
                                placeholder="Date of birth" asp-for="Dob">
                         <label class="ms-3">Date of Birth</label>
+                        <span asp-validation-for="Dob" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -50,21 +52,20 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="Email">
                         <label class="ms-3">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="Phonenumber"/>
+                        <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="Phonenumber" />
                     </div>
                 </div>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
                         <input type="password" class="form-control bg-transparent" id="password" name="password" placeholder="Password" asp-for="Password" style="display: none;">
                         <label class="ms-3" id="passwordLabel" style="display: none;">Password</label>
-                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="password" class="form-control bg-transparent" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" asp-for="ConfirmPassword" style="display: none;">
                         <label class="ms-3" id="confirmPasswordLabel" style="display: none;">Confirm Password</label>
-                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -85,6 +86,11 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" placeholder="state" asp-for="State">
                         <label class="ms-3">State</label>
+                        <span asp-validation-for="State" class="text-danger"></span>
+                        @if (TempData["Msg"] != null)
+                        {
+                            <span class="text-danger ">@TempData["Msg"]</span>
+                        }
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" maxlength="6" class="form-control bg-transparent" placeholder="zipCode" asp-for="Zipcode">
@@ -104,7 +110,7 @@
                 </div>
             </div>
 
-            @if (ViewBag.ShowAdditionalInput)
+            @if (ViewBag.ShowAdditionalInput == "true")
             {
                 <div class="mt-4 mb-4">
                     <h5>Relation</h5>

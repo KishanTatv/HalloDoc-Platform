@@ -30,6 +30,11 @@ namespace HalloDoc.Repository.Implement
             _config = config;
         }
 
+        public bool CheckAvalibleRegion(string state)
+        {
+            return _context.Regions.Any(x => x.Name.ToLower() == state.ToLower());
+        }
+
 
         public bool CheckExistAspUser(string email)
         {

@@ -12,6 +12,7 @@ namespace HalloDoc.Repository.Interface
 {
     public interface IGenral
     {
+        bool CheckAvalibleRegion(string state);
         bool CheckExistAspUser(string email);
         Aspnetuser getUserRole(string email);
 

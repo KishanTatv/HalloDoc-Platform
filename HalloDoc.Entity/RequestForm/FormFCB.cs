@@ -9,6 +9,7 @@ namespace HalloDoc.Entity.RequestForm
         public ClientInformation clientInformation { get; set; }
 
         [Column("patientFname")]
+        [Required(ErrorMessage = "FirstName is required")]
         [StringLength(100)]
         public string? PatientFname { get; set; }
 
@@ -20,6 +21,7 @@ namespace HalloDoc.Entity.RequestForm
         [StringLength(23)]
         public string? PatientPhonenumber { get; set; }
 
+        [Required(ErrorMessage = "Email is required")]
         [Column("patientEmail")]
         [StringLength(50)]
         public string? PatientEmail { get; set; }

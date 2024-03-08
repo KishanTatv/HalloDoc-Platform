@@ -29,6 +29,7 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="PatientFname">
                         <label class="ms-3">Your First Name</label>
+                        <span asp-validation-for="PatientFname" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="PatientLname">
@@ -37,14 +38,15 @@
                 </div>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="PatientPhonenumber" />
+                        <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="PatientPhonenumber" />
                     </div>   
                     <div class="col-md-6 form-floating mt-2">
                         <input type="email" class="form-control bg-transparent" placeholder="lastName" asp-for="PatientEmail">
                         <label class="ms-3">Your Email</label>
+                        <span asp-validation-for="PatientEmail" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent" id="floatingInputValue"
+                        <input type="text" class="form-control bg-transparent"
                                placeholder="relation with patient">
                         <label class="ms-3">Relation With Patient</label>
                     </div>
@@ -63,15 +65,17 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="clientInformation.Firstname">
                         <label class="ms-3">First Name</label>
+                        <span asp-validation-for="clientInformation.Firstname" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="clientInformation.Lastname">
                         <label class="ms-3">Last Name</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="date" class="form-control bg-transparent" id="floatingInputValue"
-                               placeholder="Date of birth" value="12/05/2023" asp-for="clientInformation.Dob">
+                        <input type="date" class="form-control bg-transparent"
+                               placeholder="Date of birth" asp-for="clientInformation.Dob">
                         <label class="ms-3">Date Of Birth</label>
+                        <span asp-validation-for="clientInformation.Dob" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -82,9 +86,10 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="clientInformation.Email">
                         <label class="ms-3">Your Email</label>
+                        <span asp-validation-for="clientInformation.Email" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" id="phone2" class="form-control h-100 bg-transparent" asp-for="clientInformation.Phonenumber"/>
+                        <input type="text" id="phone2" class="form-control bg-transparent" style="height:58px" asp-for="clientInformation.Phonenumber"/>
                     </div>   
                 </div>
             </div>
@@ -105,6 +110,11 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" placeholder="state" asp-for="clientInformation.State">
                         <label class="ms-3">State</label>
+                        <span asp-validation-for="clientInformation.State" class="text-danger"></span>
+                        @if (TempData["Msg"] != null)
+                        {
+                            <span class="text-danger ">@TempData["Msg"]</span>
+                        }
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="number" class="form-control bg-transparent" placeholder="zipCode" asp-for="clientInformation.Zipcode">

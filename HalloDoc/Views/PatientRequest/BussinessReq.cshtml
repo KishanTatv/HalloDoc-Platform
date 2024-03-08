@@ -22,31 +22,33 @@
                 <h5>Bussiness Information</h5>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent"  placeholder="firstNmae" asp-for="PatientFname">
+                        <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="PatientFname">
                         <label class="ms-3">Your First Name</label>
+                        <span asp-validation-for="PatientFname" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent"  placeholder="lastName" asp-for="PatientLname">
+                        <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="PatientLname">
                         <label class="ms-3">Your Last Name</label>
                     </div>
                 </div>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="PatientPhonenumber" />
-                    </div>   
+                        <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="PatientPhonenumber" />
+                    </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="email" class="form-control bg-transparent"  placeholder="email" asp-for="PatientEmail">
+                        <input type="email" class="form-control bg-transparent" placeholder="email" asp-for="PatientEmail">
                         <label class="ms-3">Your Email</label>
+                        <span asp-validation-for="PatientEmail" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent" 
+                        <input type="text" class="form-control bg-transparent"
                                placeholder="bussinessName" asp-for="PatientProperty">
                         <label class="ms-3">Bussiness/Property Name</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent"  placeholder="caseNumber" asp-for="PatientCase">
+                        <input type="text" class="form-control bg-transparent" placeholder="caseNumber" asp-for="PatientCase">
                         <label class="ms-3">Case Number (Optional)</label>
                     </div>
                 </div>
@@ -56,23 +58,25 @@
                 <h5>Patient Information</h5>
                 <div class="form-floating">
                     <textarea type="text" class="form-control bg-transparent border h-25" placeholder="Detail info"
-                               rows="3" aria-label="Detail info"
+                              rows="3" aria-label="Detail info"
                               aria-describedby="button-addon2" asp-for="clientInformation.Symptoms"></textarea>
                     <label class="ms-3">Enter Brief Detail of Symptoms(options)</label>
                 </div>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent"  placeholder="firstNmae" asp-for="clientInformation.Firstname">
+                        <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="clientInformation.Firstname">
                         <label class="ms-3">First Name</label>
+                        <span asp-validation-for="clientInformation.Firstname" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent"  placeholder="lastName" asp-for="clientInformation.Lastname">
+                        <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="clientInformation.Lastname">
                         <label class="ms-3">Last Name</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="date" class="form-control bg-transparent" id="floatingInputValue"
-                               placeholder="Date of birth" value="12/05/2023" asp-for="clientInformation.Dob">
+                        <input type="date" class="form-control bg-transparent"
+                               placeholder="Date of birth" asp-for="clientInformation.Dob">
                         <label class="ms-3">Date Of Birth</label>
+                        <span asp-validation-for="clientInformation.Dob" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -83,10 +87,11 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="email" id="email" class="form-control bg-transparent" id="email" placeholder="lastName" asp-for="clientInformation.Email">
                         <label class="ms-3">Your Email</label>
+                        <span asp-validation-for="clientInformation.Email" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" id="phone2" class="form-control h-100 bg-transparent" asp-for="clientInformation.Phonenumber"/>
-                    </div>   
+                        <input type="text" id="phone2" class="form-control bg-transparent" style="height:58px" asp-for="clientInformation.Phonenumber" />
+                    </div>
                 </div>
             </div>
 
@@ -94,25 +99,30 @@
                 <h5>Patient Location</h5>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent"  placeholder="street" asp-for="clientInformation.Street">
+                        <input type="text" class="form-control bg-transparent" placeholder="street" asp-for="clientInformation.Street">
                         <label class="ms-3">Street</label>
                     </div>
                     <div class="col-md-6 d-flex form-floating mt-2 ">
-                        <input type="text" class="form-control bg-transparent"  placeholder="city" asp-for="clientInformation.City">
+                        <input type="text" class="form-control bg-transparent" placeholder="city" asp-for="clientInformation.City">
                         <label class="ms-3">City</label>
                     </div>
                 </div>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent"  placeholder="state" asp-for="clientInformation.State">
+                        <input type="text" class="form-control bg-transparent" placeholder="state" asp-for="clientInformation.State">
                         <label class="ms-3">State</label>
+                        <span asp-validation-for="clientInformation.State" class="text-danger"></span>
+                        @if (TempData["Msg"] != null)
+                        {
+                            <span class="text-danger ">@TempData["Msg"]</span>
+                        }
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="number" class="form-control bg-transparent"  placeholder="zipCode" asp-for="clientInformation.Zipcode">
+                        <input type="number" class="form-control bg-transparent" placeholder="zipCode" asp-for="clientInformation.Zipcode">
                         <label class="ms-3">Zip Code</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent"  placeholder="roomSuite" asp-for="clientInformation.Locroom">
+                        <input type="text" class="form-control bg-transparent" placeholder="roomSuite" asp-for="clientInformation.Locroom">
                         <label class="ms-3">Room # / Suite(optional)</label>
                     </div>
                 </div>
@@ -124,7 +134,7 @@
 
                 <!-- Modal -->
                 <partial name="partial/ModalPartial" />
-          
+
             </div>
 
         </form>
