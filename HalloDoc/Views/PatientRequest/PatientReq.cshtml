@@ -67,6 +67,10 @@
                         <input type="password" class="form-control bg-transparent" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" asp-for="ConfirmPassword" style="display: none;">
                         <label class="ms-3" id="confirmPasswordLabel" style="display: none;">Confirm Password</label>
                     </div>
+                    @if (TempData["Msg"] != null)
+                    {
+                        <span class="text-danger ">@TempData["Msg"]</span>
+                    }
                 </div>
             </div>
 

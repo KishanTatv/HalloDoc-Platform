@@ -29,6 +29,7 @@ namespace HalloDoc.Controllers
         }
 
 
+        #region Patient request
         [HttpGet]
         public IActionResult PatientReq()
         {
@@ -59,7 +60,17 @@ namespace HalloDoc.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (genral.CheckAvalibleRegion(Clientinfo.State))
+                if (!genral.CheckAvalibleRegion(Clientinfo.State))
+                {
+                    TempData["Msg"] = "Not Avliable Region";
+                    return View();
+                }
+                else if (Clientinfo.Password != Clientinfo.ConfirmPassword)
+                {
+                    TempData["Msg"] = "Password Mismatch";
+                    return View();
+                }
+                else
                 {
                     Request request;
                     if (genral.CheckExistAspUser(Clientinfo.Email))
@@ -94,19 +105,17 @@ namespace HalloDoc.Controllers
                     }
                     return RedirectToAction("Dashbord", "PatientDash");
                 }
-                else
-                {
-                    TempData["Msg"] = "Not Avliable Region";
-                    return View();
-                }
+                
             }
             else
             {
                 return View();
             }
         }
+        #endregion
 
 
+        #region Family request
         [HttpGet]
         public IActionResult FamilyReq()
         {
@@ -177,8 +186,10 @@ namespace HalloDoc.Controllers
                 return View();
             }
         }
+        #endregion
 
 
+        #region Concierge request
         [HttpGet]
         public IActionResult ConciergeReq()
         {
@@ -235,9 +246,10 @@ namespace HalloDoc.Controllers
                 return View();
             }
         }
+        #endregion
 
 
-
+        #region Bussiness request
         [HttpGet]
         public IActionResult BussinessReq()
         {
@@ -294,6 +306,7 @@ namespace HalloDoc.Controllers
                 return View();
             }
         }
+        #endregion
 
 
 
