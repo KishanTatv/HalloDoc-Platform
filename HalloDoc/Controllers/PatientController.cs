@@ -78,6 +78,7 @@ namespace HalloDoc.Controllers
                         Response.Cookies.Append("HalloCookie", UserToken);
                         Response.Cookies.Append("CookieEmail", user.Email);
                         Response.Cookies.Append("CookieUserName", userName);
+                        Response.Cookies.Append("CookieRole", asp.Aspnetuserrole.Role.Id.ToString());
 
                         if (asp.Aspnetuserrole.Role.Name == "Patient")
                         {

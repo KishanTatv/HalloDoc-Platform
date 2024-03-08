@@ -7,6 +7,9 @@ using HalloDoc.Entity.Models;
 using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Mail;
+using Windows.Networking;
 
 namespace HalloDoc.Controllers
 {
@@ -141,13 +144,12 @@ namespace HalloDoc.Controllers
             if (note != null)
             {
                 _Admin.addNote(reqid, note);
-                return Json(new { value = "Ok" });
+                return RedirectToAction("ViewNotes", new { reqid = reqid });
             }
             else
             {
                 TempData["msg"] = "Please Enter Note!";
-                var data = _Admin.getAllNotes(reqid);
-                return PartialView("_AViewNotes", data);
+                return RedirectToAction("ViewNotes", new { reqid = reqid });
             }
         }
         #endregion
@@ -175,11 +177,7 @@ namespace HalloDoc.Controllers
             }
             else
             {
-                TempData["msg"] = "Please Select Reason !";
-                var client = _Admin.GetClientById(reqid);
-                var caseTag = _Admin.getAllCaseTag();
-                var popupModel = new popupModel { Requestclient = client, Casetags = caseTag };
-                return PartialView("PopupCancelcase", popupModel);
+                return Json(new { value = "Error" });
             }
 
         }
@@ -215,25 +213,23 @@ namespace HalloDoc.Controllers
             if (phyId != 0)
             {
                 int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
-                short Assignstatus = 2;
                 if (phycase == "AssignPhy")
                 {
+                    short Assignstatus = 1;
                     _Admin.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId);
+                    _Admin.updateReqStatusWithPhysician(reqid, phyId, Assignstatus);
                 }
-                else if(phycase == "TransferPhy")
+                else if (phycase == "TransferPhy")
                 {
-
+                    short Transferstatus = 2;
+                    _Admin.AddreqLogStatus(reqid, AssignNote, Transferstatus, AdminId, phyId);
+                    _Admin.updateReqStatusWithPhysician(reqid, phyId, Transferstatus);
                 }
-                _Admin.updateReqStatusWithPhysician(reqid, phyId, Assignstatus);
                 return Json(new { value = "Ok" });
             }
             else
             {
-                TempData["msg"] = "Please Select Physician !";
-                var client = _Admin.GetClientById(reqid);
-                var region = _Admin.getAllRegion();
-                var popupModel = new popupModel { Requestclient = client, Regions = region };
-                return PartialView("PopupAssigncase", popupModel);
+                return Json(new { value = "Error" });
             }
         }
         #endregion
@@ -257,9 +253,7 @@ namespace HalloDoc.Controllers
             }
             else
             {
-                TempData["msg"] = "Please Enter Note !";
-                var data = _Admin.GetClientById(reqid);
-                return PartialView("PopupBlockcase", data);
+                return Json(new { value = "Error" });
             }
         }
         #endregion
@@ -309,11 +303,34 @@ namespace HalloDoc.Controllers
 
         public IActionResult SendMailDoc(List<string> file, int reqid)
         {
+            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            Nullable<int> Phyid = null;
+            int roleId = Convert.ToInt32(Request.Cookies["CookieRole"]);
             string recEmail = _Genral.getClientEmailbyReqId(reqid);
             string subject = "Documnet files";
             string body = "Check attached document...";
-            _Genral.SendEmailOffice365(recEmail, subject, body, file);
-            return RedirectToAction("ViewUploads", new { reqid = reqid });
+
+            if(file.Count() > 0)
+            {
+               _Genral.SendEmailOffice365(recEmail, subject, body, file);
+                string fileName = null;
+                foreach (var files in file)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", files);
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        fileName += filePath + " ";
+                    }
+                }
+                _Genral.addEmailLog(body, subject, recEmail, fileName, roleId, reqid, AdminId, Phyid);
+                return Json(new { value = "Ok" });
+            }
+            else
+            {
+                return Json(new { value = "Error" });
+            }
+
+
         }
 
         #endregion
@@ -341,28 +358,40 @@ namespace HalloDoc.Controllers
 
         public IActionResult AddOrder(int vendorid, int reqid, string prescription, int refil)
         {
-            if (prescription != null)
+            if(vendorid == 0)
             {
-                int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
-                _Admin.AddOrderDetail(vendorid, AdminId, reqid, prescription, refil);
-                return Json(new { value = "Ok" });
+                return Json(new { value = "ErrorV" });
+            }
+            else if(prescription == null)
+            {
+                return Json(new { value = "ErrorP" });
             }
             else
             {
-                TempData["msg"] = "Please Add Prescription !";
-                return View();
+                int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                _Admin.AddOrderDetail(vendorid, AdminId, reqid, prescription, refil);
+                return RedirectToAction("SendOrder", new { reqid = reqid });
             }
         }
         #endregion
 
 
-        //public IActionResult PopupTransfercase(int reqid)
-        //{
-        //    var client = _Admin.GetClientById(reqid);
-        //    var region = _Admin.getAllRegion();
-        //    var popupModel = new popupModel { Requestclient = client, Regions = region };
-        //    return PartialView("PopupTransfercase", popupModel);
-        //}
+        #region Clear Case
+        public IActionResult clearcase(int reqid)
+        {
+            var data = _Admin.GetClientById(reqid);
+            return PartialView("PopupClearcase", data);
+        }
+
+        public IActionResult clearRequest(int reqid)
+        {
+            short ClearStatus = 9;
+            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            _Admin.AddreqLogStatus(reqid, null, AdminId, ClearStatus);
+            _Admin.updateReqStatus(reqid, ClearStatus);
+            return Ok();
+        }
+        #endregion
 
 
         public IActionResult NewRequest(int reqid)

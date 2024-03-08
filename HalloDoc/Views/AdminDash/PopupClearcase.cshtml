@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HalloDoc.Entity.Models.Requestclient;
+
+@{
+}
+
+<div class="modal fade" id="clearCase" tabindex="1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center text-black">
+                <h1 class="p-3">
+                    <i class="bi bi-exclamation-circle-fill fs-1 text-warning"></i>
+                </h1>
+                <h4>Confirmation for clear case</h4>
+                <p class="ms-4 me-4 m-auto">
+                    Are sure you want to clear this request? once clear this request then you are not able to see this request
+                </p>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-secondary btn-info me-2 text-light clearReq" data-reqid="@Model.Requestid" data-bs-dismiss="modal"> Clear </button>
+                    <button type="button" class="btn btn-outline-info ms-2" data-bs-dismiss="modal"> Cancel </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.clearReq').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/clearRequest',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

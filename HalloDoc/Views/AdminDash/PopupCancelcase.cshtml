@@ -16,26 +16,21 @@
             </div>
             <div class="modal-body">
                 Patient Name : <span class="text-info"> @Model.Requestclient.Firstname @Model.Requestclient.Lastname </span>
-                <div class="text-center pt-2">
-                    <div>
-                        <select class="form-select tag" name="tag" id="validationDefault04">
-                            <option selected disabled>Reasons for Cancellation</option>
-                            @foreach (var tagName in Model.Casetags)
-                            {
-                                <option value="@tagName.Name" class="CancelReason"> @tagName.Name </option>
-                            }
-                        </select>
-                        <div class="form-floating mt-2">
-                            <textarea type="text" class="form-control bg-transparent h-25 CancelNotes"
-                                      placeholder="Detail info" name="CancelNote" rows="3" aria-label="Detail info"
-                                      aria-describedby="button-addon2"> </textarea>
-                            <label for="ms-3 text-info">Provide Aditional Notes</label>
-                        </div>
-                        @if (TempData["msg"] != null)
+                <div class="pt-2">
+                    <select class="form-select tag" name="tag" id="validationDefault04">
+                        <option selected disabled>Reasons for Cancellation</option>
+                        @foreach (var tagName in Model.Casetags)
                         {
-                            <p class="text-danger">@TempData["msg"]</p>
+                            <option value="@tagName.Name" class="CancelReason"> @tagName.Name </option>
                         }
+                    </select>
+                    <div class="form-floating mt-2">
+                        <textarea type="text" class="form-control bg-transparent h-25 CancelNotes"
+                                  placeholder="Detail info" name="CancelNote" rows="3" aria-label="Detail info"
+                                  aria-describedby="button-addon2"> </textarea>
+                        <label for="ms-3 text-info">Provide Aditional Notes</label>
                     </div>
+                    <p class="text-danger m-0"></p>
                 </div>
             </div>
             <div class="modal-footer p-1">
@@ -58,12 +53,10 @@
                 method: 'POST',
                 data: { CancelNote: CancelNote, tag: tag, reqid: reqid },
                 success: function (response) {
-                    if (response.value == null) {
-                        $(".PartialPopup").html(response);
-                        var my = new bootstrap.Modal(document.getElementById('cancelCase'));
-                        my.show();
-                    } else {
+                    if (response.value == "Ok") {
                         window.location.reload();
+                    } else if (response.value == "Error") {
+                        $(".text-danger").text("Please Select Reason!");
                     }
                 },
                 error: function (xhr, status, error) {

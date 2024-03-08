@@ -303,7 +303,7 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        public void AddreqLogStatus(int reqid, string note, short status, int adminId, int tranPhyId)
+        public void AddreqLogStatus(int reqid, string note, short status, int adminId, int phyid)
         {
             Requeststatuslog reqStatus = new Requeststatuslog()
             {
@@ -311,13 +311,12 @@ namespace HalloDoc.Repository.Implement
                 Notes = note,
                 Status = status,
                 Adminid = adminId,
-                Transtophysicianid = tranPhyId,
+                Transtophysicianid = phyid,
                 Createddate = System.DateTime.Now
             };
             _context.Requeststatuslogs.Add(reqStatus);
             _context.SaveChanges();
         }
-
 
         public void updateReqStatus(int reqid, short status)
         {
@@ -377,7 +376,6 @@ namespace HalloDoc.Repository.Implement
             _context.Requestwisefiles.Update(filedata);
             _context.SaveChanges();
         }
-
 
 
         public List<Healthprofessionaltype> getAllHealthProfession()

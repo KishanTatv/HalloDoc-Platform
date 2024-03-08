@@ -1,7 +1,6 @@
 ﻿@*
 For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model HalloDoc.Entity.AdminDash.OrderViewModel;
 
 @{
 }
@@ -17,6 +16,8 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     <strong class="pe-2">&lt Back</strong>
                 </a>
             </div>
+
+            <p class="text-success text-center m-0"></p>
 
             <div class=" rounded shadow p-4 rounded-3">
                 <div class="mb-4">
@@ -38,18 +39,15 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             </select>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent busCon" placeholder="business contact"
-                                   asp-for="vendorDetail.Businesscontact">
+                            <input type="text" class="form-control bg-transparent busCon" placeholder="business contact">
                             <label class="ms-3">Business Contact</label>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="email" class="form-control bg-transparent VenEmail" placeholder="email"
-                                   asp-for="vendorDetail.Email">
+                            <input type="email" class="form-control bg-transparent VenEmail" placeholder="email">
                             <label class="ms-3">Email</label>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent VenFax" placeholder="fax number"
-                                   asp-for="vendorDetail.Faxnumber">
+                            <input type="text" class="form-control bg-transparent VenFax" placeholder="fax number">
                             <label class="ms-3">Fax Number</label>
                         </div>
                     </div>
@@ -61,10 +59,8 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                               aria-describedby="button-addon2"> </textarea>
                     <label for="ms-3 text-info">Prescription or Order details</label>
                 </div>
-                @if (TempData["msg"] != null)
-                {
-                    <p class="text-danger m-0">@TempData["msg"]</p>
-                }
+
+                <p class="text-danger m-0"></p>
 
                 <div class="mt-4 mb-4">
                     <div class="row">
@@ -142,7 +138,14 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 method: 'POST',
                 data: { vendorid: vendorid, reqid: reqid, prescription: prescription, refil: refil },
                 success: function (response) {
-                    console.log("ok");
+                    if (response.value == "ErrorP") {
+                        $(".text-danger").text("Please Add Prescription!");
+                    } else if (response.value == "ErrorV"){
+                        $(".text-danger").text("Please Select Bussiness!");
+                    } else {
+                        $("#partial").html(response);
+                        $(".text-success").text("Order Send Successfully !");
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

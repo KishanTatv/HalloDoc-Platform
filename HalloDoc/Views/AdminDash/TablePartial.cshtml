@@ -171,7 +171,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             }
                             @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
                             {
-                                <li><a class="dropdown-item" href="#">Clear Case</a></li>
+                                <li><div class="dropdown-item ClearCase" data-reqid="@item.RequestId">Clear Case</div></li>
                             }
                             @if (ViewBag.dTable == 2)
                             {
@@ -255,10 +255,13 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-end me-3 pb-2">
-        @for (int i = 1; i <= ViewBag.TPage; i++)
+        @if(ViewBag.TPage > 1)
+        {
+            @for (int i = 1; i <= ViewBag.TPage; i++)
             {
                 <li class="page-item"><div class="page-link" data-id="@ViewBag.dTable" data-page="@(i - 1)">@i</div></li>
             }
+        }
     </ul>
 </nav>
 
@@ -267,6 +270,14 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
 <script asp-append-version="true">
     $(document).ready(function () {
+
+        function hideOtherPortion(){
+            const dashHead = document.querySelector('.dashHead');
+            const dashs = document.querySelector('.DashSearch');
+            dashHead.classList.add('d-none');
+            dashs.classList.add('d-none');
+        }
+
         $('.page-link').click(function () {
             var id = $(this).data('id');
             var page = $(this).data('page');
@@ -290,10 +301,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    const dashHead = document.querySelector('.dashHead');
-                    const dashs = document.querySelector('.DashSearch');
-                    dashHead.classList.add('d-none');
-                    dashs.classList.add('d-none');
+                    hideOtherPortion();
                     $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
@@ -309,10 +317,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    const dashHead = document.querySelector('.dashHead');
-                    const dashs = document.querySelector('.DashSearch');
-                    dashHead.classList.add('d-none');
-                    dashs.classList.add('d-none');
+                    hideOtherPortion();
                     $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
@@ -380,10 +385,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    const dashHead = document.querySelector('.dashHead');
-                    const dashs = document.querySelector('.DashSearch');
-                    dashHead.classList.add('d-none');
-                    dashs.classList.add('d-none');
+                    hideOtherPortion();
                     $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
@@ -399,10 +401,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    const dashHead = document.querySelector('.dashHead');
-                    const dashs = document.querySelector('.DashSearch');
-                    dashHead.classList.add('d-none');
-                    dashs.classList.add('d-none');
+                    hideOtherPortion();
                     $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
@@ -411,22 +410,23 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             });
         });
 
-        //$('.TransferCase').click(function () {
-        //    var reqid = $(this).data('reqid');
-        //    $.ajax({
-        //        url: '/AdminDash/PopupAssigncase',
-        //        method: 'POST',
-        //        data: { reqid: reqid },
-        //        success: function (response) {
-        //            $(".PartialPopup").html(response);
-        //            var my = new bootstrap.Modal(document.getElementById('transferCase'));
-        //            my.show();
-        //        },
-        //        error: function (xhr, status, error) {
-        //            console.error(xhr.responseText);
-        //        }
-        //    });
-        //});
+        $('.ClearCase').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/clearcase',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    $(".PartialPopup").html(response);
+                    var my = new bootstrap.Modal(document.getElementById('clearCase'));
+                    my.show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
 
     });
 </script>

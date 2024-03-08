@@ -20,6 +20,7 @@
 
             <div class=" rounded shadow p-4 rounded-3">
                 <div class="mb-4">
+                    <p class="text-success text-center m-0"></p>
                     <h5>Patient Name</h5>
 
                     <div>
@@ -50,8 +51,10 @@
                     </form>
                 </div>
 
+                        <p class="text-danger text-center m-0"></p>
                 <form class="d-inline" asp-controller="Home" asp-action="DownloadAllFile" method="post">
                     <div class="d-flex justify-content-between">
+
                         <h5>Documents</h5>
 
                         <div>
@@ -91,7 +94,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <p><i class="bi bi-file-earmark-pdf-fill text-danger"></i> @item.Filename</p>
+                                            <p><i class="bi bi-file-earmark-pdf-fill"></i> @item.Filename</p>
                                         </td>
                                         <td>
                                             <p>@item.Createddate.ToString("MMMM dd, yyyy")</p>
@@ -230,7 +233,14 @@
             method: 'POST',
             data: { file: files, reqid: reqid },
             success: function (response) {
-                console.log("hg");
+                if (response.value == "Ok"){
+                    $(".text-success").text("Mail Sent Successfully !");
+                    $(".checkboxClass").prop('checked', false);
+                    $(".text-danger").text("");
+                }
+                else if (response.value == "Error") {
+                    $(".text-danger").text("Please select file to send mail !");
+                }
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

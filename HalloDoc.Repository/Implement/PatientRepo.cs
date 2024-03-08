@@ -50,6 +50,7 @@ namespace HalloDoc.Repository.Implement
                 Username = client.Firstname + " " + client.Lastname,
                 Passwordhash = client.Password,
                 Phonenumber = client.Phonenumber,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Aspnetusers.Add(asp);
             _context.SaveChanges();
@@ -61,7 +62,7 @@ namespace HalloDoc.Repository.Implement
             Aspnetuserrole aspRole = new Aspnetuserrole
             {
                 Userid = aspid,
-                Roleid = 3
+                Roleid = 3,
             };
             _context.Aspnetuserroles.Add(aspRole);
             _context.SaveChanges();
@@ -82,6 +83,7 @@ namespace HalloDoc.Repository.Implement
                 Street = client.Street,
                 City = client.City,
                 State = client.State,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
                 Zipcode = client.Zipcode
             };
             _context.Users.Add(user);
@@ -107,6 +109,7 @@ namespace HalloDoc.Repository.Implement
                 Lastname = client.Lastname,
                 Phonenumber = client.Phonenumber,
                 Email = client.Email,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
                 Locroom = client.Locroom,
             };
             _context.Requests.Add(req);
@@ -131,6 +134,7 @@ namespace HalloDoc.Repository.Implement
                 City = client.City,
                 State = client.State,
                 Zipcode = client.Zipcode,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Requestclients.Add(reqClient);
             _context.SaveChanges();
@@ -155,6 +159,7 @@ namespace HalloDoc.Repository.Implement
                 City = fInfo.clientInformation.City,
                 State = fInfo.clientInformation.State,
                 Zipcode = fInfo.clientInformation.Zipcode,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -174,6 +179,7 @@ namespace HalloDoc.Repository.Implement
                 Email = fInfo.PatientEmail,
                 Confirmationnumber = "M" + Guid.NewGuid().ToString().Substring(0, 9).ToUpper(),
                 Locroom = fInfo.clientInformation.Locroom,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Requests.Add(request);
             _context.SaveChanges();
@@ -197,7 +203,8 @@ namespace HalloDoc.Repository.Implement
                 Street = fInfo.clientInformation.Street,
                 City = fInfo.clientInformation.City,
                 State = fInfo.clientInformation.State,
-                Zipcode = fInfo.clientInformation.Zipcode
+                Zipcode = fInfo.clientInformation.Zipcode,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Requestclients.Add(reqClient);
             _context.SaveChanges();
@@ -223,7 +230,8 @@ namespace HalloDoc.Repository.Implement
             Requestconcierge conReq = new Requestconcierge
             {
                 Requestid = ReqId,
-                Conciergeid = ConciergeId
+                Conciergeid = ConciergeId,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString()
             };
             _context.Requestconcierges.Add(conReq);
             _context.SaveChanges();
@@ -247,7 +255,8 @@ namespace HalloDoc.Repository.Implement
             Requestbusiness reqbus = new Requestbusiness
             {
                 Requestid = ReqId,
-                Businessid = BussinessId
+                Businessid = BussinessId,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Requestbusinesses.Add(reqbus);
             _context.SaveChanges();
@@ -262,6 +271,7 @@ namespace HalloDoc.Repository.Implement
             {
                 Email = user.Email,
                 Passwordhash = user.ConfirmPassword.GetHashCode().ToString(),
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             Console.WriteLine(user.ConfirmPassword.GetHashCode().ToString());
             _context.Aspnetusers.Add(asp);
@@ -274,6 +284,7 @@ namespace HalloDoc.Repository.Implement
         {
             User user = _context.Users.FirstOrDefault(x => x.Email == email);
             user.Aspnetuserid = aspId;
+            user.Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString();
             _context.Users.Update(user);
             _context.SaveChanges();
         }

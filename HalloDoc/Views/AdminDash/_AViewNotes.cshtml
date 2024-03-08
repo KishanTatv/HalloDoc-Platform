@@ -92,17 +92,7 @@
                 method: 'POST',
                 data: { note: note, reqid: reqid },
                 success: function (response) {
-                    const dashHead = document.querySelector('.dashHead');
-                    const dashs = document.querySelector('.DashSearch');
-                    dashHead.classList.add('d-none');
-                    dashs.classList.add('d-none');
-                    if (response.value == null) {
                         $("#partial").html(response);
-                    }
-                    else {
-                        window.location.reload();
-                    }
-
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

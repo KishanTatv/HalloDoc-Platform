@@ -4,6 +4,7 @@ using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -65,6 +66,31 @@ namespace HalloDoc.Repository.Implement
         }
 
 
+        public void addEmailLog(string eTemplate, string sub, string recemail, string filepath, int roleid, int reqid, int? adminid, int? phyid)
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = true;
+
+            Emaillog emailLog = new Emaillog
+            {
+                Emailtemplate = eTemplate,
+                Subjectname = sub,
+                Emailid = recemail,
+                Roleid = roleid,
+                Requestid = reqid,
+                Adminid = Convert.ToInt32(adminid),
+                Physicianid = phyid,
+                Filepath = filepath,
+                Sentdate = DateTime.Now,
+                Isemailsent = bitArray,
+                Senttries = 1,
+            };
+            _context.Emaillogs.Add(emailLog);
+            _context.SaveChanges();
+        }
+
+
+
         #region SendMail Office365
         public Task SendEmailOffice365(string recEmail, string subject, string body, List<string> attachment)
         {
@@ -79,7 +105,9 @@ namespace HalloDoc.Repository.Implement
 
             try
             {
-                var mailMsg = new MailMessage(SenderEmail, recEmail);
+                var fromAddress = new MailAddress(SenderEmail, "HalloDoc Platform");
+                var toAddress = new MailAddress(recEmail);
+                var mailMsg = new MailMessage(fromAddress, toAddress);
                 mailMsg.Subject = subject;
                 mailMsg.Body = body;
 
@@ -104,6 +132,8 @@ namespace HalloDoc.Repository.Implement
 
         }
         #endregion
+
+
 
         #region not work left join GetRequestsFileswithReq
         //public IEnumerable<RequestWithFile> GetRequestsFileswithReq(int reqId)

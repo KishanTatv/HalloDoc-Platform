@@ -51,7 +51,7 @@ namespace HalloDoc.Repository.Interface
         List<Casetag> getAllCaseTag();
 
         void AddreqLogStatus(int reqid, string note, int adminId, short status);
-        void AddreqLogStatus(int reqid, string note, short status, int adminId, int tranPhyId);
+        void AddreqLogStatus(int reqid, string note, short status, int adminId, int phyid);
 
         void updateReqStatus(int reqid, short status);
 
