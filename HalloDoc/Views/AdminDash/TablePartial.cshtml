@@ -175,7 +175,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             }
                             @if (ViewBag.dTable == 2)
                             {
-                                <li><a class="dropdown-item" href="#">Send Agreement</a></li>
+                                <li><div class="dropdown-item SendAgreement" data-reqid="@item.RequestId">Send Agreement</div></li>
                             }
                             @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
                             {
@@ -427,6 +427,22 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             });
         });
 
+        $('.SendAgreement').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/sendAgree',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    $(".PartialPopup").html(response);
+                    var my = new bootstrap.Modal(document.getElementById('sendAgree'));
+                    my.show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
 
     });
 </script>

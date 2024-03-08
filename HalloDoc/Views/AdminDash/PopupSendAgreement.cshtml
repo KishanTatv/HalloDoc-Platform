@@ -1,0 +1,61 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model HalloDoc.Entity.Models.Requestclient;
+
+@{
+}
+
+<div class="modal fade" id="sendAgree" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-info p-2">
+                <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">
+                    Send Agreement
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>To Send Agreement please make sure you are updating the correct contact information below for the responsible party.</p>
+
+                <div class="text-center pt-2">
+                    <div class="form-floating mt-2">
+                        <input type="number" class="form-control bg-transparent" placeholder="contact" asp-for="Phonenumber">
+                        <label>Phone Number</label>
+                    </div>
+                    <div class="form-floating mt-2">
+                        <input type="email" class="form-control bg-transparent" placeholder="eamil" asp-for="Email">
+                        <label>Email</label>
+                    </div>
+                </div>
+                <p class="text-danger m-0">@TempData["msg"]</p>
+            </div>
+            <div class="modal-footer p-1">
+                <button type="submit" class="btn btn-secondary btn-info text-light agreement" data-bs-dismiss="modal" data-reqid="@Model.Requestid">Continue</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.agreement').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/AgrrementSent',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

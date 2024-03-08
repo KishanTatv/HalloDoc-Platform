@@ -96,7 +96,7 @@
                 <div class="btn btn-info text-light NewReq" data-reqid="1"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></div>
                 <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
                 <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
-                <button type="button" class="btn btn-info text-light"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></button>
+                <div class="btn btn-info text-light reqSupport"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></div>
             </div>
         </div>
     </div>
@@ -207,7 +207,11 @@
                 $("#partial").html(response);
             },
             error: function (xhr, status, error) {
-                console.error(xhr.responseText);
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
             }
         });
 
@@ -238,6 +242,24 @@
                 data: { id: id },
                 success: function (response) {
                     $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    if (xhr["status"] == 401) {
+                        window.location.href = "/Patient/PatientLogin";
+                    } else {
+                        console.error(xhr.responseText)
+                    }
+                }
+            });
+        });
+
+        $('.reqSupport').click(function () {
+            $.ajax({
+                url: '/AdminDash/requestSupport',
+                success: function (response) {
+                    $(".PartialPopup").html(response);
+                    var my = new bootstrap.Modal(document.getElementById('reqsupport'));
+                    my.show();
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

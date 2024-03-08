@@ -36,7 +36,18 @@ namespace HalloDoc.Repository
 
             if(Hallocookie == null || !jswtService.ValidateToken(Hallocookie, out JwtSecurityToken jwtSecurityToken))
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "SubmitReq" }));
+                //context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "SubmitReq" }));
+                if (IsAjaxRequest(context.HttpContext.Request))
+                {
+                    context.Result = new JsonResult(
+                        new { Message = "Unauthorization" }
+                    )
+                    { StatusCode = StatusCodes.Status401Unauthorized };
+                }
+                else
+                {
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Patient", action = "Index" }));
+                }
                 return;
             }
 
@@ -53,6 +64,12 @@ namespace HalloDoc.Repository
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "PatientLogin" }));
                 return;
             }
+
+        }
+
+        private bool IsAjaxRequest(HttpRequest request)
+        {
+            return request.Headers["X-Requested-With"] == "XMLHttpRequest";
         }
     }
 }

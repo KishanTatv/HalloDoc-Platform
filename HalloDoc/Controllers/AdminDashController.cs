@@ -99,6 +99,12 @@ namespace HalloDoc.Controllers
         #endregion
 
 
+        public IActionResult requestSupport()
+        {
+            return PartialView("PopupReqSupport");
+        }
+
+
         public IActionResult ExportAll()
         {
             //IEnumerable<tableData> data = _Admin.GetTableData(1);
@@ -389,6 +395,20 @@ namespace HalloDoc.Controllers
             int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
             _Admin.AddreqLogStatus(reqid, null, AdminId, ClearStatus);
             _Admin.updateReqStatus(reqid, ClearStatus);
+            return Ok();
+        }
+        #endregion
+
+
+        #region SendAgreement
+        public IActionResult sendAgree(int reqid)
+        {
+            var data = _Admin.GetClientById(reqid);
+            return PartialView("PopupSendAgreement", data);
+        }
+
+        public IActionResult AgrrementSent(int reqid)
+        {
             return Ok();
         }
         #endregion
