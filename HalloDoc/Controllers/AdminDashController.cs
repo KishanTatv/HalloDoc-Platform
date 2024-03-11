@@ -1,9 +1,11 @@
-﻿
-using DocumentFormat.OpenXml.Drawing.Charts;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using DocumentFormat.OpenXml.Wordprocessing;
 using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
 using HalloDoc.Entity.Models;
+using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -40,16 +42,11 @@ namespace HalloDoc.Controllers
             var region = _Admin.getAllRegion();
 
             var dashData = new DashTable { ToatlCount = Tcount, Regions = region };
-            if (ViewBag.dTable != null)
-            {
-                DashbordData(2, 0);
-                return PartialView("TablePartial", dashData);
-            }
             return View(dashData);
         }
 
 
-        public IActionResult DashbordData(int id, int page)
+        public IActionResult DashbordData(int id, int page, string search)
         {
             var Tcount = _Admin.TotalCountPatient();
             int pageSize = 5;
@@ -61,32 +58,68 @@ namespace HalloDoc.Controllers
                 case 1:   //New
                     ViewBag.TPage = Math.Ceiling(Tcount[0] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableData(page, pageSize);
+                    Req = _Admin.GetTableData();
+                    if (search != null)
+                    {
+                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 2:   //Pending
                     ViewBag.TPage = Math.Ceiling(Tcount[1] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataPending(page, pageSize);
+                    Req = _Admin.GetTableDataPending();
+                    if (search != null)
+                    {
+                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 3:   //Active
                     ViewBag.TPage = Math.Ceiling(Tcount[2] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataActive(page, pageSize);
+                    Req = _Admin.GetTableDataActive();
+                    if (search != null)
+                    {
+                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 4:  //Conclude
                     ViewBag.TPage = Math.Ceiling(Tcount[3] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataConclude(page, pageSize);
+                    Req = _Admin.GetTableDataConclude();
+                    if (search != null)
+                    {
+                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 5:   //To-close
                     ViewBag.TPage = Math.Ceiling(Tcount[4] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataToclose(page, pageSize);
+                    Req = _Admin.GetTableDataToclose();
+                    if (search != null)
+                    {
+                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 6:   //Unpaid
                     ViewBag.TPage = Math.Ceiling(Tcount[5] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataUnpaid(page, pageSize);
+                    Req = _Admin.GetTableDataUnpaid();
+                    if (search != null)
+                    {
+                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
             }
 
@@ -95,7 +128,6 @@ namespace HalloDoc.Controllers
 
             return PartialView("TablePartial", dashData);
         }
-
         #endregion
 
 
@@ -175,10 +207,11 @@ namespace HalloDoc.Controllers
             if (tag != null)
             {
                 int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                Nullable<int> phyId = null;
                 short Cancelstatus = 3;
                 string CancelNotes = tag + CancelNote;
-                _Admin.AddreqLogStatus(reqid, CancelNotes, AdminId, Cancelstatus);
-                _Admin.updateReqStatus(reqid, Cancelstatus);
+                _Genral.AddreqLogStatus(reqid, CancelNotes, AdminId, phyId, Cancelstatus);
+                _Genral.updateReqStatus(reqid, Cancelstatus);
                 return Json(new { value = "Ok" });
             }
             else
@@ -214,22 +247,23 @@ namespace HalloDoc.Controllers
             return Json(new { physician = phy });
         }
 
-        public IActionResult AssignReq(string AssignNote, string phycase, int phyId, int reqid)
+        public IActionResult AssignReq(string AssignNote, string phycase, int TransphyId, int reqid)
         {
-            if (phyId != 0)
+            if (TransphyId != 0)
             {
                 int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                Nullable<int> phyId = null;
                 if (phycase == "AssignPhy")
                 {
                     short Assignstatus = 1;
-                    _Admin.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId);
-                    _Admin.updateReqStatusWithPhysician(reqid, phyId, Assignstatus);
+                    _Genral.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId, TransphyId);
+                    _Genral.updateReqStatusWithPhysician(reqid, TransphyId, Assignstatus);
                 }
                 else if (phycase == "TransferPhy")
                 {
                     short Transferstatus = 2;
-                    _Admin.AddreqLogStatus(reqid, AssignNote, Transferstatus, AdminId, phyId);
-                    _Admin.updateReqStatusWithPhysician(reqid, phyId, Transferstatus);
+                    _Genral.AddreqLogStatus(reqid, AssignNote, Transferstatus, AdminId, phyId, TransphyId);
+                    _Genral.updateReqStatusWithPhysician(reqid, TransphyId, Transferstatus);
                 }
                 return Json(new { value = "Ok" });
             }
@@ -254,7 +288,7 @@ namespace HalloDoc.Controllers
             {
                 short Blockstatus = 11;
                 _Admin.AddBlockRequest(reqid, note);
-                _Admin.updateReqStatus(reqid, 11);
+                _Genral.updateReqStatus(reqid, 11);
                 return Json(new { value = "Ok" });
             }
             else
@@ -316,9 +350,9 @@ namespace HalloDoc.Controllers
             string subject = "Documnet files";
             string body = "Check attached document...";
 
-            if(file.Count() > 0)
+            if (file.Count() > 0)
             {
-               _Genral.SendEmailOffice365(recEmail, subject, body, file);
+                _Genral.SendEmailOffice365(recEmail, subject, body, file);
                 string fileName = null;
                 foreach (var files in file)
                 {
@@ -364,11 +398,11 @@ namespace HalloDoc.Controllers
 
         public IActionResult AddOrder(int vendorid, int reqid, string prescription, int refil)
         {
-            if(vendorid == 0)
+            if (vendorid == 0)
             {
                 return Json(new { value = "ErrorV" });
             }
-            else if(prescription == null)
+            else if (prescription == null)
             {
                 return Json(new { value = "ErrorP" });
             }
@@ -393,8 +427,9 @@ namespace HalloDoc.Controllers
         {
             short ClearStatus = 9;
             int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
-            _Admin.AddreqLogStatus(reqid, null, AdminId, ClearStatus);
-            _Admin.updateReqStatus(reqid, ClearStatus);
+            Nullable<int> phyId = null;
+            _Genral.AddreqLogStatus(reqid, null, AdminId, phyId, ClearStatus);
+            _Genral.updateReqStatus(reqid, ClearStatus);
             return Ok();
         }
         #endregion
@@ -407,12 +442,33 @@ namespace HalloDoc.Controllers
             return PartialView("PopupSendAgreement", data);
         }
 
-        public IActionResult AgrrementSent(int reqid)
+        public IActionResult AgrrementSent(int reqid, string email, string phone)
         {
-            return Ok();
+            string subject = "Agreement Acknowledgement";
+            string link = Url.Action("ReviewAgreement", "Home", new { reqid = reqid }, Request.Scheme);
+            string body = $"Hi,<br /><br />Please click on the following link For Agreement :<br /><br />" + link;
+            _Genral.SendEmailOffice365(email, subject, body, null);
+            return Json(new { value = "done" });
         }
         #endregion
 
+
+        #region Close case
+        public IActionResult CloseCase(int reqid)
+        {
+            var UserEmail = _Genral.getClientEmailbyReqId(reqid);
+            ClientInformation client = _Genral.getClientProfile(UserEmail);
+            List<Request> reqFile = _Genral.GetRequestsFileswithReq(reqid);
+            var data = new ClosecaseViewModel { ClientInformation = client, requests = reqFile };
+            return PartialView("_ACloseCase", data);
+        }
+        public IActionResult ClosecaseUpdate(int reqid, string email, string phone)
+        {
+            string clientEmail = _Genral.getClientEmailbyReqId(reqid);
+            _Genral.UpdateRequestClient(clientEmail, email, phone);
+            return Json(new { value = "done" });
+        }
+        #endregion
 
         public IActionResult NewRequest(int reqid)
         {

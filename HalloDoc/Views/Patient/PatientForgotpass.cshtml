@@ -19,7 +19,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
     <div class="form-floating mb-3">
         <input type="text" class="form-control bg-transparent focus-ring focus-ring-info  position-relative"
-               id="floatingInput" placeholder="name@example.com" asp-for="Email" >
+               id="floatingInput" placeholder="name@example.com" asp-for="Email">
         <label for="floatingInput">Username</label>
         <div class="position-absolute top-0 end-0 mx-3 my-2">
             <i class="bi bi-person-circle fs-4 text-secondary"></i>
@@ -32,6 +32,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
     }
 
     <button type="submit" class="w-100 h-10 btn btn-md btn-info text-light mt-3">Reset Password</button>
-    <a class="nav-link text-center text-info fw-bold" asp-controller="Patient" asp-action="PatientLogin"><span
-            class="w-20">&lt </span>Back to login</a>
+    <a class="nav-link text-center text-info fw-bold" asp-controller="Patient" asp-action="PatientLogin">
+        <span class="w-20">&lt </span>Back to login
+    </a>
 </form>

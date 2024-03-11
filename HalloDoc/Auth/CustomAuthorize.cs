@@ -30,7 +30,7 @@ namespace HalloDoc.Repository
 
             if (jswtService == null)
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "SubmitReq" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "PatientLogin" }));
                 return;
             }
 
@@ -46,7 +46,7 @@ namespace HalloDoc.Repository
                 }
                 else
                 {
-                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Patient", action = "Index" }));
+                    context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Patient", action = "SubmitReq" }));
                 }
                 return;
             }
@@ -54,7 +54,7 @@ namespace HalloDoc.Repository
             var roleClaims = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role);
             if(roleClaims == null)
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "SubmitReq" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "PatientLogin" }));
                 return;
             }
 

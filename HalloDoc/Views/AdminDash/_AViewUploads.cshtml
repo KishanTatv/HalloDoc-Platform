@@ -100,7 +100,7 @@
                                             <p>@item.Createddate.ToString("MMMM dd, yyyy")</p>
                                         </td>
                                         <td class="text-center">
-                                            <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="PatientDash" asp-action="DownloadDocument">
+                                            <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="Home" asp-action="DownloadDocument">
                                                 <i class="bi bi-cloud-check"></i>
                                             </a>
                                             <div class="btn btn-outline-info ps-1 pe-1 p-0 deleteDoc" data-docid="@item.Filename" data-reqid="@Model.FirstOrDefault().Requestid">

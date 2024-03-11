@@ -31,6 +31,25 @@ namespace HalloDoc.Repository.Interface
         //IEnumerable<RequestWithFile> GetRequestsFileswithReq(int reqId);
         List<Request> GetRequestsFileswithReq(int reqId);
 
+
+
+
+        ClientInformation getClientProfile(string email);
+        //update profile patient
+
+        void UpdateUser(PatientDash userInfo, string email);
+        void UpdateRequestClient(PatientDash userInfo, string email);
+        void UpdateRequestClient(string clientEmail, string email, string phone);
+
+
         void AddDocFile(IFormFile DocFile, int reqId);
+
+
+        void AddreqLogStatus(int reqid, string note, int? adminId, int? phyid, short status);
+        void AddreqLogStatus(int reqid, string note, short status, int? adminId, int? phyid, int TransPhyid);
+
+        void updateReqStatus(int reqid, short status);
+
+        void updateReqStatusWithPhysician(int reqid, int phyId, short status);
     }
 }

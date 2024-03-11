@@ -10,9 +10,11 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -39,6 +41,11 @@ namespace HalloDoc.Repository.Implement
         public bool CheckExistAspUser(string email)
         {
             return _context.Aspnetusers.Any(u => u.Email == email);
+        }
+
+        public int getRegionId(string state)
+        {
+            return _context.Regions.FirstOrDefault(x => x.Name.ToLower() == state.ToLower()).Regionid;
         }
 
         public Aspnetuser getUserRole(string email)
@@ -188,6 +195,128 @@ namespace HalloDoc.Repository.Implement
             _context.Requestwisefiles.Add(reqFile);
             _context.SaveChanges();
         }
+
+
+
+
+        #region statuslog
+        public void AddreqLogStatus(int reqid, string note, int? adminId, int? phyid, short status)
+        {
+            Requeststatuslog reqStatus = new Requeststatuslog()
+            {
+                Requestid = reqid,
+                Notes = note,
+                Status = status,
+                Adminid = adminId,
+                Physicianid = phyid,
+                Createddate = System.DateTime.Now
+            };
+            _context.Requeststatuslogs.Add(reqStatus);
+            _context.SaveChanges();
+        }
+
+        public void AddreqLogStatus(int reqid, string note, short status, int? adminId, int? phyid, int TransPhyid)
+        {
+            Requeststatuslog reqStatus = new Requeststatuslog()
+            {
+                Requestid = reqid,
+                Notes = note,
+                Status = status,
+                Adminid = adminId,
+                Physicianid = phyid,
+                Transtophysicianid = phyid,
+                Createddate = System.DateTime.Now
+            };
+            _context.Requeststatuslogs.Add(reqStatus);
+            _context.SaveChanges();
+        }
+
+        public void updateReqStatus(int reqid, short status)
+        {
+            Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
+            req.Status = status;
+            req.Modifieddate = System.DateTime.Now;
+            _context.Requests.Update(req);
+            _context.SaveChanges();
+        }
+
+        public void updateReqStatusWithPhysician(int reqid, int phyId, short status)
+        {
+            Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
+            req.Status = status;
+            req.Physicianid = phyId;
+            req.Modifieddate = System.DateTime.Now;
+            _context.Requests.Update(req);
+            _context.SaveChanges();
+        }
+
+        #endregion
+
+
+
+        #region patient Profile
+        public ClientInformation getClientProfile(string email)
+        {
+            var data = _context.Requestclients.Where(r => r.Email == email)
+                .Select(r => new ClientInformation
+                {
+                    Firstname = r.Firstname,
+                    Lastname = r.Lastname,
+                    Email = r.Email,
+                    Phonenumber = r.Phonenumber,
+                    Dob = new DateTime((int)r.Intyear, DateTime.ParseExact(r.Strmonth, "MMMM", CultureInfo.CurrentCulture).Month, (int)r.Intdate),
+                    Street = r.Street,
+                    City = r.City,
+                    State = r.State,
+                    Zipcode = r.Zipcode,
+                }).FirstOrDefault();
+            return data;
+        }
+
+        public void UpdateUser(PatientDash userInfo, string email)
+        {
+            User user = _context.Users.FirstOrDefault(u => u.Email == email);
+            user.Firstname = userInfo.clientInfo.Firstname;
+            user.Lastname = userInfo.clientInfo.Lastname;
+            user.Mobile = userInfo.clientInfo.Phonenumber;
+            user.Intdate = userInfo.clientInfo.Dob.Day;
+            user.Strmonth = userInfo.clientInfo.Dob.ToString("MMMM");
+            user.Intyear = userInfo.clientInfo.Dob.Year;
+            user.Regionid = getRegionId(userInfo.clientInfo.State);
+            user.Street = userInfo.clientInfo.Street;
+            user.City = userInfo.clientInfo.City;
+            user.State = userInfo.clientInfo.State;
+            user.Zipcode = userInfo.clientInfo.Zipcode;
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
+
+        public void UpdateRequestClient(PatientDash userInfo, string email)
+        {
+            Requestclient reqClient = _context.Requestclients.FirstOrDefault(u => u.Email == email);
+            reqClient.Firstname = userInfo.clientInfo.Firstname;
+            reqClient.Lastname = userInfo.clientInfo.Lastname;
+            reqClient.Phonenumber = userInfo.clientInfo.Phonenumber;
+            reqClient.Intdate = userInfo.clientInfo.Dob.Day;
+            reqClient.Strmonth = userInfo.clientInfo.Dob.ToString("MMMM");
+            reqClient.Intyear = userInfo.clientInfo.Dob.Year;
+            reqClient.Street = userInfo.clientInfo.Street;
+            reqClient.City = userInfo.clientInfo.City;
+            reqClient.State = userInfo.clientInfo.State;
+            reqClient.Zipcode = userInfo.clientInfo.Zipcode;
+            _context.Requestclients.Update(reqClient);
+            _context.SaveChanges();
+        }
+
+        public void UpdateRequestClient(string clientEmail, string email, string phone)
+        {
+            Requestclient reqClient = _context.Requestclients.FirstOrDefault(u => u.Email == clientEmail);
+            reqClient.Email = email;
+            reqClient.Phonenumber = phone;
+            _context.Requestclients.Update(reqClient);
+            _context.SaveChanges();
+        }
+        #endregion
 
     }
 }

@@ -100,6 +100,29 @@ namespace HalloDoc.Controllers
         }
 
 
+        #region Agreement Send
+        [HttpGet]
+        public IActionResult ReviewAgreement(int reqid)
+        {
+            TempData["reqid"] = reqid;
+            return View();
+        }
+
+        public IActionResult SendAgreement(int reqid)
+        {
+            _genral.updateReqStatus(reqid, 2);
+            return Ok();
+        }
+
+        public IActionResult AgreeCancel(int reqid, string note)
+        {
+            short status = 1;
+            _genral.AddreqLogStatus(reqid, note, null, null, status);
+            return Ok();
+        }
+        #endregion
+
+
         public IActionResult Privacy()
         {
             return View();

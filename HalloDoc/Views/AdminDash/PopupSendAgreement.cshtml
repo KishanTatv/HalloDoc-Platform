@@ -21,18 +21,18 @@
 
                 <div class="text-center pt-2">
                     <div class="form-floating mt-2">
-                        <input type="number" class="form-control bg-transparent" placeholder="contact" asp-for="Phonenumber">
+                        <input type="number" class="form-control bg-transparent phoneAgree" placeholder="contact" asp-for="Phonenumber">
                         <label>Phone Number</label>
                     </div>
                     <div class="form-floating mt-2">
-                        <input type="email" class="form-control bg-transparent" placeholder="eamil" asp-for="Email">
+                        <input type="email" class="form-control bg-transparent emailAgree" placeholder="eamil" asp-for="Email">
                         <label>Email</label>
                     </div>
                 </div>
-                <p class="text-danger m-0">@TempData["msg"]</p>
+                <p class="text-danger m-0"></p>
             </div>
             <div class="modal-footer p-1">
-                <button type="submit" class="btn btn-secondary btn-info text-light agreement" data-bs-dismiss="modal" data-reqid="@Model.Requestid">Continue</button>
+                <button type="submit" class="btn btn-secondary btn-info text-light" id="agreement" data-reqid="@Model.Requestid">Continue</button>
                 <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
             </div>
         </div>
@@ -43,19 +43,36 @@
 
 <script asp-append-version="true">
     $(document).ready(function () {
-        $('.agreement').click(function () {
+        $('#agreement').click(function () {
             var reqid = $(this).data('reqid');
-            $.ajax({
-                url: '/AdminDash/AgrrementSent',
-                method: 'POST',
-                data: { reqid: reqid },
-                success: function (response) {
-
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
+            if (CheckData()) {
+                var email = $('.emailAgree').val();
+                var phone = $('.phoneAgree').val();
+                $.ajax({
+                    url: '/AdminDash/AgrrementSent',
+                    method: 'POST',
+                    data: { reqid: reqid, email: email, phone: phone },
+                    success: function (response) {
+                        $("#agreement").attr("data-bs-dismiss", "modal");
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
         });
     });
+
+    function CheckData() {
+        var email = $('.emailAgree').val();
+        var phone = $('.phoneAgree').val();
+        if (email && phone) {
+            return true;
+        }
+        else {
+            $('.text-danger').text("please Add Email");
+            return false;
+        }
+    }
 </script>

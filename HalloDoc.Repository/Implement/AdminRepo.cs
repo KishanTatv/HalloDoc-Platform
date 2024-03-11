@@ -4,6 +4,7 @@ using HalloDoc.Entity.Data;
 using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository.Interface;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
@@ -63,11 +64,11 @@ namespace HalloDoc.Repository.Implement
 
 
         #region New Request
-        public IEnumerable<tableData> GetTableData(int page, int pageSize)
+        public IEnumerable<tableData> GetTableData()
         {
             IEnumerable<tableData> data = from r in _context.Requests
                                           join f in _context.Requestclients on r.Requestid equals f.Requestid
-                                          where r.Status == 1
+                                          where r.Status == 1 
                                           orderby r.Createddate descending
                                           select new tableData
                                           {
@@ -88,13 +89,13 @@ namespace HalloDoc.Repository.Implement
                                               city = f.City,
                                               Notes = r.Symptoms,
                                           };
-            return data.Skip(page * pageSize).Take(pageSize).ToList();
+            return data;
         }
         #endregion
 
 
         #region Pending Request
-        public IEnumerable<tableData> GetTableDataPending(int page, int pageSize)
+        public IEnumerable<tableData> GetTableDataPending()
         {
             IEnumerable<tableData> data = from r in _context.Requests
                                           join rc in _context.Requestclients on r.Requestid equals rc.Requestid
@@ -122,13 +123,13 @@ namespace HalloDoc.Repository.Implement
                                               city = rc.City,
                                               Notes = l.Notes,
                                           };
-            return data.Skip(page * pageSize).Take(pageSize).ToList();
+            return data;
         }
         #endregion
 
 
         #region Active Request
-        public IEnumerable<tableData> GetTableDataActive(int page, int pageSize)
+        public IEnumerable<tableData> GetTableDataActive()
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
@@ -155,13 +156,13 @@ namespace HalloDoc.Repository.Implement
                                               city = r.City,
                                               Notes = f.Symptoms,
                                           };
-            return data.Skip(page * pageSize).Take(pageSize).ToList();
+            return data;
         }
         #endregion
 
 
         #region Conclude Request
-        public IEnumerable<tableData> GetTableDataConclude(int page, int pageSize)
+        public IEnumerable<tableData> GetTableDataConclude()
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
@@ -188,13 +189,13 @@ namespace HalloDoc.Repository.Implement
                                               city = r.City,
                                               Notes = f.Symptoms,
                                           };
-            return data.Skip(page * pageSize).Take(pageSize).ToList();
+            return data;
         }
         #endregion
 
 
         #region Toclose Request
-        public IEnumerable<tableData> GetTableDataToclose(int page, int pageSize)
+        public IEnumerable<tableData> GetTableDataToclose()
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
@@ -221,13 +222,13 @@ namespace HalloDoc.Repository.Implement
                                               city = r.City,
                                               Notes = f.Symptoms,
                                           };
-            return data.Skip(page * pageSize).Take(pageSize).ToList();
+            return data;
         }
         #endregion
 
 
         #region Unpaid Request
-        public IEnumerable<tableData> GetTableDataUnpaid(int page, int pageSize)
+        public IEnumerable<tableData> GetTableDataUnpaid()
         {
             IEnumerable<tableData> data = from r in _context.Requestclients
                                           join f in _context.Requests on r.Requestid equals f.Requestid
@@ -253,7 +254,7 @@ namespace HalloDoc.Repository.Implement
                                               city = r.City,
                                               Notes = f.Symptoms,
                                           };
-            return data.Skip(page * pageSize).Take(pageSize).ToList();
+            return data;
         }
         #endregion
 
@@ -287,54 +288,6 @@ namespace HalloDoc.Repository.Implement
         {
             var CaseTagData = _context.Casetags.ToList();
             return CaseTagData;
-        }
-
-        public void AddreqLogStatus(int reqid, string note, int adminId, short status)
-        {
-            Requeststatuslog reqStatus = new Requeststatuslog()
-            {
-                Requestid = reqid,
-                Notes = note,
-                Status = status,
-                Adminid = adminId,
-                Createddate = System.DateTime.Now
-            };
-            _context.Requeststatuslogs.Add(reqStatus);
-            _context.SaveChanges();
-        }
-
-        public void AddreqLogStatus(int reqid, string note, short status, int adminId, int phyid)
-        {
-            Requeststatuslog reqStatus = new Requeststatuslog()
-            {
-                Requestid = reqid,
-                Notes = note,
-                Status = status,
-                Adminid = adminId,
-                Transtophysicianid = phyid,
-                Createddate = System.DateTime.Now
-            };
-            _context.Requeststatuslogs.Add(reqStatus);
-            _context.SaveChanges();
-        }
-
-        public void updateReqStatus(int reqid, short status)
-        {
-            Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
-            req.Status = status;
-            req.Modifieddate = System.DateTime.Now;
-            _context.Requests.Update(req);
-            _context.SaveChanges();
-        }
-
-        public void updateReqStatusWithPhysician(int reqid, int phyId, short status)
-        {
-            Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
-            req.Status = status;
-            req.Physicianid = phyId;
-            req.Modifieddate = System.DateTime.Now;
-            _context.Requests.Update(req);
-            _context.SaveChanges();
         }
 
         public List<Region> getAllRegion()

@@ -298,63 +298,6 @@ namespace HalloDoc.Repository.Implement
 
 
 
-        // profile
-        public ClientInformation getClientProfile(string email)
-        {
-            var data = _context.Requestclients.Where(r => r.Email == email)
-                .Select(r => new ClientInformation
-                {
-                    Firstname = r.Firstname,
-                    Lastname = r.Lastname,
-                    Email = r.Email,
-                    Phonenumber = r.Phonenumber,
-                    Dob = new DateTime((int)r.Intyear, DateTime.ParseExact(r.Strmonth, "MMMM", CultureInfo.CurrentCulture).Month, (int)r.Intdate),
-                    Street = r.Street,
-                    City = r.City,
-                    State = r.State,
-                    Zipcode = r.Zipcode,
-                }).FirstOrDefault();
-            return data;
-        }
-
-        public void UpdateUser(PatientDash userInfo, string email)
-        {
-            User user = _context.Users.FirstOrDefault(u => u.Email == email);
-            user.Firstname = userInfo.clientInfo.Firstname;
-            user.Lastname = userInfo.clientInfo.Lastname;
-            user.Mobile = userInfo.clientInfo.Phonenumber;
-            user.Intdate = userInfo.clientInfo.Dob.Day;
-            user.Strmonth = userInfo.clientInfo.Dob.ToString("MMMM");
-            user.Intyear = userInfo.clientInfo.Dob.Year;
-            user.Regionid = getRegionId(userInfo.clientInfo.State);
-            user.Street = userInfo.clientInfo.Street;
-            user.City = userInfo.clientInfo.City;
-            user.State = userInfo.clientInfo.State;
-            user.Zipcode = userInfo.clientInfo.Zipcode;
-            _context.Users.Update(user);
-            _context.SaveChanges();
-        }
-
-        public void UpdateRequestClient(PatientDash userInfo, string email)
-        {
-            Requestclient reqClient = _context.Requestclients.FirstOrDefault(u => u.Email == email);
-            reqClient.Firstname = userInfo.clientInfo.Firstname;
-            reqClient.Lastname = userInfo.clientInfo.Lastname;
-            reqClient.Phonenumber = userInfo.clientInfo.Phonenumber;
-            reqClient.Intdate = userInfo.clientInfo.Dob.Day;
-            reqClient.Strmonth = userInfo.clientInfo.Dob.ToString("MMMM");
-            reqClient.Intyear = userInfo.clientInfo.Dob.Year;
-            reqClient.Street = userInfo.clientInfo.Street;
-            reqClient.City = userInfo.clientInfo.City;
-            reqClient.State = userInfo.clientInfo.State;
-            reqClient.Zipcode = userInfo.clientInfo.Zipcode;
-            _context.Requestclients.Update(reqClient);
-            _context.SaveChanges();
-        }
-
-
-
-
         //sendMailResetPassword
         public void sendMail(string email, string Sub, string bodyMsg)
         {

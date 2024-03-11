@@ -1,0 +1,200 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model HalloDoc.Entity.AdminDash.ClosecaseViewModel;
+
+@{
+    Layout = "";
+}
+
+
+<div class="MainContent pt-0 min-vh-100">
+    <div class="tab-content" id="nav-tabContent">
+
+        <div class="HContainer m-auto pt-4">
+            <div class="d-flex justify-content-between">
+                <h4 class="m-0">Close Case</h4>
+                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+                    <strong class="pe-2">&lt Back</strong>
+                </a>
+            </div>
+
+            <div class=" rounded shadow p-4 rounded-3">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <p>Patient Name</p>
+                            <h5 class="text-info">@Model.ClientInformation.Firstname @Model.ClientInformation.Lastname <span class="text-black">(@Model.requests.FirstOrDefault().Confirmationnumber 1344454)</span></h5>
+                        </div>
+                        <button type="button" class="btn btn-outline-info me-3">Create invoice Through Quickbooks</button>
+                    </div>
+
+                    <div>
+                        <h5 class="m-0">Document</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th scope="col">File Name</th>
+                                    <th scope="col">Upload Date<i class="bi bi-arrow-up ms-1"></i></th>
+                                    <th scope="col" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.requests.FirstOrDefault().Requestwisefiles)
+                                {
+                                    <tr>
+                                        <td>
+                                            <p><i class="bi bi-file-earmark-pdf-fill"></i> @item.Filename</p>
+                                        </td>
+                                        <td>
+                                            <p>@item.Createddate.ToString("MMMM dd, yyyy")</p>
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="Home" asp-action="DownloadDocument">
+                                                <i class="bi bi-cloud-check"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr />
+
+
+                    <div class="mt-5">
+                        <h5>Patient Information</h5>
+                    </div>
+                    <div class="row form-floating">
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="ClientInformation.Firstname">
+                            <label class="ms-3">First Name</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="ClientInformation.Lastname">
+                            <label class="ms-3">Last Name</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="date" class="form-control bg-transparent"
+                                   placeholder="Date of birth" asp-for="ClientInformation.Dob" />
+                            <label class="ms-3">Date of Birth</label>
+                        </div>
+                        <div class="col-md-6  mt-2">
+                            <div class="row">
+                                <div class="col form-floating">
+                                    <input type="text" id="phone1" class="form-control h-100 bg-transparent" placeholder="Contact" asp-for="ClientInformation.Phonenumber" />
+                                    <label class="ms-3">Contact</label>
+                                </div>
+                                <div class="col-2 from-floating">
+                                    <a class="btn btn-outline-info p-3 ps-4 pe-4 text-info"> <i class="bi bi-telephone text-info"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="ClientInformation.Email">
+                            <label class="ms-3">Email</label>
+                        </div>
+                    </div>
+
+                    <p class="text-success text-msg"></p>
+                    <p class="text-danger text-error"></p>
+
+                    <div class="d-flex justify-content-end mt-4 mb-4">
+                        <button type="button" id="editbtn" class="btn btn-info text-light me-3" onclick="EditEnable()">Edit</button>
+                        <button type="submit" id="submitbtn" class="btn btn-info d-none ps-4 pe-4 me-3 SaveClose" data-reqid="@Model.requests.FirstOrDefault().Requestid">Save</button>
+                        <button id="cancelbtn" class="btn btn-danger d-none ps-4 pe-4 me-3">Cancel</button>
+                        <div class="btn btn-outline-info me-3 Back"> Close Case</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script asp-append-version="true">
+
+    $(document).ready(function () {
+        $('.Back').click(function () {
+            var id = 5;
+            $.ajax({
+                url: '/AdminDash/DashbordData',
+                method: 'POST',
+                data: { id: id },
+                success: function (response) {
+                    $("#partial").html(response);
+                    const dashHead = document.querySelector('.dashHead');
+                    const dashs = document.querySelector('.DashSearch');
+                    dashHead.classList.remove('d-none');
+                    dashs.classList.remove('d-none');
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+        });
+
+        function checkData(){
+            var phone = $('#phone1').val();
+            var email = $('#email').val();
+            if(phone && email){
+                return true;
+            }
+            else{
+                $('.text-error').text("Please add email, Contact !!");
+                $('.text-msg').text("");
+                return false;
+            }
+        }
+
+        $('.SaveClose').click(function () {
+            var reqid = $(this).data('reqid');
+            var phone = $('#phone1').val();
+            var email = $('#email').val();
+            if(checkData()){
+                $.ajax({
+                    url: '/AdminDash/ClosecaseUpdate',
+                    method: 'POST',
+                    data: { reqid: reqid, email: email, phone: phone },
+                    success: function (response) {
+                        if (response.value) {
+                            $('.text-msg').text("Data Changed !!");
+                            $('.text-error').text("");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
+
+    let inputs = document.querySelectorAll('input');
+
+    // Loop through each input element and set disabled attribute
+    inputs.forEach(input => {
+        input.disabled = true;
+    });
+    function EditEnable() {
+        const edit = document.getElementById('editbtn');
+        const submit = document.getElementById('submitbtn');
+        const cancel = document.getElementById('cancelbtn');
+        edit.classList.add('d-none');
+        submit.classList.remove('d-none');
+        cancel.classList.remove('d-none');
+
+        var email = document.getElementById('email');
+        var phone = document.getElementById('phone1');
+        email.disabled = false;
+        phone.disabled = false;
+    }
+
+</script>

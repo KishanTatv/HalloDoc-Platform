@@ -26,7 +26,7 @@ namespace HalloDoc.Repository.Interface
         Request AddRequest(ClientInformation clientInformation, int userId);
         void AddRequestClient(ClientInformation clientInformation, int requestId);
 
-        ClientInformation getClientProfile(string email);
+
 
 
         //other form
@@ -55,10 +55,6 @@ namespace HalloDoc.Repository.Interface
 
 
 
-        //update profile patient
-
-        void UpdateUser(PatientDash userInfo, string email);
-        void UpdateRequestClient(PatientDash userInfo, string email);
 
 
 

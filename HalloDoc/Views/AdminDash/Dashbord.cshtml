@@ -104,7 +104,7 @@
     <div class="rounded-3 pt-2 ps-2 pe-2">
         <div class=" d-flex justify-content-between flex-wrap DashSearch">
             <div class=" d-flex">
-                <input type="text" id="InputSearch" class="form-control me-2" placeholder="Search Patient" onkeyup="SearchPatient()">
+                <input type="text" id="SearchPatient" class="form-control me-2" placeholder="Search Patient">
                 <select class="form-select" id="validationDefault04">
                     <option selected disabled value="">All Regions</option>
                     @foreach (var regName in Model.Regions)
@@ -260,6 +260,43 @@
                     $(".PartialPopup").html(response);
                     var my = new bootstrap.Modal(document.getElementById('reqsupport'));
                     my.show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('#SearchPatient').change(function () {
+            var name = $(this).val();
+            var cardname = $('.dNameCard').html();
+            var id;
+            switch (cardname) {
+                case "(New)":
+                    id = 1;
+                    break;
+                case "(Pending)":
+                    id = 2;
+                    break;
+                case "(Active)":
+                    id = 3;
+                    break;
+                case "(Conclude)":
+                    id = 4;
+                    break;
+                case "(Toclose)":
+                    id = 5;
+                    break;
+                case "(Unpaid)":
+                    id = 6;
+                    break;
+            }
+            $.ajax({
+                url: '/AdminDash/DashbordData',
+                method: 'POST',
+                data: { id : id, search: name },
+                success: function (response) {
+                    $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

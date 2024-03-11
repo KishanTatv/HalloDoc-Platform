@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace HalloDoc.Repository.Interface
 {
@@ -25,17 +26,18 @@ namespace HalloDoc.Repository.Interface
 
 
         //Dashbord table Data 
-        IEnumerable<tableData> GetTableData(int page, int pageSize);
+        IEnumerable<tableData> GetTableData();
 
-        IEnumerable<tableData> GetTableDataPending(int page, int pageSize);
+        IEnumerable<tableData> GetTableDataPending();
 
-        IEnumerable<tableData> GetTableDataActive(int page, int pageSize);
+        IEnumerable<tableData> GetTableDataActive();
 
-        IEnumerable<tableData> GetTableDataConclude(int page, int pageSize);
+        IEnumerable<tableData> GetTableDataConclude();
 
-        IEnumerable<tableData> GetTableDataToclose(int page, int pageSize);
+        IEnumerable<tableData> GetTableDataToclose();
 
-        IEnumerable<tableData> GetTableDataUnpaid(int page, int pageSize);
+        IEnumerable<tableData> GetTableDataUnpaid();
+
 
 
         List<int> TotalCountPatient();
@@ -50,12 +52,8 @@ namespace HalloDoc.Repository.Interface
 
         List<Casetag> getAllCaseTag();
 
-        void AddreqLogStatus(int reqid, string note, int adminId, short status);
-        void AddreqLogStatus(int reqid, string note, short status, int adminId, int phyid);
 
-        void updateReqStatus(int reqid, short status);
 
-        void updateReqStatusWithPhysician(int reqid, int phyId,short status);
 
 
         //region

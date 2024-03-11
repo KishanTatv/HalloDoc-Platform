@@ -87,11 +87,11 @@
             var reqid = $(this).data('reqid');
             var phycase = $(this).data('phycase');
             var AssignNote = $('.AssignNote').val();
-            var phyId = $('.PhyOption').val();
+            var TransphyId = $('.PhyOption').val();
             $.ajax({
                 url: '/AdminDash/AssignReq',
                 method: 'POST',
-                data: { AssignNote: AssignNote, phycase: phycase, phyId: phyId, reqid: reqid },
+                data: { AssignNote: AssignNote, phycase: phycase, TransphyId: TransphyId, reqid: reqid },
                 success: function (response) {
                     if (response.value == "Ok") {
                         window.location.reload();
