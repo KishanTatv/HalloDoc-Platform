@@ -11,92 +11,140 @@
 
 <div class="MainContent pt-0 min-vh-100">
 
-        <div class="HContainer m-auto mt-3">
-            <div class="d-flex justify-content-between">
-                <h4 class="m-0 mt-1">Submit Information</h4>
-                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
-                    <strong class="pe-2">&lt Back</strong>
-                </a>
+    <div class="HContainer m-auto mt-3">
+        <div class="d-flex justify-content-between">
+            <h4 class="m-0 mt-1">Submit Information</h4>
+            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+                <strong class="pe-2">&lt Back</strong>
+            </a>
+        </div>
+
+        <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" id="Formdata" novalidate class="needs-validation">
+            <div class="mb-4">
+                <h5>Patient</h5>
+                <p class="msg text-center"></p>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent fname" placeholder="firstNmae" asp-for="Firstname">
+                        <label class="ms-3">First Name</label>
+                        <span asp-validation-for="Firstname" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent lname" placeholder="lastName" asp-for="Lastname">
+                        <label class="ms-3">Last Name</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="Phonenumber" />
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="Email">
+                        <label class="ms-3">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="date" class="form-control bg-transparent"
+                               placeholder="Date of birth" />
+                        <label class="ms-3">Date of Birth</label>
+                    </div>
+                </div>
             </div>
 
-            <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="ViewNotes" asp-controller="AdminDash" method="post" enctype="multipart/form-data">
-                <div class="mb-4">
-                    <h5>Patient</h5>
-
-                    <div class="row form-floating">
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="Firstname">
-                            <label class="ms-3">First Name</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="Lastname">
-                            <label class="ms-3">Last Name</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="Phonenumber" />
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="Email">
-                            <label class="ms-3">Email</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="date" class="form-control bg-transparent" 
-                                   placeholder="Date of birth" />
-                            <label class="ms-3">Date of Birth</label>
-                        </div>
+            <div class="mt-4 mb-4">
+                <h5>Location</h5>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" placeholder="street" asp-for="Street">
+                        <label class="ms-3">Street</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2 ">
+                        <input type="text" class="form-control bg-transparent" placeholder="city" asp-for="City">
+                        <label class="ms-3">City</label>
                     </div>
                 </div>
-
-                <div class="mt-4 mb-4">
-                    <h5>Location</h5>
-                    <div class="row form-floating">
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="street" asp-for="Street">
-                            <label class="ms-3">Street</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2 ">
-                            <input type="text" class="form-control bg-transparent" placeholder="city" asp-for="City">
-                            <label class="ms-3">City</label>
-                        </div>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" placeholder="state" asp-for="State">
+                        <label class="ms-3">State</label>
+                        <span asp-validation-for="State" class="text-danger"></span>
                     </div>
-                    <div class="row form-floating">
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="state" asp-for="State">
-                            <label class="ms-3">State</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" maxlength="6" class="form-control bg-transparent" placeholder="zipCode" asp-for="Zipcode">
-                            <label class="ms-3">Zip Code</label>
-                            <span asp-validation-for="Zipcode" class="text-danger"></span>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="roomSuite" asp-for="Locroom">
-                            <label class="ms-3">Room # / Suite(optional)</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-2">
-                            <a class="btn btn-outline-info p-3" > Verify </a>
-                            <a class="btn btn-outline-info p-3" href="https://maps.google.co.in/maps" target="_blank"> <i class="bi bi-geo-alt"></i> Map</a>
-                        </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" maxlength="6" class="form-control bg-transparent" placeholder="zipCode" asp-for="Zipcode">
+                        <label class="ms-3">Zip Code</label>
+                        <span asp-validation-for="Zipcode" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" placeholder="roomSuite" asp-for="Locroom">
+                        <label class="ms-3">Room # / Suite(optional)</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <a class="btn btn-outline-info p-3"> Verify </a>
+                        <a class="btn btn-outline-info p-3" href="https://maps.google.co.in/maps" target="_blank"> <i class="bi bi-geo-alt"></i> Map</a>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-floating">
-                    <h5>Notes</h5>
-                    <textarea type="text" class="form-control bg-transparent h-25"
-                              placeholder="Detail info" rows="3" aria-label="Detail info"
-                              aria-describedby="button-addon2" asp-for="Symptoms"> </textarea>
-                    <label class="ms-1 mt-4 text-info">Admin Notes (Optional)</label>
-                </div>
+            <div class="form-floating">
+                <h5>Notes</h5>
+                <textarea type="text" class="form-control bg-transparent h-25"
+                          placeholder="Detail info" rows="3" aria-label="Detail info"
+                          aria-describedby="button-addon2" asp-for="Symptoms"> </textarea>
+                <label class="ms-1 mt-4 text-info">Admin Notes (Optional)</label>
+            </div>
 
-
-                <div class="d-flex justify-content-end mt-4 mb-4">
-                    <button type="submit" class="btn btn-info text-light me-3 viewNote">Save</button>
-                    <button type="button" class="btn btn-danger">Cancel</button>
-                </div>
-            </form>
-        </div>
+            <div class="d-flex justify-content-end mt-4 mb-4">
+                <button type="submit" class="btn btn-info text-light me-3">Save</button>
+                <button type="button" class="btn btn-danger">Cancel</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 
 
 <script src="~/js/contact-api.js" asp-append-version="true"></script>
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('#Formdata').submit(function (e) {
+            e.preventDefault();
+            var data = $("#Formdata").serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/AdminDash/NewReqData',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: data,
+                success: function (response) {
+                    if (response.value == "Ok") {
+                        console.log("ok");
+                        $.ajax({
+                            url: '/AdminDash/NewRequest',
+                            method: 'POST',
+                            success: function (response) {
+                                $("#partial").html(response);
+                                $('.msg').text("Request Created Successfully !").addClass('text-success');
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                    else if (response.value == "Region"){
+                        $('.msg').text("Unaviliable Region !").addClass('text-danger');
+                    }
+                    else if (response.value == "EmailExist") {
+                        $('.msg').text("Email Exist !!").addClass('text-danger');
+                    }
+                    else {
+                        console.log("error");
+                        $("#partial").html(response);
+                    }
+                },
+                error: function () {
+                    alert('Failed to receive the Data');
+                    console.log('Failed ');
+                }
+            });
+        });
+
+    });
+</script>

@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model HalloDoc.Entity.Models.Requestclient;
+@model HalloDoc.Entity.RequestForm.ClientInformation;
 
 @{
     ViewData["Title"] = "Patient Dashbord";
@@ -17,9 +17,9 @@
         <div class="HContainer m-auto pt-4">
             <div class="d-flex justify-content-between">
                 <h4 class="m-0">View Reservation</h4>
-                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+                <div class="btn w-5 btn-info rounded bg-transparent m-2 text-info BackOn">
                     <strong class="pe-2">&lt Back</strong>
-                </a>
+                </div>
             </div>
 
             <div class=" rounded shadow p-4 rounded-3">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-floating">
                         <textarea type="text" class="form-control bg-transparent h-25"
-                                  placeholder="Detail info" id="floatingInput" rows="3" aria-label="Detail info"
+                                  placeholder="Detail info" rows="3" aria-label="Detail info"
                                   aria-describedby="button-addon2" asp-for="Notes"> </textarea>
                         <label for="ms-3 text-info">Patient Notes</label>
                     </div>
@@ -50,13 +50,13 @@
                         </div>
                         <div class="col-md-6 form-floating mt-2">
                             <input type="date" class="form-control bg-transparent"
-                                   placeholder="Date of birth" />
+                                   placeholder="Date of birth" asp-for="Dob"/>
                             <label class="ms-3">Date of Birth</label>
                         </div>
                         <div class="col-md-6  mt-2">
                             <div class="row">
                                 <div class="col form-floating">
-                                    <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="Phonenumber" />
+                                    <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="Phonenumber" />
                                 </div>
                                 <div class="col-2 from-floating">
                                     <a class="btn btn-outline-info p-3 ps-4 pe-4 text-info"> <i class="bi bi-telephone text-info"></i> </a>
@@ -77,7 +77,7 @@
                     <h5>Location Information</h5>
                     <div class="row form-floating">
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="street" asp-for="Street">
+                            <input type="text" class="form-control bg-transparent" placeholder="street" asp-for="Street">
                             <label class="ms-3">Region</label>
                         </div>
                         <div class="col-md-6 mt-2 ">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="roomSuite">
+                            <input type="text" class="form-control bg-transparent" placeholder="roomSuite" asp-for="Locroom">
                             <label class="ms-3">Room # / Suite(optional)</label>
                         </div>
                     </div>
@@ -100,8 +100,8 @@
 
 
                 <div class="d-flex justify-content-end mt-4 mb-4">
-                    <button type="button" class="btn btn-info text-light me-3 assign" data-reqid="@Model.Requestid">Assign</button>
-                    <div class="btn btn-info text-light me-3 viewNote" data-reqid="@Model.Requestid"> View Notes</div>
+                    <button type="button" class="btn btn-info text-light me-3 assign" data-reqid="@ViewBag.reqid">Assign</button>
+                    <div class="btn btn-info text-light me-3 viewNote" data-reqid="@ViewBag.reqid"> View Notes</div>
                     <button type="button" class="btn btn-danger">Cancel</button>
                 </div>
             </div>
@@ -155,5 +155,25 @@
                 }
             });
         });
+
+        //$('.BackOn').click(function () {
+        //    var id = 1;
+        //    $.ajax({
+        //        url: '/AdminDash/DashbordData',
+        //        method: 'POST',
+        //        data: { id: id },
+        //        success: function (response) {
+        //            $("#partial").html(response);
+        //            const dashHead = document.querySelector('.dashHead');
+        //            const dashs = document.querySelector('.DashSearch');
+        //            dashHead.classList.remove('d-none');
+        //            dashs.classList.remove('d-none');
+        //        },
+        //        error: function (xhr, status, error) {
+        //            console.error(xhr.responseText);
+        //        }
+        //    });
+
+        //});
     });
 </script>

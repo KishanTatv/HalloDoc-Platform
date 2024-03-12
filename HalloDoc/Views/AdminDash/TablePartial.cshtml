@@ -179,7 +179,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             }
                             @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
                             {
-                                <li><a class="dropdown-item" href="#">Encounter</a></li>
+                                <li><a class="dropdown-item Encounter" data-reqid="@item.RequestId">Encounter</a></li>
                             }
 
                         </ul>
@@ -448,6 +448,22 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             var reqid = $(this).data('reqid');
             $.ajax({
                 url: '/AdminDash/CloseCase',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    hideOtherPortion();
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.Encounter').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/AdminDash/Encounter',
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {

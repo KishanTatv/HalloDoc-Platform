@@ -5,7 +5,7 @@
 @model IEnumerable<HalloDoc.Entity.AdminDashTable.tableData>;
 
 @{
-    ViewData["Title"] = "Patient Dashbord";
+    ViewData["Title"] = "Provider Location";
     Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
 }
 
@@ -25,6 +25,6 @@
 
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('proLoc').classList.add('underLine');
+        document.getElementById('proLocTab').classList.add('underLine');
     });
 </script>

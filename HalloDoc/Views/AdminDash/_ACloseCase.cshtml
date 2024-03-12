@@ -121,33 +121,14 @@
 <script asp-append-version="true">
 
     $(document).ready(function () {
-        $('.Back').click(function () {
-            var id = 5;
-            $.ajax({
-                url: '/AdminDash/DashbordData',
-                method: 'POST',
-                data: { id: id },
-                success: function (response) {
-                    $("#partial").html(response);
-                    const dashHead = document.querySelector('.dashHead');
-                    const dashs = document.querySelector('.DashSearch');
-                    dashHead.classList.remove('d-none');
-                    dashs.classList.remove('d-none');
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
 
-        });
-
-        function checkData(){
+        function checkData() {
             var phone = $('#phone1').val();
             var email = $('#email').val();
-            if(phone && email){
+            if (phone && email) {
                 return true;
             }
-            else{
+            else {
                 $('.text-error').text("Please add email, Contact !!");
                 $('.text-msg').text("");
                 return false;
@@ -158,7 +139,7 @@
             var reqid = $(this).data('reqid');
             var phone = $('#phone1').val();
             var email = $('#email').val();
-            if(checkData()){
+            if (checkData()) {
                 $.ajax({
                     url: '/AdminDash/ClosecaseUpdate',
                     method: 'POST',

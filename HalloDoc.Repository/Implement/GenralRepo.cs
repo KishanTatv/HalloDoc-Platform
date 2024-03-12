@@ -101,6 +101,12 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
+        public EncounterForm getEncounterDetail(int reqid)
+        {
+            var data = _context.EncounterForms.FirstOrDefault(x => x.RequestId == reqid);
+            return data;
+        }
+
 
 
         #region SendMail Office365
@@ -265,10 +271,13 @@ namespace HalloDoc.Repository.Implement
                     Email = r.Email,
                     Phonenumber = r.Phonenumber,
                     Dob = new DateTime((int)r.Intyear, DateTime.ParseExact(r.Strmonth, "MMMM", CultureInfo.CurrentCulture).Month, (int)r.Intdate),
+                    date = System.DateTime.Now,
+                    Notes = r.Notes,
                     Street = r.Street,
                     City = r.City,
                     State = r.State,
                     Zipcode = r.Zipcode,
+                    Address = $"{r.Street}, {r.City}, {r.State}, {r.Zipcode}",
                 }).FirstOrDefault();
             return data;
         }

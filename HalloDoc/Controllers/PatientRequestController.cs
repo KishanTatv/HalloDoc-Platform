@@ -105,7 +105,6 @@ namespace HalloDoc.Controllers
                     }
                     return RedirectToAction("Dashbord", "PatientDash");
                 }
-                
             }
             else
             {
@@ -145,6 +144,7 @@ namespace HalloDoc.Controllers
                         }
                         else
                         {
+                            int roleId = Convert.ToInt32(Request.Cookies["CookieRole"]);
                             var userEmail = FInfo.clientInformation.Email;
                             var subject = "Create your Account";
                             string link = Url.Action("CreatePatient", "Patient");
@@ -154,6 +154,7 @@ namespace HalloDoc.Controllers
                             User user = patient.AddFcbUser(FInfo);
                             request = patient.AddFcbRequest(FInfo, user.Userid, 3);
                             patient.AddFcbRequestClient(FInfo, request.Requestid);
+                            genral.addEmailLog(body, subject, userEmail, null, roleId, request.Requestid, null, null);
                         }
 
                         if (DocFile != null)
@@ -220,6 +221,7 @@ namespace HalloDoc.Controllers
                         }
                         else
                         {
+                            int roleId = Convert.ToInt32(Request.Cookies["CookieRole"]);
                             var userEmail = FInfo.clientInformation.Email;
                             var subject = "Create your Account";
                             string link = Url.Action("CreatePatient", "Patient");
@@ -231,6 +233,7 @@ namespace HalloDoc.Controllers
                             patient.AddFcbRequestClient(FInfo, request.Requestid);
                             Concierge con = patient.AddConcierge(FInfo);
                             patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
+                            genral.addEmailLog(body, subject, userEmail, null, roleId, request.Requestid, null, null);
                         }
                         return RedirectToAction("PatientLogin", "Patient");
                     }
@@ -280,6 +283,7 @@ namespace HalloDoc.Controllers
                         }
                         else
                         {
+                            int roleId = Convert.ToInt32(Request.Cookies["CookieRole"]);
                             var userEmail = FInfo.clientInformation.Email;
                             var subject = "Create your Account";
                             string link = Url.Action("CreatePatient", "Patient");
@@ -291,6 +295,7 @@ namespace HalloDoc.Controllers
                             patient.AddFcbRequestClient(FInfo, request.Requestid);
                             Business bus = patient.AddBussiness(FInfo);
                             patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
+                            genral.addEmailLog(body, subject, userEmail, null, roleId, request.Requestid, null, null);
                         }
                         return RedirectToAction("PatientLogin", "Patient");
                     }

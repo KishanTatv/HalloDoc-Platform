@@ -21,11 +21,13 @@ namespace HalloDoc.Controllers
         private readonly ILogger<AdminDashController> _logger;
         private readonly IGenral _Genral;
         private readonly IAdmin _Admin;
-        public AdminDashController(ILogger<AdminDashController> logger, IGenral _Genral, IAdmin _Admin)
+        private readonly IPatient _Patient;
+        public AdminDashController(ILogger<AdminDashController> logger, IGenral _Genral, IAdmin _Admin, IPatient _Patient)
         {
             _logger = logger;
             this._Genral = _Genral;
             this._Admin = _Admin;
+            this._Patient = _Patient;
         }
 
 
@@ -202,7 +204,7 @@ namespace HalloDoc.Controllers
             return PartialView("PopupSendlink");
         }
 
-        public IActionResult SendLinkData(string email)
+        public IActionResult SendLinkData(string email, string name)
         {
             int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
             Nullable<int> Phyid = null;
@@ -210,9 +212,9 @@ namespace HalloDoc.Controllers
             int roleId = Convert.ToInt32(Request.Cookies["CookieRole"]);
             string sub = "Submit Requset";
             string link = Url.Action("SubmitReq", "Patient", null, Request.Scheme);
-            var body = $"Hi, Please click on the following link to submit the request." + link;
+            var body = $"Hi {name}, Please click on the following link to submit the request." + link;
             string filepath = null;
-            //_Genral.SendEmailOffice365(email, sub, body, null);
+            _Genral.SendEmailOffice365(email, sub, body, null);
             _Genral.addEmailLog(body, sub, email, filepath, roleId, reqid, AdminId, Phyid);
             return Ok();
         }
@@ -245,7 +247,8 @@ namespace HalloDoc.Controllers
         [ActionName("ViewCase")]
         public IActionResult ViewCase(int reqid)
         {
-            var data = _Admin.GetClientById(reqid);
+            ViewBag.reqid = reqid;
+            var data = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
             return PartialView("_AViewCase", data);
         }
 
@@ -551,14 +554,55 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
-        public IActionResult NewRequest(int reqid)
+        public IActionResult Encounter(int reqid)
         {
-            return View();
+            var client = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
+            var encounter = _Genral.getEncounterDetail(reqid);
+            var modelData = new EncounterViewModel { ClientInformation= client, EncounterForm = encounter };
+            return PartialView("_AEncounter", modelData);
         }
 
-        public IActionResult Provider()
+        #region NewRequest
+        public IActionResult NewRequest(int reqid)
         {
-            return View();
+            return PartialView("NewRequest");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> NewReqData(ClientInformation client)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!_Genral.CheckAvalibleRegion(client.State))
+                {
+                    return Json(new { value = "Region" });
+                }
+                else
+                {
+                    Request request;
+                    if (_Genral.CheckExistAspUser(client.Email))
+                    {
+                        //int userId = _Patient.FindUserId(client.Email);
+                        //request = _Patient.AddRequest(client, userId);
+                        return Json(new { value = "EmailExist" });
+                    }
+                    else
+                    {
+                        //Aspnetuser AspUser = _Patient.AddAspUser(client);
+                        //User user = _Patient.AddUser(client, AspUser.Id);
+                        //request = _Patient.AddRequest(client, user.Userid);
+                        //_Patient.AddRequestClient(client, request.Requestid);
+                        //_Patient.AddAspnetUserRole(AspUser.Id);
+                        return Json(new { value = "Ok" });
+                    }
+                }
+            }
+            else
+            {
+                return PartialView("NewRequest", client);
+            }
+        }
+        #endregion
+
     }
 }

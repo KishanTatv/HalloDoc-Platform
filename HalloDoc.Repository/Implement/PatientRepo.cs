@@ -115,6 +115,7 @@ namespace HalloDoc.Repository.Implement
                 Lastname = client.Lastname,
                 Phonenumber = client.Phonenumber,
                 Email = client.Email,
+                Symptoms = client.Symptoms,
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
                 Locroom = client.Locroom,
             };

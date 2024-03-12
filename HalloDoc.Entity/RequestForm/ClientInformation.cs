@@ -23,6 +23,8 @@ namespace HalloDoc.Entity.RequestForm
         [Required(ErrorMessage = "Select Dob")]
         public DateTime Dob { get; set; }
 
+        public DateTime date { get; set; }
+
         [Column("phonenumber")]
         [StringLength(23)]
         public string? Phonenumber { get; set; }
@@ -62,6 +64,10 @@ namespace HalloDoc.Entity.RequestForm
         [Column("zipcode")]
         //[RegularExpression(@"0*[1-9][0-9]*", ErrorMessage = "only number enter.")]
         public string? Zipcode { get; set; }
+
+        [Column("Address")]
+        public string? Address { get; set; }
+        public string? Notes { get; set; }
 
         [Column("Locroom")]
         [StringLength(100)]

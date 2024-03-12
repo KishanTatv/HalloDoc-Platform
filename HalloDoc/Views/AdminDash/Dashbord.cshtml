@@ -135,7 +135,7 @@
 
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('dash').classList.add('underLine');
+        document.getElementById('dashTab').classList.add('underLine');
         document.querySelector(".DashCardN").classList.add("new-active");
         newDash();
     });
@@ -216,11 +216,9 @@
         });
 
         $('.NewReq').click(function () {
-            var reqid = $(this).data('reqid');
             $.ajax({
                 url: '/AdminDash/NewRequest',
                 method: 'POST',
-                data: { reqid: reqid },
                 success: function (response) {
                     const dashHead = document.querySelector('.dashHead');
                     const dashs = document.querySelector('.DashSearch');
@@ -358,6 +356,27 @@
                     console.error(xhr.responseText);
                 }
             });
+        });
+
+
+        $('.BackOn').click(function () {
+            var id = 1;
+            $.ajax({
+                url: '/AdminDash/DashbordData',
+                method: 'POST',
+                data: { id: id },
+                success: function (response) {
+                    $("#partial").html(response);
+                    const dashHead = document.querySelector('.dashHead');
+                    const dashs = document.querySelector('.DashSearch');
+                    dashHead.classList.remove('d-none');
+                    dashs.classList.remove('d-none');
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
         });
     });
 
