@@ -14,7 +14,7 @@
     <div class="HContainer m-auto mt-3">
         <div class="d-flex justify-content-between">
             <h4 class="m-0 mt-1">Submit Information</h4>
-            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info BackOn">
                 <strong class="pe-2">&lt Back</strong>
             </a>
         </div>
@@ -37,7 +37,7 @@
                         <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="Phonenumber" />
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="Email">
+                        <input type="email" name="email" id="email" class="form-control bg-transparent cemail" placeholder="email" asp-for="Email">
                         <label class="ms-3">Email</label>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
@@ -93,7 +93,7 @@
 
             <div class="d-flex justify-content-end mt-4 mb-4">
                 <button type="submit" class="btn btn-info text-light me-3">Save</button>
-                <button type="button" class="btn btn-danger">Cancel</button>
+                <button type="button" class="btn btn-danger BackOn">Cancel</button>
             </div>
         </form>
     </div>
@@ -129,9 +129,17 @@
                         });
                     }
                     else if (response.value == "Region"){
+                        var fname = $('.fname').val();
+                        if (fname){
+                            $('.field-validation-error').remove();
+                        }
                         $('.msg').text("Unaviliable Region !").addClass('text-danger');
                     }
                     else if (response.value == "EmailExist") {
+                        var fname = $('.fname').val();
+                        if (fname) {
+                            $('.field-validation-error').remove();
+                        }
                         $('.msg').text("Email Exist !!").addClass('text-danger');
                     }
                     else {

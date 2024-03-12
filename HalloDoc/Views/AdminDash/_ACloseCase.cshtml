@@ -15,7 +15,7 @@
         <div class="HContainer m-auto pt-4">
             <div class="d-flex justify-content-between">
                 <h4 class="m-0">Close Case</h4>
-                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info BackOn">
                     <strong class="pe-2">&lt Back</strong>
                 </a>
             </div>
@@ -106,7 +106,7 @@
                     <div class="d-flex justify-content-end mt-4 mb-4">
                         <button type="button" id="editbtn" class="btn btn-info text-light me-3" onclick="EditEnable()">Edit</button>
                         <button type="submit" id="submitbtn" class="btn btn-info d-none ps-4 pe-4 me-3 SaveClose" data-reqid="@Model.requests.FirstOrDefault().Requestid">Save</button>
-                        <button id="cancelbtn" class="btn btn-danger d-none ps-4 pe-4 me-3">Cancel</button>
+                        <button id="cancelbtn" class="btn btn-danger d-none ps-4 pe-4 me-3 BackOn">Cancel</button>
                         <div class="btn btn-outline-info me-3 Back"> Close Case</div>
                     </div>
                 </div>

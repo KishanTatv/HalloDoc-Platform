@@ -101,11 +101,16 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
+
+        #region Encounter
         public EncounterForm getEncounterDetail(int reqid)
         {
             var data = _context.EncounterForms.FirstOrDefault(x => x.RequestId == reqid);
             return data;
         }
+
+        
+        #endregion
 
 
 
@@ -174,6 +179,7 @@ namespace HalloDoc.Repository.Implement
         //    return reqFile;
         //}
         #endregion
+
 
         public List<Request> GetRequestsFileswithReq(int reqId)
         {

@@ -102,7 +102,7 @@
                 <div class="d-flex justify-content-end mt-4 mb-4">
                     <button type="button" class="btn btn-info text-light me-3 assign" data-reqid="@ViewBag.reqid">Assign</button>
                     <div class="btn btn-info text-light me-3 viewNote" data-reqid="@ViewBag.reqid"> View Notes</div>
-                    <button type="button" class="btn btn-danger">Cancel</button>
+                    <button type="button" class="btn btn-danger BackOn">Cancel</button>
                 </div>
             </div>
         </div>
@@ -155,25 +155,5 @@
                 }
             });
         });
-
-        //$('.BackOn').click(function () {
-        //    var id = 1;
-        //    $.ajax({
-        //        url: '/AdminDash/DashbordData',
-        //        method: 'POST',
-        //        data: { id: id },
-        //        success: function (response) {
-        //            $("#partial").html(response);
-        //            const dashHead = document.querySelector('.dashHead');
-        //            const dashs = document.querySelector('.DashSearch');
-        //            dashHead.classList.remove('d-none');
-        //            dashs.classList.remove('d-none');
-        //        },
-        //        error: function (xhr, status, error) {
-        //            console.error(xhr.responseText);
-        //        }
-        //    });
-
-        //});
     });
 </script>

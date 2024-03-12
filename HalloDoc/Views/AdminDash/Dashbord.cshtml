@@ -239,7 +239,7 @@
             $.ajax({
                 url: '/AdminDash/DashbordData',
                 method: 'POST',
-                data: { id: id, search: search, reg:reg },
+                data: { id: id, search: search, reg: reg },
                 success: function (response) {
                     $("#partial").html(response);
                 },
@@ -281,7 +281,7 @@
             });
         });
 
-        function getIdFromCard(){
+        function getIdFromCard() {
             var cardname = $('.dNameCard').html();
             var id;
             switch (cardname) {
@@ -313,7 +313,7 @@
             $.ajax({
                 url: '/AdminDash/DashbordData',
                 method: 'POST',
-                data: { id: id, search: search, reg: reg},
+                data: { id: id, search: search, reg: reg },
                 success: function (response) {
                     $("#partial").html(response);
                 },
@@ -359,18 +359,19 @@
         });
 
 
-        $('.BackOn').click(function () {
-            var id = 1;
+        $(document).on('click', '.BackOn', function () {
+            var id = getIdFromCard();
             $.ajax({
                 url: '/AdminDash/DashbordData',
                 method: 'POST',
                 data: { id: id },
                 success: function (response) {
-                    $("#partial").html(response);
+                    console.log('h');
                     const dashHead = document.querySelector('.dashHead');
                     const dashs = document.querySelector('.DashSearch');
                     dashHead.classList.remove('d-none');
                     dashs.classList.remove('d-none');
+                    $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

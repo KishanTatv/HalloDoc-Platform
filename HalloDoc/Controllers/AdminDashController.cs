@@ -220,6 +220,50 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
+        #region NewRequest
+        public IActionResult NewRequest(int reqid)
+        {
+            return PartialView("NewRequest");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewReqData(ClientInformation client)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!_Genral.CheckAvalibleRegion(client.State))
+                {
+                    ModelState.Clear();
+                    return Json(new { value = "Region" });
+                }
+                else
+                {
+                    ModelState.Clear();
+                    Request request;
+                    if (_Genral.CheckExistAspUser(client.Email))
+                    {
+                        //int userId = _Patient.FindUserId(client.Email);
+                        //request = _Patient.AddRequest(client, userId);
+                        return Json(new { value = "EmailExist" });
+                    }
+                    else
+                    {
+                        //Aspnetuser AspUser = _Patient.AddAspUser(client);
+                        //User user = _Patient.AddUser(client, AspUser.Id);
+                        //request = _Patient.AddRequest(client, user.Userid);
+                        //_Patient.AddRequestClient(client, request.Requestid);
+                        //_Patient.AddAspnetUserRole(AspUser.Id);
+                        return Json(new { value = "Ok" });
+                    }
+                }
+            }
+            else
+            {
+                return PartialView("NewRequest", client);
+            }
+        }
+        #endregion
+
         public IActionResult ExportAll()
         {
             //IEnumerable<tableData> data = _Admin.GetTableData(1);
@@ -554,6 +598,8 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
+
+
         public IActionResult Encounter(int reqid)
         {
             var client = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
@@ -562,47 +608,9 @@ namespace HalloDoc.Controllers
             return PartialView("_AEncounter", modelData);
         }
 
-        #region NewRequest
-        public IActionResult NewRequest(int reqid)
+        public IActionResult EncounterDone(EncounterViewModel data)
         {
-            return PartialView("NewRequest");
+            return PartialView();
         }
-
-        [HttpPost]
-        public async Task<IActionResult> NewReqData(ClientInformation client)
-        {
-            if (ModelState.IsValid)
-            {
-                if (!_Genral.CheckAvalibleRegion(client.State))
-                {
-                    return Json(new { value = "Region" });
-                }
-                else
-                {
-                    Request request;
-                    if (_Genral.CheckExistAspUser(client.Email))
-                    {
-                        //int userId = _Patient.FindUserId(client.Email);
-                        //request = _Patient.AddRequest(client, userId);
-                        return Json(new { value = "EmailExist" });
-                    }
-                    else
-                    {
-                        //Aspnetuser AspUser = _Patient.AddAspUser(client);
-                        //User user = _Patient.AddUser(client, AspUser.Id);
-                        //request = _Patient.AddRequest(client, user.Userid);
-                        //_Patient.AddRequestClient(client, request.Requestid);
-                        //_Patient.AddAspnetUserRole(AspUser.Id);
-                        return Json(new { value = "Ok" });
-                    }
-                }
-            }
-            else
-            {
-                return PartialView("NewRequest", client);
-            }
-        }
-        #endregion
-
     }
 }

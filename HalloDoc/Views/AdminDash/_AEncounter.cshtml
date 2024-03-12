@@ -20,157 +20,159 @@
             </div>
 
             <div class=" rounded shadow p-4 rounded-3">
-                <div class="mb-4">
-                    <h3 class="text-info text-center mt-3 mb-3">Medical Report-Confidential</h3>
+                <form id="Formdata" novalidate class="needs-validation">
+                    <div class="mb-4">
+                        <h3 class="text-info text-center mt-3 mb-3">Medical Report-Confidential</h3>
 
-                    <div class="row form-floating">
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="@Model.ClientInformation.Firstname">
-                            <label class="ms-3 text-secondary">First Name</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="@Model.ClientInformation.Lastname">
-                            <label class="ms-3 text-secondary">Last Name</label>
-                        </div>
-                        <div class="col-md-12 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.ClientInformation.Address">
-                            <label class="ms-3 text-secondary">Location</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="date" class="form-control bg-transparent"
-                                   placeholder="Date of birth" asp-for="@Model.ClientInformation.Dob" />
-                            <label class="ms-3 text-secondary">Date of Birth</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="date" class="form-control bg-transparent"
-                                   placeholder="Date" asp-for="@Model.ClientInformation.date"/>
-                            <label class="ms-3 text-secondary">Date</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="@Model.ClientInformation.Phonenumber" />
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="@Model.ClientInformation.Email">
-                            <label class="ms-3 text-secondary">Email</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.HistoryOfPresentIllnessOrInjury">
-                            <label class="ms-3 text-secondary">History Of Present illness Or injury</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.MedicalHistory">
-                            <label class="ms-3 text-secondary">Medical History</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Medications">
-                            <label class="ms-3 text-secondary">Medications</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Allergies">
-                            <label class="ms-3 text-secondary">Allergies</label>
-                        </div>
-                    </div>
-
-                    <div class="row form-floating">
-                        <div class="col-md-4 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Temp">
-                            <label class="ms-3 text-secondary">Temp</label>
-                        </div>
-                        <div class="col-md-4 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Hr">
-                            <label class="ms-3 text-secondary">HR</label>
-                        </div>
-                        <div class="col-md-4 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Rr">
-                            <label class="ms-3 text-secondary">RR</label>
-                        </div>
-                    </div>
-
-                    <div class="row form-floating">
-                        <div class="col-md-4 mt-2">
-                            <div class="row">
-                                <div class="col-md-6 form-floating mt-3">
-                                    <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.BloodPressureDiastolic">
-                                    <label class="ms-3 text-secondary">Blood Pressure(S...)</label>
-                                </div>
-                                <div class="col-md-6 form-floating mt-3">
-                                    <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.BloodPressureSystolic">
-                                    <label class="ms-3 text-secondary">Blood Pressure(D...)</label>
-                                </div>
+                        <div class="row form-floating">
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="@Model.ClientInformation.Firstname">
+                                <label class="ms-3 text-secondary">First Name</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="@Model.ClientInformation.Lastname">
+                                <label class="ms-3 text-secondary">Last Name</label>
+                            </div>
+                            <div class="col-md-12 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.ClientInformation.Address">
+                                <label class="ms-3 text-secondary">Location</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="date" class="form-control bg-transparent"
+                                       placeholder="Date of birth" asp-for="@Model.ClientInformation.Dob" />
+                                <label class="ms-3 text-secondary">Date of Birth</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="date" class="form-control bg-transparent"
+                                       placeholder="Date" asp-for="@Model.ClientInformation.date" />
+                                <label class="ms-3 text-secondary">Date</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="@Model.ClientInformation.Phonenumber" />
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="@Model.ClientInformation.Email">
+                                <label class="ms-3 text-secondary">Email</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.HistoryOfPresentIllnessOrInjury">
+                                <label class="ms-3 text-secondary">History Of Present illness Or injury</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.MedicalHistory">
+                                <label class="ms-3 text-secondary">Medical History</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Medications">
+                                <label class="ms-3 text-secondary">Medications</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Allergies">
+                                <label class="ms-3 text-secondary">Allergies</label>
                             </div>
                         </div>
-                        <div class="col-md-4 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.O2">
-                            <label class="ms-3 text-secondary">O2</label>
+
+                        <div class="row form-floating">
+                            <div class="col-md-4 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Temp">
+                                <label class="ms-3 text-secondary">Temp</label>
+                            </div>
+                            <div class="col-md-4 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Hr">
+                                <label class="ms-3 text-secondary">HR</label>
+                            </div>
+                            <div class="col-md-4 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Rr">
+                                <label class="ms-3 text-secondary">RR</label>
+                            </div>
                         </div>
-                        <div class="col-md-4 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Pain">
-                            <label class="ms-3 text-secondary">Pain</label>
+
+                        <div class="row form-floating">
+                            <div class="col-md-4 mt-2">
+                                <div class="row">
+                                    <div class="col-md-6 form-floating mt-3">
+                                        <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.BloodPressureDiastolic">
+                                        <label class="ms-3 text-secondary">Blood Pressure(S...)</label>
+                                    </div>
+                                    <div class="col-md-6 form-floating mt-3">
+                                        <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.BloodPressureSystolic">
+                                        <label class="ms-3 text-secondary">Blood Pressure(D...)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.O2">
+                                <label class="ms-3 text-secondary">O2</label>
+                            </div>
+                            <div class="col-md-4 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Pain">
+                                <label class="ms-3 text-secondary">Pain</label>
+                            </div>
+                        </div>
+
+                        <div class="row form-floating">
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Heent">
+                                <label class="ms-3 text-secondary">Heeent</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Cv">
+                                <label class="ms-3 text-secondary">CV</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Chest">
+                                <label class="ms-3 text-secondary">Chest</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Abd">
+                                <label class="ms-3 text-secondary">ABD</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Extremeties">
+                                <label class="ms-3 text-secondary">Extr</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Skin">
+                                <label class="ms-3 text-secondary">Skin</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Neuro">
+                                <label class="ms-3 text-secondary">Neuro</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Other">
+                                <label class="ms-3 text-secondary">Other</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Diagnosis">
+                                <label class="ms-3 text-secondary">Diagnosis</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.TreatmentPlan">
+                                <label class="ms-3 text-secondary">Treatment Plan</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.MedicationsDispensed">
+                                <label class="ms-3 text-secondary">Medications Dispensed</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Procedures">
+                                <label class="ms-3 text-secondary">Procedures</label>
+                            </div>
+                            <div class="col-md-12 form-floating mt-3">
+                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.FollowUp">
+                                <label class="ms-3 text-secondary">Followup</label>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row form-floating">
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Heent">
-                            <label class="ms-3 text-secondary">Heeent</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Cv">
-                            <label class="ms-3 text-secondary">CV</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Chest">
-                            <label class="ms-3 text-secondary">Chest</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Abd">
-                            <label class="ms-3 text-secondary">ABD</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Extremeties">
-                            <label class="ms-3 text-secondary">Extr</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Skin">
-                            <label class="ms-3 text-secondary">Skin</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Neuro">
-                            <label class="ms-3 text-secondary">Neuro</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Other">
-                            <label class="ms-3 text-secondary">Other</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Diagnosis">
-                            <label class="ms-3 text-secondary">Diagnosis</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.TreatmentPlan">
-                            <label class="ms-3 text-secondary">Treatment Plan</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.MedicationsDispensed">
-                            <label class="ms-3 text-secondary">Medications Dispensed</label>
-                        </div>
-                        <div class="col-md-6 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Procedures">
-                            <label class="ms-3 text-secondary">Procedures</label>
-                        </div>
-                        <div class="col-md-12 form-floating mt-3">
-                            <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.FollowUp">
-                            <label class="ms-3 text-secondary">Followup</label>
-                        </div>
+
+                    <div class="d-flex justify-content-end mt-4 mb-4">
+                        <button type="submit" class="btn btn-info text-light me-3 ChangeDone">Save Change</button>
+                        <div class="btn btn-primary text-light me-3 viewNote"> Finalize </div>
+                        <button type="button" class="btn btn-danger BackOn">Cancel</button>
                     </div>
-                </div>x
-
-
-                <div class="d-flex justify-content-end mt-4 mb-4">
-                    <button type="button" class="btn btn-info text-light me-3 assign">Save Change</button>
-                    <div class="btn btn-primary text-light me-3 viewNote"> Finalize </div>
-                    <button type="button" class="btn btn-danger">Cancel</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -181,6 +183,28 @@
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('dash').classList.add('underLine');
+    });
+</script>
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('#Formdata').submit(function (e) {
+            e.preventDefault();
+            var data = $("#Formdata").serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/AdminDash/EncounterDone',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: data,
+                success: function (response) {
+                    console.log("success");
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+        });
     });
 </script>
 
