@@ -24,7 +24,7 @@ namespace HalloDoc.Repository.Interface
 
         string getClientEmailbyReqId(int reqid);
 
-        void addEmailLog(string eTemplate, string sub, string recemail, string filepath, int roleid, int reqid, int? adminid, int? phyid);
+        void addEmailLog(string eTemplate, string sub, string recemail, string filepath, int roleid, int? reqid, int? adminid, int? phyid);
 
         Task SendEmailOffice365(string recEmail, string subject, string body, List<string> attachment);
 

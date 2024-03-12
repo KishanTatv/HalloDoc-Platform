@@ -86,7 +86,7 @@ namespace HalloDoc.Repository.Implement
                                               Phonenumber = f.Phonenumber,
                                               ReqPhonenumber = r.Phonenumber,
                                               Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
-                                              city = f.City,
+                                              Region = f.State,
                                               Notes = r.Symptoms,
                                           };
             return data;
@@ -120,7 +120,7 @@ namespace HalloDoc.Repository.Implement
                                               Phonenumber = rc.Phonenumber,
                                               ReqPhonenumber = rc.Phonenumber,
                                               Address = rc.Street + ", " + rc.City + ", " + rc.State + ", " + rc.Zipcode,
-                                              city = rc.City,
+                                              Region = rc.State,
                                               Notes = l.Notes,
                                           };
             return data;
@@ -153,7 +153,7 @@ namespace HalloDoc.Repository.Implement
                                               Phonenumber = r.Phonenumber,
                                               ReqPhonenumber = f.Phonenumber,
                                               Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
-                                              city = r.City,
+                                              Region = r.State,
                                               Notes = f.Symptoms,
                                           };
             return data;
@@ -186,7 +186,7 @@ namespace HalloDoc.Repository.Implement
                                               Phonenumber = r.Phonenumber,
                                               ReqPhonenumber = f.Phonenumber,
                                               Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
-                                              city = r.City,
+                                              Region = r.State,
                                               Notes = f.Symptoms,
                                           };
             return data;
@@ -219,7 +219,7 @@ namespace HalloDoc.Repository.Implement
                                               Phonenumber = r.Phonenumber,
                                               ReqPhonenumber = f.Phonenumber,
                                               Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
-                                              city = r.City,
+                                              Region = r.State,
                                               Notes = f.Symptoms,
                                           };
             return data;
@@ -251,7 +251,7 @@ namespace HalloDoc.Repository.Implement
                                               Phonenumber = r.Phonenumber,
                                               ReqPhonenumber = f.Phonenumber,
                                               Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
-                                              city = r.City,
+                                              Region = r.State,
                                               Notes = f.Symptoms,
                                           };
             return data;

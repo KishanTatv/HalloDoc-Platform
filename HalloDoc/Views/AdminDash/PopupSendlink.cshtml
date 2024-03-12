@@ -1,38 +1,42 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-
-@model HalloDoc.Entity.Models.Requestclient;
-
 @{
 }
 
-<div class="modal fade" id="sendAgree" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+
+<div class="modal fade" id="sendLink" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-dialog-centered">
         <div class="modal-content rounded-4">
             <div class="modal-header bg-info p-2">
                 <h1 class="modal-title fs-5 text-light" id="exampleModalLabel">
-                    Send Agreement
+                    Send mail to patient for submitting request
                 </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>To Send Agreement please make sure you are updating the correct contact information below for the responsible party.</p>
-
                 <div class="text-center pt-2">
                     <div class="form-floating mt-2">
-                        <input type="number" class="form-control bg-transparent phoneAgree" placeholder="contact" asp-for="Phonenumber">
-                        <label>Phone Number</label>
+                        <input type="text" class="form-control bg-transparent" placeholder="firstNmae">
+                        <label>First Name</label>
                     </div>
                     <div class="form-floating mt-2">
-                        <input type="email" class="form-control bg-transparent emailAgree" placeholder="eamil" asp-for="Email">
+                        <input type="text" class="form-control bg-transparent" placeholder="lastName">
+                        <label>Last Name</label>
+                    </div>
+                    <div class="form-floating mt-2">
+                        <input type="text" id="phone1" style="height:58px" class="form-control bg-transparent" />
+                    </div>
+                    <div class="form-floating mt-2">
+                        <input type="email" class="form-control bg-transparent emailInput" placeholder="eamil">
                         <label>Email</label>
                     </div>
                 </div>
                 <p class="text-danger m-0"></p>
             </div>
             <div class="modal-footer p-1">
-                <button type="submit" class="btn btn-secondary btn-info text-light" id="agreement" data-reqid="@Model.Requestid">Continue</button>
+                <button type="submit" class="btn btn-secondary btn-info text-light sendlink" >Send</button>
                 <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
             </div>
         </div>
@@ -41,19 +45,18 @@
 
 
 
+<script src="~/js/contact-api.js" asp-append-version="true"></script>
 <script asp-append-version="true">
     $(document).ready(function () {
-        $('#agreement').click(function () {
-            var reqid = $(this).data('reqid');
+        $('.sendlink').click(function () {
             if (CheckData()) {
-                var email = $('.emailAgree').val();
-                var phone = $('.phoneAgree').val();
+                var email = $('.emailInput').val();
                 $.ajax({
-                    url: '/AdminDash/AgrrementSent',
+                    url: '/AdminDash/SendLinkData',
                     method: 'POST',
-                    data: { reqid: reqid, email: email, phone: phone },
+                    data: {email: email},
                     success: function (response) {
-                        $("#sendAgree").remove();
+                        $("#sendLink").remove();
                         $('.modal-backdrop').remove();
                     },
                     error: function (xhr, status, error) {
@@ -65,9 +68,8 @@
     });
 
     function CheckData() {
-        var email = $('.emailAgree').val();
-        var phone = $('.phoneAgree').val();
-        if (email && phone) {
+        var email = $('.emailInput').val();
+        if (email) {
             return true;
         }
         else {

@@ -100,7 +100,7 @@
 
 
                 <div class="d-flex justify-content-end mt-4 mb-4">
-                    <button type="button" class="btn btn-info text-light me-3">Assign</button>
+                    <button type="button" class="btn btn-info text-light me-3 assign" data-reqid="@Model.Requestid">Assign</button>
                     <div class="btn btn-info text-light me-3 viewNote" data-reqid="@Model.Requestid"> View Notes</div>
                     <button type="button" class="btn btn-danger">Cancel</button>
                 </div>
@@ -131,6 +131,24 @@
                     dashHead.classList.add('d-none');
                     dashs.classList.add('d-none');
                     $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.assign').click(function () {
+            var reqid = $(this).data('reqid');
+            var phyCase = "AssignPhy";
+            $.ajax({
+                url: '/AdminDash/PopupAssigncase',
+                method: 'POST',
+                data: { reqid: reqid, phyCase: phyCase },
+                success: function (response) {
+                    $(".PartialPopup").html(response);
+                    var my = new bootstrap.Modal(document.getElementById('assignCase'));
+                    my.show();
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

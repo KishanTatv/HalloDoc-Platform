@@ -78,7 +78,7 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public void addEmailLog(string eTemplate, string sub, string recemail, string filepath, int roleid, int reqid, int? adminid, int? phyid)
+        public void addEmailLog(string eTemplate, string sub, string recemail, string filepath, int roleid, int? reqid, int? adminid, int? phyid)
         {
             BitArray bitArray = new BitArray(1);
             bitArray[0] = true;

@@ -94,7 +94,8 @@
                 data: { AssignNote: AssignNote, phycase: phycase, TransphyId: TransphyId, reqid: reqid },
                 success: function (response) {
                     if (response.value == "Ok") {
-                        window.location.reload();
+                        $("#assignCase").remove();
+                        $('.modal-backdrop').remove();
                     } else if (response.value == "Error") {
                         $(".text-danger").text("Please Select Physician!");
                     }

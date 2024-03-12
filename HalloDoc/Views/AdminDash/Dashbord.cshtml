@@ -92,7 +92,7 @@
                 <h5>Patient <span class="text-primary dNameCard"> </span> </h5>
             </div>
             <div>
-                <button type="button" class="btn btn-info text-light"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
+                <button type="button" class="btn btn-info text-light sendLink"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
                 <div class="btn btn-info text-light NewReq" data-reqid="1"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></div>
                 <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
                 <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
@@ -105,20 +105,20 @@
         <div class=" d-flex justify-content-between flex-wrap DashSearch">
             <div class=" d-flex">
                 <input type="text" id="SearchPatient" class="form-control me-2" placeholder="Search Patient">
-                <select class="form-select" id="validationDefault04">
-                    <option selected disabled value="">All Regions</option>
+                <select class="form-select" id="RegSearch">
+                    <option value="">All Regions</option>
                     @foreach (var regName in Model.Regions)
                     {
-                        <option value="@regName.Regionid">@regName.Name</option>
+                        <option value="@regName.Name">@regName.Name</option>
                     }
                 </select>
             </div>
             <div class=" d-flex align-self-center p-0 ">
-                <span class="btn btn-outline-secondary p-0 ps-1 pe-1 me-2 h-50 text-dashide">All</span>
-                <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-success"></i>Patient</span>
-                <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-orange"></i>Family/Friend</span>
-                <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-pink"></i>Bussiness</span>
-                <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-blue"></i>Concierge</span>
+                <span class="btn btn-outline-secondary p-0 ps-1 pe-1 me-2 h-50 text-dashide reqFilter" data-reqtype="">All</span>
+                <span class="me-2 text-black reqFilter" data-reqtype="2"><i class="bi bi-circle-fill me-1 text-success"></i>Patient</span>
+                <span class="me-2 text-black reqFilter" data-reqtype="3"><i class="bi bi-circle-fill me-1 text-orange"></i>Family/Friend</span>
+                <span class="me-2 text-black reqFilter" data-reqtype="1"><i class="bi bi-circle-fill me-1 text-pink"></i>Bussiness</span>
+                <span class="me-2 text-black reqFilter" data-reqtype="4"><i class="bi bi-circle-fill me-1 text-blue"></i>Concierge</span>
                 <span class="me-2 text-black"><i class="bi bi-circle-fill me-1 text-purple"></i>vip</span>
             </div>
         </div>
@@ -236,10 +236,12 @@
 
         $('.DashCard').click(function () {
             var id = $(this).data('id');
+            var search = $('#SearchPatient').val();
+            var reg = $('#RegSearch').val();
             $.ajax({
                 url: '/AdminDash/DashbordData',
                 method: 'POST',
-                data: { id: id },
+                data: { id: id, search: search, reg:reg },
                 success: function (response) {
                     $("#partial").html(response);
                 },
@@ -267,8 +269,21 @@
             });
         });
 
-        $('#SearchPatient').change(function () {
-            var name = $(this).val();
+        $('.sendLink').click(function () {
+            $.ajax({
+                url: '/AdminDash/SendLink',
+                success: function (response) {
+                    $(".PartialPopup").html(response);
+                    var my = new bootstrap.Modal(document.getElementById('sendLink'));
+                    my.show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        function getIdFromCard(){
             var cardname = $('.dNameCard').html();
             var id;
             switch (cardname) {
@@ -291,10 +306,51 @@
                     id = 6;
                     break;
             }
+            return id;
+        }
+        $('#SearchPatient').keyup(function () {
+            var search = $(this).val();
+            var reg = $('#RegSearch').val();
+            var id = getIdFromCard();
             $.ajax({
                 url: '/AdminDash/DashbordData',
                 method: 'POST',
-                data: { id : id, search: name },
+                data: { id: id, search: search, reg: reg},
+                success: function (response) {
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('#RegSearch').change(function () {
+            var search = $('#SearchPatient').val();
+            var reg = $(this).val();
+            var id = getIdFromCard();
+            $.ajax({
+                url: '/AdminDash/DashbordData',
+                method: 'POST',
+                data: { id: id, search: search, reg: reg },
+                success: function (response) {
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.reqFilter').click(function () {
+            var reqtype = $(this).data('reqtype');
+            var id = getIdFromCard();
+            var search = $('#SearchPatient').val();
+            var reg = $('#RegSearch').val();
+            $.ajax({
+                url: '/AdminDash/DashbordData',
+                method: 'POST',
+                data: { id: id, search: search, reg: reg, reqtype: reqtype },
                 success: function (response) {
                     $("#partial").html(response);
                 },

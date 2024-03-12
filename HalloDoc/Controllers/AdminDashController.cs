@@ -46,7 +46,7 @@ namespace HalloDoc.Controllers
         }
 
 
-        public IActionResult DashbordData(int id, int page, string search)
+        public IActionResult DashbordData(int id, int page, string search, string reg, int reqtype)
         {
             var Tcount = _Admin.TotalCountPatient();
             int pageSize = 5;
@@ -64,6 +64,16 @@ namespace HalloDoc.Controllers
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
                         ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
+                    if(reg != null)
+                    {
+                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    if(reqtype != 0)
+                    {
+                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
                     Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 2:   //Pending
@@ -73,6 +83,16 @@ namespace HalloDoc.Controllers
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    if (reg != null)
+                    {
+                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    if (reqtype != 0)
+                    {
+                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
                         ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
@@ -86,6 +106,16 @@ namespace HalloDoc.Controllers
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
                         ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
+                    if (reg != null)
+                    {
+                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    if (reqtype != 0)
+                    {
+                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
                     Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 4:  //Conclude
@@ -95,6 +125,16 @@ namespace HalloDoc.Controllers
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    if (reg != null)
+                    {
+                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    if (reqtype != 0)
+                    {
+                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
                         ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
@@ -108,6 +148,16 @@ namespace HalloDoc.Controllers
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
                         ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
+                    if (reg != null)
+                    {
+                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    if (reqtype != 0)
+                    {
+                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
                     Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 6:   //Unpaid
@@ -117,6 +167,16 @@ namespace HalloDoc.Controllers
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    if (reg != null)
+                    {
+                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
+                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+                    }
+                    if (reqtype != 0)
+                    {
+                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
                         ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
@@ -136,6 +196,27 @@ namespace HalloDoc.Controllers
             return PartialView("PopupReqSupport");
         }
 
+        #region SendLink
+        public IActionResult SendLink()
+        {
+            return PartialView("PopupSendlink");
+        }
+
+        public IActionResult SendLinkData(string email)
+        {
+            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            Nullable<int> Phyid = null;
+            Nullable<int> reqid = null;
+            int roleId = Convert.ToInt32(Request.Cookies["CookieRole"]);
+            string sub = "Submit Requset";
+            string link = Url.Action("SubmitReq", "Patient", null, Request.Scheme);
+            var body = $"Hi, Please click on the following link to submit the request." + link;
+            string filepath = null;
+            //_Genral.SendEmailOffice365(email, sub, body, null);
+            _Genral.addEmailLog(body, sub, email, filepath, roleId, reqid, AdminId, Phyid);
+            return Ok();
+        }
+        #endregion
 
         public IActionResult ExportAll()
         {
