@@ -82,20 +82,20 @@
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input AdIn" type="checkbox" value="option1">
-                                        <label class="form-check-label" for="inlineCheckbox1">District Of Columbia</label>
+                                        <input class="form-check-input AdIn checkb" type="checkbox" value="option1">
+                                        <label>District Of Columbia</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input AdIn" type="checkbox" value="option2">
-                                        <label class="form-check-label" for="inlineCheckbox2">New York</label>
+                                        <input class="form-check-input AdIn checkb" type="checkbox" value="option2">
+                                        <label>New York</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input AdIn" type="checkbox" value="option3">
-                                        <label class="form-check-label" for="inlineCheckbox3">Virginia</label>
+                                        <input class="form-check-input AdIn checkb" type="checkbox" value="option3">
+                                        <label>Virginia</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input AdIn" type="checkbox" value="option3">
-                                        <label class="form-check-label" for="inlineCheckbox3">Virginia</label>
+                                        <input class="form-check-input AdIn checkb" type="checkbox" value="option3">
+                                        <label>Virginia</label>
                                     </div>
                                 </div>
                             </div>
@@ -182,6 +182,7 @@
         const edit = document.getElementById('editbtn1');
         const submit = document.getElementById('submitbtn1');
         const cancel = document.getElementById('cancelbtn1');
+        const checkb = document.querySelectorAll('.checkb');
         edit.classList.add('d-none');
         submit.classList.remove('d-none');
         cancel.classList.remove('d-none');
@@ -190,6 +191,9 @@
         AdIn.forEach(AdIn =>{
             AdIn.disabled = false;
             AdIn.classList.add("bg-transparent");
+        });
+        checkb.forEach(checkb =>{
+            checkb.classList.remove("bg-transparent");
         });
     }
 

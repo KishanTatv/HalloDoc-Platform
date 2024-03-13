@@ -128,58 +128,57 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
-                                    <div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="AssignPhy"> Assign Case </div>
+                                    <div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="AssignPhy"> <i class="bi bi-card-heading me-2"></i> Assign Case </div>
                                 </li>
                             }
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
-                                    <div class="dropdown-item CancelCase" data-reqid="@item.RequestId"> Cancel Case </div>
+                                    <div class="dropdown-item CancelCase" data-reqid="@item.RequestId"> <i class="bi bi-x-circle me-2"></i> Cancel Case </div>
                                 </li>
                             }
                             <li>
-                                <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> View Case </div>
+                                <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> <i class="bi bi-journal-album me-2"></i> View Case </div>
                             </li>
                             @if (ViewBag.dTable != 1)
                             {
-                                <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId">View Uploads </div></li>
+                                <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId"> <i class="bi bi-file-earmark-arrow-up me-2"></i> View Uploads </div></li>
                             }
                             <li>
-                                <div class="dropdown-item ViewNote" data-reqid="@item.RequestId">View Notes</div>
+                                <div class="dropdown-item ViewNote" data-reqid="@item.RequestId"> <i class="bi bi-file-diff me-2"></i> View Notes</div>
                             </li>
                             @if (ViewBag.dTable == 1)
                             {
                                 <li>
                                     <div class="dropdown-item BlockCase" data-reqid="@item.RequestId">
-                                        Block
-                                        Patient
+                                        <i class="bi bi-slash-circle me-2"></i> Block Patient
                                     </div>
                                 </li>
                             }
                             @if (ViewBag.dTable == 2)
                             {
-                                <li><div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="TransferPhy">Transfer</div></li>
+                                <li><div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="TransferPhy"><i class="bi bi-journal-medical me-2"></i> Transfer</div></li>
                             }
                             @if (ViewBag.dTable == 5)
                             {
-                                <li><a class="dropdown-item CloseCase" data-reqid="@item.RequestId">Close Case</a></li>
+                                <li><a class="dropdown-item CloseCase" data-reqid="@item.RequestId"><i class="bi bi-x-circle me-2"></i> Close Case</a></li>
                             }
                             @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
                             {
-                                <li><div class="dropdown-item OrderCase" data-reqid="@item.RequestId">Order</div></li>
-                                <li><a class="dropdown-item" href="#">Doctors Notes</a></li>
+                                <li><div class="dropdown-item OrderCase" data-reqid="@item.RequestId"><i class="bi bi-journal-check me-2"></i> Order</div></li>
+                                <li><a class="dropdown-item" href="#"><i class="bi bi-journal-bookmark-fill me-2"></i> Doctors Notes</a></li>
                             }
                             @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
                             {
-                                <li><div class="dropdown-item ClearCase" data-reqid="@item.RequestId">Clear Case</div></li>
+                                <li><div class="dropdown-item ClearCase" data-reqid="@item.RequestId"><i class="bi bi-x-circle me-2"></i> Clear Case</div></li>
                             }
                             @if (ViewBag.dTable == 2)
                             {
-                                <li><div class="dropdown-item SendAgreement" data-reqid="@item.RequestId">Send Agreement</div></li>
+                                <li><div class="dropdown-item SendAgreement" data-reqid="@item.RequestId"><i class="bi bi-journals me-2"></i> Send Agreement</div></li>
                             }
                             @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
                             {
-                                <li><a class="dropdown-item Encounter" data-reqid="@item.RequestId">Encounter</a></li>
+                                <li><a class="dropdown-item Encounter" data-reqid="@item.RequestId"><i class="bi bi-journal-plus me-2"></i> Encounter</a></li>
                             }
 
                         </ul>

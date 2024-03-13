@@ -174,8 +174,16 @@
 
 
 .form-check-input:checked {
-    background-color: #0dcaf0;
     border-color: #0dcaf0;
+    background-color: #0dcaf0;
+}
+
+.form-floating > label {
+    color: darkgray;
+}
+
+floating > .form-select {
+    color: #44e0f8;
 }
 
 

@@ -15,14 +15,65 @@
 <div class="MainContent pt-0 min-vh-100">
     <partial name="partial/AdminNavTab" />
 
-    <div>
-         Provider 
-        <p>hello</p>
-    </div>
-</div>
+    <div class="d-flex w-100 justify-content-center pb-4">
+        <div class="HContainer m-auto">
+            <div class="d-flex m-3">
+                <h4>Provider Information</h4>
+            </div>
 
-<script asp-append-version="true">
-    window.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('providerTab').classList.add('underLine');
-    });
-</script>
+            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between mt-2 mb-2">
+                        <div>
+                            <input type="text" id="SearchProvider" class="form-control" placeholder="All">
+                        </div>
+                        <div class="btn btn-info text-light">
+                            Create Provider Account
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>
+                                        <div class="form-check">
+                                            Stop Notification
+                                        </div>
+                                    </th>
+                                    <th scope="col">Provider Name<i class="bi bi-arrow-up ms-1"></i></th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">On Call Status</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input class="form-check-input" type="checkbox" value="" id="toggleAllCheck"></td>
+                                    <td>jhkh hkjlkj</td>
+                                    <td>Physician</td>
+                                    <td>Un Availiable</td>
+                                    <td>Pending</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-outline-info ps-2 pe-2 p-0" >
+                                            Contact
+                                        </a>
+                                        <div class="btn btn-outline-info ps-2 pe-2 p-0">
+                                            Edit
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script asp-append-version="true">
+        window.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById('providerTab').classList.add('underLine');
+        });
+    </script>
