@@ -49,7 +49,7 @@ namespace HalloDoc.Controllers
 
 
         public IActionResult DashbordData(int id, int page, string search, string reg, int reqtype)
-        {
+       {
             var Tcount = _Admin.TotalCountPatient();
             int pageSize = 5;
 
@@ -64,19 +64,15 @@ namespace HalloDoc.Controllers
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if(reg != null)
                     {
                         Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if(reqtype != 0)
                     {
                         Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
-                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 2:   //Pending
                     ViewBag.TPage = Math.Ceiling(Tcount[1] / 5.0);
@@ -85,19 +81,15 @@ namespace HalloDoc.Controllers
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reg != null)
                     {
                         Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reqtype != 0)
                     {
                         Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
-                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 3:   //Active
                     ViewBag.TPage = Math.Ceiling(Tcount[2] / 5.0);
@@ -106,19 +98,15 @@ namespace HalloDoc.Controllers
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reg != null)
                     {
                         Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reqtype != 0)
                     {
                         Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
-                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 4:  //Conclude
                     ViewBag.TPage = Math.Ceiling(Tcount[3] / 5.0);
@@ -127,19 +115,15 @@ namespace HalloDoc.Controllers
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reg != null)
                     {
                         Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reqtype != 0)
                     {
                         Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
-                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 5:   //To-close
                     ViewBag.TPage = Math.Ceiling(Tcount[4] / 5.0);
@@ -148,19 +132,15 @@ namespace HalloDoc.Controllers
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reg != null)
                     {
                         Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reqtype != 0)
                     {
                         Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
-                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
                 case 6:   //Unpaid
                     ViewBag.TPage = Math.Ceiling(Tcount[5] / 5.0);
@@ -169,22 +149,21 @@ namespace HalloDoc.Controllers
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reg != null)
                     {
                         Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
                     if (reqtype != 0)
                     {
                         Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                        ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
                     }
-                    Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
                     break;
             }
 
+            ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
+            ViewBag.CurrentPage = page;
+            Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
             var region = _Admin.getAllRegion();
             var dashData = new DashTable { Tdata = Req.ToList(), Regions = region };
 
@@ -599,7 +578,7 @@ namespace HalloDoc.Controllers
         #endregion
 
 
-
+        #region Encounter
         public IActionResult Encounter(int reqid)
         {
             var client = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
@@ -612,5 +591,6 @@ namespace HalloDoc.Controllers
         {
             return PartialView();
         }
+        #endregion
     }
 }

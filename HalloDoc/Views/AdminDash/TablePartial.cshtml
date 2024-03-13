@@ -254,14 +254,22 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
 
 <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-end me-3 pb-2">
-        @if(ViewBag.TPage > 1)
+    <ul class="pagination justify-content-between me-3 pb-2">
+
+        <div>
+            <span> Page : <span class="text-primary">@(ViewBag.CurrentPage + 1)</span> / @ViewBag.TPage </span>
+        </div>
+        <div>
+        @if (ViewBag.CurrentPage > 0)
         {
-            @for (int i = 1; i <= ViewBag.TPage; i++)
-            {
-                <li class="page-item"><div class="page-link" data-id="@ViewBag.dTable" data-page="@(i - 1)">@i</div></li>
-            }
+            <li><div class="page-link" data-id="@ViewBag.dTable" data-page="@(ViewBag.CurrentPage - 1)"> Previous </div></li>
         }
+        @if (ViewBag.TPage-1 > ViewBag.CurrentPage)
+        {
+            <li><div class="page-link text-warning" data-id="@ViewBag.dTable" data-page="@(ViewBag.CurrentPage + 1)"> Next </div></li>
+        }
+        </div>
+
     </ul>
 </nav>
 
@@ -271,28 +279,12 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 <script asp-append-version="true">
     $(document).ready(function () {
 
-        function hideOtherPortion(){
+        function hideOtherPortion() {
             const dashHead = document.querySelector('.dashHead');
             const dashs = document.querySelector('.DashSearch');
             dashHead.classList.add('d-none');
             dashs.classList.add('d-none');
         }
-
-        $('.page-link').click(function () {
-            var id = $(this).data('id');
-            var page = $(this).data('page');
-            $.ajax({
-                url: '/AdminDash/DashbordData',
-                method: 'POST',
-                data: { id: id, page: page },
-                success: function (response) {
-                    $("#partial").html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
 
         $('.ViewCase').click(function () {
             var reqid = $(this).data('reqid');

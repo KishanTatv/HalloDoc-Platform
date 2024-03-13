@@ -2,6 +2,8 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
+@model HalloDoc.Entity.AdminTab.ProfileViewModel;
+
 @{
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
@@ -14,147 +16,291 @@
     <partial name="partial/AdminNavTab" />
 
     <div>
-        <p>profile</p>
-
         <div class="d-flex w-100 justify-content-center pb-4">
             <div class="HContainer m-auto">
                 <div class="d-flex justify-content-end">
-                    <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="PatientDash" asp-action="Dashbord">
+                    <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
                         <strong class="pe-2">&lt Back</strong>
                     </a>
                 </div>
 
-                <form class="rounded shadow p-4 mb-5 bg-body-tertiary rounded" asp-action="PatientReq" asp-controller="PatientRequest" method="post" enctype="multipart/form-data">
+                <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
                     <div class="mb-4">
-                        <h5>Patient Information</h5>
-                        <div class="form-floating">
-                            <textarea type="text" class="form-control bg-transparent border border-info h-25"
-                                      placeholder="Detail info" rows="3" aria-label="Detail info"
-                                      aria-describedby="button-addon2"> </textarea>
-                            <label for="ms-3 text-info">Enter Brief Detail of Symptoms(options)</label>
-                        </div>
+                        <p class="msg text-center"></p>
+                        <h5>Account Information</h5>
                         <div class="row form-floating">
                             <div class="col-md-6 form-floating mt-2">
-                                <input type="text" class="form-control bg-transparent" placeholder="firstNmae">
-                                <label class="ms-3">First Name</label>
+                                <input type="text" class="form-control bg-transparent" placeholder="username" asp-for="Admin.Aspnetuser.Username">
+                                <label class="ms-3">User Name</label>
                             </div>
                             <div class="col-md-6 form-floating mt-2">
-                                <input type="text" class="form-control bg-transparent" placeholder="lastName">
-                                <label class="ms-3">Last Name</label>
+                                <input type="password" class="form-control bg-transparent pass" placeholder="pass">
+                                <label class="ms-3">Password</label>
                             </div>
                             <div class="col-md-6 form-floating mt-2">
-                                <input type="date" class="form-control bg-transparent"
-                                       placeholder="Date of birth">
-                                <label class="ms-3">Date of Birth</label>
+                                <select class="form-select" aria-label="Floating label select example" disabled>
+                                    <option selected>Active</option>
+                                    <option value="1">One</option>
+                                </select>
+                                <label class="ms-2" for="floatingSelect">Status</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2">
+                                <select class="form-select" aria-label="Floating label select example" disabled>
+                                    <option selected>Master Admin</option>
+                                    <option value="1">One</option>
+                                </select>
+                                <label class="ms-2" for="floatingSelect">Role</label>
                             </div>
                         </div>
                     </div>
-
-                    <div class="mt-4 mb-4">
-                        <h5>Patient Contact Information</h5>
-                        <div class="row form-floating">
-                            <div class="col-md-6 form-floating mt-2">
-                                <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email">
-                                <label class="ms-3">Email</label>
-                            </div>
-                            <div class="col-md-6 form-floating mt-2">
-                                <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" />
-                            </div>
-                        </div>
-                        <div class="row form-floating">
-                            <div class="col-md-6 form-floating mt-2">
-                                <input type="password" class="form-control bg-transparent" id="password" name="password" placeholder="Password" style="display: none;">
-                                <label class="ms-3" id="passwordLabel" style="display: none;">Password</label>
-                            </div>
-                            <div class="col-md-6 form-floating mt-2">
-                                <input type="password" class="form-control bg-transparent" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" style="display: none;">
-                                <label class="ms-3" id="confirmPasswordLabel" style="display: none;">Confirm Password</label>
-                            </div>
-                            @if (TempData["Msg"] != null)
-                            {
-                                <span class="text-danger ">@TempData["Msg"]</span>
-                            }
-                        </div>
+                    <div class="d-flex justify-content-end mt-4 mb-4">
+                        <button type="submit" class="btn btn-outline-info changePass">Reset Password</button>
                     </div>
 
-                    <div class="mt-4 mb-4">
-                        <h5>Patient Location</h5>
-                        <div class="row form-floating">
-                            <div class="col-md-6 form-floating mt-2">
-                                <input type="text" class="form-control bg-transparent" placeholder="street">
-                                <label class="ms-3">Street</label>
-                            </div>
-                            <div class="col-md-6 form-floating mt-2 ">
-                                <input type="text" class="form-control bg-transparent" placeholder="city">
-                                <label class="ms-3">City</label>
-                            </div>
-                        </div>
-                        <div class="row form-floating">
-                            <div class="col-md-6 form-floating mt-2">
-                                <input type="text" class="form-control bg-transparent" placeholder="state">
-                                <label class="ms-3">State</label>
-                                @if (TempData["Msg"] != null)
-                                {
-                                    <span class="text-danger ">@TempData["Msg"]</span>
-                                }
-                            </div>
-                            <div class="col-md-6 form-floating mt-2">
-                                <input type="text" maxlength="6" class="form-control bg-transparent" placeholder="zipCode">
-                                <label class="ms-3">Zip Code</label>
-                            </div>
-                            <div class="col-md-6 form-floating mt-2">
-                                <input type="text" class="form-control bg-transparent" placeholder="roomSuite">
-                                <label class="ms-3">Room # / Suite(optional)</label>
-                            </div>
-
-                        </div>
-                    </div>
-
+                    <form id="Formdata1" novalidate class="needs-validation">
                         <div class="mt-4 mb-4">
-                            <h5>Relation</h5>
+                            <h5>Administrartor Information</h5>
                             <div class="row form-floating">
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent" placeholder="Relation with Patient">
-                                    <label class="ms-3">Relation with Patient (optional)</label>
+                                    <input type="text" class="form-control bg-transparent AdIn" placeholder="firstNmae" asp-for="Admin.Firstname">
+                                    <label class="ms-3">First Name</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="Admin.Lastname">
+                                    <label class="ms-3">Last Name</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="email" class="form-control bg-transparent" id="email" placeholder="email" asp-for="Admin.Email">
+                                    <label class="ms-3">Email</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="email" class="form-control bg-transparent" id="conEmail" placeholder="conEmail" asp-for="Admin.Email">
+                                    <label class="ms-3">Confirm Email</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" id="phone1" class="form-control bg-transparent AdIn" style="height:58px" asp-for="Admin.Mobile" />
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input AdIn" type="checkbox" value="option1">
+                                        <label class="form-check-label" for="inlineCheckbox1">District Of Columbia</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input AdIn" type="checkbox" value="option2">
+                                        <label class="form-check-label" for="inlineCheckbox2">New York</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input AdIn" type="checkbox" value="option3">
+                                        <label class="form-check-label" for="inlineCheckbox3">Virginia</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input AdIn" type="checkbox" value="option3">
+                                        <label class="form-check-label" for="inlineCheckbox3">Virginia</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="d-flex justify-content-end mt-4 mb-4">
+                            <button id="editbtn1" class="btn btn-info me-4" onclick="editEnable1()">Edit</button>
+                            <button type="submit" id="submitbtn1" class="btn btn-info d-none ps-4 pe-4 me-3">Submit</button>
+                            <button id="cancelbtn1" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable1()">Cancel</button>
+                        </div>
+                        </form>
 
-                    <div class="mt-4 mb-4">
-                        <h5>(optional) Upload Photo or Document</h5>
-                        <div class="d-flex m-auto">
-                            <div class="p-0 w-100">
-                                <input type="text" class="form-control bg-transparent" id="selectedFile" placeholder="select File"
-                                       disabled>
-                                <label class="ms-3"></label>
-                            </div>
-                            <div>
-                                <label class="btn btn-outline-info d-flex ">
-                                    <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
-                                    <i class="bi bi-cloud-arrow-up border-info"></i>
-                                    <span class="upload_txt ms-2">Upload</span>
-                                </label>
+                    <form id="Formdata2" novalidate class="needs-validation">
+                        <div class="mt-4 mb-4">
+                            <h5>Mailing & Billing Information</h5>
+                            <div class="row form-floating">
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" class="form-control bg-transparent Adad" placeholder="add1" asp-for="Admin.Address1">
+                                    <label class="ms-3">Address 1</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" class="form-control bg-transparent Adad" placeholder="add2" asp-for="Admin.Address2">
+                                    <label class="ms-3">Address 1</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2 ">
+                                    <input type="text" class="form-control bg-transparent Adad" placeholder="city" asp-for="Admin.City">
+                                    <label class="ms-3">City</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <select class="form-select selectReg" aria-label="Floating label select">
+                                        <option selected>@Enum.GetName(typeof(HalloEnum.regName), Model.Admin.Regionid)</option>
+                                        @foreach(var state in Model.Regions)
+                                        {
+                                            <option value="@state.Regionid">@state.Name</option>
+                                        }
+                                    </select>
+                                    <label class="ms-2" for="floatingSelect">state</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" maxlength="6" class="form-control bg-transparent Adad" placeholder="zipCode" asp-for="Admin.Zip">
+                                    <label class="ms-3">Zip Code</label>
+                                </div>
+                                <div class="col-md-6 form-floating mt-2">
+                                    <input type="text" id="phone2" class="form-control bg-transparent Adad" style="height:58px" asp-for="Admin.Altphone" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="d-flex justify-content-end mt-4 mb-4">
-                        <button type="submit" class="btn btn-info me-4" name="Upload">Submit</button>
-                        <button type="button" class="btn btn-outline-info">Cancel</button>
-
-                        <!-- Modal -->
-                        <partial name="partial/ModalPartial" />
-
-                    </div>
-                </form>
+                        <div class="d-flex justify-content-end mt-4 mb-4">
+                            <button id="editbtn2" class="btn btn-info me-4" onclick="editEnable2()">Edit</button>
+                            <button type="submit" id="submitbtn2" class="btn btn-info d-none ps-4 pe-4 me-3">Submit</button>
+                            <button id="cancelbtn2" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable2()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
 
     </div>
 </div>
 
+
+<script src="~/js/contact-api.js" asp-append-version="true"></script>
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('profileTab').classList.add('underLine');
+    });
+
+    let inputs = document.querySelectorAll('input');
+    let select = document.querySelectorAll('select');
+    inputs.forEach(input => {
+        input.disabled = true;
+        input.classList.remove("bg-transparent");
+    });
+    select.forEach(select =>{
+        select.disabled = true;
+        select.classList.remove("bg-transparent");
+    })
+
+    let pass = document.querySelector('.pass');
+    pass.disabled = false;
+    pass.classList.add("bg-transparent");
+
+    function editEnable1(){
+        event.preventDefault();
+        const edit = document.getElementById('editbtn1');
+        const submit = document.getElementById('submitbtn1');
+        const cancel = document.getElementById('cancelbtn1');
+        edit.classList.add('d-none');
+        submit.classList.remove('d-none');
+        cancel.classList.remove('d-none');
+
+        let AdIn = document.querySelectorAll('.AdIn');
+        AdIn.forEach(AdIn =>{
+            AdIn.disabled = false;
+            AdIn.classList.add("bg-transparent");
+        });
+    }
+
+    function cancelEnable1(){
+        event.preventDefault();
+        const edit = document.getElementById('editbtn1');
+        const submit = document.getElementById('submitbtn1');
+        const cancel = document.getElementById('cancelbtn1');
+        edit.classList.remove('d-none');
+        submit.classList.add('d-none');
+        cancel.classList.add('d-none');
+
+        let AdIn = document.querySelectorAll('.AdIn');
+        AdIn.forEach(AdIn => {
+            AdIn.disabled = true;
+            AdIn.classList.remove("bg-transparent");
+        });
+    }
+
+    function editEnable2(){
+        event.preventDefault();
+        const edit = document.getElementById('editbtn2');
+        const submit = document.getElementById('submitbtn2');
+        const cancel = document.getElementById('cancelbtn2');
+        const reg = document.querySelector('.selectReg');
+        edit.classList.add('d-none');
+        submit.classList.remove('d-none');
+        cancel.classList.remove('d-none');
+        let Adad = document.querySelectorAll('.Adad');
+        Adad.forEach(Adad =>{
+            Adad.disabled = false;
+            Adad.classList.add("bg-transparent");
+        });
+        reg.disabled = false;
+        reg.classList.add("bg-transparent");
+    }
+
+    function cancelEnable2(){
+        event.preventDefault();
+        const edit = document.getElementById('editbtn2');
+        const submit = document.getElementById('submitbtn2');
+        const cancel = document.getElementById('cancelbtn2');
+        const reg = document.querySelector('.selectReg');
+        edit.classList.remove('d-none');
+        submit.classList.add('d-none');
+        cancel.classList.add('d-none');
+        let Adad = document.querySelectorAll('.Adad');
+        Adad.forEach(Adad => {
+            Adad.disabled = true;
+            Adad.classList.remove("bg-transparent");
+        });
+        reg.disabled = true;
+        reg.classList.remove("bg-transparent");
+    }
+</script>
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.changePass').click(function () {
+            var pass = $('.pass').val();
+            $.ajax({
+                url: '/AdminTab/ResetPass',
+                method: 'POST',
+                data: { pass : pass },
+                success: function (response) {
+                    if (response.value == "ok"){
+                        $('.msg').text("Password Changed").addClass('text-success');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('#Formdata1').submit(function (e) {
+            e.preventDefault();
+            var data = $("#Formdata1").serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateAdminProfile',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: data,
+                success: function (response) {
+                    if (response.value == "changed"){
+                        window.location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+        $('#Formdata2').submit(function (e) {
+            e.preventDefault();
+            var data = $("#Formdata2").serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateAdminLoc',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: data,
+                success: function (response) {
+                    if (response.value == "changed") {
+                        window.location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+        });
     });
 </script>

@@ -16,3 +16,11 @@ html {
   position: relative;
   min-height: 100%;
 }
+
+.form-floating > label{
+    color: darkgray;
+}
+
+.form-select {
+    color: #44e0f8;
+}

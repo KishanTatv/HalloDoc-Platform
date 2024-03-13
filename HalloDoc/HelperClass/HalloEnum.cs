@@ -32,5 +32,10 @@
         {
             New = 1, Pending, Active, Conclude, Toclose, Unpaid
         }
+
+        public enum regName
+        {
+            Gujrat = 1, Maharashtra, Delhi, Bihar, Goa
+        }
     }
 }

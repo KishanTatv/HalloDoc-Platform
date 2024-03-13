@@ -2,7 +2,6 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model IEnumerable<HalloDoc.Entity.AdminDashTable.tableData>;
 
 @{
     ViewData["Title"] = "Provider Location";
@@ -14,16 +13,16 @@
 
 
 <div class="MainContent pt-0 min-vh-100">
-        <partial name="partial/AdminNavTab" />
+    <partial name="partial/AdminNavTab" />
 
-        <div>
-            Location Provider tab
-            <p>hello</p>
-        </div>
+    <div>
+         Provider 
+        <p>hello</p>
+    </div>
 </div>
 
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('proLocTab').classList.add('underLine');
+        document.getElementById('providerTab').classList.add('underLine');
     });
 </script>

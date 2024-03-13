@@ -12,13 +12,20 @@
               aria-selected="false" asp-action="ProviderLoc" asp-controller="AdminTab">Provider Location</a>
         <a class="nav-link ps-3 bg-transparent" id="profileTab"
            aria-selected="false" asp-action="Profile" asp-controller="AdminTab">My Profile</a>
-        <a class="nav-link ps-3 bg-transparent" 
-              aria-selected="false" asp-action="" asp-controller="AdminDash">Provider</a>
+        <li class="nav-item dropdown">
+        <a class="nav-link ps-3 bg-transparent dropdown-toggle" id="providerTab" data-bs-toggle="dropdown" aria-expanded="false">Providers</a>
+        <ul class="dropdown-menu">
+                <li><a class="dropdown-item" asp-action="Provider" asp-controller="AdminTab">Provider</a></li>
+                <li><a class="dropdown-item" asp-action="Scheduling" asp-controller="AdminTab">Scheduling</a></li>
+                <li><a class="dropdown-item" asp-action="Invoicing" asp-controller="AdminTab">Invoicing</a></li>
+        </ul>
+        </li>
         <a class="nav-link ps-3 bg-transparent"
               aria-selected="false" asp-action="" asp-controller="AdminDash">Partners</a>
         <a class="nav-link ps-3 bg-transparent"
               aria-selected="false" asp-action="" asp-controller="AdminDash">Access</a>
         <a class="nav-link ps-3 bg-transparent"
               aria-selected="false" asp-action="" asp-controller="AdminDash">Records</a>
+
     </div>
 </nav>

@@ -75,5 +75,13 @@ namespace HalloDoc.Repository.Interface
         List<Healthprofessional> getHealthProfessionBussiness(int professionTypeId);
         Healthprofessional getVendorDetail(int vendorid);
         void AddOrderDetail(int vendorid, int adminid, int reqid, string prescription, int refil);
+
+
+        // Admin Profile
+        Admin getAdminProfile(string email);
+        void updatePass(string email, string pass);
+
+        void updateAdminInfo(Admin adminData, string email);
+        void updateAdminLocation(Admin adminData, string email);
     }
 }

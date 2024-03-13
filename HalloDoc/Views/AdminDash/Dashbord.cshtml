@@ -215,6 +215,26 @@
             }
         });
 
+        $(document).on('click', '.page-link', function () {
+            console.log("test");
+            var id = $(this).data('id');
+            var page = $(this).data('page');
+            var search = $('#SearchPatient').val();
+            var reg = $('#RegSearch').val();
+            $.ajax({
+                url: '/AdminDash/DashbordData',
+                method: 'POST',
+                data: { id: id, page: page, search: search, reg: reg },
+                success: function (response) {
+
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
         $('.NewReq').click(function () {
             $.ajax({
                 url: '/AdminDash/NewRequest',
@@ -357,7 +377,6 @@
                 }
             });
         });
-
 
         $(document).on('click', '.BackOn', function () {
             var id = getIdFromCard();

@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let lightEnable = document.querySelector('.lightEnable');
     let MICON = document.querySelector(".MICON");
     let Header = document.querySelector(".Header");
+    let label = document.querySelector("label");
 
     // Check the current theme state from localStorage or default to light theme
     let isDarkTheme = localStorage.getItem("Local_mode") === "1";

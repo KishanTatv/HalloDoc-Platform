@@ -366,5 +366,44 @@ namespace HalloDoc.Repository.Implement
             _context.Orderdetails.Add(order);
             _context.SaveChanges();
         }
+
+
+        // admin profile
+        public Admin getAdminProfile(string email)
+        {
+            var data = _context.Admins.Include(x => x.Aspnetuser).FirstOrDefault(x => x.Email == email);
+            return data;
+        }
+
+        public void updatePass(string email, string pass)
+        {
+            Aspnetuser asp = _context.Aspnetusers.FirstOrDefault(x => x.Email == email);
+            asp.Passwordhash = pass;
+            _context.Aspnetusers.Update(asp);
+            _context.SaveChanges();
+        }
+
+        public void updateAdminInfo(Admin adminData,string email)
+        {
+            Admin admin = _context.Admins.FirstOrDefault(x => x.Email == email);
+            admin.Firstname = adminData.Firstname;
+            admin.Lastname = adminData.Lastname;
+            admin.Mobile = adminData.Mobile;
+            _context.Admins.Update(admin);
+            _context.SaveChanges();
+        }
+
+        public void updateAdminLocation(Admin adminData,string email)
+        {
+            Admin admin = _context.Admins.FirstOrDefault(x => x.Email == email);
+            admin.Address1 = adminData.Address1;
+            admin.Address2 = adminData.Address2;
+            admin.City = adminData.City;
+            admin.Regionid = adminData.Regionid;
+            admin.Zip = adminData.Zip;
+            admin.Altphone = adminData.Altphone;
+            _context.Admins.Update(admin);
+            _context.SaveChanges();
+        }
     }
 }

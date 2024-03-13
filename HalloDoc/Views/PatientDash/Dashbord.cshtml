@@ -205,7 +205,7 @@
                             <div class="row form-floating">
                                 <div class="col-md-6 d-flex justify-content-between form-floating mt-2">
                                     <div class="col-md-3 form-floating">
-                                        <select class="form-select h-100" aria-label="Default select example">
+                                        <select class="form-select h-100" aria-label="Default select example" disabled>
                                             <option selected>Mobile</option>
                                             <option value="1">Telephone</option>
                                         </select>
@@ -266,6 +266,7 @@
     // Loop through each input element and set disabled attribute
     inputs.forEach(input => {
         input.disabled = true;
+        input.classList.remove("bg-transparent");
     });
 
     function EditEnable() {
@@ -280,10 +281,12 @@
         // Loop through each input element and set disabled attribute
         inputs.forEach(input => {
             input.disabled = false;
+            input.classList.add("bg-transparent");
         });
 
-        const emailId = document.getElementById('emailid');
+        const emailId = document.querySelector('#emailId');
         emailId.disabled = true;
+        emailId.classList.remove("bg-transparent");
     }
 
 </script>
