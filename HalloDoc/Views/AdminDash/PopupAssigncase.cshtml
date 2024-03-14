@@ -55,6 +55,7 @@
             <div class="modal-footer p-1">
                 <button type="submit" class="btn btn-secondary btn-info text-light AssignCase" data-reqid="@Model.Requestclient.Requestid" data-phycase="@ViewBag.PhyCase">Continue</button>
                 <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                <div class="BackOn d-none"></div>
             </div>
         </div>
     </div>
@@ -94,8 +95,13 @@
                 data: { AssignNote: AssignNote, phycase: phycase, TransphyId: TransphyId, reqid: reqid },
                 success: function (response) {
                     if (response.value == "Ok") {
+                        $('.BackOn').click();
                         $("#assignCase").remove();
                         $('.modal-backdrop').remove();
+                        $('body').css({
+                            'overflow': 'visible',
+                            'padding-right': '0'
+                        });
                     } else if (response.value == "Error") {
                         $(".text-danger").text("Please Select Physician!");
                     }

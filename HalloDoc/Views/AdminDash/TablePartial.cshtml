@@ -258,15 +258,19 @@ For more information on enabling MVC for empty projects, visit https://go.micros
         <div>
             <span> Page : <span class="text-primary">@(ViewBag.CurrentPage + 1)</span> / @ViewBag.TPage </span>
         </div>
-        <div>
-        @if (ViewBag.CurrentPage > 0)
-        {
-            <li><div class="page-link" data-id="@ViewBag.dTable" data-page="@(ViewBag.CurrentPage - 1)"> Previous </div></li>
-        }
-        @if (ViewBag.TPage-1 > ViewBag.CurrentPage)
-        {
+        <div class="d-flex">
+            @if (ViewBag.CurrentPage > 0)
+            {
+            <li><div class="page-link text-warning" data-id="@ViewBag.dTable" data-page="@(ViewBag.CurrentPage - 1)"> Previous </div></li>
+            }
+            @for (int i = 1; i <= ViewBag.TPage; i++)
+            {
+            <li class="page-item"><div class="page-link" data-id="@ViewBag.dTable" data-page="@(i - 1)">@i</div></li>
+            }
+            @if (ViewBag.TPage - 1 > ViewBag.CurrentPage)
+            {
             <li><div class="page-link text-warning" data-id="@ViewBag.dTable" data-page="@(ViewBag.CurrentPage + 1)"> Next </div></li>
-        }
+            }
         </div>
 
     </ul>

@@ -21,6 +21,7 @@
                 <div class="text-center mt-4">
                     <button type="submit" class="btn btn-secondary btn-info me-2 text-light clearReq" data-reqid="@Model.Requestid" data-bs-dismiss="modal"> Clear </button>
                     <button type="button" class="btn btn-outline-info ms-2" data-bs-dismiss="modal"> Cancel </button>
+                    <div class="BackOn d-none"></div>
                 </div>
             </div>
         </div>
@@ -38,6 +39,9 @@
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
+                    if(response.value){
+                        $('.BackOn').click();
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

@@ -106,8 +106,9 @@
                     <div class="d-flex justify-content-end mt-4 mb-4">
                         <button type="button" id="editbtn" class="btn btn-info text-light me-3" onclick="EditEnable()">Edit</button>
                         <button type="submit" id="submitbtn" class="btn btn-info d-none ps-4 pe-4 me-3 SaveClose" data-reqid="@Model.requests.FirstOrDefault().Requestid">Save</button>
-                        <button id="cancelbtn" class="btn btn-danger d-none ps-4 pe-4 me-3 BackOn">Cancel</button>
-                        <div class="btn btn-outline-info me-3 Back"> Close Case</div>
+                        <button id="cancelbtn" class="btn btn-danger d-none ps-4 pe-4 me-3" onclick="EditDisable()">Cancel</button>
+                        <div class="btn btn-outline-info me-3 closeCase" data-reqid="@Model.requests.FirstOrDefault().Requestid"> Close Case</div>
+                        <div class="BackOn"></div>
                     </div>
                 </div>
             </div>
@@ -156,6 +157,25 @@
                 });
             }
         });
+
+        $('.closeCase').click(function (){
+            var reqid = $(this).data('reqid');
+            if (checkData()) {
+                $.ajax({
+                    url: '/AdminDash/ClosecaseDone',
+                    method: 'POST',
+                    data: { reqid: reqid },
+                    success: function (response) {
+                        if (response.value) {
+                            $('.BackOn').click();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
     });
 
     let inputs = document.querySelectorAll('input');
@@ -163,19 +183,34 @@
     // Loop through each input element and set disabled attribute
     inputs.forEach(input => {
         input.disabled = true;
+        input.classList.remove('bg-transparent');
     });
+
+    const edit = document.getElementById('editbtn');
+    const submit = document.getElementById('submitbtn');
+    const cancel = document.getElementById('cancelbtn');
+    var email = document.getElementById('email');
+    var phone = document.getElementById('phone1');
     function EditEnable() {
-        const edit = document.getElementById('editbtn');
-        const submit = document.getElementById('submitbtn');
-        const cancel = document.getElementById('cancelbtn');
         edit.classList.add('d-none');
         submit.classList.remove('d-none');
         cancel.classList.remove('d-none');
 
-        var email = document.getElementById('email');
-        var phone = document.getElementById('phone1');
         email.disabled = false;
+        email.classList.add('bg-transparent');
         phone.disabled = false;
+        phone.classList.add('bg-transparent');
+    }
+
+    function EditDisable() {
+        edit.classList.remove('d-none');
+        submit.classList.add('d-none');
+        cancel.classList.add('d-none');
+
+        email.disabled = true;
+        email.classList.remove('bg-transparent');
+        phone.disabled = true;
+        phone.classList.remove('bg-transparent');
     }
 
 </script>

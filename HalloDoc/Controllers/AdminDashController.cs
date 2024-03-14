@@ -49,7 +49,7 @@ namespace HalloDoc.Controllers
 
 
         public IActionResult DashbordData(int id, int page, string search, string reg, int reqtype)
-       {
+        {
             var Tcount = _Admin.TotalCountPatient();
             int pageSize = 5;
 
@@ -65,11 +65,11 @@ namespace HalloDoc.Controllers
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
                     }
-                    if(reg != null)
+                    if (reg != null)
                     {
                         Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
                     }
-                    if(reqtype != 0)
+                    if (reqtype != 0)
                     {
                         Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
                     }
@@ -360,18 +360,9 @@ namespace HalloDoc.Controllers
             {
                 int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
                 Nullable<int> phyId = null;
-                if (phycase == "AssignPhy")
-                {
-                    short Assignstatus = 1;
-                    _Genral.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId, TransphyId);
-                    _Genral.updateReqStatusWithPhysician(reqid, TransphyId, Assignstatus);
-                }
-                else if (phycase == "TransferPhy")
-                {
-                    short Transferstatus = 2;
-                    _Genral.AddreqLogStatus(reqid, AssignNote, Transferstatus, AdminId, phyId, TransphyId);
-                    _Genral.updateReqStatusWithPhysician(reqid, TransphyId, Transferstatus);
-                }
+                short Assignstatus = 2;
+                _Genral.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId, TransphyId);
+                _Genral.updateReqStatusWithPhysician(reqid, TransphyId, Assignstatus);
                 return Json(new { value = "Ok" });
             }
             else
@@ -537,7 +528,7 @@ namespace HalloDoc.Controllers
             Nullable<int> phyId = null;
             _Genral.AddreqLogStatus(reqid, null, AdminId, phyId, ClearStatus);
             _Genral.updateReqStatus(reqid, ClearStatus);
-            return Ok();
+            return Json(new {value = "Ok"});
         }
         #endregion
 
@@ -575,6 +566,16 @@ namespace HalloDoc.Controllers
             _Genral.UpdateRequestClient(clientEmail, email, phone);
             return Json(new { value = "done" });
         }
+
+        public IActionResult ClosecaseDone(int reqid)
+        {
+            short UnpaidStatus = 9;
+            Nullable<int> phyId = null;
+            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            _Genral.updateReqStatus(reqid, UnpaidStatus);
+            _Genral.AddreqLogStatus(reqid, null, AdminId, phyId, UnpaidStatus);
+            return Json(new { value = "done" });
+        }
         #endregion
 
 
@@ -583,7 +584,7 @@ namespace HalloDoc.Controllers
         {
             var client = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
             var encounter = _Genral.getEncounterDetail(reqid);
-            var modelData = new EncounterViewModel { ClientInformation= client, EncounterForm = encounter };
+            var modelData = new EncounterViewModel { ClientInformation = client, EncounterForm = encounter };
             return PartialView("_AEncounter", modelData);
         }
 
