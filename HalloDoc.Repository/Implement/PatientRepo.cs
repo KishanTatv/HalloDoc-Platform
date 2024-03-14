@@ -103,6 +103,25 @@ namespace HalloDoc.Repository.Implement
             return UserId;
         }
 
+
+        public string getRegAbr(string region)
+        {
+            return _context.Regions.FirstOrDefault(x => x.Name.ToLower() == region.ToLower()).Abbreviation.ToUpper();
+        }
+
+        public int DailyRequestCount()
+        {
+            return _context.Requests.Where(x => x.Createddate == System.DateTime.Now).ToList().Count();
+        }
+
+        public string getConfirmNum(string reg, string fname, string lname)
+        {
+            string reqCount = DailyRequestCount().ToString().PadLeft(4, '0');
+            string num = getRegAbr(reg).Substring(0, 2) + System.DateTime.Now.Day + DateTime.Now.ToString("MM") + DateTime.Now.ToString("yy") + fname.ToUpper().Substring(0, 2) + lname.ToUpper().Substring(0, 2) +  reqCount;
+            return num;
+        }
+
+
         public Request AddRequest(ClientInformation client, int userId)
         {
             Request req = new Request
@@ -110,7 +129,7 @@ namespace HalloDoc.Repository.Implement
                 Userid = userId,
                 Requesttypeid = 2,
                 Status = 1,
-                Confirmationnumber = "M" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper(),
+                Confirmationnumber = getConfirmNum(client.State, client.Firstname, client.Lastname),
                 Firstname = client.Firstname,
                 Lastname = client.Lastname,
                 Phonenumber = client.Phonenumber,
@@ -185,7 +204,7 @@ namespace HalloDoc.Repository.Implement
                 Lastname = fInfo.PatientLname,
                 Phonenumber = fInfo.PatientPhonenumber,
                 Email = fInfo.PatientEmail,
-                Confirmationnumber = "M" + Guid.NewGuid().ToString().Substring(0, 9).ToUpper(),
+                Confirmationnumber = getConfirmNum(fInfo.clientInformation.State, fInfo.clientInformation.Firstname, fInfo.clientInformation.Lastname),
                 Locroom = fInfo.clientInformation.Locroom,
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };

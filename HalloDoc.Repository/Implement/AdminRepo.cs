@@ -375,6 +375,11 @@ namespace HalloDoc.Repository.Implement
             return data;
         }
 
+        public List<Adminregion> getAdminReg(int adId)
+        {
+            return _context.Adminregions.Include(x => x.Region).Where(x => x.Adminid == adId).ToList();
+        }
+
         public void updatePass(string email, string pass)
         {
             Aspnetuser asp = _context.Aspnetusers.FirstOrDefault(x => x.Email == email);
@@ -404,6 +409,14 @@ namespace HalloDoc.Repository.Implement
             admin.Altphone = adminData.Altphone;
             _context.Admins.Update(admin);
             _context.SaveChanges();
+        }
+
+        
+        //Physician record
+        public List<Physician> getAllPhysicianData()
+        {
+            var data = _context.Physicians.Include(x => x.Physiciannotifications).ToList();
+            return data;
         }
     }
 }

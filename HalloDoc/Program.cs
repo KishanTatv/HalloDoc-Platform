@@ -5,6 +5,8 @@ using HalloDoc.Repository.Implement;
 using HalloDoc.Entity.Data;
 using HalloDoc.Repository.Service.Interface;
 using HalloDoc.Repository.Service;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HalloDocDbContext>(options =>
      options.UseNpgsql(builder.Configuration.GetConnectionString("HalloDocDb"))
 );
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddScoped<IGenral, GenralRepo>();

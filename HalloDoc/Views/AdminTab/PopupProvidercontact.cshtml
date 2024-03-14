@@ -1,0 +1,87 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="modal fade" id="proContact" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-info p-2">
+                <h1 class="modal-title fs-5 text-light ms-2" id="exampleModalLabel">
+                    Contact Your Provider
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Choose communication to send message</p>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" value="Name" id="flexRadioDefault1">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        SMS
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" value="Email" id="flexRadioDefault2" checked>
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Email
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" value="Both" id="flexRadioDefault3">
+                    <label class="form-check-label" for="flexRadioDefault2">
+                        Both
+                    </label>
+                </div>
+                <div class="form-floating mt-3">
+                    <textarea type="text" class="form-control bg-transparent h-25 " id="note"></textarea>
+                    <label for="ms-3 text-info">Message</label>
+                </div>
+                <p class="text-msg text-danger m-0"></p>
+            </div>
+            <div class="modal-footer p-1">
+                <button type="submit" class="btn btn-secondary btn-info text-light sendcontPop" data-phid="@TempData["phid"]">Send</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                <div class="BackOn d-none"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        function noteValid() {
+            var note = $('#note').val();
+            console.log(note.length);
+            if (note) {
+                return true;
+            }
+            else {
+                $('.text-msg').text("Please add message.");
+                return false;
+            }
+        }
+
+        $('.sendcontPop').click(function () {
+            var contType = $('input[name="flexRadioDefault"]:checked').val();
+            var note = $('#note').val();
+            var phid = $(this).data('phid');
+            if (noteValid()) {
+                $.ajax({
+                    url: '/AdminTab/Pcontactsend',
+                    method: 'POST',
+                    data: { phid: phid, contType: contType, note: note },
+                    success: function (response) {
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
+
+</script>

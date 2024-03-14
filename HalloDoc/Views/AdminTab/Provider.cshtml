@@ -2,6 +2,8 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
+@model List<HalloDoc.Entity.Models.Physician>;
+
 
 @{
     ViewData["Title"] = "Provider Location";
@@ -49,14 +51,16 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach(var phy in Model)
+                                {    
                                 <tr>
                                     <td><input class="form-check-input" type="checkbox" value="" id="toggleAllCheck"></td>
-                                    <td>jhkh hkjlkj</td>
-                                    <td>Physician</td>
+                                    <td>@phy.Firstname @phy.Lastname</td>
+                                    <td>@phy.Roleid</td>
                                     <td>Un Availiable</td>
-                                    <td>Pending</td>
+                                    <td>@phy.Status</td>
                                     <td class="text-center">
-                                        <a class="btn btn-outline-info ps-2 pe-2 p-0" >
+                                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact" data-phid="@phy.Physicianid">
                                             Contact
                                         </a>
                                         <div class="btn btn-outline-info ps-2 pe-2 p-0">
@@ -64,6 +68,7 @@
                                         </div>
                                     </td>
                                 </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -72,8 +77,31 @@
         </div>
     </div>
 
-    <script asp-append-version="true">
-        window.addEventListener('DOMContentLoaded', (event) => {
-            document.getElementById('providerTab').classList.add('underLine');
+    <div class="TabpartialPop">
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('providerTab').classList.add('underLine');
+    });
+
+    $('.PContact').click(function () {
+        var phid = $(this).data('phid');
+        $.ajax({
+            url: '/AdminTab/PcontactPop',
+            method: 'POST',
+            data: { phid: phid },
+            success: function (response) {
+                $(".TabpartialPop").html(response);
+                var my = new bootstrap.Modal(document.getElementById('proContact'));
+                my.show();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
         });
-    </script>
+    });
+
+</script>

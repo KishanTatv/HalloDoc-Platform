@@ -38,6 +38,12 @@ namespace HalloDoc.Controllers
             return View(modelData);
         }
 
+        public IActionResult adminReg(int adId)
+        {
+            var data = _Admin.getAdminReg(adId);
+            return Json(new { Adminregion = data });
+        }
+
         public IActionResult ResetPass(string pass)
         {
             string adminEmail = Request.Cookies["CookieEmail"];
@@ -62,6 +68,18 @@ namespace HalloDoc.Controllers
 
         #region Provider
         public IActionResult Provider()
+        {
+            var data = _Admin.getAllPhysicianData().ToList();
+            return View(data);
+        }
+
+        public IActionResult PcontactPop(int phid)
+        {
+            TempData["phid"] = phid;
+            return PartialView("PopupProvidercontact");
+        }
+
+        public IActionResult Pcontactsend(int phid, string contType, string note)
         {
             return View();
         }

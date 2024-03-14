@@ -55,7 +55,8 @@ namespace HalloDoc.Repository.Interface
 
 
 
-
+        //confirmation no
+        string getConfirmNum(string reg, string fname, string lname);
 
 
 

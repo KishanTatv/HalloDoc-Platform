@@ -73,7 +73,7 @@ namespace HalloDoc.Controllers
                         string userName = _genral.userFullName(user.Email);
                         Aspnetuser asp = _genral.getUserRole(user.Email);
 
-                        Console.WriteLine(user.Passwordhash.GetHashCode().ToString());
+                        //Console.WriteLine(user.Passwordhash.GetHashCode().ToString());
                         var UserToken = _jwtToken.GenrateJwtToken(asp);
                         Response.Cookies.Append("HalloCookie", UserToken);
                         Response.Cookies.Append("CookieEmail", user.Email);
