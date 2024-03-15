@@ -43,7 +43,7 @@ namespace HalloDoc.Controllers
         public async Task<IActionResult> Dashbord()
         {
             string UserEmail = Request.Cookies["CookieEmail"];
-            ClientInformation client = genral.getClientProfile(UserEmail);
+            ClientInformation client = genral.getUserProfile(UserEmail);
             IEnumerable<RequestWithFile> ReqFile = patient.GetRequestsFiles(UserEmail);
 
             var PatientDash = new PatientDash { ReqWithFiles = ReqFile, clientInfo = client };
@@ -58,8 +58,8 @@ namespace HalloDoc.Controllers
         {
             string UserEmail = Request.Cookies["CookieEmail"];
 
-            genral.UpdateUser(userInfo, UserEmail);
             genral.UpdateRequestClient(userInfo, UserEmail);
+            genral.UpdateUser(userInfo, UserEmail);
 
             return RedirectToAction("Dashbord");
         }

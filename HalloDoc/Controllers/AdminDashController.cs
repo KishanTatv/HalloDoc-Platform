@@ -221,17 +221,17 @@ namespace HalloDoc.Controllers
                     Request request;
                     if (_Genral.CheckExistAspUser(client.Email))
                     {
-                        //int userId = _Patient.FindUserId(client.Email);
-                        //request = _Patient.AddRequest(client, userId);
+                        int userId = _Patient.FindUserId(client.Email);
+                        request = _Patient.AddRequest(client, userId);
                         return Json(new { value = "EmailExist" });
                     }
                     else
                     {
-                        //Aspnetuser AspUser = _Patient.AddAspUser(client);
-                        //User user = _Patient.AddUser(client, AspUser.Id);
-                        //request = _Patient.AddRequest(client, user.Userid);
-                        //_Patient.AddRequestClient(client, request.Requestid);
-                        //_Patient.AddAspnetUserRole(AspUser.Id);
+                        Aspnetuser AspUser = _Patient.AddAspUser(client);
+                        User user = _Patient.AddUser(client, AspUser.Id);
+                        request = _Patient.AddRequest(client, user.Userid);
+                        _Patient.AddRequestClient(client, request.Requestid);
+                        _Patient.addAspnetUserrole(user.Userid, 3);
                         return Json(new { value = "Ok" });
                     }
                 }
@@ -242,6 +242,7 @@ namespace HalloDoc.Controllers
             }
         }
         #endregion
+
 
         public IActionResult ExportAll()
         {

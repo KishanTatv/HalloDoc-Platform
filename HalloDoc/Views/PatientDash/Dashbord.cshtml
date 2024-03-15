@@ -250,7 +250,7 @@
                         <div class="d-flex justify-content-end mt-4 mb-4">
                             <button id="editbtn" type="button" class="btn btn-info ps-4 pe-4" onclick="EditEnable()">Edit</button>
                             <button type="submit" id="submitbtn" class="btn btn-info d-none ps-4 pe-4 me-3">Submit</button>
-                            <button id="cancelbtn" class="btn btn-danger d-none ps-4 pe-4">Cancel</button>
+                            <button id="cancelbtn" type="button" class="btn btn-danger d-none ps-4 pe-4" onclick="EditDisable()">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -261,32 +261,43 @@
 
 
 <script asp-append-version="true">
-    let inputs = document.querySelectorAll('input');
 
-    // Loop through each input element and set disabled attribute
-    inputs.forEach(input => {
-        input.disabled = true;
-        input.classList.remove("bg-transparent");
-    });
-
-    function EditEnable() {
-        const edit = document.getElementById('editbtn');
-        const submit = document.getElementById('submitbtn');
-        const cancel = document.getElementById('cancelbtn');
-        edit.classList.add('d-none');
-        submit.classList.remove('d-none');
-        cancel.classList.remove('d-none');
-        const inputs = document.querySelectorAll('input');
+        let inputs = document.querySelectorAll('input');
 
         // Loop through each input element and set disabled attribute
         inputs.forEach(input => {
-            input.disabled = false;
-            input.classList.add("bg-transparent");
+            input.disabled = true;
+            input.classList.remove("bg-transparent");
         });
 
-        const emailId = document.querySelector('#emailId');
-        emailId.disabled = true;
-        emailId.classList.remove("bg-transparent");
-    }
+        const edit = document.getElementById('editbtn');
+        const submit = document.getElementById('submitbtn');
+        const cancel = document.getElementById('cancelbtn');
+        function EditEnable() {
+            edit.classList.add('d-none');
+            submit.classList.remove('d-none');
+            cancel.classList.remove('d-none');
 
+            // Loop through each input element and set disabled attribute
+            inputs.forEach(input => {
+                input.disabled = false;
+                input.classList.add("bg-transparent");
+            });
+
+            const emailId = document.querySelector('#emailId');
+            emailId.disabled = true;
+            emailId.classList.remove("bg-transparent");
+        }
+
+        function EditDisable() {
+            edit.classList.remove('d-none');
+            submit.classList.add('d-none');
+            cancel.classList.add('d-none');
+
+            // Loop through each input element and set disabled attribute
+            inputs.forEach(input => {
+                input.disabled = true;
+                input.classList.remove("bg-transparent");
+            });
+        }
 </script>

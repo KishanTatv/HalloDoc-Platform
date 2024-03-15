@@ -12,11 +12,13 @@ namespace HalloDoc.Controllers
         private readonly ILogger<AdminDashController> _logger;
         private readonly IGenral _Genral;
         private readonly IAdmin _Admin;
-        public AdminTabController(ILogger<AdminDashController> logger, IGenral Genral, IAdmin Admin)
+        private readonly IPhysician _physician;
+        public AdminTabController(ILogger<AdminDashController> logger, IGenral Genral, IAdmin Admin, IPhysician physician)
         {
             _logger = logger;
             _Genral = Genral;
             _Admin = Admin;
+            _physician = physician;
         }
         public IActionResult Index()
         {
@@ -66,6 +68,7 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
+
         #region Provider
         public IActionResult Provider()
         {
@@ -83,6 +86,47 @@ namespace HalloDoc.Controllers
         {
             return View();
         }
+
+        public IActionResult PhysicanEdit(int phid)
+        {
+            TempData["phid"] = phid;
+            var phinfo = _Admin.getPhysicianDetail(phid);
+            var region = _Admin.getAllRegion();
+            var data = new PhysicianProfileViewModel { physician = phinfo, Regions = region};
+            return PartialView("_ProPhysicianEdit", data);
+        }
+
+        public IActionResult ResetPhyPass(string pass, int phid)
+        {
+            string phyEmail = _Admin.getPhysicianEmail(phid);
+            _Admin.updatePass(phyEmail, pass);
+            return Json(new { value = "ok" });
+        }
+
+        public IActionResult UpdatePhyProfile(PhysicianProfileViewModel phinfo)
+        {
+            int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+            string phyEmail = _Admin.getPhysicianEmail(phinfo.phid);
+            _physician.updatePhysicianInfo(phinfo.physician, phyEmail, aspId);
+            return Json(new { value = "changed" });
+        }
+
+        public IActionResult UpdatePhyLoc(PhysicianProfileViewModel phinfo)
+        {
+            int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+            string phyEmail = _Admin.getPhysicianEmail(phinfo.phid);
+            _physician.updatePhysicianLocation(phinfo.physician, phyEmail, aspId);
+            return Json(new { value = "changed" });
+        }
+
+        public IActionResult UpdatePhyAdditional(PhysicianProfileViewModel phinfo)
+        {
+            int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+            string phyEmail = _Admin.getPhysicianEmail(phinfo.phid);
+            _physician.updateAdditionPhyData(phinfo.physician, phyEmail, aspId);
+            return Json(new { value = "changed" });
+        }
+
         #endregion
     }
 }

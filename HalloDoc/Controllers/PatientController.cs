@@ -192,7 +192,6 @@ namespace HalloDoc.Controllers
                     if (user.Password == user.ConfirmPassword)
                     {
                         Aspnetuser asp = _patient.createonlyAsp(user);
-                        _patient.AddAspnetUserRole(asp.Id);
                         _patient.updateUserIdWithAsp(asp.Id, asp.Email);
                         TempData["Msg"] = "Your Account created Successfully!!";
                         return View();

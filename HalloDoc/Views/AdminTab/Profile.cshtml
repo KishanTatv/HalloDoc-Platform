@@ -110,9 +110,9 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-end mt-4 mb-4">
-                            <button id="editbtn1" class="btn btn-info me-4" onclick="editEnable1()">Edit</button>
+                            <button id="editbtn1" type="button" class="btn btn-info me-4" onclick="editEnable1()">Edit</button>
                             <button type="submit" id="submitbtn1" class="btn btn-info d-none ps-4 pe-4 me-3">Submit</button>
-                            <button id="cancelbtn1" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable1()">Cancel</button>
+                            <button id="cancelbtn1" type="button" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable1()">Cancel</button>
                         </div>
                     </form>
 
@@ -126,18 +126,25 @@
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
                                     <input type="text" class="form-control bg-transparent Adad" placeholder="add2" asp-for="Admin.Address2">
-                                    <label class="ms-3">Address 1</label>
+                                    <label class="ms-3">Address 2</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2 ">
                                     <input type="text" class="form-control bg-transparent Adad" placeholder="city" asp-for="Admin.City">
                                     <label class="ms-3">City</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <select class="form-select selectReg" aria-label="Floating label select">
-                                        <option selected>@Enum.GetName(typeof(HalloEnum.regName), Model.Admin.Regionid)</option>
+                                    <input type="hidden" asp-for="Admin.Regionid" id="regionIdHidden" />
+                                    <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRegionId(this)">
                                         @foreach (var state in Model.Regions)
                                         {
-                                            <option value="@state.Regionid">@state.Name</option>
+                                            @if (state.Regionid == Model.Admin.Regionid)
+                                            {
+                                                <option value="@state.Regionid" selected>@state.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@state.Regionid">@state.Name</option>
+                                            }
                                         }
                                     </select>
                                     <label class="ms-2" for="floatingSelect">state</label>
@@ -152,9 +159,9 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-end mt-4 mb-4">
-                            <button id="editbtn2" class="btn btn-info me-4" onclick="editEnable2()">Edit</button>
+                            <button id="editbtn2" type="button" class="btn btn-info me-4" onclick="editEnable2()">Edit</button>
                             <button type="submit" id="submitbtn2" class="btn btn-info d-none ps-4 pe-4 me-3">Submit</button>
-                            <button id="cancelbtn2" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable2()">Cancel</button>
+                            <button id="cancelbtn2" type="button" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable2()">Cancel</button>
                         </div>
                     </form>
                 </div>
@@ -181,6 +188,13 @@
         select.disabled = true;
         select.classList.remove("bg-transparent");
     })
+    let reghide = document.getElementById('regionIdHidden');
+    reghide.disabled = false;
+
+    function updateRegionId(selectElement) {
+        const selectedRegionId = selectElement.value;
+        document.getElementById('regionIdHidden').value = selectedRegionId;
+    }
 
     let pass = document.querySelector('.pass');
     pass.disabled = false;
@@ -228,6 +242,8 @@
         const submit = document.getElementById('submitbtn2');
         const cancel = document.getElementById('cancelbtn2');
         const reg = document.querySelector('.selectReg');
+        let reghide = document.getElementById('regionIdHidden');
+        reghide.disabled = false;
         edit.classList.add('d-none');
         submit.classList.remove('d-none');
         cancel.classList.remove('d-none');

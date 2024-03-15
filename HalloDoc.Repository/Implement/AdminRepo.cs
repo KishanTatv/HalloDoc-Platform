@@ -68,7 +68,7 @@ namespace HalloDoc.Repository.Implement
         {
             IEnumerable<tableData> data = from r in _context.Requests
                                           join f in _context.Requestclients on r.Requestid equals f.Requestid
-                                          where r.Status == 1 
+                                          where r.Status == 1
                                           orderby r.Createddate descending
                                           select new tableData
                                           {
@@ -87,7 +87,7 @@ namespace HalloDoc.Repository.Implement
                                               ReqPhonenumber = r.Phonenumber,
                                               Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
                                               Region = f.State,
-                                              Notes = r.Symptoms,
+                                              Notes = f.Notes,
                                           };
             return data;
         }
@@ -100,8 +100,7 @@ namespace HalloDoc.Repository.Implement
             IEnumerable<tableData> data = from r in _context.Requests
                                           join rc in _context.Requestclients on r.Requestid equals rc.Requestid
                                           join p in _context.Physicians on r.Physicianid equals p.Physicianid
-                                          join l in _context.Requeststatuslogs on r.Requestid equals l.Requestid
-                                          where l.Status == 2
+                                          where r.Status == 2
                                           orderby r.Createddate descending
                                           select new tableData
                                           {
@@ -121,7 +120,7 @@ namespace HalloDoc.Repository.Implement
                                               ReqPhonenumber = rc.Phonenumber,
                                               Address = rc.Street + ", " + rc.City + ", " + rc.State + ", " + rc.Zipcode,
                                               Region = rc.State,
-                                              Notes = l.Notes,
+                                              Notes = _context.Requeststatuslogs.Where(x => x.Requestid == r.Requestid).OrderByDescending(x => x.Requeststatuslogid).FirstOrDefault().Notes,
                                           };
             return data;
         }
@@ -154,7 +153,7 @@ namespace HalloDoc.Repository.Implement
                                               ReqPhonenumber = f.Phonenumber,
                                               Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
                                               Region = r.State,
-                                              Notes = f.Symptoms,
+                                              Notes = r.Notes,
                                           };
             return data;
         }
@@ -187,7 +186,7 @@ namespace HalloDoc.Repository.Implement
                                               ReqPhonenumber = f.Phonenumber,
                                               Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
                                               Region = r.State,
-                                              Notes = f.Symptoms,
+                                              Notes = r.Notes,
                                           };
             return data;
         }
@@ -220,7 +219,7 @@ namespace HalloDoc.Repository.Implement
                                               ReqPhonenumber = f.Phonenumber,
                                               Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
                                               Region = r.State,
-                                              Notes = f.Symptoms,
+                                              Notes = r.Notes,
                                           };
             return data;
         }
@@ -252,7 +251,7 @@ namespace HalloDoc.Repository.Implement
                                               ReqPhonenumber = f.Phonenumber,
                                               Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
                                               Region = r.State,
-                                              Notes = f.Symptoms,
+                                              Notes = r.Notes,
                                           };
             return data;
         }
@@ -384,11 +383,12 @@ namespace HalloDoc.Repository.Implement
         {
             Aspnetuser asp = _context.Aspnetusers.FirstOrDefault(x => x.Email == email);
             asp.Passwordhash = pass;
+            asp.Modifieddate = System.DateTime.Now;
             _context.Aspnetusers.Update(asp);
             _context.SaveChanges();
         }
 
-        public void updateAdminInfo(Admin adminData,string email)
+        public void updateAdminInfo(Admin adminData, string email)
         {
             Admin admin = _context.Admins.FirstOrDefault(x => x.Email == email);
             admin.Firstname = adminData.Firstname;
@@ -398,7 +398,7 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        public void updateAdminLocation(Admin adminData,string email)
+        public void updateAdminLocation(Admin adminData, string email)
         {
             Admin admin = _context.Admins.FirstOrDefault(x => x.Email == email);
             admin.Address1 = adminData.Address1;
@@ -411,12 +411,22 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        
+
         //Physician record
         public List<Physician> getAllPhysicianData()
         {
             var data = _context.Physicians.Include(x => x.Physiciannotifications).ToList();
             return data;
+        }
+
+        public string getPhysicianEmail(int phid)
+        {
+            return _context.Physicians.FirstOrDefault(x => x.Physicianid == phid).Email;
+        }
+
+        public Physician getPhysicianDetail(int phid)
+        {
+            return _context.Physicians.Include(x => x.Aspnetuser).FirstOrDefault(x => x.Physicianid == phid);
         }
     }
 }

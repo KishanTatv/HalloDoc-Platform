@@ -80,11 +80,12 @@ namespace HalloDoc.Controllers
                     }
                     else
                     {
+                        int roleId = 3;
                         Aspnetuser AspUser = patient.AddAspUser(Clientinfo);
                         User user = patient.AddUser(Clientinfo, AspUser.Id);
                         request = patient.AddRequest(Clientinfo, user.Userid);
                         patient.AddRequestClient(Clientinfo, request.Requestid);
-                        patient.AddAspnetUserRole(AspUser.Id);
+                        patient.addAspnetUserrole(user.Userid, roleId);
                     }
 
                     if (DocFile != null)
@@ -154,6 +155,7 @@ namespace HalloDoc.Controllers
                             User user = patient.AddFcbUser(FInfo);
                             request = patient.AddFcbRequest(FInfo, user.Userid, 3);
                             patient.AddFcbRequestClient(FInfo, request.Requestid);
+                            patient.addAspnetUserrole(user.Userid, 3);
                             genral.addEmailLog(body, subject, userEmail, null, roleId, request.Requestid, null, null);
                         }
 
@@ -231,6 +233,7 @@ namespace HalloDoc.Controllers
                             User user = patient.AddFcbUser(FInfo);
                             request = patient.AddFcbRequest(FInfo, user.Userid, 4);
                             patient.AddFcbRequestClient(FInfo, request.Requestid);
+                            patient.addAspnetUserrole(user.Userid, 3);
                             Concierge con = patient.AddConcierge(FInfo);
                             patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
                             genral.addEmailLog(body, subject, userEmail, null, roleId, request.Requestid, null, null);
@@ -293,6 +296,7 @@ namespace HalloDoc.Controllers
                             User user = patient.AddFcbUser(FInfo);
                             request = patient.AddFcbRequest(FInfo, user.Userid, 1);
                             patient.AddFcbRequestClient(FInfo, request.Requestid);
+                            patient.addAspnetUserrole(user.Userid, 3);
                             Business bus = patient.AddBussiness(FInfo);
                             patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
                             genral.addEmailLog(body, subject, userEmail, null, roleId, request.Requestid, null, null);

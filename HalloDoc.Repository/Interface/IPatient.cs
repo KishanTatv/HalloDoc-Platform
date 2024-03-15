@@ -20,7 +20,7 @@ namespace HalloDoc.Repository.Interface
 
         //for patient
         Aspnetuser AddAspUser(ClientInformation clientInformation);
-        void AddAspnetUserRole(int aspid);
+        void addAspnetUserrole(int userid, int roleId);
         User AddUser(ClientInformation clientInformation, int AspUserId);
 
         Request AddRequest(ClientInformation clientInformation, int userId);

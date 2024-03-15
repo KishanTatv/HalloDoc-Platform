@@ -89,5 +89,9 @@ namespace HalloDoc.Repository.Interface
 
         //Physical Data
         List<Physician> getAllPhysicianData();
+
+        string getPhysicianEmail(int phid);
+
+        Physician getPhysicianDetail(int phid);
     }
 }

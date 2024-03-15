@@ -1,5 +1,4 @@
-﻿using HalloDoc.Entity.AdminDash;
-using HalloDoc.Entity.Models;
+﻿using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -16,6 +15,7 @@ namespace HalloDoc.Repository.Interface
         bool CheckExistAspUser(string email);
         Aspnetuser getUserRole(string email);
 
+        int getAspId(string email);
         bool checkBlockReq(string email);
 
         string userFullName(string email);
@@ -37,6 +37,7 @@ namespace HalloDoc.Repository.Interface
 
 
         ClientInformation getClientProfile(string email);
+        ClientInformation getUserProfile(string email);
         //update profile patient
 
         void UpdateUser(PatientDash userInfo, string email);

@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace HalloDoc.Entity.AdminTab
 {
-    public class ProfileViewModel
+    public class PhysicianProfileViewModel
     {
-        public Admin Admin { get; set; }
-
+        public Physician physician { get; set; }
         public List<Region> Regions { get; set; }
 
-        public List<Adminregion> AdminRegions { get; set; } 
-
+        public int phid { get; set; }
     }
 }

@@ -73,6 +73,11 @@ namespace HalloDoc.Entity.AdminDashTable
         [StringLength(50)]
         public string? city { get; set; }
 
+        [Column("Notegroup")]
+        [StringLength(100)]
+        public List<string> Notegroup { get; set; }
+
+
         [Column("Notes")]
         [StringLength(100)]
         public string? Notes { get; set; }

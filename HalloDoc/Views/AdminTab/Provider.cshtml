@@ -18,7 +18,7 @@
     <partial name="partial/AdminNavTab" />
 
     <div class="d-flex w-100 justify-content-center pb-4">
-        <div class="HContainer m-auto">
+        <div class="HContainer ProviderMain m-auto">
             <div class="d-flex m-3">
                 <h4>Provider Information</h4>
             </div>
@@ -51,23 +51,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach(var phy in Model)
-                                {    
-                                <tr>
-                                    <td><input class="form-check-input" type="checkbox" value="" id="toggleAllCheck"></td>
-                                    <td>@phy.Firstname @phy.Lastname</td>
-                                    <td>@phy.Roleid</td>
-                                    <td>Un Availiable</td>
-                                    <td>@phy.Status</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact" data-phid="@phy.Physicianid">
-                                            Contact
-                                        </a>
-                                        <div class="btn btn-outline-info ps-2 pe-2 p-0">
-                                            Edit
-                                        </div>
-                                    </td>
-                                </tr>
+                                @foreach (var phy in Model)
+                                {
+                                    <tr>
+                                        <td><input class="form-check-input" type="checkbox" value="" id="toggleAllCheck"></td>
+                                        <td>@phy.Firstname @phy.Lastname</td>
+                                        <td>@phy.Roleid</td>
+                                        <td>Un Availiable</td>
+                                        <td>@phy.Status</td>
+                                        <td class="text-center">
+                                            <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact" data-phid="@phy.Physicianid">
+                                                Contact
+                                            </a>
+                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 PEdit" data-phid="@phy.Physicianid">
+                                                Edit
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -75,10 +75,11 @@
                 </div>
             </div>
         </div>
+
+        <div class="Tabpartial">
+        </div>
     </div>
 
-    <div class="TabpartialPop">
-    </div>
 </div>
 
 
@@ -94,9 +95,24 @@
             method: 'POST',
             data: { phid: phid },
             success: function (response) {
-                $(".TabpartialPop").html(response);
+                $(".Tabpartial").html(response);
                 var my = new bootstrap.Modal(document.getElementById('proContact'));
                 my.show();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+    $('.PEdit').click(function () {
+        var phid = $(this).data('phid');
+        $.ajax({
+            url: '/AdminTab/PhysicanEdit',
+            method: 'POST',
+            data: { phid: phid },
+            success: function (response) {
+                $(".Tabpartial").html(response);
+                $('.ProviderMain').addClass("d-none");
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

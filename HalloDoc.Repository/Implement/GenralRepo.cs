@@ -54,6 +54,11 @@ namespace HalloDoc.Repository.Implement
             return user;
         }
 
+        public int getAspId(string email)
+        {
+            return _context.Aspnetusers.FirstOrDefault(x => x.Email == email).Id;
+        }
+
         public bool checkBlockReq(string email)
         {
             return _context.Blockrequests.Any(u => u.Email == email);
@@ -267,6 +272,26 @@ namespace HalloDoc.Repository.Implement
 
 
         #region patient Profile
+        public ClientInformation getUserProfile(string email)
+        {
+            var data = _context.Users.Where(r => r.Email == email)
+                .Select(r => new ClientInformation
+                {
+                    Firstname = r.Firstname,
+                    Lastname = r.Lastname,
+                    Email = r.Email,
+                    Phonenumber = r.Mobile,
+                    Dob = new DateTime((int)r.Intyear, DateTime.ParseExact(r.Strmonth, "MMMM", CultureInfo.CurrentCulture).Month, (int)r.Intdate),
+                    date = System.DateTime.Now,
+                    Street = r.Street,
+                    City = r.City,
+                    State = r.State,
+                    Zipcode = r.Zipcode,
+                    Address = $"{r.Street}, {r.City}, {r.State}, {r.Zipcode}",
+                }).FirstOrDefault();
+            return data;
+        }
+
         public ClientInformation getClientProfile(string email)
         {
             var data = _context.Requestclients.Where(r => r.Email == email)
@@ -278,11 +303,11 @@ namespace HalloDoc.Repository.Implement
                     Phonenumber = r.Phonenumber,
                     Dob = new DateTime((int)r.Intyear, DateTime.ParseExact(r.Strmonth, "MMMM", CultureInfo.CurrentCulture).Month, (int)r.Intdate),
                     date = System.DateTime.Now,
-                    Notes = r.Notes,
                     Street = r.Street,
                     City = r.City,
                     State = r.State,
                     Zipcode = r.Zipcode,
+                    Notes = r.Notes,
                     Address = $"{r.Street}, {r.City}, {r.State}, {r.Zipcode}",
                 }).FirstOrDefault();
             return data;
@@ -332,6 +357,7 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
         #endregion
+
 
     }
 }
