@@ -53,8 +53,8 @@
 <script asp-append-version="true">
     $(document).ready(function () {
         function noteValid() {
-            var note = $('#note').val();
-            console.log(note.length);
+            var note = $('#note').val().trim();
+                console.log(note.length);
             if (note) {
                 return true;
             }

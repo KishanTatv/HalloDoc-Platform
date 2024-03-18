@@ -62,9 +62,42 @@ namespace HalloDoc.Repository.Implement
         }
         #endregion
 
+        #region AllRequest Data
+        public IEnumerable<tableData> GetTableData()
+        {
+            IEnumerable<tableData> data = from r in _context.Requests
+                                          join f in _context.Requestclients on r.Requestid equals f.Requestid
+                                          join p in _context.Physicians on r.Physicianid equals p.Physicianid into rf
+                                          from p in rf.DefaultIfEmpty()
+                                          orderby r.Createddate descending
+                                          select new tableData
+                                          {
+                                              Name = f.Firstname + " " + f.Lastname,
+                                              Intdate = f.Intdate,
+                                              Strmonth = f.Strmonth,
+                                              Intyear = f.Intyear,
+                                              Age = System.DateTime.Now.Year - f.Intyear,
+                                              Email = f.Email,
+                                              RequestId = f.Requestid,
+                                              ReqClientId = f.Requestclientid,
+                                              ReqTypeId = r.Requesttypeid,
+                                              Requestor = r.Firstname + "," + r.Lastname,
+                                              RequestedDate = r.Createddate,
+                                              PhysicianName = p.Firstname + " " +p.Lastname,
+                                              DateOfService = r.Modifieddate,
+                                              Phonenumber = f.Phonenumber,
+                                              ReqPhonenumber = r.Phonenumber,
+                                              Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
+                                              Region = f.State,
+                                              Notes = f.Notes,
+                                          };
+            return data;
+        }
+        #endregion
+
 
         #region New Request
-        public IEnumerable<tableData> GetTableData()
+        public IEnumerable<tableData> GetTableDataNew()
         {
             IEnumerable<tableData> data = from r in _context.Requests
                                           join f in _context.Requestclients on r.Requestid equals f.Requestid

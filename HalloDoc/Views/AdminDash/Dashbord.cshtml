@@ -94,7 +94,7 @@
             <div>
                 <button type="button" class="btn btn-info text-light sendLink"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
                 <div class="btn btn-info text-light NewReq" data-reqid="1"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></div>
-                <button type="button" class="btn btn-info text-light"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
+                <button type="button" class="btn btn-info text-light ExportIndivisul"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
                 <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
                 <div class="btn btn-info text-light reqSupport"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></div>
             </div>
@@ -374,6 +374,21 @@
                 data: { id: id, search: search, reg: reg, reqtype: reqtype },
                 success: function (response) {
                     $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.ExportIndivisul').click(function () {
+            var id = getIdFromCard();
+            $.ajax({
+                url: '/AdminDash/Export',
+                method: 'POST',
+                data: { id: id },
+                success: function (response) {
+                    console.log("ok");
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

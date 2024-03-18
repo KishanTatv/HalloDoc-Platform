@@ -1,7 +1,9 @@
-﻿using DocumentFormat.OpenXml.Drawing.Charts;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.Web;
 using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
 using HalloDoc.Entity.Models;
@@ -9,8 +11,11 @@ using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Rotativa;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
+using System.Reflection.Metadata;
 using Windows.Networking;
 
 namespace HalloDoc.Controllers
@@ -60,7 +65,7 @@ namespace HalloDoc.Controllers
                 case 1:   //New
                     ViewBag.TPage = Math.Ceiling(Tcount[0] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableData();
+                    Req = _Admin.GetTableDataNew();
                     if (search != null)
                     {
                         Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
@@ -244,28 +249,180 @@ namespace HalloDoc.Controllers
         #endregion
 
 
+        #region export Excel
+        public IActionResult Export(int id)
+        {
+            IEnumerable<tableData> Req = new List<tableData>();
+            switch (id)
+            {
+                case 1:
+                    Req = _Admin.GetTableDataNew();
+                    using (var workbook = new XLWorkbook())
+                    {
+                        var worksheet = workbook.Worksheets.Add("TableData");
+                        worksheet.Cell(1, 1).Value = "Name";
+                        worksheet.Cell(1, 2).Value = "Date of Birth";
+                        worksheet.Cell(1, 3).Value = "Requestor";
+                        worksheet.Cell(1, 4).Value = "Requested Date";
+                        worksheet.Cell(1, 5).Value = "Phone No";
+                        worksheet.Cell(1, 6).Value = "Address";
+                        worksheet.Cell(1, 7).Value = "Notes";
+
+                        int row = 2;
+                        foreach (var item in Req)
+                        {
+                            worksheet.Cell(row, 1).Value = item.Name;
+                            worksheet.Cell(row, 2).Value = item.Intdate + "/" + item.Strmonth + "/" + item.Intyear;
+                            worksheet.Cell(row, 3).Value = item.Requestor;
+                            worksheet.Cell(row, 4).Value = item.RequestedDate;
+                            worksheet.Cell(row, 5).Value = item.Phonenumber;
+                            worksheet.Cell(row, 6).Value = item.Address;
+                            worksheet.Cell(row, 7).Value = item.Notes;
+                            row++;
+                        }
+
+                        using (var stream = new MemoryStream())
+                        {
+                            workbook.SaveAs(stream);
+                            var content = stream.ToArray();
+                            var mimeType = "application/....";
+                            return File(content, mimeType, "Reporrt.xlsx");
+                        }
+                    }
+                    break;
+                case 2:
+                    Req = _Admin.GetTableDataPending();
+                    using (var workbook = new XLWorkbook())
+                    {
+                        var worksheet = workbook.Worksheets.Add("TableData");
+                        worksheet.Cell(1, 1).Value = "Name";
+                        worksheet.Cell(1, 2).Value = "Date of Birth";
+                        worksheet.Cell(1, 3).Value = "Requestor";
+                        worksheet.Cell(1, 4).Value = "Physician Name";
+                        worksheet.Cell(1, 5).Value = "Date Of Service";
+                        worksheet.Cell(1, 6).Value = "Phone No";
+                        worksheet.Cell(1, 7).Value = "Address";
+                        worksheet.Cell(1, 8).Value = "Notes";
+
+                        int row = 2;
+                        foreach (var item in Req)
+                        {
+                            worksheet.Cell(row, 1).Value = item.Name;
+                            worksheet.Cell(row, 2).Value = item.Intdate + "/" + item.Strmonth + "/" + item.Intyear;
+                            worksheet.Cell(row, 3).Value = item.Requestor;
+                            worksheet.Cell(row, 4).Value = item.PhysicianName;
+                            worksheet.Cell(row, 5).Value = item.DateOfService;
+                            worksheet.Cell(row, 6).Value = item.Phonenumber;
+                            worksheet.Cell(row, 7).Value = item.Address;
+                            worksheet.Cell(row, 8).Value = item.Notes;
+                            row++;
+                        }
+
+                        using (var stream = new MemoryStream())
+                        {
+                            workbook.SaveAs(stream);
+                            var content = stream.ToArray();
+                            var mimeType = "application/....";
+                            return File(content, mimeType, "Reporrt.xlsx");
+                        }
+                    }
+                    break;
+                case 3:
+                    Req = _Admin.GetTableDataActive();
+                    break;
+                case 4:
+                    Req = _Admin.GetTableDataConclude();
+                    break;
+                case 5:
+                    Req = _Admin.GetTableDataToclose();
+                    using (var workbook = new XLWorkbook())
+                    {
+                        var worksheet = workbook.Worksheets.Add("TableData");
+                        worksheet.Cell(1, 1).Value = "Name";
+                        worksheet.Cell(1, 2).Value = "Date of Birth";
+                        worksheet.Cell(1, 3).Value = "Region";
+                        worksheet.Cell(1, 4).Value = "Physician Name";
+                        worksheet.Cell(1, 5).Value = "Date Of Service";
+                        worksheet.Cell(1, 6).Value = "Address";
+                        worksheet.Cell(1, 7).Value = "Notes";
+
+                        int row = 2;
+                        foreach (var item in Req)
+                        {
+                            worksheet.Cell(row, 1).Value = item.Name;
+                            worksheet.Cell(row, 2).Value = item.Intdate + "/" + item.Strmonth + "/" + item.Intyear;
+                            worksheet.Cell(row, 3).Value = item.Region;
+                            worksheet.Cell(row, 4).Value = item.PhysicianName;
+                            worksheet.Cell(row, 5).Value = item.DateOfService;
+                            worksheet.Cell(row, 6).Value = item.Address;
+                            worksheet.Cell(row, 7).Value = item.Notes;
+                            row++;
+                        }
+
+                        using (var stream = new MemoryStream())
+                        {
+                            workbook.SaveAs(stream);
+                            var content = stream.ToArray();
+                            var mimeType = "application/....";
+                            return File(content, mimeType, "Reporrt.xlsx");
+                        }
+                    }
+                    break;
+                case 6:
+                    Req = _Admin.GetTableDataToclose();
+                    break;
+            }
+
+            return Ok();
+        }
+
         public IActionResult ExportAll()
         {
-            //IEnumerable<tableData> data = _Admin.GetTableData(1);
+            IEnumerable<tableData> data = _Admin.GetTableData();
 
-            //using (var workbook = new XLWorkbook())
-            //{
-            //    var worksheet = workbook.Worksheets.Add("TableData");
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("TableData");
 
-            //    worksheet.Cell(1, 1).Value = "Name";
-            //    worksheet.Cell(1, 2).Value = "Date of Birth";
+                worksheet.Cell(1, 1).Value = "Name";
+                worksheet.Cell(1, 2).Value = "Date of Birth";
+                worksheet.Cell(1, 3).Value = "Requestor";
+                worksheet.Cell(1, 4).Value = "Requested Date";
+                worksheet.Cell(1, 5).Value = "Physician Name";
+                worksheet.Cell(1, 6).Value = "Date Of Service";
+                worksheet.Cell(1, 7).Value = "Region";
+                worksheet.Cell(1, 8).Value = "Phone No";
+                worksheet.Cell(1, 9).Value = "Address";
+                worksheet.Cell(1, 10).Value = "Notes";
 
-            //    int row = 2;
-            //    foreach (var item in data)
-            //    {
-            //        worksheet.Cell(row, 1).Value = item.Name;
-            //        row++;
-            //    }
+                int row = 2;
+                foreach (var item in data)
+                {
+                    worksheet.Cell(row, 1).Value = item.Name;
+                    worksheet.Cell(row, 2).Value = item.Intdate + "/" + item.Strmonth + "/" + item.Intyear;
+                    worksheet.Cell(row, 3).Value = item.Requestor;
+                    worksheet.Cell(row, 4).Value = item.RequestedDate;
+                    worksheet.Cell(row, 5).Value = item.PhysicianName;
+                    worksheet.Cell(row, 6).Value = item.DateOfService;
+                    worksheet.Cell(row, 7).Value = item.Region;
+                    worksheet.Cell(row, 8).Value = item.Phonenumber;
+                    worksheet.Cell(row, 9).Value = item.Address;
+                    worksheet.Cell(row, 10).Value = item.Notes;
+                    row++;
+                }
 
-            //    workbook.SaveAs("MyTableData.xlsx");
-            //}
-            return View();
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    var mimeType = "application/....";
+                    return File(content, mimeType, "Reporrt.xlsx");
+                }
+
+                //workbook.SaveAs("MyTableData.xlsx");
+            }
         }
+        #endregion
 
 
         [ActionName("ViewCase")]
@@ -529,7 +686,7 @@ namespace HalloDoc.Controllers
             Nullable<int> phyId = null;
             _Genral.AddreqLogStatus(reqid, null, AdminId, phyId, ClearStatus);
             _Genral.updateReqStatus(reqid, ClearStatus);
-            return Json(new {value = "Ok"});
+            return Json(new { value = "Ok" });
         }
         #endregion
 
@@ -583,15 +740,54 @@ namespace HalloDoc.Controllers
         #region Encounter
         public IActionResult Encounter(int reqid)
         {
-            var client = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
-            var encounter = _Genral.getEncounterDetail(reqid);
-            var modelData = new EncounterViewModel { ClientInformation = client, EncounterForm = encounter };
-            return PartialView("_AEncounter", modelData);
+            if (!_Genral.CheckEncounterFinalize(reqid))
+            {
+                TempData["reqid"] = reqid;
+                var client = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
+                var encounter = _Genral.getEncounterDetail(reqid);
+                var modelData = new EncounterViewModel { ClientInformation = client, EncounterForm = encounter };
+                return PartialView("_AEncounter", modelData);
+            }
+            else
+            {
+                TempData["reqid"] = reqid;
+                return PartialView("PopupEncounterFinalize");
+            }
         }
 
         public IActionResult EncounterDone(EncounterViewModel data)
         {
-            return PartialView();
+            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            Nullable<int> phyId = null;
+            if (_Genral.CheckEncounterForm((int)data.EncounterForm.RequestId))
+            {
+                _Genral.UpdateEncounterForm(data.EncounterForm, AdminId, phyId);
+            }
+            else
+            {
+                _Genral.AddEncounterForm(data.EncounterForm, AdminId, phyId);
+            }
+            return Ok();
+        }
+
+        public IActionResult EncounFinalze(int reqid)
+        {
+            _Genral.EncounterFinalize(reqid);
+            return Ok();
+        }
+
+        public IActionResult EncounterDownload(int reqid)
+        {
+            // Convert HTML to PDF using Rotativa
+            //var pdfBytes = new Rotativa.ViewAsPdf("_Encounter", new { reqid = reqid })
+            //{
+            //    FileName = "MedicalReport.pdf"
+            //}.BuildPdf(ControllerContext);
+
+            //// Return the PDF as a FileResult
+            //return File(pdfBytes, "application/pdf");
+            //return new ActionAsPdf("Encounter", new { reqid = reqid }) { FileName = "MediaclReport.pdf" };
+            return Ok();
         }
         #endregion
     }

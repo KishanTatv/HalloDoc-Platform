@@ -464,8 +464,17 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    hideOtherPortion();
-                    $("#partial").html(response);
+                    // in if condition
+                    if (response.includes("EnFinal")) {
+                        $(".PartialPopup").html(response);
+                        var my = new bootstrap.Modal(document.getElementById('EnFinal'));
+                        my.show();
+                    }
+                    else {
+                        hideOtherPortion();
+                        $("#partial").html(response);
+                    }
+
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

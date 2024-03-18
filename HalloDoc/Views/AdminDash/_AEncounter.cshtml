@@ -23,11 +23,14 @@
                 <form id="Formdata" novalidate class="needs-validation">
                     <div class="mb-4">
                         <h3 class="text-info text-center mt-3 mb-3">Medical Report-Confidential</h3>
+                        <p class="text-success text-center msgShow"></p>
 
                         <div class="row form-floating">
                             <div class="col-md-6 form-floating mt-3">
+                                <input type="text" class="d-none EncountrtReq" asp-for="@Model.EncounterForm.RequestId" value="@TempData["reqid"]" />
                                 <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="@Model.ClientInformation.Firstname">
                                 <label class="ms-3 text-secondary">First Name</label>
+                                <span asp-validation-for="ClientInformation.Firstname" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="@Model.ClientInformation.Lastname">
@@ -53,6 +56,7 @@
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="@Model.ClientInformation.Email">
                                 <label class="ms-3 text-secondary">Email</label>
+                                <span asp-validation-for="ClientInformation.Firstname" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.HistoryOfPresentIllnessOrInjury">
@@ -169,8 +173,9 @@
 
                     <div class="d-flex justify-content-end mt-4 mb-4">
                         <button type="submit" class="btn btn-info text-light me-3 ChangeDone">Save Change</button>
-                        <div class="btn btn-primary text-light me-3 viewNote"> Finalize </div>
+                        <div class="btn btn-primary text-light me-3 ChnageFinalize"> Finalize </div>
                         <button type="button" class="btn btn-danger BackOn">Cancel</button>
+                        <div class="BackOn d-none"></div>
                     </div>
                 </form>
             </div>
@@ -197,13 +202,27 @@
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                 data: data,
                 success: function (response) {
-                    console.log("success");
+                    $(".msgShow").text("Change Successfully!");
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
+        });
 
+        $(".ChnageFinalize").click(function () {
+            var reqid = $(".EncountrtReq").val();
+            $.ajax({
+                url: '/AdminDash/EncounFinalze',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    $('.BackOn').click();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
         });
     });
 </script>

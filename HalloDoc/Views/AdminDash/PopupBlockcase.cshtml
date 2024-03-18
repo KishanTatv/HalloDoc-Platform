@@ -40,7 +40,7 @@
     $(document).ready(function () {
         $('.blockReq').click(function () {
             var reqid = $(this).data('reqid');
-            var note = $('#blockReq').val();
+            var note = $('#blockReq').val().trim();
             $.ajax({
                 url: '/AdminDash/BlockReq',
                 method: 'POST',

@@ -124,8 +124,8 @@
     $(document).ready(function () {
 
         function checkData() {
-            var phone = $('#phone1').val();
-            var email = $('#email').val();
+            var phone = $('#phone1').val().trim();
+            var email = $('#email').val().trim();
             if (phone && email) {
                 return true;
             }

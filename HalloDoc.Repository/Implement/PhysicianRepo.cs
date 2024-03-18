@@ -53,13 +53,13 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        public void updateAdditionPhyData(Physician physician, string email, int aspId)
+        public void updateAdditionPhyData(string busName, string busWeb, string photo,string sign, string email,int aspId)
         {
             Physician phy = _context.Physicians.FirstOrDefault(x => x.Email == email);
-            phy.Businessname = physician.Businessname;
-            phy.Businesswebsite = physician.Businesswebsite;
-            phy.Photo = physician.Photo;
-            phy.Signature = physician.Signature;
+            phy.Businessname = busName;
+            phy.Businesswebsite = busWeb;
+            phy.Photo = photo;
+            phy.Signature = sign;
             phy.Modifieddate = System.DateTime.Now;
             phy.Modifiedby = aspId;
             _context.Physicians.Update(phy);

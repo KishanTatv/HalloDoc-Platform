@@ -114,7 +114,105 @@ namespace HalloDoc.Repository.Implement
             return data;
         }
 
-        
+        public bool CheckEncounterForm(int reqid)
+        {
+            return _context.EncounterForms.Any(x => x.RequestId == reqid);
+        }
+
+        public bool CheckEncounterFinalize(int reqid)
+        {
+            if (CheckEncounterForm(reqid))
+            {
+                var checkFin = _context.EncounterForms.FirstOrDefault(x => x.RequestId == reqid).IsFinalize;
+                if (checkFin == true)
+                {
+                    return true;
+                }
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void EncounterFinalize(int reqid)
+        {
+            EncounterForm form = _context.EncounterForms.FirstOrDefault(x => x.RequestId == reqid);
+            form.IsFinalize = true;
+            _context.EncounterForms.Update(form);
+            _context.SaveChanges();
+        }
+
+        public void AddEncounterForm(EncounterForm modeldata, int? AdminId, int? PhyId)
+        {
+            EncounterForm form = new EncounterForm
+            {
+                RequestId = modeldata.RequestId,
+                HistoryOfPresentIllnessOrInjury = modeldata.HistoryOfPresentIllnessOrInjury,
+                MedicalHistory = modeldata.MedicalHistory,
+                Medications = modeldata.Medications,
+                Allergies = modeldata.Allergies,
+                Temp = modeldata.Temp,
+                Hr = modeldata.Hr,
+                Rr = modeldata.Rr,
+                BloodPressureDiastolic = modeldata.BloodPressureDiastolic,
+                BloodPressureSystolic = modeldata.BloodPressureSystolic,
+                O2 = modeldata.O2,
+                Pain = modeldata.Pain,
+                Heent = modeldata.Heent,
+                Cv = modeldata.Cv,
+                Chest = modeldata.Chest,
+                Abd = modeldata.Abd,
+                Extremeties = modeldata.Extremeties,
+                Skin = modeldata.Skin,
+                Neuro = modeldata.Neuro,
+                Other = modeldata.Other,
+                Diagnosis = modeldata.Diagnosis,
+                TreatmentPlan = modeldata.TreatmentPlan,
+                MedicationsDispensed = modeldata.MedicationsDispensed,
+                Procedures = modeldata.Procedures,
+                FollowUp = modeldata.FollowUp,
+                AdminId = AdminId,
+                PhysicianId = PhyId,
+            };
+            _context.EncounterForms.Add(form);
+            _context.SaveChanges();
+        }
+
+        public void UpdateEncounterForm(EncounterForm modeldata, int? AdminId, int? PhyId)
+        {
+            EncounterForm form = _context.EncounterForms.FirstOrDefault(x => x.RequestId == modeldata.RequestId);
+            form.HistoryOfPresentIllnessOrInjury = modeldata.HistoryOfPresentIllnessOrInjury;
+            form.MedicalHistory = modeldata.MedicalHistory;
+            form.Medications = modeldata.Medications;
+            form.Allergies = modeldata.Allergies;
+            form.Temp = modeldata.Temp;
+            form.Hr = modeldata.Hr;
+            form.Rr = modeldata.Rr;
+            form.BloodPressureDiastolic = modeldata.BloodPressureDiastolic;
+            form.BloodPressureSystolic = modeldata.BloodPressureSystolic;
+            form.O2 = modeldata.O2;
+            form.Pain = modeldata.Pain;
+            form.Heent = modeldata.Heent;
+            form.Cv = modeldata.Cv;
+            form.Chest = modeldata.Chest;
+            form.Abd = modeldata.Abd;
+            form.Extremeties = modeldata.Extremeties;
+            form.Skin = modeldata.Skin;
+            form.Neuro = modeldata.Neuro;
+            form.Other = modeldata.Other;
+            form.Diagnosis = modeldata.Diagnosis;
+            form.TreatmentPlan = modeldata.TreatmentPlan;
+            form.MedicationsDispensed = modeldata.MedicationsDispensed;
+            form.Procedures = modeldata.Procedures;
+            form.FollowUp = modeldata.FollowUp;
+            form.AdminId = AdminId;
+            form.PhysicianId = PhyId;
+            _context.EncounterForms.Update(form);
+            _context.SaveChanges();
+        }
+
         #endregion
 
 

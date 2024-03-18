@@ -28,6 +28,8 @@ namespace HalloDoc.Repository.Interface
         //Dashbord table Data 
         IEnumerable<tableData> GetTableData();
 
+        IEnumerable<tableData> GetTableDataNew();
+
         IEnumerable<tableData> GetTableDataPending();
 
         IEnumerable<tableData> GetTableDataActive();

@@ -1,4 +1,5 @@
-﻿using HalloDoc.Entity.Models;
+﻿using HalloDoc.Entity.AdminDash;
+using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -26,7 +27,14 @@ namespace HalloDoc.Repository.Interface
 
         void addEmailLog(string eTemplate, string sub, string recemail, string filepath, int roleid, int? reqid, int? adminid, int? phyid);
         
+
         EncounterForm getEncounterDetail(int reqid);
+        bool CheckEncounterForm(int reqid);
+        bool CheckEncounterFinalize(int reqid);
+        void EncounterFinalize(int reqid);
+        void AddEncounterForm(EncounterForm modeldata, int? AdminId, int? PhyId);
+        void UpdateEncounterForm(EncounterForm modeldata, int? AdminId, int? PhyId);
+
 
         Task SendEmailOffice365(string recEmail, string subject, string body, List<string> attachment);
 

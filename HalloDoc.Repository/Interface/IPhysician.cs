@@ -11,6 +11,6 @@ namespace HalloDoc.Repository.Interface
     {
         void updatePhysicianInfo(Physician physcian, string email, int aspId);
         void updatePhysicianLocation(Physician physician, string email, int aspId);
-        void updateAdditionPhyData(Physician physician, string email, int aspId);
+        void updateAdditionPhyData(string busName, string busWeb, string photo, string sign, string email, int aspId);
     }
 }

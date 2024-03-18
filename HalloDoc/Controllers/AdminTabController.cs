@@ -3,6 +3,7 @@ using HalloDoc.Entity.Models;
 using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using static Uno.WinRTFeatureConfiguration;
 
 namespace HalloDoc.Controllers
 {
@@ -50,7 +51,7 @@ namespace HalloDoc.Controllers
         {
             string adminEmail = Request.Cookies["CookieEmail"];
             _Admin.updatePass(adminEmail, pass);
-            return Json(new { value = "ok" }); 
+            return Json(new { value = "ok" });
         }
 
         public IActionResult UpdateAdminProfile(ProfileViewModel adminInfo)
@@ -92,7 +93,7 @@ namespace HalloDoc.Controllers
             TempData["phid"] = phid;
             var phinfo = _Admin.getPhysicianDetail(phid);
             var region = _Admin.getAllRegion();
-            var data = new PhysicianProfileViewModel { physician = phinfo, Regions = region};
+            var data = new PhysicianProfileViewModel { physician = phinfo, Regions = region };
             return PartialView("_ProPhysicianEdit", data);
         }
 
@@ -119,11 +120,39 @@ namespace HalloDoc.Controllers
             return Json(new { value = "changed" });
         }
 
-        public IActionResult UpdatePhyAdditional(PhysicianProfileViewModel phinfo)
+        public IActionResult UpdatePhyAdditional(string BusinessN, string BusinessW, string Note, int phid, IFormFile Photo, IFormFile Sign)
         {
+
             int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
-            string phyEmail = _Admin.getPhysicianEmail(phinfo.phid);
-            _physician.updateAdditionPhyData(phinfo.physician, phyEmail, aspId);
+            string phyEmail = _Admin.getPhysicianEmail(phid);
+
+            byte[] photoBytes;
+            byte[] signatureBytes;
+
+
+            using (var memoryStream = new MemoryStream())
+            {
+                if (Photo != null)
+                {
+                    Photo.CopyTo(memoryStream);
+                }
+                photoBytes = memoryStream.ToArray();
+            }
+            var photoBase64 = Convert.ToBase64String(photoBytes);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                if (Sign != null)
+                {
+                    Sign.CopyTo(memoryStream);
+                }
+                signatureBytes = memoryStream.ToArray();
+            }
+            var signatureBase64 = Convert.ToBase64String(signatureBytes);
+            _physician.updateAdditionPhyData(BusinessW, BusinessW, photoBase64, signatureBase64, phyEmail, aspId);
+
+
+
             return Json(new { value = "changed" });
         }
 

@@ -140,27 +140,27 @@
             </div>
         </form>
 
-        <form id="Formdata3" novalidate class="needs-validation">
+        <form id="Formdata3" novalidate class="needs-validation" method="post" enctype="multipart/form-data">
             <div class="mt-4 mb-4">
                 <h5>Provider Profile</h5>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent edi3" placeholder="firstNmae" asp-for="physician.Businessname">
+                        <input type="text" class="form-control bg-transparent phybn edi3" placeholder="firstNmae" asp-for="physician.Businessname">
                         <label class="ms-3">Bussiness Name</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="Email" class="form-control bg-transparent edi3" placeholder="lastname" asp-for="physician.Businesswebsite">
+                        <input type="Email" class="form-control bg-transparent phybw edi3" placeholder="lastname" asp-for="physician.Businesswebsite">
                         <label class="ms-3">Bussiness Website</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <div class="d-flex m-auto">
                             <div class="p-0 w-100">
-                                <input type="text" class="form-control bg-transparent sfile" id="selectedFile1" placeholder="select File" disabled>
+                                <input type="text" class="form-control bg-transparent sfile" id="selectedFile" placeholder="Select Photo" disabled>
                                 <label class="ms-3"></label>
                             </div>
                             <div>
                                 <label class="btn btn-outline-info d-flex">
-                                    <input type="file" style="display: none;" id="FileInput1" name="DocFile" multiple>
+                                    <input type="file" class="uploadPhoto fileUplod" style="display: none;" id="FileInput" name="Photo">
                                     <i class="bi bi-cloud-arrow-up border-info"></i>
                                     <span class="upload_txt ms-2 edi3">Upload</span>
                                 </label>
@@ -170,12 +170,12 @@
                     <div class="col-md-6 form-floating mt-2">
                         <div class="d-flex m-auto">
                             <div class="p-0 w-75">
-                                <input type="text" class="form-control bg-transparent sfile" id="selectedFile2" placeholder="select File" disabled>
+                                <input type="text" class="form-control bg-transparent sfile" id="selectedFile1" placeholder="Select Signature" disabled>
                                 <label class="ms-3"></label>
                             </div>
                             <div>
                                 <label class="btn btn-outline-info d-flex ">
-                                    <input type="file" style="display: none;" id="FileInput2" name="DocFile" multiple>
+                                    <input type="file" class="uploadSign fileUplod" style="display: none;" id="FileInput1" name="Sign">
                                     <i class="bi bi-cloud-arrow-up border-info"></i>
                                     <span class="upload_txt ms-2 edi3">Upload</span>
                                 </label>
@@ -185,7 +185,7 @@
                     </div>
                 </div>
                 <div class="form-floating">
-                    <textarea type="text" class="form-control bg-transparent h-25"
+                    <textarea type="text" class="form-control bg-transparent h-25 phyAdmNote"
                               placeholder="Detail info" rows="3" asp-for="physician.Adminnotes"></textarea>
                     <label for="ms-3 text-info">Admin Notes</label>
                 </div>
@@ -278,23 +278,13 @@
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('profileTab').classList.add('underLine');
-
-        let SpBtnUpload1 = document.getElementById("SpBtnUpload1");
-        let FileInput1 = document.getElementById("FileInput1");
-        if (FileInput1) {
-            FileInput1.addEventListener('change', () => {
-                SpBtnUpload1.click();
-            });
-        }
-
-        let SpBtnUpload2 = document.getElementById("SpBtnUpload2");
-        let FileInput2 = document.getElementById("FileInput2");
-        if (FileInput2) {
-            FileInput2.addEventListener('change', () => {
-                SpBtnUpload2.click();
-            });
-        }
     });
+    document.getElementById('FileInput').addEventListener('change', function () {
+        document.getElementById('selectedFile').value = this.files[0].name;
+    })
+    document.getElementById('FileInput1').addEventListener('change', function () {
+        document.getElementById('selectedFile1').value = this.files[0].name;
+    })
 
     function updateRegionId(selectElement) {
         const selectedRegionId = selectElement.value;
@@ -410,6 +400,10 @@
         sfile.forEach(sfile => {
             sfile.classList.add("bg-transparent");
         })
+        const upfile = document.querySelectorAll('.fileUplod');
+        upfile.forEach(item => {
+            item.disabled = false;
+        })
         signBtn.classList.remove("bg-transparent");
         textarea.disabled = false;
         textarea.classList.add("bg-transparent");
@@ -501,14 +495,21 @@
         });
         $('#Formdata3').submit(function (e) {
             e.preventDefault();
-            var data = $("#Formdata3").serialize();
-            var phid = $('.Phyid').val();
-            data += "&phid=" + phid;
+
+            var formData = new FormData();
+            formData.append('phid', $('.Phyid').val());
+            formData.append('BusinessN', $('.phybn').val());
+            formData.append('BusinessW', $('.phybw').val());
+            formData.append('Note', document.querySelector('.phyAdmNote').value);
+            formData.append('Photo', $('.uploadPhoto')[0].files[0]);
+            formData.append('Sign', $('.uploadSign')[0].files[0]);
+
             $.ajax({
                 type: 'POST',
                 url: '/AdminTab/UpdatePhyAdditional',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                data: data,
+                data: formData,
+                processData: false, 
+                contentType: false,
                 success: function (response) {
                     if (response.value == "changed") {
                         window.location.reload();
