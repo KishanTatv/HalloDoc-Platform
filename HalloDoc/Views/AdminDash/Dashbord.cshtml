@@ -20,10 +20,10 @@
     <div class="dashHead">
         <div class="container-fluid overflow-hidden">
 
-            <div class="row g-3 nav pt-4">
+            <div class="row g-3 nav pt-4 mb-3">
                 <div class="col-4 col-sm-4 col-lg-2 active">
-                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardN" onclick="newDash()" data-id="1">
-                        <div class=" p-0">
+                    <div class="d-flex card p-2 text-decoration-none card rounded-3 DashCard DashCardN" onclick="newDash()" data-id="1">
+                        <div class="p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_new.jpg">
                             <strong class="Dash-name">NEW</strong>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="col-4 col-sm-4 col-lg-2 ">
-                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardP" onclick="penDash()" data-id="2">
+                    <div class="d-flex card p-2 text-decoration-none rounded-3 DashCard DashCardP" onclick="penDash()" data-id="2">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_pending.jpg">
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="col-4 col-sm-4 col-lg-2 ">
-                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardA" onclick="actDash()" data-id="3">
+                    <div class="d-flex card p-2 text-decoration-none rounded-3 DashCard DashCardA" onclick="actDash()" data-id="3">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_active.png">
@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="col-4 col-sm-4 col-lg-2 ">
-                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardC" onclick="conDash()" data-id="4">
+                    <div class="d-flex card p-2 text-decoration-none rounded-3 DashCard DashCardC" onclick="conDash()" data-id="4">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_conclude.png">
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="col-4 col-sm-4 col-lg-2 ">
-                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardT" onclick="tocDash()" data-id="5">
+                    <div class="d-flex card p-2 text-decoration-none rounded-3 DashCard DashCardT" onclick="tocDash()" data-id="5">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_toclose.png">
@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="col-4 col-sm-4 col-lg-2 ">
-                    <div class="d-flex p-2 text-decoration-none rounded-3 DashCard DashCardU" onclick="unpDash()" data-id="6">
+                    <div class="d-flex card p-2 text-decoration-none rounded-3 DashCard DashCardU" onclick="unpDash()" data-id="6">
                         <div class=" p-0">
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_unpaid.png">
@@ -83,6 +83,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
 
@@ -388,7 +389,7 @@
                 method: 'POST',
                 data: { id: id },
                 success: function (response) {
-                    console.log("ok");
+                    console.log(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

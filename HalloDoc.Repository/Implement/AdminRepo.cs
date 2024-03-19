@@ -1,5 +1,6 @@
 ﻿using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
+using HalloDoc.Entity.AdminTab;
 using HalloDoc.Entity.Data;
 using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -342,7 +344,7 @@ namespace HalloDoc.Repository.Implement
 
             Blockrequest req = new Blockrequest()
             {
-                Requestid = reqId.ToString(),
+                Requestid = reqId,
                 Reason = note,
                 Email = email,
                 Phonenumber = phoneNum,
@@ -444,8 +446,48 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
+        public bool CheckAdminReg(int adminId, int Regid)
+        {
+            return _context.Adminregions.Any(x => x.Adminid == adminId && x.Regionid == Regid);
+        }
+
+        public void removeAdminReg(int adminId, int regionId)
+        {
+            Adminregion adreg = _context.Adminregions.FirstOrDefault(x => x.Adminid == adminId && x.Regionid == regionId);
+            _context.Adminregions.Remove(adreg);
+            _context.SaveChanges(); 
+        }
+
+        public void addAdminRegion(int adminId, int regioId)
+        {
+            Adminregion adreg = new Adminregion
+            {
+                Adminid = adminId,
+                Regionid = regioId,
+            };
+            _context.Adminregions.Add(adreg);
+            _context.SaveChanges();
+        }
+
 
         //Physician record
+
+        public PhysicianCustom getPhyProfile(int phid)
+        {
+            var data = _context.Physicians.Where(r => r.Physicianid == phid)
+                .Select(r => new PhysicianCustom
+                {
+                    Firstname = r.Firstname,
+                    Lastname = r.Lastname,
+                    Email = r.Email,
+                    Mobile = r.Mobile,
+                    Medicallicense = r.Medicallicense,
+                    Npinumber = r.Npinumber,
+                    Syncemailaddress = r.Syncemailaddress,
+                }).FirstOrDefault();
+            return data;
+        }
+
         public List<Physician> getAllPhysicianData()
         {
             var data = _context.Physicians.Include(x => x.Physiciannotifications).ToList();

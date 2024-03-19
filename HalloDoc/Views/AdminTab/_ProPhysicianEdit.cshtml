@@ -29,6 +29,7 @@
                 <div class="col-md-6 form-floating mt-2">
                     <input type="password" class="form-control bg-transparent pass" placeholder="pass">
                     <label class="ms-3">Password</label>
+                    <span class="pass-error text-danger"></span>
                 </div>
                 <div class="col-md-6 form-floating mt-2">
                     <select class="form-select" aria-label="Floating label select example" disabled>
@@ -56,8 +57,9 @@
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent d-none" placeholder="firstNmae" asp-for="physician.Physicianid">
-                        <input type="text" class="form-control bg-transparent AdIn" placeholder="firstNmae" asp-for="physician.Firstname">
+                        <input type="text" class="form-control bg-transparent AdIn fname" placeholder="firstNmae" asp-for="physician.Firstname">
                         <label class="ms-3">First Name</label>
+                        <span asp-validation-for="physician.Firstname" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="physician.Lastname">
@@ -436,20 +438,26 @@
         var phid = $('.Phyid').val();
 
         $('.changePass').click(function () {
-            var pass = $('.pass').val();
-            $.ajax({
-                url: '/AdminTab/ResetPhyPass',
-                method: 'POST',
-                data: { pass: pass, phid: phid },
-                success: function (response) {
-                    if (response.value == "ok") {
-                        $('.msg').text("Password Changed").addClass('text-success');
+            var pass = $('.pass').val().trim();
+            if (pass != '') {
+                $.ajax({
+                    url: '/AdminTab/ResetPhyPass',
+                    method: 'POST',
+                    data: { pass: pass, phid: phid },
+                    success: function (response) {
+                        $('.pass-error').text("");
+                        if (response.value == "ok") {
+                            $('.msg').text("Password Changed").addClass('text-success');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
+                });
+            }
+            else {
+                $('.pass-error').text("Add Password to change");
+            }
         });
 
         $('#Formdata1').submit(function (e) {
@@ -457,21 +465,22 @@
             var data = $("#Formdata1").serialize();
             var phid = $('.Phyid').val();
             data += "&phid=" + phid;
-            console.log(data);
-            $.ajax({
-                type: 'POST',
-                url: '/AdminTab/UpdatePhyProfile',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                data: data,
-                success: function (response) {
-                    if (response.value == "changed") {
-                        window.location.reload();
+            if ($('.fname').val().trim() != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '/AdminTab/UpdatePhyProfile',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: data,
+                    success: function (response) {
+                        if (response.value == "changed") {
+                            window.location.reload();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
+                });
+            }
         });
         $('#Formdata2').submit(function (e) {
             e.preventDefault();
@@ -508,7 +517,7 @@
                 type: 'POST',
                 url: '/AdminTab/UpdatePhyAdditional',
                 data: formData,
-                processData: false, 
+                processData: false,
                 contentType: false,
                 success: function (response) {
                     if (response.value == "changed") {

@@ -56,7 +56,29 @@ namespace HalloDoc.Controllers
 
         public IActionResult UpdateAdminProfile(ProfileViewModel adminInfo)
         {
+            var regList = Request.Form["checkReg"].ToList();
             string adminEmail = Request.Cookies["CookieEmail"];
+            int adminId = _Admin.getAdminId(adminEmail);
+            List<int> r = new List<int>();
+            foreach (var reg in _Admin.getAdminReg(adminId))
+            {
+                r.Add(reg.Region.Regionid);
+            }
+
+            foreach (var i in regList)
+            {
+                if (!_Admin.CheckAdminReg(adminId, Convert.ToInt16(i)))
+                {
+                    _Admin.addAdminRegion(adminId, Convert.ToInt16(i));
+                }
+            }
+            foreach (var f in r)
+            {
+                if (!regList.Contains(f.ToString()))
+                {
+                    _Admin.removeAdminReg(adminId, f);
+                }
+            }
             _Admin.updateAdminInfo(adminInfo.Admin, adminEmail);
             return Json(new { value = "changed" });
         }
@@ -91,9 +113,9 @@ namespace HalloDoc.Controllers
         public IActionResult PhysicanEdit(int phid)
         {
             TempData["phid"] = phid;
-            var phinfo = _Admin.getPhysicianDetail(phid);
+            PhysicianCustom phinfo = _Admin.getPhyProfile(phid);
             var region = _Admin.getAllRegion();
-            var data = new PhysicianProfileViewModel { physician = phinfo, Regions = region };
+            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, Regions = region };
             return PartialView("_ProPhysicianEdit", data);
         }
 

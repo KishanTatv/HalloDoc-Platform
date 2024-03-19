@@ -28,10 +28,6 @@ public partial class Blockrequest
     [Column("reason", TypeName = "character varying")]
     public string? Reason { get; set; }
 
-    [Column("requestid")]
-    [StringLength(50)]
-    public string Requestid { get; set; } = null!;
-
     [Column("ip")]
     [StringLength(20)]
     public string? Ip { get; set; }
@@ -41,4 +37,7 @@ public partial class Blockrequest
 
     [Column("modifieddate", TypeName = "timestamp without time zone")]
     public DateTime? Modifieddate { get; set; }
+
+    [Column("requestid")]
+    public int? Requestid { get; set; }
 }
