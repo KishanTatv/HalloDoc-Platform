@@ -3,9 +3,15 @@
 
 // Write your JavaScript code.
 
+let p = document.querySelectorAll('.iti--allow-dropdown');
+p.forEach(item => {
+    item.classList.add('h-75');
+})
+
 document.getElementById('FileInput').addEventListener('change', function () {
     document.getElementById('selectedFile').value = this.files[0].name;
 })
+
 
 function isPasswordSame() {
     var password = document.getElementById('Password').value;

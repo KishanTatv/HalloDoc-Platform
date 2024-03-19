@@ -85,27 +85,15 @@
                                 {
                                     <p>@Enum.GetName(typeof(HalloEnum.regName), adminreg.Regionid)</p>
                                 }
+
                                 <div class="col-md-6 form-floating mt-2">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input AdIn checkb" type="checkbox" value="Maharashtra">
-                                        <label>Maharashtra</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input AdIn checkb" type="checkbox" value="Delhi">
-                                        <label>Delhi</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input AdIn checkb" type="checkbox" value="Bihar">
-                                        <label>Bihar</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input AdIn checkb" type="checkbox" value="Goa">
-                                        <label>Goa</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input AdIn checkb" type="checkbox" value="Gujrat">
-                                        <label>Gujrat</label>
-                                    </div>
+                                    @foreach (var reg in Model.Regions)
+                                    {
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input AdIn checkb" type="checkbox" value="@reg.Name">
+                                            <label>@reg.Name</label>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>

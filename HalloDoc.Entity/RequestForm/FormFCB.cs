@@ -9,15 +9,19 @@ namespace HalloDoc.Entity.RequestForm
         public ClientInformation clientInformation { get; set; }
 
         [Column("patientFname")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
         [Required(ErrorMessage = "FirstName is required")]
         [StringLength(100)]
         public string? PatientFname { get; set; }
 
         [Column("patientLname")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
+        [Required(ErrorMessage = "LastName is required")]
         [StringLength(100)]
         public string? PatientLname { get; set; }
 
         [Column("patientPhonenumber")]
+        [Required(ErrorMessage = "PhoneNumber is required")]
         [StringLength(23)]
         public string? PatientPhonenumber { get; set; }
 

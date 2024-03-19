@@ -12,10 +12,14 @@ namespace HalloDoc.Entity.RequestForm
 
         [Column("firstname")]
         [Required(ErrorMessage = "Firstname is required")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
         [StringLength(100)]
         public string? Firstname { get; set; }
 
+
         [Column("lastname")]
+        [Required(ErrorMessage = "Lastname is required")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
         [StringLength(100)]
         public string? Lastname { get; set; }
 
@@ -26,13 +30,14 @@ namespace HalloDoc.Entity.RequestForm
         public DateTime date { get; set; }
 
         [Column("phonenumber")]
+        [Required(ErrorMessage = "Phone Number is required")]
         [StringLength(23)]
         public string? Phonenumber { get; set; }
 
         [Column("email")]
         [StringLength(50)]
         //[RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
-        [Required(ErrorMessage = "Please enter email")]
+        [Required(ErrorMessage = "Please Enter Email")]
         public string? Email { get; set; }
 
         //[Required(ErrorMessage = "Password is required")]
@@ -58,11 +63,13 @@ namespace HalloDoc.Entity.RequestForm
 
         [Column("state")]
         [Required(ErrorMessage = "State is required")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only String Enter.")]
         [StringLength(100)]
         public string? State { get; set; }
 
         [Column("zipcode")]
-        //[RegularExpression(@"0*[1-9][0-9]*", ErrorMessage = "only number enter.")]
+        [Required(ErrorMessage = "ZipCode is required")]
+        [RegularExpression(@"0*[1-9][0-9]*", ErrorMessage = "only number enter.")]
         public string? Zipcode { get; set; }
 
         [Column("Address")]

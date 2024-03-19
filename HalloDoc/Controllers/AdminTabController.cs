@@ -129,7 +129,6 @@ namespace HalloDoc.Controllers
             byte[] photoBytes;
             byte[] signatureBytes;
 
-
             using (var memoryStream = new MemoryStream())
             {
                 if (Photo != null)
@@ -150,9 +149,6 @@ namespace HalloDoc.Controllers
             }
             var signatureBase64 = Convert.ToBase64String(signatureBytes);
             _physician.updateAdditionPhyData(BusinessW, BusinessW, photoBase64, signatureBase64, phyEmail, aspId);
-
-
-
             return Json(new { value = "changed" });
         }
 

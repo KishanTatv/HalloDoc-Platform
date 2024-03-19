@@ -36,6 +36,7 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="Lastname">
                         <label class="ms-3">Last Name</label>
+                        <span asp-validation-for="Lastname" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="date" class="form-control bg-transparent" 
@@ -55,7 +56,8 @@
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="Phonenumber" />
+                        <input type="number" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="Phonenumber" />
+                        <span asp-validation-for="Phonenumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row form-floating">
@@ -147,7 +149,7 @@
 
             <div class="d-flex justify-content-end mt-4 mb-4">
                 <button type="submit" class="btn btn-info me-4" name="Upload">Submit</button>
-                <button type="button" class="btn btn-outline-info">Cancel</button>
+                <a type="button" class="btn btn-outline-info" asp-action="PatientReq" asp-controller="PatientRequest">Cancel</a>
 
                 <!-- Modal -->
                 <partial name="partial/ModalPartial" />
