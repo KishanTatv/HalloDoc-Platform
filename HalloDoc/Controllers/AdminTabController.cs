@@ -93,9 +93,12 @@ namespace HalloDoc.Controllers
 
 
         #region Provider
-        public IActionResult Provider()
+        public IActionResult Provider(int page)
         {
             var data = _Admin.getAllPhysicianData().ToList();
+            var Tcount = data.Count();
+            ViewBag.TPage = Math.Ceiling(Tcount / 5.0);
+            ViewBag.CurrentPage = page;
             return View(data);
         }
 
@@ -107,15 +110,25 @@ namespace HalloDoc.Controllers
 
         public IActionResult Pcontactsend(int phid, string contType, string note)
         {
-            return View();
+            int adminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            int roleId = Convert.ToInt16(Request.Cookies["CookieRole"]);
+            string phyEmail = _Admin.getPhysicianEmail(phid);
+            string sub = "Communication Notification";
+            if (contType == "Email" || contType == "Both")
+            {
+                _Genral.SendEmailOffice365(phyEmail, sub, note, null);
+                _Genral.addEmailLog(note, sub, phyEmail, null, roleId, null, adminId, null);
+            }
+            return Ok();
         }
 
         public IActionResult PhysicanEdit(int phid)
         {
             TempData["phid"] = phid;
             PhysicianCustom phinfo = _Admin.getPhyProfile(phid);
+            var phy = _Admin.getPhysicianDetail(phid);
             var region = _Admin.getAllRegion();
-            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, Regions = region };
+            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region };
             return PartialView("_ProPhysicianEdit", data);
         }
 
@@ -130,7 +143,7 @@ namespace HalloDoc.Controllers
         {
             int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
             string phyEmail = _Admin.getPhysicianEmail(phinfo.phid);
-            _physician.updatePhysicianInfo(phinfo.physician, phyEmail, aspId);
+            _physician.updatePhysicianInfo(phinfo.PhysicianCustom, phyEmail, aspId);
             return Json(new { value = "changed" });
         }
 
@@ -174,6 +187,44 @@ namespace HalloDoc.Controllers
             return Json(new { value = "changed" });
         }
 
+        public IActionResult DeletePhy(int phid)
+        {
+            _physician.isDeletePhy(phid);
+            return Ok();
+        }
+
         #endregion
+
+
+        #region Access
+        public IActionResult Access()
+        {
+            return View();
+        }
+
+        public IActionResult CreateRole()
+        {
+            var role = _Admin.getAllAspnetrole();
+            var data = new CreateRoleViewModel { aspnetrole = role };
+            return PartialView("_CreateRole", data);
+        }
+        #endregion
+
+
+        public IActionResult SearchRecord()
+        {
+            return View();
+        }
+
+
+        public IActionResult PatientHistory()
+        {
+            return View();
+        }
+
+        public IActionResult BlockHistory()
+        {
+            return View();
+        }
     }
 }

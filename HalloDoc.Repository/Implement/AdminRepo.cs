@@ -477,6 +477,7 @@ namespace HalloDoc.Repository.Implement
             var data = _context.Physicians.Where(r => r.Physicianid == phid)
                 .Select(r => new PhysicianCustom
                 {
+                    Physicianid = phid,
                     Firstname = r.Firstname,
                     Lastname = r.Lastname,
                     Email = r.Email,
@@ -490,7 +491,9 @@ namespace HalloDoc.Repository.Implement
 
         public List<Physician> getAllPhysicianData()
         {
-            var data = _context.Physicians.Include(x => x.Physiciannotifications).ToList();
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = false;
+            var data = _context.Physicians.Include(x => x.Physiciannotifications).Where(x=> x.Isdeleted == bitArray).ToList();
             return data;
         }
 
@@ -502,6 +505,12 @@ namespace HalloDoc.Repository.Implement
         public Physician getPhysicianDetail(int phid)
         {
             return _context.Physicians.Include(x => x.Aspnetuser).FirstOrDefault(x => x.Physicianid == phid);
+        }
+
+        //role
+        public List<Aspnetrole> getAllAspnetrole()
+        {
+            return _context.Aspnetroles.ToList();
         }
     }
 }

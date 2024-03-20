@@ -74,7 +74,7 @@
                     method: 'POST',
                     data: { phid: phid, contType: contType, note: note },
                     success: function (response) {
-
+                        window.location.reload();
                     },
                     error: function (xhr, status, error) {
                         console.error(xhr.responseText);

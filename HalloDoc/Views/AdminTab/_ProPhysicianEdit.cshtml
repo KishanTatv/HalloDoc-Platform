@@ -18,8 +18,8 @@
 
     <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
         <div class="mb-4">
-            <input class="Phyid d-none" value="@Model.physician.Physicianid" />
-            <p class="msg text-center"></p>
+            <input class="Phyid d-none" value="@Model.PhysicianCustom.Physicianid" />
+            <p class="Addmsg text-center"></p>
             <h5>Account Information</h5>
             <div class="row form-floating">
                 <div class="col-md-6 form-floating mt-2">
@@ -54,34 +54,37 @@
         <form id="Formdata1" novalidate class="needs-validation">
             <div class="mt-4 mb-4">
                 <h5>Physician Information</h5>
+                <input type="text" class="form-control bg-transparent d-none" placeholder="firstNmae" asp-for="PhysicianCustom.Physicianid">
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent d-none" placeholder="firstNmae" asp-for="physician.Physicianid">
-                        <input type="text" class="form-control bg-transparent AdIn fname" placeholder="firstNmae" asp-for="physician.Firstname">
+                        <input type="text" class="form-control bg-transparent AdIn fname" placeholder="firstNmae" asp-for="PhysicianCustom.Firstname">
                         <label class="ms-3">First Name</label>
-                        <span asp-validation-for="physician.Firstname" class="text-danger"></span>
+                        <span asp-validation-for="PhysicianCustom.Firstname" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="physician.Lastname">
+                        <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="PhysicianCustom.Lastname">
                         <label class="ms-3">Last Name</label>
+                        <span asp-validation-for="PhysicianCustom.Lastname" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="email" class="form-control bg-transparent" id="email" placeholder="email" asp-for="physician.Email">
+                        <input type="email" class="form-control bg-transparent" id="email" placeholder="email" asp-for="PhysicianCustom.Email">
                         <label class="ms-3">Email</label>
+                        <span asp-validation-for="PhysicianCustom.Email" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" id="phone1" class="form-control bg-transparent AdIn" style="height:58px" asp-for="physician.Mobile" />
+                        <input type="text" id="phone1" class="form-control bg-transparent AdIn" style="height:58px" asp-for="PhysicianCustom.Mobile" />
+                        <span asp-validation-for="PhysicianCustom.Mobile" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent AdIn" placeholder="licence" asp-for="physician.Medicallicense">
+                        <input type="text" class="form-control bg-transparent AdIn" placeholder="licence" asp-for="PhysicianCustom.Medicallicense">
                         <label class="ms-3">Medical Licencse</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent AdIn" placeholder="npi" asp-for="physician.Npinumber">
+                        <input type="text" class="form-control bg-transparent AdIn" placeholder="npi" asp-for="PhysicianCustom.Npinumber">
                         <label class="ms-3">NPI Number</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" class="form-control bg-transparent AdIn" placeholder="syncemail" asp-for="physician.Syncemailaddress">
+                        <input type="text" class="form-control bg-transparent AdIn" placeholder="syncemail" asp-for="PhysicianCustom.Syncemailaddress">
                         <label class="ms-3">Synchronization  Email Address</label>
                     </div>
                 </div>
@@ -198,7 +201,6 @@
                 <button id="cancelbtn3" type="button" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable3()">Cancel</button>
             </div>
         </form>
-
         <hr />
 
         <h5>Onboarding</h5>
@@ -272,15 +274,28 @@
             </tr>
         </table>
 
+        <hr />
+
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-danger text-light">Save</button>
+            <button class="btn btn-info text-light ms-3 deletePhy">Delete Account</button>
+        </div>
+
     </div>
 </div>
 
 
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/js/contact-api.js" asp-append-version="true"></script>
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('profileTab').classList.add('underLine');
     });
+    let cflag = document.querySelectorAll('.iti--allow-dropdown');
+    cflag.forEach(item => {
+        item.classList.add('h-75');
+    })
     document.getElementById('FileInput').addEventListener('change', function () {
         document.getElementById('selectedFile').value = this.files[0].name;
     })
@@ -312,7 +327,7 @@
     let pass = document.querySelector('.pass');
     pass.disabled = false;
     pass.classList.add("bg-transparent");
-
+   
     function editEnable1() {
         event.preventDefault();
         const edit = document.getElementById('editbtn1');
@@ -435,6 +450,7 @@
 
 <script asp-append-version="true">
     $(document).ready(function () {
+
         var phid = $('.Phyid').val();
 
         $('.changePass').click(function () {
@@ -523,6 +539,21 @@
                     if (response.value == "changed") {
                         window.location.reload();
                     }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.deletePhy').click(function () {
+            var phid = $('.Phyid').val();
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/DeletePhy',
+                data: {phid: phid},
+                success: function (response) {
+                    window.location.reload();
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

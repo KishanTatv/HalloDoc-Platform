@@ -50,7 +50,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
             @foreach (var item in Model.Tdata)
             {
-                <tr class=" @Enum.GetName(typeof(HalloEnum.reqTypebg), item.ReqTypeId)">
+                <tr class=" @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))">
                     <td class="text-light " scope="row">
                         <p class="d-flex justify-content-between">
                             @item.Name
@@ -199,9 +199,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 <div class="accordion-header bg-lighinfo p-2">
                     <div class="d-flex justify-content-between mb-3">
                         <span>@item.Name</span>
-                        <span class="d-flex align-items-center gap-2">
-                            Ptient
-                        </span>
+                        <span class="d-flex align-items-center gap-2"> @Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId) <span class="dot me-1 @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))"></span></span>
                     </div>
                     <div class="d-flex justify-content-between">
                         <span>@item.Address</span>
@@ -220,7 +218,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                 <span class="d-inline-flex">
                                     <i class="bi bi-clock text-primary"></i><span class="text-secondary mx-2">
                                         Wait Time:
-                                    </span>Dec 5, 2023 08:52 AM
+                                    </span>@item.RequestedDate
                                 </span>
                                 <span class="d-inline-flex">
                                     <i class="bi bi-calendar3 text-primary"></i><span class="text-secondary mx-2"> Date of Birth: </span> @item.Strmonth.Substring(0, 3) @item.Intdate , @item.Intyear (@item.Age)

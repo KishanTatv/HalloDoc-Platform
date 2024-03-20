@@ -7,25 +7,28 @@
 <nav class="shadow-sm bg-body-tertiary rounded collapse show" id="collapseExample">
     <div class="Dash-nav nav nav-underline nav-item text-info" id="nav-tab" role="tablist">
         <a class="nav-link ps-3 bg-transparent " id="dashTab"
-              aria-selected="true" asp-action="Dashbord" asp-controller="AdminDash">Dashbord</a>
+           aria-selected="true" asp-action="Dashbord" asp-controller="AdminDash">Dashbord</a>
         <a class="nav-link ps-3 bg-transparent" id="proLocTab"
-              aria-selected="false" asp-action="ProviderLoc" asp-controller="AdminTab">Provider Location</a>
+           aria-selected="false" asp-action="ProviderLoc" asp-controller="AdminTab">Provider Location</a>
         <a class="nav-link ps-3 bg-transparent" id="profileTab"
            aria-selected="false" asp-action="Profile" asp-controller="AdminTab">My Profile</a>
-        <li class="nav-item dropdown">
         <a class="nav-link ps-3 bg-transparent dropdown-toggle" id="providerTab" data-bs-toggle="dropdown" aria-expanded="false">Providers</a>
         <ul class="dropdown-menu">
-                <li><a class="dropdown-item" asp-action="Provider" asp-controller="AdminTab">Provider</a></li>
-                <li><a class="dropdown-item" asp-action="Scheduling" asp-controller="AdminTab">Scheduling</a></li>
-                <li><a class="dropdown-item" asp-action="Invoicing" asp-controller="AdminTab">Invoicing</a></li>
+            <li><a class="dropdown-item" asp-action="Provider" asp-controller="AdminTab">Provider</a></li>
+            <li><a class="dropdown-item" asp-action="Scheduling" asp-controller="AdminTab">Scheduling</a></li>
+            <li><a class="dropdown-item" asp-action="Invoicing" asp-controller="AdminTab">Invoicing</a></li>
         </ul>
-        </li>
+        <a class="nav-link ps-3 bg-transparent" id="AccessTab"
+           aria-selected="false" asp-action="" asp-controller="AdminTab">Partners</a>
         <a class="nav-link ps-3 bg-transparent"
-              aria-selected="false" asp-action="" asp-controller="AdminDash">Partners</a>
-        <a class="nav-link ps-3 bg-transparent"
-              aria-selected="false" asp-action="" asp-controller="AdminDash">Access</a>
-        <a class="nav-link ps-3 bg-transparent"
-              aria-selected="false" asp-action="" asp-controller="AdminDash">Records</a>
-
+           aria-selected="false" asp-action="Access" asp-controller="AdminTab">Access</a>
+        <a class="nav-link ps-3 bg-transparent dropdown-toggle" id="recordTab" data-bs-toggle="dropdown" aria-expanded="false">Records</a>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" asp-action="SearchRecord" asp-controller="AdminTab">Search Records</a></li>
+            <li><a class="dropdown-item" asp-action="EmailLog" asp-controller="AdminTab">Email Logs</a></li>
+            <li><a class="dropdown-item" asp-action="SMSLog" asp-controller="AdminTab">SMS Logs</a></li>
+            <li><a class="dropdown-item" asp-action="PatientHistory" asp-controller="AdminTab">Patient Records</a></li>
+            <li><a class="dropdown-item" asp-action="BlockHistory" asp-controller="AdminTab">Blocked History</a></li>
+        </ul>
     </div>
 </nav>

@@ -83,7 +83,7 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public void addEmailLog(string eTemplate, string sub, string recemail, string filepath, int roleid, int? reqid, int? adminid, int? phyid)
+        public void addEmailLog(string eTemplate, string sub, string recemail, string? filepath, int roleid, int? reqid, int? adminid, int? phyid)
         {
             BitArray bitArray = new BitArray(1);
             bitArray[0] = true;
@@ -218,7 +218,7 @@ namespace HalloDoc.Repository.Implement
 
 
         #region SendMail Office365
-        public Task SendEmailOffice365(string recEmail, string subject, string body, List<string> attachment)
+        public Task SendEmailOffice365(string recEmail, string subject, string body, List<string>? attachment)
         {
             string SenderEmail = _config["credntial:Email"];
             string Pass = _config["credntial:Pass"];

@@ -100,5 +100,9 @@ namespace HalloDoc.Repository.Interface
         string getPhysicianEmail(int phid);
 
         Physician getPhysicianDetail(int phid);
+
+
+        // role
+        List<Aspnetrole> getAllAspnetrole();
     }
 }

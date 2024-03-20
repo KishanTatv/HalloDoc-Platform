@@ -228,6 +228,7 @@ namespace HalloDoc.Controllers
                     {
                         int userId = _Patient.FindUserId(client.Email);
                         request = _Patient.AddRequest(client, userId);
+                        _Patient.AddRequestClient(client, request.Requestid);
                         return Json(new { value = "EmailExist" });
                     }
                     else

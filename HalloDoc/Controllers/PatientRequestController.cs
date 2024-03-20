@@ -77,6 +77,7 @@ namespace HalloDoc.Controllers
                     {
                         int userId = patient.FindUserId(Clientinfo.Email);
                         request = patient.AddRequest(Clientinfo, userId);
+                        patient.AddRequestClient(Clientinfo, request.Requestid);
                     }
                     else
                     {
@@ -142,6 +143,7 @@ namespace HalloDoc.Controllers
                         {
                             int userId = patient.FindUserId(FInfo.clientInformation.Email);
                             request = patient.AddFcbRequest(FInfo, userId, 3);
+                            patient.AddFcbRequestClient(FInfo, request.Requestid);
                         }
                         else
                         {
@@ -218,6 +220,7 @@ namespace HalloDoc.Controllers
                         {
                             int userId = patient.FindUserId(FInfo.clientInformation.Email);
                             request = patient.AddFcbRequest(FInfo, userId, 4);
+                            patient.AddFcbRequestClient(FInfo, request.Requestid);
                             Concierge con = patient.AddConcierge(FInfo);
                             patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
                         }
@@ -281,6 +284,7 @@ namespace HalloDoc.Controllers
                         {
                             int userId = patient.FindUserId(FInfo.clientInformation.Email);
                             request = patient.AddFcbRequest(FInfo, userId, 1);
+                            patient.AddFcbRequestClient(FInfo, request.Requestid);
                             Business bus = patient.AddBussiness(FInfo);
                             patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
                         }

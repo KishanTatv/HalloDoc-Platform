@@ -1,9 +1,11 @@
-﻿using HalloDoc.Entity.Data;
+﻿using HalloDoc.Entity.AdminTab;
+using HalloDoc.Entity.Data;
 using HalloDoc.Entity.Models;
 using HalloDoc.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +25,7 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public void updatePhysicianInfo(Physician physcian, string email, int aspId)
+        public void updatePhysicianInfo(PhysicianCustom physcian, string email, int aspId)
         {
             Physician phy = _context.Physicians.FirstOrDefault(x => x.Email == email);
             phy.Firstname = physcian.Firstname;
@@ -63,6 +65,17 @@ namespace HalloDoc.Repository.Implement
             phy.Modifieddate = System.DateTime.Now;
             phy.Modifiedby = aspId;
             _context.Physicians.Update(phy);
+            _context.SaveChanges();
+        }
+
+        public void isDeletePhy(int phid)
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = true;
+
+            Physician ph = _context.Physicians.FirstOrDefault(x => x.Physicianid == phid);
+            ph.Isdeleted = bitArray;
+            _context.Physicians.Update(ph);
             _context.SaveChanges();
         }
     }

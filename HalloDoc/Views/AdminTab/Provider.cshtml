@@ -10,8 +10,6 @@
     Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
 }
 
-<link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
-
 
 
 <div class="MainContent pt-0 min-vh-100">
@@ -72,6 +70,21 @@
                             </tbody>
                         </table>
                     </div>
+                    <div aria-label="Page navigation example">
+                        <ul class="pagination justify-content-between me-3 pb-2">
+
+                            <div>
+                                <span> Page : <span class="text-primary">@(ViewBag.CurrentPage + 1)</span> / @ViewBag.TPage </span>
+                            </div>
+                            <div class="d-flex">
+                                <li><div class="page-link" data-page="@(ViewBag.CurrentPage - 1)"> Previous </div></li>
+                                
+                                <li class="page-item"><div class="page-link">@(ViewBag.CurrentPage + 1)</div></li>
+
+                                <li><div class="page-link" data-page="@(ViewBag.CurrentPage + 1)"> Next </div></li>
+                             </div>
+                        </ul>
+                     </div>
                 </div>
             </div>
         </div>
@@ -119,5 +132,21 @@
             }
         });
     });
+
+    $('.page-link').click(function(){
+        var page = $(this).data('page');
+        $.ajax({
+            url: '/AdminTab/Provider',
+            method: 'POST',
+            data: { page: page },
+            success: function (response) {
+
+                $("#partial").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    })
 
 </script>

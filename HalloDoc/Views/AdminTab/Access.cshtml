@@ -1,0 +1,84 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@{
+    ViewData["Title"] = "Access";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
+
+
+
+<div class="MainContent pt-0 min-vh-100">
+    <partial name="partial/AdminNavTab" />
+
+    <div class="d-flex w-100 justify-content-center pb-4">
+        <div class="HContainer AccessMain m-auto">
+            <div class="d-flex m-3">
+                <h4>Account Access</h4>
+            </div>
+
+            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-end mt-2 mb-2">
+                        <button class="btn btn-info text-light createAccess"> Create Access</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Account Type</th>
+                                    <th scope="col" class="d-flex justify-content-end pe-5">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>test hjkjh</td>
+                                    <td>Admin</td>
+                                    <td class="d-flex justify-content-end">
+                                        <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit">
+                                            Edit
+                                        </div>
+                                        <div class="btn btn-outline-info ps-2 pe-2 p-0 ms-2 ADelete">
+                                            Delete
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="Tabpartial">
+        </div>
+
+</div>
+
+
+
+<script asp-append-version="true">
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('AccessTab').classList.add('underLine');
+    });
+
+    $('.createAccess').click(function () {
+        $.ajax({
+            url: '/AdminTab/CreateRole',
+            method: 'POST',
+            success: function (response) {
+                $('.AccessMain').addClass("d-none");
+                $(".Tabpartial").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>

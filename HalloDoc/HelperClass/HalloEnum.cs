@@ -20,13 +20,13 @@
 
         public enum repestType
         {
-            Bussiness = 1, Patient, Family, Conciegre
+            Bussiness = 1, Patient, Family, Concierge
         }
 
-        public enum reqTypebg
-        {
-            bgBussiness = 1, bgPatient, bgFamily, bgConcierge
-        }
+        //public enum reqTypebg
+        //{
+        //    bgBussiness = 1, bgPatient, bgFamily, bgConcierge
+        //}
 
         public enum DashName
         {

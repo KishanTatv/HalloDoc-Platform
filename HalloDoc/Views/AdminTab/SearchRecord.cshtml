@@ -1,0 +1,123 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@{
+    ViewData["Title"] = "Search Record";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+<div class="MainContent pt-0 min-vh-100">
+    <partial name="partial/AdminNavTab" />
+
+    <div class="d-flex w-100 justify-content-center pb-4">
+        <div class="HContainer ProviderMain m-auto">
+            <div class="d-flex m-3">
+                <h5>Search Record</h5>
+            </div>
+
+            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                <div class="mb-4">
+                    <div class="row">
+                        <div class="col-md-3 form-floating mt-2">
+                            <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRoleId(this)">
+                                <option value="0" selected> All  </option>
+                            </select>
+                            <label class="ms-3">Select Request Status</label>
+                        </div>
+                        <div class="col-md-3 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">Patient Name</label>
+                        </div>
+                        <div class="col-md-3 form-floating mt-2">
+                            <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRoleId(this)">
+                                <option value="0" selected> All </option>
+                            </select>
+                            <label class="ms-3">Select Request Type</label>
+                        </div>
+                        <div class="col-md-3 form-floating mt-2">
+                            <input type="date" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">From Date Of Service</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 form-floating mt-2">
+                            <input type="date" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">To Date Of Service</label>
+                        </div>
+                        <div class="col-md-3 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">Provider Name</label>
+                        </div>
+                        <div class="col-md-3 form-floating mt-2">
+                            <input type="email" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">Email</label>
+                        </div>
+                        <div class="col-md-3 form-floating mt-2">
+                            <input type="number" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">Phone Number</label>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-2 mb-2">
+                        <button class="btn btn-outline-info text-info">Clear</button>
+                        <button class="btn btn-info text-light ms-3">Search</button>
+                    </div>
+                </div>
+                <div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th scope="col"> Patient Name </th>
+                                    <th scope="col"> Requestor </th>
+                                    <th scope="col"> Date Of Service </th>
+                                    <th scope="col"> Close Case Date <i class="bi bi-arrow-down ms-1"> </th>
+                                    <th scope="col"> Email </th>
+                                    <th scope="col"> Phone Number </th>
+                                    <th scope="col"> Address </th>
+                                    <th scope="col"> Zip </th>
+                                    <th scope="col"> Request Status </th>
+                                    <th scope="col"> Physician </th>
+                                    <th scope="col"> Physician Note </th>
+                                    <th scope="col"> Cancelled By Provider Note </th>
+                                    <th scope="col"> Admin Note </th>
+                                    <th scope="col"> Patient Note </th>
+                                    <th scope="col">Delete Permanently</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @*@foreach (var phy in Model)
+                                {*@
+                                <tr>
+                                    <td>lkj vjk</td>
+                                    <td>ghjk</td>
+                                    <td>34, maty,4543</td>
+                                    <td>44, hkjh, 2324</td>
+                                    <td>testhggh@uj.cokm</td>
+                                    <td>3213433</td>
+                                    <td>gjjhgjkg</td>
+                                    <td>555</td>
+                                    <td>new</td>
+                                    <td>bxbxcb</td>
+                                    <td>note</td>
+                                    <td>pnote</td>
+                                    <td>Anote</td>
+                                    <td>patnote</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                @*}*@
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
