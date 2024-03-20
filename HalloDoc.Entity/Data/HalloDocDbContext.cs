@@ -143,6 +143,8 @@ public partial class HalloDocDbContext : DbContext
             entity.HasKey(e => e.Blockrequestid).HasName("blockrequests_pkey");
 
             entity.Property(e => e.Blockrequestid).UseIdentityAlwaysColumn();
+
+            entity.HasOne(d => d.Request).WithMany(p => p.Blockrequests).HasConstraintName("fkeyreqid");
         });
 
         modelBuilder.Entity<Business>(entity =>

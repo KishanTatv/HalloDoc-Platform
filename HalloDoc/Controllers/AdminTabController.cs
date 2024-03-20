@@ -237,7 +237,8 @@ namespace HalloDoc.Controllers
 
         public IActionResult BlockHistory()
         {
-            return View();
+            var data = _Admin.getallBlockRequest();
+            return View(data);
         }
     }
 }

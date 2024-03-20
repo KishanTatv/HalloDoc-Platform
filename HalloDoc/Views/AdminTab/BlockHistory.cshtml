@@ -1,7 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-
+@model IEnumerable<HalloDoc.Entity.Models.Blockrequest>;
 
 
 @{
@@ -14,7 +14,7 @@
     <partial name="partial/AdminNavTab" />
 
     <div class="d-flex w-100 justify-content-center pb-4">
-        <div class="HContainer ProviderMain m-auto">
+        <div class="HContainer m-auto">
             <div class="d-flex m-3">
                 <h5>Block History</h5>
             </div>
@@ -59,24 +59,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @*@foreach (var phy in Model)
-                                {*@
-                                <tr>
-                                    <td>lkj vjk</td>
-                                    <td>3444546 545</td>
-                                    <td>jklklm,m@gj.dcds</td>
-                                    <td>44,bsd date</td>
-                                    <td>test</td>
-                                    <td>
-                                        <input name="checkActive" class="form-check-input AdIn checkb" type="checkbox" value="">
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact">
-                                            unBlock
-                                        </a>
-                                    </td>
-                                </tr>
-                                @*}*@
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td> @item.Request.Requestclients.FirstOrDefault().Firstname @item.Request.Requestclients.FirstOrDefault().Lastname</td>
+                                        <td> @item.Request.Requestclients.FirstOrDefault().Phonenumber </td>
+                                        <td> @item.Request.Requestclients.FirstOrDefault().Email </td>
+                                        <td> @item.Createddate </td>
+                                        <td>test</td>
+                                        <td>
+                                            <input name="checkActive" class="form-check-input AdIn checkb" type="checkbox" value="">
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact">
+                                                Unblock
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>

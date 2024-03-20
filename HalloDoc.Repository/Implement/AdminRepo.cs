@@ -339,6 +339,8 @@ namespace HalloDoc.Repository.Implement
 
         public void AddBlockRequest(int reqId, string note)
         {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = false;
             string email = _context.Requestclients.FirstOrDefault(x => x.Requestid == reqId).Email;
             string phoneNum = _context.Requestclients.FirstOrDefault(x => x.Requestid == reqId).Phonenumber;
 
@@ -348,6 +350,7 @@ namespace HalloDoc.Repository.Implement
                 Reason = note,
                 Email = email,
                 Phonenumber = phoneNum,
+                Isactive = bitArray,
             };
             _context.Blockrequests.Add(req);
             _context.SaveChanges();
@@ -514,10 +517,15 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        // log data
+        // log history data
         public IEnumerable<Emaillog> getEmailLogData()
         {
             return _context.Emaillogs.Include(x => x.Request).ToList();
+        }
+
+        public IEnumerable<Blockrequest> getallBlockRequest()
+        {
+            return _context.Blockrequests.Include(x => x.Request).ThenInclude(x => x.Requestclients).ToList();
         }
     }
 }

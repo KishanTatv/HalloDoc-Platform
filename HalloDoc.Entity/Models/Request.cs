@@ -115,6 +115,9 @@ public partial class Request
     public string? Locroom { get; set; }
 
     [InverseProperty("Request")]
+    public virtual ICollection<Blockrequest> Blockrequests { get; } = new List<Blockrequest>();
+
+    [InverseProperty("Request")]
     public virtual ICollection<Emaillog> Emaillogs { get; } = new List<Emaillog>();
 
     [InverseProperty("Request")]

@@ -40,4 +40,8 @@ public partial class Blockrequest
 
     [Column("requestid")]
     public int? Requestid { get; set; }
+
+    [ForeignKey("Requestid")]
+    [InverseProperty("Blockrequests")]
+    public virtual Request? Request { get; set; }
 }

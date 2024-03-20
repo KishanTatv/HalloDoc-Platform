@@ -108,5 +108,6 @@ namespace HalloDoc.Repository.Interface
         // log
 
         IEnumerable<Emaillog> getEmailLogData();
+        IEnumerable<Blockrequest> getallBlockRequest();
     }
 }
