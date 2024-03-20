@@ -216,6 +216,18 @@ namespace HalloDoc.Controllers
             return View();
         }
 
+        public IActionResult SMSlog()
+        {
+            ViewBag.logType = "SMS";
+            return View("EmailSMSlog");
+        }
+
+        public IActionResult Emaillog()
+        {
+            ViewBag.logType = "Email";
+            return View("EmailSMSlog");
+        }
+
 
         public IActionResult PatientHistory()
         {

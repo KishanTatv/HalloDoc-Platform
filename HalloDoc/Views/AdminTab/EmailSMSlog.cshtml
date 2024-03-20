@@ -1,0 +1,115 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+
+@{
+    ViewData["Title"] = "Block History";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+<div class="MainContent pt-0 min-vh-100">
+    <partial name="partial/AdminNavTab" />
+
+    <div class="d-flex w-100 justify-content-center pb-4">
+        <div class="m-auto">
+            <div class="d-flex m-3">
+                @if (ViewBag.logType == "SMS")
+                {
+                    <h5>Email Logs (Gmail)</h5>
+                }
+                else
+                {
+                    <h5>SMS Logs (Twilio)</h5>
+                }
+            </div>
+
+            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                <div class="mb-4">
+                    <div class="row">
+                        <div class="col-md-2 form-floating mt-2">
+                            <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRoleId(this)">
+                                <option value="0" selected> All  </option>
+                            </select>
+                            <label class="ms-3">Search by Role</label>
+                        </div>
+                        <div class="col-md-2 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">Reciver Name</label>
+                        </div>
+                        <div class="col-md-2 form-floating mt-2">
+                            <input type="email" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">Email</label>
+                        </div>
+                        <div class="col-md-2 form-floating mt-2">
+                            <input type="date" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">Created Date</label>
+                        </div>
+                        <div class="col-md-2 form-floating mt-2">
+                            <input type="date" class="form-control bg-transparent Adad" placeholder="add1">
+                            <label class="ms-3">Sent Date</label>
+                        </div>
+                        <div class="col-md-2 mt-3">
+                            <div class="d-flex">
+                                <button class="btn btn-info text-light">Search</button>
+                                <button class="btn btn-outline-info text-info ms-2">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th scope="col"> Recipient </th>
+                                    <th scope="col"> Action </th>
+                                    <th scope="col"> Role Name </th>
+                                    @if (ViewBag.logType == "SMS")
+                                    {
+                                        <th scope="col"> Mobile Number </th>
+                                    }
+                                    else
+                                    {
+                                        <th scope="col"> Email Id </th>
+                                    }
+                                    <th scope="col"> Created Date <i class="bi bi-arrow-down ms-1"></i> </th>
+                                    <th scope="col"> Sent Date</th>
+                                    <th scope="col"> Sent </th>
+                                    <th scope="col"> Sent Tries </th>
+                                    <th scope="col"> Confirmation Number </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @*@foreach (var phy in Model)
+                                {*@
+                                <tr>
+                                    <td>lkj vjk</td>
+                                    <td> sdf </td>
+                                    <td> Physician </td>
+                                    @if (ViewBag.logType == "SMS")
+                                    {
+                                        <td>6476354</td>
+                                    }
+                                    else
+                                    {
+                                        <td> hkh@gamil.com </td>
+                                    }
+                                    <td>32, mon 2121</td>
+                                    <td>32, mon 2121</td>
+                                    <td> Yes </td>
+                                    <td> 1 </td>
+                                    <td> - </td>
+                                </tr>
+                                @*}*@
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
