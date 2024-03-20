@@ -202,7 +202,7 @@ namespace HalloDoc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConciergeReq(FormFCB FInfo)
+        public IActionResult ConciergeReq(FormFCB FInfo)
         {
             if (ModelState.IsValid)
             {
@@ -266,7 +266,7 @@ namespace HalloDoc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> BussinessReq(FormFCB FInfo)
+        public IActionResult BussinessReq(FormFCB FInfo)
         {
             if (ModelState.IsValid)
             {

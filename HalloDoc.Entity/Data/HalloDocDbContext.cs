@@ -177,6 +177,8 @@ public partial class HalloDocDbContext : DbContext
         modelBuilder.Entity<Emaillog>(entity =>
         {
             entity.HasKey(e => e.Emaillogid).HasName("emaillog_pkey");
+
+            entity.HasOne(d => d.Request).WithMany(p => p.Emaillogs).HasConstraintName("logreqId");
         });
 
         modelBuilder.Entity<EncounterForm>(entity =>

@@ -22,7 +22,7 @@
            aria-selected="false" asp-action="" asp-controller="AdminTab">Partners</a>
         <a class="nav-link ps-3 bg-transparent"
            aria-selected="false" asp-action="Access" asp-controller="AdminTab">Access</a>
-        <a class="nav-link ps-3 bg-transparent dropdown-toggle" id="recordTab" data-bs-toggle="dropdown" aria-expanded="false">Records</a>
+        <a class="nav-link ps-3 bg-transparent dropdown-toggle" @(ViewContext.ActionDescriptor.RouteValues["action"] == "Emaillog" ? "active" : "") id="recordTab" data-bs-toggle="dropdown" aria-expanded="false">Records</a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" asp-action="SearchRecord" asp-controller="AdminTab">Search Records</a></li>
             <li><a class="dropdown-item" asp-action="Emaillog" asp-controller="AdminTab"> Email Logs</a></li>

@@ -236,10 +236,50 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                 </span>
                             </div>
                             <div class="d-flex justify-content-between row">
-                                <button class="btn btn-primary col-5 mb-2">Assign Case</button>
-                                <button class="btn btn-danger col-5 mb-2">Cancel Case</button>
-                                <button class="btn btn-success col-5 mb-2">View Notes</button>
-                                <button class="btn btn-danger col-5 mb-2">Block Patient</button>
+                                @if (ViewBag.dTable == 1)
+                                {
+                                    <button class="btn btn-primary col-5 mb-2 AssignCase" data-reqid="@item.RequestId" data-phycase="AssignPhy">Assign Case</button>
+                                }
+                                @if (ViewBag.dTable == 1)
+                                {
+                                    <button class="btn btn-danger col-5 mb-2 CancelCase" data-reqid="@item.RequestId">Cancel Case</button>
+                                }
+                                <button class="btn btn-danger col-5 mb-2 ViewCase" data-reqid="@item.RequestId">View Case</button>
+                                @if (ViewBag.dTable != 1)
+                                {
+                                    <button class="btn btn-success col-5 mb-2 ViewUpload" data-reqid="@item.RequestId">View Upload</button>
+                                }
+                                <button class="btn btn-success col-5 mb-2 ViewNote" data-reqid="@item.RequestId">View Notes</button>
+                                @if (ViewBag.dTable == 1)
+                                {
+                                    <button class="btn btn-danger col-5 mb-2 BlockCase" data-reqid="@item.RequestId">Block Patient</button>
+                                }
+                                @if (ViewBag.dTable == 2)
+                                {
+                                    <button class="btn btn-info col-5 mb-2 AssignCase" data-reqid="@item.RequestId" data-phycase="TransferPhy"> Transfer </button>
+                                }
+                                @if (ViewBag.dTable == 5)
+                                {
+                                    <button class="btn btn-danger col-5 mb-2 CloseCase" data-reqid="@item.RequestId"> Close Case</button>
+                                }
+                                @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                                {
+                                    <button class="btn btn-danger col-5 mb-2 OrderCase" data-reqid="@item.RequestId"> Order</button>
+                                    <button class="btn btn-danger col-5 mb-2" href="#"> Doctors Notes</button>
+                                }
+                                @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
+                                {
+                                    <button class="btn btn-warning col-5 mb-2 ClearCase" data-reqid="@item.RequestId"> Clear Case</button>
+                                }
+                                @if (ViewBag.dTable == 2)
+                                {
+                                    <button class="btn btn-warning col-5 mb-2 SendAgreement" data-reqid="@item.RequestId"> Send Agreement</button>
+                                }
+                                @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                                {
+                                    <button class="btn btn-success col-5 mb-2 Encounter" data-reqid="@item.RequestId"> Encounter </button>
+                                }
+
                                 <button class="btn btn-success col-5 mb-2">Email</button>
                             </div>
                         </div>

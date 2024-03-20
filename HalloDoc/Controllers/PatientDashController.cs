@@ -40,7 +40,7 @@ namespace HalloDoc.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Dashbord()
+        public IActionResult Dashbord()
         {
             string UserEmail = Request.Cookies["CookieEmail"];
             ClientInformation client = genral.getUserProfile(UserEmail);

@@ -115,6 +115,9 @@ public partial class Request
     public string? Locroom { get; set; }
 
     [InverseProperty("Request")]
+    public virtual ICollection<Emaillog> Emaillogs { get; } = new List<Emaillog>();
+
+    [InverseProperty("Request")]
     public virtual ICollection<EncounterForm> EncounterForms { get; } = new List<EncounterForm>();
 
     [ForeignKey("Physicianid")]

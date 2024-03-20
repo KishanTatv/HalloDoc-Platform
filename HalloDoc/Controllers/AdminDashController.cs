@@ -211,7 +211,7 @@ namespace HalloDoc.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NewReqData(ClientInformation client)
+        public IActionResult NewReqData(ClientInformation client)
         {
             if (ModelState.IsValid)
             {

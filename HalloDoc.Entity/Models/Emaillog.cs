@@ -58,4 +58,8 @@ public partial class Emaillog
 
     [Column("action")]
     public int? Action { get; set; }
+
+    [ForeignKey("Requestid")]
+    [InverseProperty("Emaillogs")]
+    public virtual Request? Request { get; set; }
 }

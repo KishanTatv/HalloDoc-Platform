@@ -1,11 +1,11 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-
+@model IEnumerable<HalloDoc.Entity.Models.Emaillog>;
 
 
 @{
-    ViewData["Title"] = "Block History";
+    ViewData["Title"] = "Log History";
     Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
 }
 
@@ -83,27 +83,47 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @*@foreach (var phy in Model)
-                                {*@
-                                <tr>
-                                    <td>lkj vjk</td>
-                                    <td> sdf </td>
-                                    <td> Physician </td>
-                                    @if (ViewBag.logType == "SMS")
-                                    {
-                                        <td>6476354</td>
-                                    }
-                                    else
-                                    {
-                                        <td> hkh@gamil.com </td>
-                                    }
-                                    <td>32, mon 2121</td>
-                                    <td>32, mon 2121</td>
-                                    <td> Yes </td>
-                                    <td> 1 </td>
-                                    <td> - </td>
-                                </tr>
-                                @*}*@
+                                @foreach (var log in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (log.Requestid == null)
+                                            {
+                                                <span>-</span>
+                                            }
+                                            else
+                                            {
+                                                @log.Request.Firstname @log.Request.Lastname
+                                            }
+                                        </td>
+                                        <td> @log.Subjectname </td>
+                                        <td> @log.Roleid </td>
+                                        @if (ViewBag.logType == "SMS")
+                                        {
+                                            <td>6476354</td>
+                                        }
+                                        else
+                                        {
+                                            <td> @log.Emailid </td>
+                                        }
+                                        <td>@log.Createdate</td>
+                                        <td>@log.Sentdate</td>
+                                        <td>
+                                            @if (log.Isemailsent != null)
+                                            {
+                                                <span>Yes</span>
+                                            }
+                                            else
+                                            {
+                                            <span>No</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @log.Senttries
+                                        </td>
+                                        <td> - </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>

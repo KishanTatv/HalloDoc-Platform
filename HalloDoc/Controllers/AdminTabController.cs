@@ -224,8 +224,9 @@ namespace HalloDoc.Controllers
 
         public IActionResult Emaillog()
         {
+            var data = _Admin.getEmailLogData();
             ViewBag.logType = "Email";
-            return View("EmailSMSlog");
+            return View("EmailSMSlog", data );
         }
 
 

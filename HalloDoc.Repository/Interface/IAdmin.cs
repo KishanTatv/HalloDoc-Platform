@@ -104,5 +104,9 @@ namespace HalloDoc.Repository.Interface
 
         // role
         List<Aspnetrole> getAllAspnetrole();
+
+        // log
+
+        IEnumerable<Emaillog> getEmailLogData();
     }
 }

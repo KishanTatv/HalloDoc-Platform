@@ -512,5 +512,12 @@ namespace HalloDoc.Repository.Implement
         {
             return _context.Aspnetroles.ToList();
         }
+
+
+        // log data
+        public IEnumerable<Emaillog> getEmailLogData()
+        {
+            return _context.Emaillogs.Include(x => x.Request).ToList();
+        }
     }
 }

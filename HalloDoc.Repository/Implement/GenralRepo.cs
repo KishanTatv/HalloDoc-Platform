@@ -98,6 +98,7 @@ namespace HalloDoc.Repository.Implement
                 Adminid = Convert.ToInt32(adminid),
                 Physicianid = phyid,
                 Filepath = filepath,
+                Createdate = DateTime.Now,
                 Sentdate = DateTime.Now,
                 Isemailsent = bitArray,
                 Senttries = 1,
