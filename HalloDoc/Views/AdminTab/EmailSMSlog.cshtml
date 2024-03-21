@@ -1,7 +1,6 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model IEnumerable<HalloDoc.Entity.Models.Emaillog>;
 
 
 @{
@@ -18,11 +17,11 @@
             <div class="d-flex m-3">
                 @if (ViewBag.logType == "SMS")
                 {
-                    <h5>Email Logs (Gmail)</h5>
+                    <h5>SMS Logs (Twilio)</h5>
                 }
                 else
                 {
-                    <h5>SMS Logs (Twilio)</h5>
+                    <h5>Email Logs (Gmail)</h5>
                 }
             </div>
 
@@ -36,19 +35,19 @@
                             <label class="ms-3">Search by Role</label>
                         </div>
                         <div class="col-md-2 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="text" class="form-control bg-transparent dataChng RecName" placeholder="add1">
                             <label class="ms-3">Reciver Name</label>
                         </div>
                         <div class="col-md-2 form-floating mt-2">
-                            <input type="email" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="email" class="form-control bg-transparent dataChng EmailChng" placeholder="add1">
                             <label class="ms-3">Email</label>
                         </div>
                         <div class="col-md-2 form-floating mt-2">
-                            <input type="date" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="date" class="form-control bg-transparent dataChng crDate" placeholder="add1">
                             <label class="ms-3">Created Date</label>
                         </div>
                         <div class="col-md-2 form-floating mt-2">
-                            <input type="date" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="date" class="form-control bg-transparent dataChng cgDate" placeholder="add1">
                             <label class="ms-3">Sent Date</label>
                         </div>
                         <div class="col-md-2 mt-3">
@@ -60,76 +59,51 @@
                     </div>
                 </div>
                 <div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="table-secondary">
-                                <tr>
-                                    <th scope="col"> Recipient </th>
-                                    <th scope="col"> Action </th>
-                                    <th scope="col"> Role Name </th>
-                                    @if (ViewBag.logType == "SMS")
-                                    {
-                                        <th scope="col"> Mobile Number </th>
-                                    }
-                                    else
-                                    {
-                                        <th scope="col"> Email Id </th>
-                                    }
-                                    <th scope="col"> Created Date <i class="bi bi-arrow-down ms-1"></i> </th>
-                                    <th scope="col"> Sent Date</th>
-                                    <th scope="col"> Sent </th>
-                                    <th scope="col"> Sent Tries </th>
-                                    <th scope="col"> Confirmation Number </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var log in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @if (log.Requestid == null)
-                                            {
-                                                <span>-</span>
-                                            }
-                                            else
-                                            {
-                                                @log.Request.Firstname @log.Request.Lastname
-                                            }
-                                        </td>
-                                        <td> @log.Subjectname </td>
-                                        <td> @log.Roleid </td>
-                                        @if (ViewBag.logType == "SMS")
-                                        {
-                                            <td>6476354</td>
-                                        }
-                                        else
-                                        {
-                                            <td> @log.Emailid </td>
-                                        }
-                                        <td>@log.Createdate</td>
-                                        <td>@log.Sentdate</td>
-                                        <td>
-                                            @if (log.Isemailsent != null)
-                                            {
-                                                <span>Yes</span>
-                                            }
-                                            else
-                                            {
-                                            <span>No</span>
-                                            }
-                                        </td>
-                                        <td>
-                                            @log.Senttries
-                                        </td>
-                                        <td> - </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="LogPartial"></div>
+
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $.ajax({
+            url: '/AdminTab/EmaillogData',
+            method: 'POST',
+            data: { eamil: '' },
+            success: function (response) {
+                $('.LogPartial').html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+
+        $('.dataChng').change(function () {
+            var name = $('.RecName').val().trim();
+            var email = $('.EmailChng').val().trim();
+            var crDate = $('.crDate').val();
+            var cgDate = $('.cgDate').val();
+            $.ajax({
+                url: '/AdminTab/EmaillogData',
+                method: 'POST',
+                data: { email: email, name: name, crDate: crDate, cgDate: cgDate },
+                success: function (response) {
+                    $('.LogPartial').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+    });
+</script>

@@ -62,7 +62,7 @@ namespace HalloDoc.Controllers
             {
                 if (!genral.CheckAvalibleRegion(Clientinfo.State))
                 {
-                    TempData["Msg"] = "Not Avliable Region";
+                    TempData["RegMsg"] = "Not Avliable Region";
                     return View();
                 }
                 else if (Clientinfo.Password != Clientinfo.ConfirmPassword)
@@ -86,7 +86,7 @@ namespace HalloDoc.Controllers
                         User user = patient.AddUser(Clientinfo, AspUser.Id);
                         request = patient.AddRequest(Clientinfo, user.Userid);
                         patient.AddRequestClient(Clientinfo, request.Requestid);
-                        patient.addAspnetUserrole(user.Userid, roleId);
+                        patient.addAspnetUserrole(AspUser.Id, roleId);
                     }
 
                     if (DocFile != null)
@@ -105,7 +105,7 @@ namespace HalloDoc.Controllers
                             }
                         }
                     }
-                    return RedirectToAction("Dashbord", "PatientDash");
+                    return RedirectToAction("PatientLogin", "Patient");
                 }
             }
             else
@@ -157,7 +157,6 @@ namespace HalloDoc.Controllers
                             User user = patient.AddFcbUser(FInfo);
                             request = patient.AddFcbRequest(FInfo, user.Userid, 3);
                             patient.AddFcbRequestClient(FInfo, request.Requestid);
-                            patient.addAspnetUserrole(user.Userid, 3);
                             genral.addEmailLog(body, subject, userEmail, null, roleId, request.Requestid, null, null);
                         }
 
@@ -182,7 +181,7 @@ namespace HalloDoc.Controllers
                 }
                 else
                 {
-                    TempData["Msg"] = "Not Avliable Region";
+                    TempData["RegMsg"] = "Not Avliable Region";
                     return View();
                 }
             }
@@ -236,7 +235,6 @@ namespace HalloDoc.Controllers
                             User user = patient.AddFcbUser(FInfo);
                             request = patient.AddFcbRequest(FInfo, user.Userid, 4);
                             patient.AddFcbRequestClient(FInfo, request.Requestid);
-                            patient.addAspnetUserrole(user.Userid, 3);
                             Concierge con = patient.AddConcierge(FInfo);
                             patient.AddRequestConcierge(FInfo, request.Requestid, con.Conciergeid);
                             genral.addEmailLog(body, subject, userEmail, null, roleId, request.Requestid, null, null);
@@ -246,7 +244,7 @@ namespace HalloDoc.Controllers
                 }
                 else
                 {
-                    TempData["Msg"] = "Not Avliable Region";
+                    TempData["RegMsg"] = "Not Avliable Region";
                     return View();
                 }
             }
@@ -300,7 +298,6 @@ namespace HalloDoc.Controllers
                             User user = patient.AddFcbUser(FInfo);
                             request = patient.AddFcbRequest(FInfo, user.Userid, 1);
                             patient.AddFcbRequestClient(FInfo, request.Requestid);
-                            patient.addAspnetUserrole(user.Userid, 3);
                             Business bus = patient.AddBussiness(FInfo);
                             patient.AddRequestBussiness(FInfo, request.Requestid, bus.Businessid);
                             genral.addEmailLog(body, subject, userEmail, null, roleId, request.Requestid, null, null);
@@ -310,7 +307,7 @@ namespace HalloDoc.Controllers
                 }
                 else
                 {
-                    TempData["Msg"] = "Not Avliable Region";
+                    TempData["RegMsg"] = "Not Avliable Region";
                     return View();
                 }
             }

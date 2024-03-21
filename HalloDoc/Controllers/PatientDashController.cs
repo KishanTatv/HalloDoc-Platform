@@ -58,8 +58,8 @@ namespace HalloDoc.Controllers
         {
             string UserEmail = Request.Cookies["CookieEmail"];
 
-            genral.UpdateRequestClient(userInfo, UserEmail);
-            genral.UpdateUser(userInfo, UserEmail);
+            genral.UpdateRequestClient(userInfo.clientInfo, UserEmail);
+            genral.UpdateUser(userInfo.clientInfo, UserEmail);
 
             return RedirectToAction("Dashbord");
         }

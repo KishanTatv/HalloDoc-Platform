@@ -93,9 +93,9 @@
                         <input type="text" class="form-control bg-transparent" placeholder="state" asp-for="State">
                         <label class="ms-3">State</label>
                         <span asp-validation-for="State" class="text-danger"></span>
-                        @if (TempData["Msg"] != null)
+                        @if (TempData["RegMsg"] != null)
                         {
-                            <span class="text-danger ">@TempData["Msg"]</span>
+                            <span class="text-danger ">@TempData["RegMsg"]</span>
                         }
                     </div>
                     <div class="col-md-6 form-floating mt-2">

@@ -62,11 +62,11 @@ namespace HalloDoc.Repository.Implement
             return asp;
         }
 
-        public void addAspnetUserrole(int userid, int roleId)
+        public void addAspnetUserrole(int aspId, int roleId)
         {
             Aspnetuserrole aspRole = new Aspnetuserrole
             {
-                Userid = userid,
+                Userid = aspId,
                 Roleid = roleId,
             };
             _context.Aspnetuserroles.Add(aspRole);

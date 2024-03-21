@@ -1,8 +1,8 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model List<HalloDoc.Entity.Models.Region>;
 
-@model List<HalloDoc.Entity.Models.Physician>;
 
 
 @{
@@ -24,129 +24,81 @@
             <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
                 <div class="mb-4">
                     <div class="d-flex justify-content-between mt-2 mb-2">
-                        <div>
-                            <input type="text" id="SearchProvider" class="form-control" placeholder="All">
+                        <div class="w-25">
+                            <select class="form-select" id="RegSearch">
+                                <option value="">All Regions</option>
+                                @foreach (var regName in Model)
+                                {
+                                    <option value="@regName.Regionid">@regName.Name</option>
+                                }
+                            </select>
                         </div>
                         <div class="btn btn-info text-light">
                             Create Provider Account
                         </div>
                     </div>
 
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="table-secondary">
-                                <tr>
-                                    <th>
-                                        <div class="form-check">
-                                            Stop Notification
-                                        </div>
-                                    </th>
-                                    <th scope="col">Provider Name<i class="bi bi-arrow-up ms-1"></i></th>
-                                    <th scope="col">Role</th>
-                                    <th scope="col">On Call Status</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var phy in Model)
-                                {
-                                    <tr>
-                                        <td><input class="form-check-input" type="checkbox" value="" id="toggleAllCheck"></td>
-                                        <td>@phy.Firstname @phy.Lastname</td>
-                                        <td>@phy.Roleid</td>
-                                        <td>Un Availiable</td>
-                                        <td>@phy.Status</td>
-                                        <td class="text-center">
-                                            <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact" data-phid="@phy.Physicianid">
-                                                Contact
-                                            </a>
-                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 PEdit" data-phid="@phy.Physicianid">
-                                                Edit
-                                            </div>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                    <div aria-label="Page navigation example">
-                        <ul class="pagination justify-content-between me-3 pb-2">
-
-                            <div>
-                                <span> Page : <span class="text-primary">@(ViewBag.CurrentPage + 1)</span> / @ViewBag.TPage </span>
-                            </div>
-                            <div class="d-flex">
-                                <li><div class="page-link" data-page="@(ViewBag.CurrentPage - 1)"> Previous </div></li>
-                                
-                                <li class="page-item"><div class="page-link">@(ViewBag.CurrentPage + 1)</div></li>
-
-                                <li><div class="page-link" data-page="@(ViewBag.CurrentPage + 1)"> Next </div></li>
-                             </div>
-                        </ul>
-                     </div>
+                    <div id="ProviderPartial"></div>
                 </div>
             </div>
         </div>
-
-        <div class="Tabpartial">
-        </div>
     </div>
 
+    <div class="Tabpartial">
+    </div>
 </div>
 
 
+
 <script asp-append-version="true">
-    window.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('providerTab').classList.add('underLine');
-    });
-
-    $('.PContact').click(function () {
-        var phid = $(this).data('phid');
+    $(document).ready(function () {
         $.ajax({
-            url: '/AdminTab/PcontactPop',
+            url: '/AdminTab/ProviderData',
             method: 'POST',
-            data: { phid: phid },
+            data: { page: 0 },
             success: function (response) {
-                $(".Tabpartial").html(response);
-                var my = new bootstrap.Modal(document.getElementById('proContact'));
-                my.show();
+                $("#ProviderPartial").html(response);
             },
             error: function (xhr, status, error) {
-                console.error(xhr.responseText);
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText);
+                }
             }
         });
-    });
-    $('.PEdit').click(function () {
-        var phid = $(this).data('phid');
-        $.ajax({
-            url: '/AdminTab/PhysicanEdit',
-            method: 'POST',
-            data: { phid: phid },
-            success: function (response) {
-                $(".Tabpartial").html(response);
-                $('.ProviderMain').addClass("d-none");
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
-    });
 
-    $('.page-link').click(function(){
-        var page = $(this).data('page');
-        $.ajax({
-            url: '/AdminTab/Provider',
-            method: 'POST',
-            data: { page: page },
-            success: function (response) {
 
-                $("#partial").html(response);
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
+        $('#RegSearch').change(function () {
+            var reg = $('#RegSearch').val();
+            $.ajax({
+                url: '/AdminTab/ProviderData',
+                method: 'POST',
+                data: { reg: reg },
+                success: function (response) {
+                    $("#ProviderPartial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
         });
-    })
+
+        $(document).on('click', '.page-link', function () {
+            var page = $(this).data('page');
+            $.ajax({
+                url: '/AdminTab/ProviderData',
+                method: 'POST',
+                data: { page: page },
+                success: function (response) {
+                    $("#ProviderPartial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+    });
 
 </script>

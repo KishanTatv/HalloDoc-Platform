@@ -12,6 +12,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,13 +66,15 @@ namespace HalloDoc.Repository.Implement
         #endregion
 
         #region AllRequest Data
-        public IEnumerable<tableData> GetTableData()
+
+        public DashTable GetPartialTableData(List<short>? status, int? page, string? search, string? reg, int? reqtype)
         {
             IEnumerable<tableData> data = from r in _context.Requests
                                           join f in _context.Requestclients on r.Requestid equals f.Requestid
                                           join p in _context.Physicians on r.Physicianid equals p.Physicianid into rf
                                           from p in rf.DefaultIfEmpty()
                                           orderby r.Createddate descending
+                                          where status.Contains(r.Status)
                                           select new tableData
                                           {
                                               Name = f.Firstname + " " + f.Lastname,
@@ -85,213 +88,32 @@ namespace HalloDoc.Repository.Implement
                                               ReqTypeId = r.Requesttypeid,
                                               Requestor = r.Firstname + "," + r.Lastname,
                                               RequestedDate = r.Createddate,
-                                              PhysicianName = p.Firstname + " " +p.Lastname,
+                                              PhysicianName = p.Firstname + " " + p.Lastname,
                                               DateOfService = r.Modifieddate,
                                               Phonenumber = f.Phonenumber,
                                               ReqPhonenumber = r.Phonenumber,
                                               Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
                                               Region = f.State,
                                               Notes = f.Notes,
+                                              ReqNotes = _context.Requeststatuslogs.Where(x => x.Requestid == r.Requestid).OrderByDescending(x => x.Requeststatuslogid).FirstOrDefault().Notes,
                                           };
-            return data;
+            if (search != null)
+            {
+                data = data.Where(e => e.Name.ToLower().Contains(search.ToLower()));
+            }
+            if (reg != null)
+            {
+                data = data.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
+            }
+            if (reqtype != 0)
+            {
+                data = data.Where(e => e.ReqTypeId.Equals(reqtype));
+            }
+
+            var tableData = new DashTable { Tdata = data.Skip((int)(page * 5)).Take(5).ToList(), filterCount = data.Count() };
+            return tableData;
         }
         #endregion
-
-
-        #region New Request
-        public IEnumerable<tableData> GetTableDataNew()
-        {
-            IEnumerable<tableData> data = from r in _context.Requests
-                                          join f in _context.Requestclients on r.Requestid equals f.Requestid
-                                          where r.Status == 1
-                                          orderby r.Createddate descending
-                                          select new tableData
-                                          {
-                                              Name = f.Firstname + " " + f.Lastname,
-                                              Intdate = f.Intdate,
-                                              Strmonth = f.Strmonth,
-                                              Intyear = f.Intyear,
-                                              Age = System.DateTime.Now.Year - f.Intyear,
-                                              Email = f.Email,
-                                              RequestId = f.Requestid,
-                                              ReqClientId = f.Requestclientid,
-                                              ReqTypeId = r.Requesttypeid,
-                                              Requestor = r.Firstname + "," + r.Lastname,
-                                              RequestedDate = r.Createddate,
-                                              Phonenumber = f.Phonenumber,
-                                              ReqPhonenumber = r.Phonenumber,
-                                              Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
-                                              Region = f.State,
-                                              Notes = f.Notes,
-                                          };
-            return data;
-        }
-        #endregion
-
-
-        #region Pending Request
-        public IEnumerable<tableData> GetTableDataPending()
-        {
-            IEnumerable<tableData> data = from r in _context.Requests
-                                          join rc in _context.Requestclients on r.Requestid equals rc.Requestid
-                                          join p in _context.Physicians on r.Physicianid equals p.Physicianid
-                                          where r.Status == 2
-                                          orderby r.Createddate descending
-                                          select new tableData
-                                          {
-                                              Name = r.Firstname + " " + r.Lastname,
-                                              Intdate = rc.Intdate,
-                                              Strmonth = rc.Strmonth,
-                                              Intyear = rc.Intyear,
-                                              Age = System.DateTime.Now.Year - rc.Intyear,
-                                              RequestId = r.Requestid,
-                                              ReqClientId = rc.Requestclientid,
-                                              ReqTypeId = r.Requesttypeid,
-                                              Requestor = r.Firstname + "," + r.Lastname,
-                                              PhysicianName = p.Firstname + ", " + p.Lastname,
-                                              DateOfService = r.Modifieddate,
-                                              RequestedDate = r.Createddate,
-                                              Phonenumber = rc.Phonenumber,
-                                              ReqPhonenumber = rc.Phonenumber,
-                                              Address = rc.Street + ", " + rc.City + ", " + rc.State + ", " + rc.Zipcode,
-                                              Region = rc.State,
-                                              Notes = _context.Requeststatuslogs.Where(x => x.Requestid == r.Requestid).OrderByDescending(x => x.Requeststatuslogid).FirstOrDefault().Notes,
-                                          };
-            return data;
-        }
-        #endregion
-
-
-        #region Active Request
-        public IEnumerable<tableData> GetTableDataActive()
-        {
-            IEnumerable<tableData> data = from r in _context.Requestclients
-                                          join f in _context.Requests on r.Requestid equals f.Requestid
-                                          join s in _context.Physicians on f.Physicianid equals s.Physicianid
-                                          where f.Status == 4 || f.Status == 5
-                                          orderby f.Createddate descending
-                                          select new tableData
-                                          {
-                                              Name = r.Firstname + " " + r.Lastname,
-                                              Intdate = r.Intdate,
-                                              Strmonth = r.Strmonth,
-                                              Intyear = r.Intyear,
-                                              Age = System.DateTime.Now.Year - r.Intyear,
-                                              RequestId = f.Requestid,
-                                              ReqClientId = r.Requestclientid,
-                                              ReqTypeId = f.Requesttypeid,
-                                              Requestor = f.Firstname + "," + f.Lastname,
-                                              PhysicianName = s.Firstname + ", " + s.Lastname,
-                                              DateOfService = f.Accepteddate,
-                                              RequestedDate = f.Createddate,
-                                              Phonenumber = r.Phonenumber,
-                                              ReqPhonenumber = f.Phonenumber,
-                                              Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
-                                              Region = r.State,
-                                              Notes = r.Notes,
-                                          };
-            return data;
-        }
-        #endregion
-
-
-        #region Conclude Request
-        public IEnumerable<tableData> GetTableDataConclude()
-        {
-            IEnumerable<tableData> data = from r in _context.Requestclients
-                                          join f in _context.Requests on r.Requestid equals f.Requestid
-                                          join s in _context.Physicians on f.Physicianid equals s.Physicianid
-                                          where f.Status == 6
-                                          orderby f.Createddate descending
-                                          select new tableData
-                                          {
-                                              Name = r.Firstname + " " + r.Lastname,
-                                              Intdate = r.Intdate,
-                                              Strmonth = r.Strmonth,
-                                              Intyear = r.Intyear,
-                                              Age = System.DateTime.Now.Year - r.Intyear,
-                                              RequestId = f.Requestid,
-                                              ReqClientId = r.Requestclientid,
-                                              ReqTypeId = f.Requesttypeid,
-                                              Requestor = f.Firstname + "," + f.Lastname,
-                                              PhysicianName = s.Firstname + ", " + s.Lastname,
-                                              DateOfService = f.Accepteddate,
-                                              RequestedDate = f.Createddate,
-                                              Phonenumber = r.Phonenumber,
-                                              ReqPhonenumber = f.Phonenumber,
-                                              Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
-                                              Region = r.State,
-                                              Notes = r.Notes,
-                                          };
-            return data;
-        }
-        #endregion
-
-
-        #region Toclose Request
-        public IEnumerable<tableData> GetTableDataToclose()
-        {
-            IEnumerable<tableData> data = from r in _context.Requestclients
-                                          join f in _context.Requests on r.Requestid equals f.Requestid
-                                          join p in _context.Physicians on f.Physicianid equals p.Physicianid into preq
-                                          from p in preq.DefaultIfEmpty()
-                                          where f.Status == 3 || f.Status == 7 || f.Status == 8
-                                          orderby f.Createddate descending
-                                          select new tableData
-                                          {
-                                              Name = r.Firstname + " " + r.Lastname,
-                                              Intdate = r.Intdate,
-                                              Strmonth = r.Strmonth,
-                                              Intyear = r.Intyear,
-                                              Age = System.DateTime.Now.Year - r.Intyear,
-                                              RequestId = r.Requestid,
-                                              ReqClientId = r.Requestclientid,
-                                              ReqTypeId = f.Requesttypeid,
-                                              Requestor = f.Firstname + "," + f.Lastname,
-                                              DateOfService = f.Accepteddate,
-                                              RequestedDate = f.Createddate,
-                                              Phonenumber = r.Phonenumber,
-                                              ReqPhonenumber = f.Phonenumber,
-                                              Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
-                                              Region = r.State,
-                                              Notes = r.Notes,
-                                          };
-            return data;
-        }
-        #endregion
-
-
-        #region Unpaid Request
-        public IEnumerable<tableData> GetTableDataUnpaid()
-        {
-            IEnumerable<tableData> data = from r in _context.Requestclients
-                                          join f in _context.Requests on r.Requestid equals f.Requestid
-                                          join s in _context.Physicians on f.Physicianid equals s.Physicianid
-                                          where f.Status == 9
-                                          orderby f.Createddate descending
-                                          select new tableData
-                                          {
-                                              Name = r.Firstname + " " + r.Lastname,
-                                              Intdate = r.Intdate,
-                                              Strmonth = r.Strmonth,
-                                              Intyear = r.Intyear,
-                                              Age = System.DateTime.Now.Year - r.Intyear,
-                                              ReqClientId = r.Requestclientid,
-                                              ReqTypeId = f.Requesttypeid,
-                                              Requestor = f.Firstname + "," + f.Lastname,
-                                              PhysicianName = s.Firstname + ", " + s.Lastname,
-                                              DateOfService = f.Accepteddate,
-                                              RequestedDate = f.Createddate,
-                                              Phonenumber = r.Phonenumber,
-                                              ReqPhonenumber = f.Phonenumber,
-                                              Address = r.Street + ", " + r.City + ", " + r.State + ", " + r.Zipcode,
-                                              Region = r.State,
-                                              Notes = r.Notes,
-                                          };
-            return data;
-        }
-        #endregion
-
 
 
         public void addNote(int reqid, string note)
@@ -351,6 +173,7 @@ namespace HalloDoc.Repository.Implement
                 Email = email,
                 Phonenumber = phoneNum,
                 Isactive = bitArray,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Blockrequests.Add(req);
             _context.SaveChanges();
@@ -458,7 +281,7 @@ namespace HalloDoc.Repository.Implement
         {
             Adminregion adreg = _context.Adminregions.FirstOrDefault(x => x.Adminid == adminId && x.Regionid == regionId);
             _context.Adminregions.Remove(adreg);
-            _context.SaveChanges(); 
+            _context.SaveChanges();
         }
 
         public void addAdminRegion(int adminId, int regioId)
@@ -496,7 +319,7 @@ namespace HalloDoc.Repository.Implement
         {
             BitArray bitArray = new BitArray(1);
             bitArray[0] = false;
-            var data = _context.Physicians.Include(x => x.Physiciannotifications).Where(x=> x.Isdeleted == bitArray).ToList();
+            var data = _context.Physicians.Include(x => x.Physiciannotifications).Where(x => x.Isdeleted == bitArray).ToList();
             return data;
         }
 
@@ -520,7 +343,7 @@ namespace HalloDoc.Repository.Implement
         // log history data
         public IEnumerable<Emaillog> getEmailLogData()
         {
-            return _context.Emaillogs.Include(x => x.Request).ToList();
+            return _context.Emaillogs.Include(x => x.Request).ThenInclude(x => x.Requestclients).ToList();
         }
 
         public IEnumerable<Blockrequest> getallBlockRequest()

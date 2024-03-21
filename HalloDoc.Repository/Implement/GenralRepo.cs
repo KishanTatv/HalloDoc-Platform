@@ -412,37 +412,37 @@ namespace HalloDoc.Repository.Implement
             return data;
         }
 
-        public void UpdateUser(PatientDash userInfo, string email)
+        public void UpdateUser(ClientInformation client, string email)
         {
             User user = _context.Users.FirstOrDefault(u => u.Email == email);
-            user.Firstname = userInfo.clientInfo.Firstname;
-            user.Lastname = userInfo.clientInfo.Lastname;
-            user.Mobile = userInfo.clientInfo.Phonenumber;
-            user.Intdate = userInfo.clientInfo.Dob.Day;
-            user.Strmonth = userInfo.clientInfo.Dob.ToString("MMMM");
-            user.Intyear = userInfo.clientInfo.Dob.Year;
-            user.Regionid = getRegionId(userInfo.clientInfo.State);
-            user.Street = userInfo.clientInfo.Street;
-            user.City = userInfo.clientInfo.City;
-            user.State = userInfo.clientInfo.State;
-            user.Zipcode = userInfo.clientInfo.Zipcode;
+            user.Firstname = client.Firstname;
+            user.Lastname = client.Lastname;
+            user.Mobile = client.Phonenumber;
+            user.Intdate = client.Dob.Day;
+            user.Strmonth = client.Dob.ToString("MMMM");
+            user.Intyear = client.Dob.Year;
+            user.Regionid = getRegionId(client.State);
+            user.Street = client.Street;
+            user.City = client.City;
+            user.State = client.State;
+            user.Zipcode = client.Zipcode;
             _context.Users.Update(user);
             _context.SaveChanges();
         }
 
-        public void UpdateRequestClient(PatientDash userInfo, string email)
+        public void UpdateRequestClient(ClientInformation client, string email)
         {
             Requestclient reqClient = _context.Requestclients.FirstOrDefault(u => u.Email == email);
-            reqClient.Firstname = userInfo.clientInfo.Firstname;
-            reqClient.Lastname = userInfo.clientInfo.Lastname;
-            reqClient.Phonenumber = userInfo.clientInfo.Phonenumber;
-            reqClient.Intdate = userInfo.clientInfo.Dob.Day;
-            reqClient.Strmonth = userInfo.clientInfo.Dob.ToString("MMMM");
-            reqClient.Intyear = userInfo.clientInfo.Dob.Year;
-            reqClient.Street = userInfo.clientInfo.Street;
-            reqClient.City = userInfo.clientInfo.City;
-            reqClient.State = userInfo.clientInfo.State;
-            reqClient.Zipcode = userInfo.clientInfo.Zipcode;
+            reqClient.Firstname = client.Firstname;
+            reqClient.Lastname = client.Lastname;
+            reqClient.Phonenumber = client.Phonenumber;
+            reqClient.Intdate = client.Dob.Day;
+            reqClient.Strmonth = client.Dob.ToString("MMMM");
+            reqClient.Intyear = client.Dob.Year;
+            reqClient.Street = client.Street;
+            reqClient.City = client.City;
+            reqClient.State = client.State;
+            reqClient.Zipcode = client.Zipcode;
             _context.Requestclients.Update(reqClient);
             _context.SaveChanges();
         }

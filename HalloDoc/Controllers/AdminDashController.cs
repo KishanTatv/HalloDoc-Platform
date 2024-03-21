@@ -1,9 +1,4 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
-using DocumentFormat.OpenXml.Wordprocessing;
-using System.Web;
 using HalloDoc.Entity.AdminDash;
 using HalloDoc.Entity.AdminDashTable;
 using HalloDoc.Entity.Models;
@@ -11,12 +6,8 @@ using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Rotativa;
-using System.Net;
-using System.Net.Mail;
-using System.Net.Mime;
-using System.Reflection.Metadata;
-using Windows.Networking;
+using System.IO;
+using DocumentFormat.OpenXml.Drawing;
 
 namespace HalloDoc.Controllers
 {
@@ -58,119 +49,53 @@ namespace HalloDoc.Controllers
             var Tcount = _Admin.TotalCountPatient();
             int pageSize = 5;
 
-            IEnumerable<tableData> Req = new List<tableData>();
+            DashTable Req = new DashTable();
+            List<short> status = new List<short>();
 
             switch (id)
             {
                 case 1:   //New
                     ViewBag.TPage = Math.Ceiling(Tcount[0] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataNew();
-                    if (search != null)
-                    {
-                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                    }
-                    if (reg != null)
-                    {
-                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                    }
-                    if (reqtype != 0)
-                    {
-                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                    }
+                    status.Add(1);
+                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
                     break;
                 case 2:   //Pending
                     ViewBag.TPage = Math.Ceiling(Tcount[1] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataPending();
-                    if (search != null)
-                    {
-                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                    }
-                    if (reg != null)
-                    {
-                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                    }
-                    if (reqtype != 0)
-                    {
-                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                    }
+                    status.Add(2);
+                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
                     break;
                 case 3:   //Active
                     ViewBag.TPage = Math.Ceiling(Tcount[2] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataActive();
-                    if (search != null)
-                    {
-                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                    }
-                    if (reg != null)
-                    {
-                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                    }
-                    if (reqtype != 0)
-                    {
-                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                    }
+                    status.Add(4); status.Add(5);
+                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
                     break;
                 case 4:  //Conclude
                     ViewBag.TPage = Math.Ceiling(Tcount[3] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataConclude();
-                    if (search != null)
-                    {
-                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                    }
-                    if (reg != null)
-                    {
-                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                    }
-                    if (reqtype != 0)
-                    {
-                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                    }
+                    status.Add(6);
+                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
                     break;
                 case 5:   //To-close
                     ViewBag.TPage = Math.Ceiling(Tcount[4] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataToclose();
-                    if (search != null)
-                    {
-                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                    }
-                    if (reg != null)
-                    {
-                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                    }
-                    if (reqtype != 0)
-                    {
-                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                    }
+                    status.Add(3); status.Add(7); status.Add(8);
+                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
                     break;
                 case 6:   //Unpaid
                     ViewBag.TPage = Math.Ceiling(Tcount[5] / 5.0);
                     ViewBag.dTable = id;
-                    Req = _Admin.GetTableDataUnpaid();
-                    if (search != null)
-                    {
-                        Req = Req.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-                    }
-                    if (reg != null)
-                    {
-                        Req = Req.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-                    }
-                    if (reqtype != 0)
-                    {
-                        Req = Req.Where(e => e.ReqTypeId.Equals(reqtype));
-                    }
+                    status.Add(9);
+                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
                     break;
             }
 
-            ViewBag.TPage = Math.Ceiling(Req.Count() / 5.0);
             ViewBag.CurrentPage = page;
-            Req = Req.Skip(page * pageSize).Take(pageSize).ToList();
+            ViewBag.TPage = Math.Ceiling(Req.filterCount / 5.0);
             var region = _Admin.getAllRegion();
-            var dashData = new DashTable { Tdata = Req.ToList(), Regions = region };
+            var dashData = new DashTable { Tdata = Req.Tdata.ToList(), Regions = region };
 
             return PartialView("TablePartial", dashData);
         }
@@ -254,132 +179,17 @@ namespace HalloDoc.Controllers
         public IActionResult Export(int id)
         {
             IEnumerable<tableData> Req = new List<tableData>();
-            switch (id)
-            {
-                case 1:
-                    Req = _Admin.GetTableDataNew();
-                    using (var workbook = new XLWorkbook())
-                    {
-                        var worksheet = workbook.Worksheets.Add("TableData");
-                        worksheet.Cell(1, 1).Value = "Name";
-                        worksheet.Cell(1, 2).Value = "Date of Birth";
-                        worksheet.Cell(1, 3).Value = "Requestor";
-                        worksheet.Cell(1, 4).Value = "Requested Date";
-                        worksheet.Cell(1, 5).Value = "Phone No";
-                        worksheet.Cell(1, 6).Value = "Address";
-                        worksheet.Cell(1, 7).Value = "Notes";
+            List<short> status = new List<short>();
 
-                        int row = 2;
-                        foreach (var item in Req)
-                        {
-                            worksheet.Cell(row, 1).Value = item.Name;
-                            worksheet.Cell(row, 2).Value = item.Intdate + "/" + item.Strmonth + "/" + item.Intyear;
-                            worksheet.Cell(row, 3).Value = item.Requestor;
-                            worksheet.Cell(row, 4).Value = item.RequestedDate;
-                            worksheet.Cell(row, 5).Value = item.Phonenumber;
-                            worksheet.Cell(row, 6).Value = item.Address;
-                            worksheet.Cell(row, 7).Value = item.Notes;
-                            row++;
-                        }
-
-                        using (var stream = new MemoryStream())
-                        {
-                            workbook.SaveAs(stream);
-                            var content = stream.ToArray();
-                            var mimeType = "application/....";
-                            return File(content, mimeType, "Reporrt.xlsx");
-                        }
-                    }
-                    break;
-                case 2:
-                    Req = _Admin.GetTableDataPending();
-                    using (var workbook = new XLWorkbook())
-                    {
-                        var worksheet = workbook.Worksheets.Add("TableData");
-                        worksheet.Cell(1, 1).Value = "Name";
-                        worksheet.Cell(1, 2).Value = "Date of Birth";
-                        worksheet.Cell(1, 3).Value = "Requestor";
-                        worksheet.Cell(1, 4).Value = "Physician Name";
-                        worksheet.Cell(1, 5).Value = "Date Of Service";
-                        worksheet.Cell(1, 6).Value = "Phone No";
-                        worksheet.Cell(1, 7).Value = "Address";
-                        worksheet.Cell(1, 8).Value = "Notes";
-
-                        int row = 2;
-                        foreach (var item in Req)
-                        {
-                            worksheet.Cell(row, 1).Value = item.Name;
-                            worksheet.Cell(row, 2).Value = item.Intdate + "/" + item.Strmonth + "/" + item.Intyear;
-                            worksheet.Cell(row, 3).Value = item.Requestor;
-                            worksheet.Cell(row, 4).Value = item.PhysicianName;
-                            worksheet.Cell(row, 5).Value = item.DateOfService;
-                            worksheet.Cell(row, 6).Value = item.Phonenumber;
-                            worksheet.Cell(row, 7).Value = item.Address;
-                            worksheet.Cell(row, 8).Value = item.Notes;
-                            row++;
-                        }
-
-                        using (var stream = new MemoryStream())
-                        {
-                            workbook.SaveAs(stream);
-                            var content = stream.ToArray();
-                            var mimeType = "application/....";
-                            return File(content, mimeType, "Reporrt.xlsx");
-                        }
-                    }
-                    break;
-                case 3:
-                    Req = _Admin.GetTableDataActive();
-                    break;
-                case 4:
-                    Req = _Admin.GetTableDataConclude();
-                    break;
-                case 5:
-                    Req = _Admin.GetTableDataToclose();
-                    using (var workbook = new XLWorkbook())
-                    {
-                        var worksheet = workbook.Worksheets.Add("TableData");
-                        worksheet.Cell(1, 1).Value = "Name";
-                        worksheet.Cell(1, 2).Value = "Date of Birth";
-                        worksheet.Cell(1, 3).Value = "Region";
-                        worksheet.Cell(1, 4).Value = "Physician Name";
-                        worksheet.Cell(1, 5).Value = "Date Of Service";
-                        worksheet.Cell(1, 6).Value = "Address";
-                        worksheet.Cell(1, 7).Value = "Notes";
-
-                        int row = 2;
-                        foreach (var item in Req)
-                        {
-                            worksheet.Cell(row, 1).Value = item.Name;
-                            worksheet.Cell(row, 2).Value = item.Intdate + "/" + item.Strmonth + "/" + item.Intyear;
-                            worksheet.Cell(row, 3).Value = item.Region;
-                            worksheet.Cell(row, 4).Value = item.PhysicianName;
-                            worksheet.Cell(row, 5).Value = item.DateOfService;
-                            worksheet.Cell(row, 6).Value = item.Address;
-                            worksheet.Cell(row, 7).Value = item.Notes;
-                            row++;
-                        }
-
-                        using (var stream = new MemoryStream())
-                        {
-                            workbook.SaveAs(stream);
-                            var content = stream.ToArray();
-                            var mimeType = "application/....";
-                            return File(content, mimeType, "Reporrt.xlsx");
-                        }
-                    }
-                    break;
-                case 6:
-                    Req = _Admin.GetTableDataToclose();
-                    break;
-            }
+           
 
             return Ok();
         }
 
         public IActionResult ExportAll()
         {
-            IEnumerable<tableData> data = _Admin.GetTableData();
+            List<short> status = new List<short>();
+            DashTable data = _Admin.GetPartialTableData(status, 0, null, null, null);
 
             using (var workbook = new XLWorkbook())
             {
@@ -397,7 +207,7 @@ namespace HalloDoc.Controllers
                 worksheet.Cell(1, 10).Value = "Notes";
 
                 int row = 2;
-                foreach (var item in data)
+                foreach (var item in data.Tdata)
                 {
                     worksheet.Cell(row, 1).Value = item.Name;
                     worksheet.Cell(row, 2).Value = item.Intdate + "/" + item.Strmonth + "/" + item.Intyear;
@@ -566,7 +376,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult deleteDoc(string file, int reqid)
         {
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file);
+            var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file);
             if (System.IO.File.Exists(filePath))
             {
                 _Admin.DeleteDocFile(file, reqid);
@@ -584,7 +394,7 @@ namespace HalloDoc.Controllers
         {
             for (var i = 0; i < file.Count(); i++)
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file[i]);
+                var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", file[i]);
                 if (System.IO.File.Exists(filePath))
                 {
                     _Admin.DeleteDocFile(file[i], reqid);
@@ -613,7 +423,7 @@ namespace HalloDoc.Controllers
                 string fileName = null;
                 foreach (var files in file)
                 {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", files);
+                    var filePath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", files);
                     if (System.IO.File.Exists(filePath))
                     {
                         fileName += filePath + " ";

@@ -48,8 +48,8 @@ namespace HalloDoc.Repository.Interface
         ClientInformation getUserProfile(string email);
         //update profile patient
 
-        void UpdateUser(PatientDash userInfo, string email);
-        void UpdateRequestClient(PatientDash userInfo, string email);
+        void UpdateUser(ClientInformation userInfo, string email);
+        void UpdateRequestClient(ClientInformation userInfo, string email);
         void UpdateRequestClient(string clientEmail, string email, string phone);
 
 

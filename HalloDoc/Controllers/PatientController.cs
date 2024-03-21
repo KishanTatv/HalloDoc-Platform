@@ -193,6 +193,7 @@ namespace HalloDoc.Controllers
                     {
                         Aspnetuser asp = _patient.createonlyAsp(user);
                         _patient.updateUserIdWithAsp(asp.Id, asp.Email);
+                        _patient.addAspnetUserrole(asp.Id, 3);
                         TempData["Msg"] = "Your Account created Successfully!!";
                         return View();
                     }

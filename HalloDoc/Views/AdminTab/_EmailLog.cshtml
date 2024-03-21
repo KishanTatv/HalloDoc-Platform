@@ -1,0 +1,81 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model IEnumerable<HalloDoc.Entity.Models.Emaillog>;
+
+@{
+    Layout = "";
+}
+
+
+<div class="table-responsive">
+    <table class="table">
+        <thead class="table-secondary">
+            <tr>
+                <th scope="col"> Recipient </th>
+                <th scope="col"> Action </th>
+                <th scope="col"> Role Name </th>
+                @if (ViewBag.logType == "SMS")
+                {
+                    <th scope="col"> Mobile Number </th>
+                }
+                else
+                {
+                    <th scope="col"> Email Id </th>
+                }
+                <th scope="col"> Created Date <i class="bi bi-arrow-down ms-1"></i> </th>
+                <th scope="col"> Sent Date</th>
+                <th scope="col"> Sent </th>
+                <th scope="col"> Sent Tries </th>
+                <th scope="col"> Confirmation Number </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (log.Requestid == null)
+                            {
+                                <span>-</span>
+                            }
+                            else
+                            {
+                                @log.Request.Firstname @log.Request.Lastname
+                            }
+                        </td>
+                        <td> @log.Subjectname </td>
+                        <td> @log.Roleid </td>
+                        @if (ViewBag.logType == "SMS")
+                        {
+                            <td>6476354</td>
+                        }
+                        else
+                        {
+                            <td> @log.Emailid </td>
+                        }
+                        <td>@log.Createdate.Date</td>
+                        <td>@log.Sentdate</td>
+                        <td>
+                            @if (log.Isemailsent != null)
+                            {
+                                <span>Yes</span>
+                            }
+                            else
+                            {
+                                <span>No</span>
+                            }
+                        </td>
+                        <td>
+                            @log.Senttries
+                        </td>
+                        <td> - </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

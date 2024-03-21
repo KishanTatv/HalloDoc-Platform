@@ -324,7 +324,9 @@
             e.preventDefault();
             var data = $("#Formdata1").serialize();
 
-            if ($('.InAdfname').val().trim() != '' && $('.InAdmobile').val().trim() != '') {
+            if ($('.InAdmobile').val().trim() == undefined) {
+                $('.spAdmobile').text("PhoneNumber is required!");
+            } else {
                 $.ajax({
                     type: 'POST',
                     url: '/AdminTab/UpdateAdminProfile',
@@ -339,10 +341,9 @@
                         console.error(xhr.responseText);
                     }
                 });
-            } else {
-                $('.spAdmobile').text("PhoneNumber is required!")
             }
         });
+
         $('#Formdata2').submit(function (e) {
             e.preventDefault();
             var data = $("#Formdata2").serialize();

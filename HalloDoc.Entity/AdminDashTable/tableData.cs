@@ -82,6 +82,10 @@ namespace HalloDoc.Entity.AdminDashTable
         [StringLength(100)]
         public string? Notes { get; set; }
 
+        [Column("ReqNotes")]
+        [StringLength(100)]
+        public string? ReqNotes { get; set; }
+
         [Column("ChatWith")]
         [StringLength(50)]
         public string? ChatWith { get; set; }

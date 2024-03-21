@@ -39,6 +39,20 @@
     height: 1.2em;
 }
 
+.mapouter {
+    position: relative;
+    text-align: right;
+    height: 500px;
+    width: 600px;
+}
+
+.gmap_canvas {
+    overflow: hidden;
+    background: none !important;
+    height: 500px;
+    width: 600px;
+}
+
 /* .list-group-item.active, .list-group-item:hover {
     color: #fff;
     background-color: #65d4eb;

@@ -2,28 +2,25 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model IEnumerable<HalloDoc.Entity.AdminDashTable.tableData>;
 
 @{
     ViewData["Title"] = "Provider Location";
     Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
 }
 
-<link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
 
 
 
 <div class="MainContent pt-0 min-vh-100">
-        <partial name="partial/AdminNavTab" />
+    <partial name="partial/AdminNavTab" />
 
-        <div>
-            Location Provider tab
-            <p>hello</p>
+    <div>
+        <h5 class="ms-3 mt-4 mb-3">Location Provider tab</h5>
+        <div class="HContainer mapouter container">
+            <div class="gmap_canvas">
+                <iframe width="600" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=tatvasoft%20ahmedabad&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><br>
+                <a href="https://www.embedgooglemap.net"></a>
+            </div>
         </div>
+    </div>
 </div>
-
-<script asp-append-version="true">
-    window.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('proLocTab').classList.add('underLine');
-    });
-</script>

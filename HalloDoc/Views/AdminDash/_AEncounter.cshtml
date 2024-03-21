@@ -35,6 +35,7 @@
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="@Model.ClientInformation.Lastname">
                                 <label class="ms-3 text-secondary">Last Name</label>
+                                <span asp-validation-for="ClientInformation.Lastname" class="text-danger"></span>
                             </div>
                             <div class="col-md-12 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.ClientInformation.Address">
@@ -44,6 +45,7 @@
                                 <input type="date" class="form-control bg-transparent"
                                        placeholder="Date of birth" asp-for="@Model.ClientInformation.Dob" />
                                 <label class="ms-3 text-secondary">Date of Birth</label>
+                                <span asp-validation-for="ClientInformation.Dob" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="date" class="form-control bg-transparent"
@@ -52,11 +54,12 @@
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="@Model.ClientInformation.Phonenumber" />
+                                <span asp-validation-for="ClientInformation.Phonenumber" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="@Model.ClientInformation.Email">
                                 <label class="ms-3 text-secondary">Email</label>
-                                <span asp-validation-for="ClientInformation.Firstname" class="text-danger"></span>
+                                <span asp-validation-for="ClientInformation.Email" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.HistoryOfPresentIllnessOrInjury">
@@ -184,15 +187,19 @@
 </div>
 
 
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/js/contact-api.js" asp-append-version="true"></script>
 <script asp-append-version="true">
     window.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('dash').classList.add('underLine');
+        document.getElementById('email').disable = true;
     });
 </script>
 
 <script asp-append-version="true">
     $(document).ready(function () {
+
         $('#Formdata').submit(function (e) {
             e.preventDefault();
             var data = $("#Formdata").serialize();

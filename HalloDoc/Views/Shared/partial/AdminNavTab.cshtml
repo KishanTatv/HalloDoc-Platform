@@ -6,23 +6,23 @@
 
 <nav class="shadow-sm bg-body-tertiary rounded collapse show" id="collapseExample">
     <div class="Dash-nav nav nav-underline nav-item text-info" id="nav-tab" role="tablist">
-        <a class="nav-link ps-3 bg-transparent " id="dashTab"
+        <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Dashbord" ? "underLine" : "")" id="dashTab"
            aria-selected="true" asp-action="Dashbord" asp-controller="AdminDash">Dashbord</a>
-        <a class="nav-link ps-3 bg-transparent" id="proLocTab"
+        <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "ProviderLoc" ? "underLine" : "")" id="proLocTab"
            aria-selected="false" asp-action="ProviderLoc" asp-controller="AdminTab">Provider Location</a>
-        <a class="nav-link ps-3 bg-transparent" id="profileTab"
+        <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Profile" ? "underLine" : "")" id="profileTab"
            aria-selected="false" asp-action="Profile" asp-controller="AdminTab">My Profile</a>
-        <a class="nav-link ps-3 bg-transparent dropdown-toggle" id="providerTab" data-bs-toggle="dropdown" aria-expanded="false">Providers</a>
+        <a class="nav-link ps-3 bg-transparent dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "Provider" ? "underLine" : "")" id="providerTab" data-bs-toggle="dropdown" aria-expanded="false">Providers</a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" asp-action="Provider" asp-controller="AdminTab">Provider</a></li>
             <li><a class="dropdown-item" asp-action="Scheduling" asp-controller="AdminTab">Scheduling</a></li>
             <li><a class="dropdown-item" asp-action="Invoicing" asp-controller="AdminTab">Invoicing</a></li>
         </ul>
-        <a class="nav-link ps-3 bg-transparent" id="AccessTab"
-           aria-selected="false" asp-action="" asp-controller="AdminTab">Partners</a>
-        <a class="nav-link ps-3 bg-transparent"
+        <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Partner" ? "underLine" : "")" id="AccessTab"
+           aria-selected="false" asp-action="Partner" asp-controller="AdminTab">Partners</a>
+        <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Access" ? "underLine" : "")"
            aria-selected="false" asp-action="Access" asp-controller="AdminTab">Access</a>
-        <a class="nav-link ps-3 bg-transparent dropdown-toggle" @(ViewContext.ActionDescriptor.RouteValues["action"] == "Emaillog" ? "active" : "") id="recordTab" data-bs-toggle="dropdown" aria-expanded="false">Records</a>
+        <a class="nav-link ps-3 bg-transparent dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "SearchRecord" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "Emaillog" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "SMSlog" ? "underLine" : "")  @(ViewContext.ActionDescriptor.RouteValues["action"] == "PatientHistory" ? "underLine" : "")  @(ViewContext.ActionDescriptor.RouteValues["action"] == "BlockHistory" ? "underLine" : "")" id="recordTab" data-bs-toggle="dropdown" aria-expanded="false">Records</a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" asp-action="SearchRecord" asp-controller="AdminTab">Search Records</a></li>
             <li><a class="dropdown-item" asp-action="Emaillog" asp-controller="AdminTab"> Email Logs</a></li>

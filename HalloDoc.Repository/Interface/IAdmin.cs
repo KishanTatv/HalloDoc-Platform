@@ -27,19 +27,8 @@ namespace HalloDoc.Repository.Interface
 
 
         //Dashbord table Data 
-        IEnumerable<tableData> GetTableData();
 
-        IEnumerable<tableData> GetTableDataNew();
-
-        IEnumerable<tableData> GetTableDataPending();
-
-        IEnumerable<tableData> GetTableDataActive();
-
-        IEnumerable<tableData> GetTableDataConclude();
-
-        IEnumerable<tableData> GetTableDataToclose();
-
-        IEnumerable<tableData> GetTableDataUnpaid();
+        DashTable GetPartialTableData(List<short>? status, int? page, string? search, string? reg, int? reqtype);
 
 
 
