@@ -62,6 +62,12 @@ public partial class Aspnetuser
     [InverseProperty("ModifiedbyNavigation")]
     public virtual ICollection<Physician> PhysicianModifiedbyNavigations { get; } = new List<Physician>();
 
+    [InverseProperty("ModifiedbyNavigation")]
+    public virtual ICollection<Shiftdetail> Shiftdetails { get; } = new List<Shiftdetail>();
+
+    [InverseProperty("CreatedbyNavigation")]
+    public virtual ICollection<Shift> Shifts { get; } = new List<Shift>();
+
     [InverseProperty("Aspnetuser")]
     public virtual ICollection<User> Users { get; } = new List<User>();
 }

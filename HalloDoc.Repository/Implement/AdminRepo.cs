@@ -67,50 +67,79 @@ namespace HalloDoc.Repository.Implement
 
         #region AllRequest Data
 
-        public DashTable GetPartialTableData(List<short>? status, int? page, string? search, string? reg, int? reqtype)
+        public DashTable GetPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype)
         {
-            IEnumerable<tableData> data = from r in _context.Requests
-                                          join f in _context.Requestclients on r.Requestid equals f.Requestid
-                                          join p in _context.Physicians on r.Physicianid equals p.Physicianid into rf
-                                          from p in rf.DefaultIfEmpty()
-                                          orderby r.Createddate descending
-                                          where status.Contains(r.Status)
-                                          select new tableData
-                                          {
-                                              Name = f.Firstname + " " + f.Lastname,
-                                              Intdate = f.Intdate,
-                                              Strmonth = f.Strmonth,
-                                              Intyear = f.Intyear,
-                                              Age = System.DateTime.Now.Year - f.Intyear,
-                                              Email = f.Email,
-                                              RequestId = f.Requestid,
-                                              ReqClientId = f.Requestclientid,
-                                              ReqTypeId = r.Requesttypeid,
-                                              Requestor = r.Firstname + "," + r.Lastname,
-                                              RequestedDate = r.Createddate,
-                                              PhysicianName = p.Firstname + " " + p.Lastname,
-                                              DateOfService = r.Modifieddate,
-                                              Phonenumber = f.Phonenumber,
-                                              ReqPhonenumber = r.Phonenumber,
-                                              Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
-                                              Region = f.State,
-                                              Notes = f.Notes,
-                                              ReqNotes = _context.Requeststatuslogs.Where(x => x.Requestid == r.Requestid).OrderByDescending(x => x.Requeststatuslogid).FirstOrDefault().Notes,
-                                          };
-            if (search != null)
-            {
-                data = data.Where(e => e.Name.ToLower().Contains(search.ToLower()));
-            }
-            if (reg != null)
-            {
-                data = data.Where(e => e.Region.ToLower().Equals(reg.ToLower()));
-            }
-            if (reqtype != 0)
-            {
-                data = data.Where(e => e.ReqTypeId.Equals(reqtype));
-            }
+            var data = from r in _context.Requests
+                       join f in _context.Requestclients on r.Requestid equals f.Requestid
+                       join p in _context.Physicians on r.Physicianid equals p.Physicianid into rf
+                       from p in rf.DefaultIfEmpty()
+                       orderby r.Createddate descending
+                       where (status == null ? true : status.Contains(r.Status)) &&
+                      (search == null ? true : f.Firstname.ToLower().Contains(search.ToLower()) || f.Lastname.ToLower().Contains(search.ToLower())) &&
+                      (reg == null ? true : f.State.ToLower().Equals(reg.ToLower())) &&
+                      (reqtype == 0 ? true : r.Requesttypeid.Equals(reqtype))
+                       select new tableData
+                       {
+                           Name = f.Firstname + " " + f.Lastname,
+                           Intdate = f.Intdate,
+                           Strmonth = f.Strmonth,
+                           Intyear = f.Intyear,
+                           Age = System.DateTime.Now.Year - f.Intyear,
+                           Email = f.Email,
+                           RequestId = f.Requestid,
+                           ReqClientId = f.Requestclientid,
+                           ReqTypeId = r.Requesttypeid,
+                           Requestor = r.Firstname + "," + r.Lastname,
+                           RequestedDate = r.Createddate,
+                           PhysicianName = p.Firstname + " " + p.Lastname,
+                           DateOfService = r.Modifieddate,
+                           Phonenumber = f.Phonenumber,
+                           ReqPhonenumber = r.Phonenumber,
+                           Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
+                           Region = f.State,
+                           Notes = f.Notes,
+                           ReqNotes = _context.Requeststatuslogs.Where(x => x.Requestid == r.Requestid).OrderByDescending(x => x.Requeststatuslogid).FirstOrDefault().Notes,
+                       };
 
-            var tableData = new DashTable { Tdata = data.Skip((int)(page * 5)).Take(5).ToList(), filterCount = data.Count() };
+            var tableData = new DashTable { Tdata = data.Skip((int)(page * pageSize)).Take(5).ToList(), filterCount = data.Count() };
+            return tableData;
+        }
+
+        public DashTable ExportPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype)
+        {
+            var data = from r in _context.Requests
+                       join f in _context.Requestclients on r.Requestid equals f.Requestid
+                       join p in _context.Physicians on r.Physicianid equals p.Physicianid into rf
+                       from p in rf.DefaultIfEmpty()
+                       orderby r.Createddate descending
+                       where (status == null ? true : status.Contains(r.Status)) &&
+                      (search == null ? true : f.Firstname.ToLower().Contains(search.ToLower()) || f.Lastname.ToLower().Contains(search.ToLower())) &&
+                      (reg == null ? true : f.State.ToLower().Equals(reg.ToLower())) &&
+                      (reqtype == 0 ? true : r.Requesttypeid.Equals(reqtype))
+                       select new tableData
+                       {
+                           Name = f.Firstname + " " + f.Lastname,
+                           Intdate = f.Intdate,
+                           Strmonth = f.Strmonth,
+                           Intyear = f.Intyear,
+                           Age = System.DateTime.Now.Year - f.Intyear,
+                           Email = f.Email,
+                           RequestId = f.Requestid,
+                           ReqClientId = f.Requestclientid,
+                           ReqTypeId = r.Requesttypeid,
+                           Requestor = r.Firstname + "," + r.Lastname,
+                           RequestedDate = r.Createddate,
+                           PhysicianName = p.Firstname + " " + p.Lastname,
+                           DateOfService = r.Modifieddate,
+                           Phonenumber = f.Phonenumber,
+                           ReqPhonenumber = r.Phonenumber,
+                           Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
+                           Region = f.State,
+                           Notes = f.Notes,
+                           ReqNotes = _context.Requeststatuslogs.Where(x => x.Requestid == r.Requestid).OrderByDescending(x => x.Requeststatuslogid).FirstOrDefault().Notes,
+                       };
+
+            var tableData = new DashTable { Tdata = data.ToList(), filterCount = data.Count() };
             return tableData;
         }
         #endregion
@@ -349,6 +378,44 @@ namespace HalloDoc.Repository.Implement
         public IEnumerable<Blockrequest> getallBlockRequest()
         {
             return _context.Blockrequests.Include(x => x.Request).ThenInclude(x => x.Requestclients).ToList();
+        }
+
+
+        //create role
+
+        public List<Role> getAllroleDetails()
+        {
+            return _context.Roles.ToList();
+        }
+
+        public Role AddRole(string roleName, short AccType, int aspId)
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = false;
+            Role role = new Role
+            {
+                Name = roleName,
+                Accounttype = AccType,
+                Createddate = DateTime.Now,
+                Createdby = aspId,
+                Isdeleted = bitArray,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
+            };
+            _context.Roles.Add(role);
+            _context.SaveChanges();
+
+            return role;
+        }
+
+        public void addRoleMenu(int roleId, int menuId)
+        {
+            Rolemenu roleMenu = new Rolemenu
+            {
+                Roleid = roleId,
+                Menuid = menuId,
+            };
+            _context.Rolemenus.Add(roleMenu);
+            _context.SaveChanges();
         }
     }
 }

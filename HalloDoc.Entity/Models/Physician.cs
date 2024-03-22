@@ -165,4 +165,7 @@ public partial class Physician
 
     [InverseProperty("Physician")]
     public virtual ICollection<Requestwisefile> Requestwisefiles { get; } = new List<Requestwisefile>();
+
+    [InverseProperty("Physician")]
+    public virtual ICollection<Shift> Shifts { get; } = new List<Shift>();
 }

@@ -8,6 +8,7 @@ using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using DocumentFormat.OpenXml.Drawing;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace HalloDoc.Controllers
 {
@@ -58,37 +59,37 @@ namespace HalloDoc.Controllers
                     ViewBag.TPage = Math.Ceiling(Tcount[0] / 5.0);
                     ViewBag.dTable = id;
                     status.Add(1);
-                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 2:   //Pending
                     ViewBag.TPage = Math.Ceiling(Tcount[1] / 5.0);
                     ViewBag.dTable = id;
                     status.Add(2);
-                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 3:   //Active
                     ViewBag.TPage = Math.Ceiling(Tcount[2] / 5.0);
                     ViewBag.dTable = id;
                     status.Add(4); status.Add(5);
-                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 4:  //Conclude
                     ViewBag.TPage = Math.Ceiling(Tcount[3] / 5.0);
                     ViewBag.dTable = id;
                     status.Add(6);
-                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 5:   //To-close
                     ViewBag.TPage = Math.Ceiling(Tcount[4] / 5.0);
                     ViewBag.dTable = id;
                     status.Add(3); status.Add(7); status.Add(8);
-                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 6:   //Unpaid
                     ViewBag.TPage = Math.Ceiling(Tcount[5] / 5.0);
                     ViewBag.dTable = id;
                     status.Add(9);
-                    Req = _Admin.GetPartialTableData(status, page, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
             }
 
@@ -176,20 +177,31 @@ namespace HalloDoc.Controllers
 
 
         #region export Excel
-        public IActionResult Export(int id)
-        {
-            IEnumerable<tableData> Req = new List<tableData>();
-            List<short> status = new List<short>();
-
-           
-
-            return Ok();
-        }
-
-        public IActionResult ExportAll()
+        public IActionResult Export(int id, string search, string reg, int reqtype)
         {
             List<short> status = new List<short>();
-            DashTable data = _Admin.GetPartialTableData(status, 0, null, null, null);
+            switch (id)
+            {
+                case 1:   //New
+                    status.Add(1);
+                    break;
+                case 2:   //Pending
+                    status.Add(2);
+                    break;
+                case 3:   //Active
+                    status.Add(4); status.Add(5);
+                    break;
+                case 4:  //Conclude
+                    status.Add(6);
+                    break;
+                case 5:   //To-close
+                    status.Add(3); status.Add(7); status.Add(8);
+                    break;
+                case 6:   //Unpaid
+                    status.Add(9);
+                    break;
+            }
+            DashTable data = _Admin.ExportPartialTableData(status, 0, 0, search, reg, reqtype);
 
             using (var workbook = new XLWorkbook())
             {
@@ -229,8 +241,73 @@ namespace HalloDoc.Controllers
                     var mimeType = "application/....";
                     return File(content, mimeType, "Reporrt.xlsx");
                 }
+            }
+        }
 
-                //workbook.SaveAs("MyTableData.xlsx");
+        public IActionResult ExportAll(int id)
+        {
+            List<short> status = new List<short>();
+            switch (id)
+            {
+                case 1:   //New
+                    status.Add(1);
+                    break;
+                case 2:   //Pending
+                    status.Add(2);
+                    break;
+                case 3:   //Active
+                    status.Add(4); status.Add(5);
+                    break;
+                case 4:  //Conclude
+                    status.Add(6);
+                    break;
+                case 5:   //To-close
+                    status.Add(3); status.Add(7); status.Add(8);
+                    break;
+                case 6:   //Unpaid
+                    status.Add(9);
+                    break;
+            }
+            DashTable data = _Admin.ExportPartialTableData(status, 0, 0, null, null, 0);
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("TableData");
+
+                worksheet.Cell(1, 1).Value = "Name";
+                worksheet.Cell(1, 2).Value = "Date of Birth";
+                worksheet.Cell(1, 3).Value = "Requestor";
+                worksheet.Cell(1, 4).Value = "Requested Date";
+                worksheet.Cell(1, 5).Value = "Physician Name";
+                worksheet.Cell(1, 6).Value = "Date Of Service";
+                worksheet.Cell(1, 7).Value = "Region";
+                worksheet.Cell(1, 8).Value = "Phone No";
+                worksheet.Cell(1, 9).Value = "Address";
+                worksheet.Cell(1, 10).Value = "Notes";
+
+                int row = 2;
+                foreach (var item in data.Tdata)
+                {
+                    worksheet.Cell(row, 1).Value = item.Name;
+                    worksheet.Cell(row, 2).Value = item.Intdate + "/" + item.Strmonth + "/" + item.Intyear;
+                    worksheet.Cell(row, 3).Value = item.Requestor;
+                    worksheet.Cell(row, 4).Value = item.RequestedDate;
+                    worksheet.Cell(row, 5).Value = item.PhysicianName;
+                    worksheet.Cell(row, 6).Value = item.DateOfService;
+                    worksheet.Cell(row, 7).Value = item.Region;
+                    worksheet.Cell(row, 8).Value = item.Phonenumber;
+                    worksheet.Cell(row, 9).Value = item.Address;
+                    worksheet.Cell(row, 10).Value = item.Notes;
+                    row++;
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    var mimeType = "application/....";
+                    return File(content, mimeType, "Reporrt.xlsx");
+                }
             }
         }
         #endregion
@@ -578,6 +655,7 @@ namespace HalloDoc.Controllers
             {
                 _Genral.AddEncounterForm(data.EncounterForm, AdminId, phyId);
             }
+
             return Ok();
         }
 

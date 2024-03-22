@@ -56,11 +56,14 @@ namespace HalloDoc.Controllers
         [ActionName("UpadteProfile")]
         public IActionResult UpadteProfile(PatientDash userInfo)
         {
-            string UserEmail = Request.Cookies["CookieEmail"];
+            if (genral.CheckAvalibleRegion(userInfo.clientInfo.State))
+            {
+                string UserEmail = Request.Cookies["CookieEmail"];
 
-            genral.UpdateRequestClient(userInfo.clientInfo, UserEmail);
-            genral.UpdateUser(userInfo.clientInfo, UserEmail);
+                genral.UpdateRequestClient(userInfo.clientInfo, UserEmail);
+                genral.UpdateUser(userInfo.clientInfo, UserEmail);
 
+            }
             return RedirectToAction("Dashbord");
         }
 

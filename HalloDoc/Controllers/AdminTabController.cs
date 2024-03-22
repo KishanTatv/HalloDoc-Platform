@@ -104,7 +104,7 @@ namespace HalloDoc.Controllers
             var data = _Admin.getAllPhysicianData().ToList();
             ViewBag.TPage = Math.Ceiling(data.Count() / 5.0);
 
-            if(reg != 0)
+            if (reg != 0)
             {
                 data = data.Where(x => x.Regionid == reg).ToList();
             }
@@ -211,14 +211,41 @@ namespace HalloDoc.Controllers
         #region Access
         public IActionResult Access()
         {
-            return View();
+            var data = _Admin.getAllroleDetails();
+            return View(data);
         }
 
         public IActionResult CreateRole()
         {
             var role = _Admin.getAllAspnetrole();
-            var data = new CreateRoleViewModel { aspnetrole = role };
+            var menu = _Genral.getMenuNames(0);
+            var data = new CreateRoleViewModel { aspnetrole = role, Menus = menu };
             return PartialView("_CreateRole", data);
+        }
+
+        public IActionResult AccOption(int AccType)
+        {
+            var menu = _Genral.getMenuNames(AccType);
+            return PartialView("_MenuOption", menu);
+        }
+
+        public IActionResult SaveRole(string RoleName, short AccType, List<string> Pages)
+        {
+            if (RoleName == null || AccType == 0 || Pages.Count() == 0)
+            {
+                return Json(new { value = "error" });
+            }
+            else
+            {
+                int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+                Role role = _Admin.AddRole(RoleName, AccType, aspId);
+                foreach (var item in Pages)
+                {
+                    Menu menu = _Genral.getSingleMenu(AccType, item);
+                    _Admin.addRoleMenu(role.Roleid, menu.Menuid);
+                }
+                return Json(new { value = "done" });
+            }
         }
         #endregion
 
@@ -228,6 +255,7 @@ namespace HalloDoc.Controllers
             return View();
         }
 
+        #region EmailSMS Log
         public IActionResult SMSlog()
         {
             ViewBag.logType = "SMS";
@@ -240,27 +268,36 @@ namespace HalloDoc.Controllers
             return View("EmailSMSlog");
         }
 
-        public IActionResult EmaillogData(string email, string name, DateTime crDate, DateTime cgDate)
+        public IActionResult EmailSMSlogData(string email, string name, DateTime crDate, DateTime cgDate, string checklog)
         {
-            ViewBag.logType = "Email";
-            var data = _Admin.getEmailLogData();
-            if(email != null)
+            ViewBag.logType = checklog;
+            if (checklog == "Email")
             {
-                data = data.Where(x => x.Emailid.ToLower().Contains(email.ToLower())).ToList();
+                var data = _Admin.getEmailLogData();
+                if (email != null)
+                {
+                    data = data.Where(x => x.Emailid.ToLower().Contains(email.ToLower())).ToList();
+                }
+                if (name != null)
+                {
+                    data = data.Where(x => (x.Request?.Firstname?.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Lastname?.ToLower().Contains(name.ToLower()) ?? false)).ToList();
+                }
+                if (crDate != DateTime.MinValue)
+                {
+                    data = data.Where(x => x.Createdate.Date.Equals(crDate)).ToList();
+                }
+                if (cgDate != DateTime.MinValue)
+                {
+                    data = data.Where(x => x.Sentdate.Equals(cgDate)).ToList();
+                }
+                return PartialView("_EmailLog", data);
             }
-            if(name != null) {
-                data = data.Where(x => (x.Request.Firstname?.ToLower().Contains(name.ToLower()) ?? false) || (x.Request.Lastname?.ToLower().Contains(name.ToLower()) ?? false)).ToList();
-            }
-            if (crDate != DateTime.MinValue)
+            else
             {
-                data = data.Where(x => x.Createdate.Date.Equals(crDate)).ToList();
+                return PartialView("_EmailLog");
             }
-            if(cgDate != DateTime.MinValue)
-            {
-                data = data.Where(x => x.Sentdate.Equals(cgDate)).ToList();
-            }
-            return PartialView("_EmailLog", data);
         }
+        #endregion
 
 
         public IActionResult PatientHistory()

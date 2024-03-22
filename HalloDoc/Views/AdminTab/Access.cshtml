@@ -1,6 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model List<HalloDoc.Entity.Models.Role>;
 
 
 @{
@@ -37,18 +38,30 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>test hjkjh</td>
-                                    <td>Admin</td>
-                                    <td class="d-flex justify-content-end">
-                                        <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit">
-                                            Edit
-                                        </div>
-                                        <div class="btn btn-outline-info ps-2 pe-2 p-0 ms-2 ADelete">
-                                            Delete
-                                        </div>
-                                    </td>
-                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>
+                                            @if (item.Accounttype == 1)
+                                            {
+                                                <span>Admin</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Provider</span>
+                                            }
+                                        </td>
+                                        <td class="d-flex justify-content-end">
+                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit">
+                                                Edit
+                                            </div>
+                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 ms-2 ADelete">
+                                                Delete
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -56,8 +69,8 @@
             </div>
         </div>
     </div>
-        <div class="Tabpartial">
-        </div>
+    <div class="Tabpartial">
+    </div>
 
 </div>
 

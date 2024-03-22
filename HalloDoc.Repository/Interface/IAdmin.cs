@@ -28,8 +28,8 @@ namespace HalloDoc.Repository.Interface
 
         //Dashbord table Data 
 
-        DashTable GetPartialTableData(List<short>? status, int? page, string? search, string? reg, int? reqtype);
-
+        DashTable GetPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype);
+        DashTable ExportPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype);
 
 
         List<int> TotalCountPatient();
@@ -95,8 +95,14 @@ namespace HalloDoc.Repository.Interface
         List<Aspnetrole> getAllAspnetrole();
 
         // log
-
         IEnumerable<Emaillog> getEmailLogData();
         IEnumerable<Blockrequest> getallBlockRequest();
+
+
+        // role
+        List<Role> getAllroleDetails();
+        Role AddRole(string roleName, short AccType, int aspId);
+        void addRoleMenu(int roleId, int menuId);
+
     }
 }

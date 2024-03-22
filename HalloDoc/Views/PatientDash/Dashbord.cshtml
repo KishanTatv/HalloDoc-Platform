@@ -187,15 +187,18 @@
                                 <div class="col-md-6 form-floating mt-2">
                                     <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="firstNmae" asp-for="clientInfo.Firstname">
                                     <label class="ms-3">Your First Name</label>
+                                    <span asp-validation-for="clientInfo.Firstname" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
                                     <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="lastName" asp-for="clientInfo.Lastname">
                                     <label class="ms-3">Your Last Name</label>
+                                    <span asp-validation-for="clientInfo.Lastname" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
                                     <input type="date" class="form-control bg-transparent" id="floatingInputValue"
                                            placeholder="Date of birth" asp-for="clientInfo.Dob">
                                     <label class="ms-3">Date Of Birth</label>
+                                    <span asp-validation-for="clientInfo.Dob" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -213,6 +216,7 @@
                                     </div>
                                     <div class="col-md-8">
                                         <input type="text" id="phone1" class="form-control h-100 bg-transparent" asp-for="clientInfo.Phonenumber" />
+                                        <span asp-validation-for="clientInfo.Phonenumber" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
@@ -238,10 +242,12 @@
                                 <div class="col-md-6 form-floating mt-2">
                                     <input type="text" class="form-control bg-transparent" id="floatingInput" placeholder="state" asp-for="clientInfo.State">
                                     <label class="ms-3">State</label>
+                                    <span asp-validation-for="clientInfo.State" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
                                     <input type="number" class="form-control bg-transparent" id="floatingInput" placeholder="zipCode" asp-for="clientInfo.Zipcode">
                                     <label class="ms-3">Zip Code</label>
+                                    <span asp-validation-for="clientInfo.Zipcode" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

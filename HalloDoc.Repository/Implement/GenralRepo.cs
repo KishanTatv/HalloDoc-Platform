@@ -458,5 +458,26 @@ namespace HalloDoc.Repository.Implement
         #endregion
 
 
+
+        #region menu
+
+        public List<Menu> getMenuNames(int? accType)
+        {
+            if (accType == 0)
+            {
+                return _context.Menus.ToList();
+            }
+            else
+            {
+                return _context.Menus.Where(x => x.Accounttype == accType).ToList();
+            }
+        }
+
+        public Menu getSingleMenu(int accType, string name)
+        {
+            return _context.Menus.FirstOrDefault(x => x.Accounttype == accType || x.Name.Contains(name));
+        }
+
+        #endregion
     }
 }

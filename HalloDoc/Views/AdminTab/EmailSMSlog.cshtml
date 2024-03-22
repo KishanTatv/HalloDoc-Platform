@@ -15,6 +15,7 @@
     <div class="d-flex w-100 justify-content-center pb-4">
         <div class="m-auto">
             <div class="d-flex m-3">
+                <input type="text" class="d-none viewbag" value="@ViewBag.logType" />
                 @if (ViewBag.logType == "SMS")
                 {
                     <h5>SMS Logs (Twilio)</h5>
@@ -71,10 +72,11 @@
 
 <script asp-append-version="true">
     $(document).ready(function () {
+        var checklog = $('.viewbag').val();
         $.ajax({
-            url: '/AdminTab/EmaillogData',
+            url: '/AdminTab/EmailSMSlogData',
             method: 'POST',
-            data: { eamil: '' },
+            data: { checklog: checklog },
             success: function (response) {
                 $('.LogPartial').html(response);
             },
@@ -88,14 +90,15 @@
         });
 
         $('.dataChng').change(function () {
+            var checklog = $('.viewbag').val();
             var name = $('.RecName').val().trim();
             var email = $('.EmailChng').val().trim();
             var crDate = $('.crDate').val();
             var cgDate = $('.cgDate').val();
             $.ajax({
-                url: '/AdminTab/EmaillogData',
+                url: '/AdminTab/EmailSMSlogData',
                 method: 'POST',
-                data: { email: email, name: name, crDate: crDate, cgDate: cgDate },
+                data: { email: email, name: name, crDate: crDate, cgDate: cgDate, checklog: checklog },
                 success: function (response) {
                     $('.LogPartial').html(response);
                 },

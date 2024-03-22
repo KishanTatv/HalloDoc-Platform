@@ -111,13 +111,13 @@ namespace HalloDoc.Repository.Implement
 
         public int DailyRequestCount()
         {
-            return _context.Requests.Where(x => x.Createddate == System.DateTime.Now).ToList().Count();
+            return _context.Requests.Where(x => x.Createddate.Date == System.DateTime.Now.Date).ToList().Count();
         }
 
         public string getConfirmNum(string reg, string fname, string lname)
         {
             string reqCount = DailyRequestCount().ToString().PadLeft(4, '0');
-            string num = getRegAbr(reg).Substring(0, 2) + System.DateTime.Now.Day + DateTime.Now.ToString("MM") + DateTime.Now.ToString("yy") + fname.ToUpper().Substring(0, 2) + lname.ToUpper().Substring(0, 2) +  reqCount;
+            string num = getRegAbr(reg).Substring(0, 2) + System.DateTime.Now.ToString("dd") + DateTime.Now.ToString("MM") + DateTime.Now.ToString("yy") + fname.ToUpper().Substring(0, 2) + lname.ToUpper().Substring(0, 2) +  reqCount;
             return num;
         }
 

@@ -95,8 +95,8 @@
             <div>
                 <button type="button" class="btn btn-info text-light sendLink"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
                 <div class="btn btn-info text-light NewReq" data-reqid="1"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></div>
-                <button type="button" class="btn btn-info text-light ExportIndivisul"><i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
-                <a type="button" class="btn btn-info text-light" asp-controller="AdminDash" asp-action="ExportAll"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
+                <button type="button" class="btn btn-info text-light" onclick="ExportIndivisul()"> <i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
+                <a type="button" class="btn btn-info text-light" onclick="ExportAllDataClick()"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
                 <div class="btn btn-info text-light reqSupport"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></div>
             </div>
         </div>
@@ -143,6 +143,31 @@
         newDash();
     });
 
+    function getIdFromCard() {
+        var cardname = $('.dNameCard').html();
+        var id;
+        switch (cardname) {
+            case "(New)":
+                id = 1;
+                break;
+            case "(Pending)":
+                id = 2;
+                break;
+            case "(Active)":
+                id = 3;
+                break;
+            case "(Conclude)":
+                id = 4;
+                break;
+            case "(Toclose)":
+                id = 5;
+                break;
+            case "(Unpaid)":
+                id = 6;
+                break;
+        }
+        return id;
+    }
     function newDash() {
         document.querySelector(".DashCardN").classList.add("new-active");
         document.querySelector(".DashCardP").classList.remove("Pending-active");
@@ -196,6 +221,30 @@
         document.querySelector(".DashCardT").classList.remove("ToClose-active");
         document.querySelector(".DashCardU").classList.add("Unpaid-active");
         document.querySelector(".dNameCard").innerHTML = "(Unpaid)";
+    }
+
+    function ExportAllDataClick() {
+        var status = getIdFromCard();
+
+        var link = document.createElement('a');
+        link.href = '/AdminDash/ExportAll?id=' + status;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    function ExportIndivisul() {
+        var status = getIdFromCard();
+        var search = $('#SearchPatient').val();
+        var reg = $('#RegSearch').val();
+        var reqType = $('.reqFilter').data('reqtype');
+
+        var link = document.createElement('a');
+        link.href = '/AdminDash/Export?id=' + status + "&search=" + search + "&reg=" + reg + "&reqtype" + reqType;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 </script>
 
@@ -303,32 +352,7 @@
                 }
             });
         });
-
-        function getIdFromCard() {
-            var cardname = $('.dNameCard').html();
-            var id;
-            switch (cardname) {
-                case "(New)":
-                    id = 1;
-                    break;
-                case "(Pending)":
-                    id = 2;
-                    break;
-                case "(Active)":
-                    id = 3;
-                    break;
-                case "(Conclude)":
-                    id = 4;
-                    break;
-                case "(Toclose)":
-                    id = 5;
-                    break;
-                case "(Unpaid)":
-                    id = 6;
-                    break;
-            }
-            return id;
-        }
+        
         $('#SearchPatient').keyup(function () {
             var search = $(this).val();
             var reg = $('#RegSearch').val();
@@ -374,21 +398,6 @@
                 data: { id: id, search: search, reg: reg, reqtype: reqtype },
                 success: function (response) {
                     $("#partial").html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
-        $('.ExportIndivisul').click(function () {
-            var id = getIdFromCard();
-            $.ajax({
-                url: '/AdminDash/Export',
-                method: 'POST',
-                data: { id: id },
-                success: function (response) {
-                    console.log(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

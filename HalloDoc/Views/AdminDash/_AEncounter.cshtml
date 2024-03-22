@@ -20,44 +20,44 @@
             </div>
 
             <div class=" rounded shadow p-4 rounded-3">
-                <form id="Formdata" novalidate class="needs-validation">
+                <form id="Formdata" class="needs-validation">
                     <div class="mb-4">
                         <h3 class="text-info text-center mt-3 mb-3">Medical Report-Confidential</h3>
                         <p class="text-success text-center msgShow"></p>
 
                         <div class="row form-floating">
                             <div class="col-md-6 form-floating mt-3">
-                                <input type="text" class="d-none EncountrtReq" asp-for="@Model.EncounterForm.RequestId" value="@TempData["reqid"]" />
-                                <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="@Model.ClientInformation.Firstname">
+                                <input type="text" class="d-none EncountrtReq" asp-for="@Model.EncounterForm.RequestId" value="@TempData["reqid"]"/>
+                                <input type="text" class="form-control clientFeild" placeholder="firstNmae" asp-for="@Model.ClientInformation.Firstname" disabled>
                                 <label class="ms-3 text-secondary">First Name</label>
                                 <span asp-validation-for="ClientInformation.Firstname" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
-                                <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="@Model.ClientInformation.Lastname">
+                                <input type="text" class="form-control clientFeild" placeholder="lastName" asp-for="@Model.ClientInformation.Lastname" disabled>
                                 <label class="ms-3 text-secondary">Last Name</label>
                                 <span asp-validation-for="ClientInformation.Lastname" class="text-danger"></span>
                             </div>
                             <div class="col-md-12 form-floating mt-3">
-                                <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.ClientInformation.Address">
+                                <input type="text" class="form-control clientFeild" placeholder="loc" asp-for="@Model.ClientInformation.Address" disabled>
                                 <label class="ms-3 text-secondary">Location</label>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
-                                <input type="date" class="form-control bg-transparent"
-                                       placeholder="Date of birth" asp-for="@Model.ClientInformation.Dob" />
+                                <input type="date" class="form-control clientFeild"
+                                       placeholder="Date of birth" asp-for="@Model.ClientInformation.Dob" disabled />
                                 <label class="ms-3 text-secondary">Date of Birth</label>
                                 <span asp-validation-for="ClientInformation.Dob" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
-                                <input type="date" class="form-control bg-transparent"
-                                       placeholder="Date" asp-for="@Model.ClientInformation.date" />
+                                <input type="date" class="form-control clientFeild"
+                                       placeholder="Date" asp-for="@Model.ClientInformation.date" disabled />
                                 <label class="ms-3 text-secondary">Date</label>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
-                                <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="@Model.ClientInformation.Phonenumber" />
+                                <input type="text" id="phone1" class="form-control clientFeild" style="height:58px" asp-for="@Model.ClientInformation.Phonenumber" disabled />
                                 <span asp-validation-for="ClientInformation.Phonenumber" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
-                                <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="@Model.ClientInformation.Email">
+                                <input type="email" name="email" id="email" class="form-control clientFeild" placeholder="email" asp-for="@Model.ClientInformation.Email" disabled>
                                 <label class="ms-3 text-secondary">Email</label>
                                 <span asp-validation-for="ClientInformation.Email" class="text-danger"></span>
                             </div>
@@ -195,6 +195,7 @@
         document.getElementById('dash').classList.add('underLine');
         document.getElementById('email').disable = true;
     });
+
 </script>
 
 <script asp-append-version="true">

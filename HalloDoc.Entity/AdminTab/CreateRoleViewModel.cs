@@ -10,5 +10,7 @@ namespace HalloDoc.Entity.AdminTab
     public class CreateRoleViewModel
     {
         public List<Aspnetrole> aspnetrole { get; set; }
+
+        public List<Menu> Menus { get; set; }   
     }
 }
