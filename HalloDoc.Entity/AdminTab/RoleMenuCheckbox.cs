@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 
 namespace HalloDoc.Entity.AdminTab
 {
-    public class CreateRoleViewModel
+    public class RoleMenuCheckbox
     {
-        public List<Aspnetrole> aspnetrole { get; set; }
-
-        public List<Menu> Menus { get; set; }   
-
-        public Role Role { get; set; }
+        public List<Menu> menus { get; set; }
 
         public List<Rolemenu> rolemenus { get; set; }
     }

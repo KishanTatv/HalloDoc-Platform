@@ -1,0 +1,243 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HalloDoc.Entity.AdminTab.PhysicianProfileViewModel;
+
+
+<div class="HContainer m-auto">
+    <div class="d-flex justify-content-between mt-4">
+        <h4>Edit Physician Account</h4>
+        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="Provider">
+            <strong class="pe-2">&lt Back</strong>
+        </a>
+    </div>
+
+    <form class="phydata" asp-action="AddNewProvider" asp-controller="AdminTab" method="post" enctype="multipart/form-data">
+        <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+            <div class="mb-4">
+                <p class="Addmsg text-center"></p>
+                <h5>Account Information</h5>
+                <div class="row form-floating">
+                    <div class="col-md-4 form-floating mt-2">
+                        <input type="text" class="form-control" placeholder="username" asp-for="physician.Aspnetuser.Username" disabled>
+                        <label class="ms-3">User Name</label>
+                    </div>
+                    <div class="col-md-4 form-floating mt-2">
+                        <input type="password" class="form-control bg-transparent pass" placeholder="pass">
+                        <label class="ms-3">Password</label>
+                        <span class="pass-error text-danger"></span>
+                    </div>
+                    <div class="col-md-4 form-floating mt-2">
+                        <select class="form-select bg-transparent" aria-label="Floating label select example">
+                            <option disabled>Select Role</option>
+                            <option value="1">One</option>
+                        </select>
+                        <label class="ms-2" for="floatingSelect">Role</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 mb-4">
+                <h5>Physician Information</h5>
+                <input type="text" class="form-control bg-transparent d-none" placeholder="firstNmae" asp-for="PhysicianCustom.Physicianid">
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent AdIn fname" placeholder="firstNmae" asp-for="PhysicianCustom.Firstname">
+                        <label class="ms-3">First Name</label>
+                        <span asp-validation-for="PhysicianCustom.Firstname" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="PhysicianCustom.Lastname">
+                        <label class="ms-3">Last Name</label>
+                        <span asp-validation-for="PhysicianCustom.Lastname" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="email" class="form-control bg-transparent" id="email" placeholder="email" asp-for="PhysicianCustom.Email">
+                        <label class="ms-3">Email</label>
+                        <span asp-validation-for="PhysicianCustom.Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" id="phone1" class="form-control bg-transparent AdIn" style="height:58px" asp-for="PhysicianCustom.Mobile" />
+                        <span asp-validation-for="PhysicianCustom.Mobile" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent AdIn" placeholder="licence" asp-for="PhysicianCustom.Medicallicense">
+                        <label class="ms-3">Medical Licencse</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent AdIn" placeholder="npi" asp-for="PhysicianCustom.Npinumber">
+                        <label class="ms-3">NPI Number</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 mb-4">
+                <h5>Mailing & Billing Information</h5>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent Adad" placeholder="add1" asp-for="physician.Address1">
+                        <label class="ms-3">Address 1</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent Adad" placeholder="add2" asp-for="physician.Address2">
+                        <label class="ms-3">Address 2</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2 ">
+                        <input type="text" class="form-control bg-transparent Adad" placeholder="city" asp-for="physician.City">
+                        <label class="ms-3">City</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="hidden" asp-for="physician.Regionid" id="regionIdHidden" />
+                        <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRegionId(this)">
+                            @foreach (var state in Model.Regions)
+                            {
+                                <option value="@state.Regionid">@state.Name</option>
+                            }
+                        </select>
+                        <label class="ms-2" for="floatingSelect">state</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" maxlength="6" class="form-control bg-transparent Adad" placeholder="zipCode" asp-for="physician.Zip">
+                        <label class="ms-3">Zip Code</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" id="phone2" class="form-control bg-transparent Adad" style="height:58px" asp-for="physician.Altphone" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 mb-4">
+                <h5>Provider Profile</h5>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent phybn edi3" placeholder="firstNmae" asp-for="physician.Businessname">
+                        <label class="ms-3">Bussiness Name</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="Email" class="form-control bg-transparent phybw edi3" placeholder="lastname" asp-for="physician.Businesswebsite">
+                        <label class="ms-3">Bussiness Website</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <div class="d-flex m-auto">
+                            <div class="p-0 w-100">
+                                <input type="text" class="form-control bg-transparent sfile" id="selectedFile" placeholder="Select Photo" disabled>
+                                <label class="ms-3"></label>
+                            </div>
+                            <div>
+                                <label class="btn btn-outline-info d-flex">
+                                    <input type="file" class="uploadPhoto fileUplod" style="display: none;" id="FileInput" name="Photo">
+                                    <i class="bi bi-cloud-arrow-up border-info"></i>
+                                    <span class="upload_txt ms-2 edi3">Upload</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating">
+                    <textarea type="text" class="form-control bg-transparent h-25 phyAdmNote"
+                              placeholder="Detail info" rows="3" asp-for="physician.Adminnotes"></textarea>
+                    <label for="ms-3 text-info">Admin Notes</label>
+                </div>
+            </div>
+
+            <hr />
+
+            <h5>Onboarding</h5>
+            <table class="w-50">
+                <tr>
+                    <td>
+                        <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">Independent Contractor Agreement</p>
+                    </td>
+                    <td>
+                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-info pt-0 pb-0 text-light">View</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">Background Check</p>
+                    </td>
+                    <td>
+                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-info pt-0 pb-0 text-light">View</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">HIPAA Compliance</p>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-info pt-0 pb-0 text-light">View</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">Non-discloure Agreement</p>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">Licenec Document</p>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    </td>
+                </tr>
+            </table>
+
+            <hr />
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-success text-light createPhy">Create Account</button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/js/contact-api.js" asp-append-version="true"></script>
+<script asp-append-version="true">
+    let cflag = document.querySelectorAll('.iti--allow-dropdown');
+    cflag.forEach(item => {
+        item.classList.add('h-75');
+    })
+    document.getElementById('FileInput').addEventListener('change', function () {
+        document.getElementById('selectedFile').value = this.files[0].name;
+    })
+
+    function updateRegionId(selectElement) {
+        const selectedRegionId = selectElement.value;
+        document.getElementById('regionIdHidden').value = selectedRegionId;
+    }
+</script>

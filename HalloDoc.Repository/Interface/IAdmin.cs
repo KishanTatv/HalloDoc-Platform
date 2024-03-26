@@ -102,7 +102,10 @@ namespace HalloDoc.Repository.Interface
         // role
         List<Role> getAllroleDetails();
         Role AddRole(string roleName, short AccType, int aspId);
+        void UpdateRole(int roleid, string roleName, short AccType, int aspId);
+        bool checkRoleMenu(int roleId, int menuId);
         void addRoleMenu(int roleId, int menuId);
+        void removeRoleMenu(int roleId, int menuId);
 
     }
 }

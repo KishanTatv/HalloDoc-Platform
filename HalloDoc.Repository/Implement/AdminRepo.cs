@@ -385,7 +385,9 @@ namespace HalloDoc.Repository.Implement
 
         public List<Role> getAllroleDetails()
         {
-            return _context.Roles.ToList();
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = true;
+            return _context.Roles.Where(x => x.Isdeleted != bitArray).ToList();
         }
 
         public Role AddRole(string roleName, short AccType, int aspId)
@@ -407,6 +409,27 @@ namespace HalloDoc.Repository.Implement
             return role;
         }
 
+        public void UpdateRole(int roleid, string roleName, short AccType, int aspId)
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = false;
+            Role role = _context.Roles.FirstOrDefault(x => x.Roleid == roleid);
+            role.Name = roleName;
+            role.Accounttype = AccType;
+            role.Modifieddate = DateTime.Now;
+            role.Modifiedby = aspId;
+            role.Isdeleted = bitArray;
+            role.Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString();
+            _context.Roles.Update(role);
+            _context.SaveChanges();
+        }
+
+
+        public bool checkRoleMenu(int roleId, int menuId)
+        {
+            return _context.Rolemenus.Any(x => x.Roleid == roleId && x.Menuid == menuId);
+        }
+
         public void addRoleMenu(int roleId, int menuId)
         {
             Rolemenu roleMenu = new Rolemenu
@@ -415,6 +438,13 @@ namespace HalloDoc.Repository.Implement
                 Menuid = menuId,
             };
             _context.Rolemenus.Add(roleMenu);
+            _context.SaveChanges();
+        }
+
+        public void removeRoleMenu(int roleId, int menuId)
+        {
+            Rolemenu rolemenu = _context.Rolemenus.FirstOrDefault(x => x.Roleid == roleId && x.Menuid == menuId);
+            _context.Rolemenus.Remove(rolemenu);
             _context.SaveChanges();
         }
     }

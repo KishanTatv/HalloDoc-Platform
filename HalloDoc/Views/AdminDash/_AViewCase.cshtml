@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model HalloDoc.Entity.RequestForm.ClientInformation;
+@model HalloDoc.Entity.AdminDash.ViewcaseViewModel;
 
 @{
     ViewData["Title"] = "Patient Dashbord";
@@ -28,11 +28,11 @@
 
                     <div>
                         <p class="m-0">Confirmation Number</p>
-                        <h5 class="text-info">87685854</h5>
+                        <h5 class="text-info">(@Model.request.Confirmationnumber)</h5>
                     </div>
                     <div class="form-floating">
                         <textarea type="text" class="form-control bg-transparent h-25"
-                                  placeholder="Detail info" rows="3" asp-for="Notes"></textarea>
+                                  placeholder="Detail info" rows="3" asp-for="clientInformation.Notes"></textarea>
                         <label for="ms-3 text-info">Patient Notes</label>
                     </div>
 
@@ -40,22 +40,22 @@
 
                     <div class="row form-floating">
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="Firstname">
+                            <input type="text" class="form-control bg-transparent" placeholder="firstNmae" asp-for="clientInformation.Firstname">
                             <label class="ms-3">First Name</label>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="Lastname">
+                            <input type="text" class="form-control bg-transparent" placeholder="lastName" asp-for="clientInformation.Lastname">
                             <label class="ms-3">Last Name</label>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
                             <input type="date" class="form-control bg-transparent"
-                                   placeholder="Date of birth" asp-for="Dob"/>
+                                   placeholder="Date of birth" asp-for="clientInformation.Dob" />
                             <label class="ms-3">Date of Birth</label>
                         </div>
                         <div class="col-md-6  mt-2">
                             <div class="row">
                                 <div class="col form-floating">
-                                    <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="Phonenumber" />
+                                    <input type="text" id="phone1" class="form-control bg-transparent" style="height:58px" asp-for="clientInformation.Phonenumber" />
                                 </div>
                                 <div class="col-2 from-floating">
                                     <a class="btn btn-outline-info p-3 ps-4 pe-4 text-info"> <i class="bi bi-telephone text-info"></i> </a>
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="Email">
+                            <input type="email" name="email" id="email" class="form-control bg-transparent" placeholder="email" asp-for="clientInformation.Email">
                             <label class="ms-3">Email</label>
                         </div>@*
                         <div class="col-md-6 form-floating mt-2">
@@ -76,7 +76,7 @@
                     <h5>Location Information</h5>
                     <div class="row form-floating">
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="street" asp-for="State">
+                            <input type="text" class="form-control bg-transparent" placeholder="street" asp-for="clientInformation.State">
                             <label class="ms-3">Region</label>
                         </div>
                         <div class="col-md-6 mt-2 ">
@@ -91,7 +91,7 @@
                             </div>
                         </div>
                         <div class="col-md-6 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent" placeholder="roomSuite" asp-for="Locroom">
+                            <input type="text" class="form-control bg-transparent" placeholder="roomSuite" asp-for="clientInformation.Locroom">
                             <label class="ms-3">Room # / Suite(optional)</label>
                         </div>
                     </div>

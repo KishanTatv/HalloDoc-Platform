@@ -82,6 +82,11 @@ namespace HalloDoc.Repository.Implement
             return _context.Requestclients.FirstOrDefault(x => x.Requestid == reqid).Email;
         }
 
+        public Request getRequestData(int reqid)
+        {
+            return _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
+        }
+
 
         public void addEmailLog(string eTemplate, string sub, string recemail, string? filepath, int roleid, int? reqid, int? adminid, int? phyid)
         {
@@ -476,6 +481,26 @@ namespace HalloDoc.Repository.Implement
         public Menu getSingleMenu(int accType, string name)
         {
             return _context.Menus.FirstOrDefault(x => x.Accounttype == accType || x.Name.Contains(name));
+        }
+
+        public Role getRoleinfo(int roleId)
+        {
+            return _context.Roles.FirstOrDefault(x => x.Roleid == roleId);
+        }
+
+        public List<Rolemenu> getAllroleMenu(int roleId)
+        {
+            return _context.Rolemenus.Where(x => x.Roleid == roleId).ToList();
+        }
+
+        public void deleteRole(int roleid)
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = true;
+            Role role = _context.Roles.FirstOrDefault(x => x.Roleid == roleid);
+            role.Isdeleted = bitArray;
+            _context.Roles.Update(role);
+            _context.SaveChanges();
         }
 
         #endregion

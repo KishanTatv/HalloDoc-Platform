@@ -53,10 +53,10 @@
                                             }
                                         </td>
                                         <td class="d-flex justify-content-end">
-                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit">
+                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit" data-roleid="@item.Roleid">
                                                 Edit
                                             </div>
-                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 ms-2 ADelete">
+                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 ms-2 ADelete" data-roleid="@item.Roleid">
                                                 Delete
                                             </div>
                                         </td>
@@ -85,6 +85,40 @@
             success: function (response) {
                 $('.AccessMain').addClass("d-none");
                 $(".Tabpartial").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.AEdit').click(function(){
+        var roleid = $(this).data('roleid');
+        $.ajax({
+            url: '/AdminTab/EditRole',
+            method: 'POST',
+            data: { roleid: roleid },
+            success: function (response) {
+                $('.AccessMain').addClass("d-none");
+                $(".Tabpartial").html(response);
+
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.ADelete').click(function () {
+        var roleid = $(this).data('roleid');
+        $.ajax({
+            url: '/AdminTab/DeletePopup',
+            method: 'POST',
+            data: { roleid: roleid },
+            success: function (response) {
+                $(".Tabpartial").html(response);
+                var my = new bootstrap.Modal(document.getElementById('deleteRole'));
+                my.show();
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

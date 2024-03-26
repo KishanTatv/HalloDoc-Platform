@@ -25,6 +25,24 @@ namespace HalloDoc.Repository.Implement
         }
 
 
+        public void addNewPhysician(PhysicianProfileViewModel model, string photo, int aspId)
+        {
+            Physician ph = new Physician
+            {
+                Firstname = model.physician.Firstname,
+                Lastname = model.physician.Lastname,
+                Mobile = model.physician.Mobile,
+                Medicallicense = model.physician.Medicallicense,
+                Npinumber = model.physician.Npinumber,
+                Syncemailaddress = model.physician.Syncemailaddress,
+                Modifieddate = System.DateTime.Now,
+                Modifiedby = aspId,
+            };
+            _context.Physicians.Add(ph);
+            _context.SaveChanges();
+        }
+
+
         public void updatePhysicianInfo(PhysicianCustom physcian, string email, int aspId)
         {
             Physician phy = _context.Physicians.FirstOrDefault(x => x.Email == email);
@@ -55,7 +73,7 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        public void updateAdditionPhyData(string busName, string busWeb, string photo,string sign, string email,int aspId)
+        public void updateAdditionPhyData(string busName, string busWeb, string photo, string sign, string email, int aspId)
         {
             Physician phy = _context.Physicians.FirstOrDefault(x => x.Email == email);
             phy.Businessname = busName;

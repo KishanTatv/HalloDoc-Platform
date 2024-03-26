@@ -33,7 +33,7 @@
                                 }
                             </select>
                         </div>
-                        <div class="btn btn-info text-light">
+                        <div class="btn btn-info text-light createNew">
                             Create Provider Account
                         </div>
                     </div>
@@ -68,6 +68,19 @@
             }
         });
 
+        $('.createNew').click(function () {
+            $.ajax({
+                url: '/AdminTab/NewProvider',
+                method: 'POST',
+                success: function (response) {
+                    $(".Tabpartial").html(response);
+                    $('.ProviderMain').addClass("d-none");
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
 
         $('#RegSearch').change(function () {
             var reg = $('#RegSearch').val();

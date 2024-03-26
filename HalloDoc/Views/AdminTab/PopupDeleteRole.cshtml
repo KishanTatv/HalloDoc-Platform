@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="modal fade" id="deleteRole" tabindex="1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center text-black">
+                <h1 class="p-3">
+                    <i class="bi bi-person-x fs-1 text-danger"></i>
+                </h1>
+                <h4>Confirmation for Delete Role</h4>
+                <p class="ms-4 me-4 m-auto">
+                    Are you sure want to Delete this Role? once delete this role then you are not able to see this Role.
+                </p>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-secondary btn-info me-2 text-light deleterole" data-roleid="@TempData["roleId"]" data-bs-dismiss="modal"> Delete </button>
+                    <button type="button" class="btn btn-outline-info ms-2" data-bs-dismiss="modal"> Cancel </button>
+                    <div class="BackOn d-none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.deleterole').click(function () {
+            var roleid = $(this).data('roleid');
+            $.ajax({
+                url: '/AdminTab/deleteRole',
+                method: 'POST',
+                data: { roleid: roleid },
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

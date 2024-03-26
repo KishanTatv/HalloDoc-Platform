@@ -24,6 +24,7 @@ namespace HalloDoc.Repository.Interface
         Requestclient GetClientById(int id);
 
         string getClientEmailbyReqId(int reqid);
+        Request getRequestData(int reqid);
 
         void addEmailLog(string eTemplate, string sub, string recemail, string? filepath, int roleid, int? reqid, int? adminid, int? phyid);
         
@@ -64,5 +65,8 @@ namespace HalloDoc.Repository.Interface
 
         List<Menu> getMenuNames(int? accType);
         Menu getSingleMenu(int accType, string name);
+        Role getRoleinfo(int roleId);
+        List<Rolemenu> getAllroleMenu(int roleId);
+        void deleteRole(int roleid);
     }
 }

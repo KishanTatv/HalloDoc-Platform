@@ -11,7 +11,7 @@
 <div class="HContainer m-auto">
     <div class="d-flex justify-content-between mt-4">
         <h4>Create Role</h4>
-        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="Provider">
+        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="Access">
             <strong class="pe-2">&lt Back</strong>
         </a>
     </div>
@@ -19,18 +19,40 @@
     <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
         <div class="mb-4">
             <h5>Details></h5>
+            @if (Model.Role != null)
+            {
+                <input type="text" class="d-none roleId" value="@Model.Role.Roleid" />
+            }
             <div class="row">
                 <div class="col-md-6 form-floating mt-2">
-                    <input type="text" class="form-control bg-transparent RoleName" placeholder="add1">
+                    <input type="text" class="form-control bg-transparent RoleName" placeholder="add1" asp-for="Role.Name">
                     <label class="ms-3">Role Name</label>
                     <span class="text-danger roleMsg"></span>
                 </div>
                 <div class="col-md-6 form-floating mt-2">
                     <select class="form-select selectAcctype" aria-label="Floating label select">
-                        <option value="0" selected> All </option>
-                        @foreach (var role in Model.aspnetrole)
+                        @if (Model.Role != null)
                         {
-                            <option value="@role.Id">@role.Name</option>
+                            <option value="0"> All </option>
+                            @foreach (var role in Model.aspnetrole)
+                            {
+                                @if (Model.Role.Accounttype == role.Id)
+                                {
+                                    <option value="@role.Id" selected>@role.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@role.Id">@role.Name</option>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <option value="0" selected> All </option>
+                            @foreach (var role in Model.aspnetrole)
+                            {
+                                <option value="@role.Id">@role.Name</option>
+                            }
                         }
                     </select>
                     <label class="ms-2" for="floatingSelect">Account Type</label>
@@ -51,10 +73,13 @@
 
 <script asp-append-version="true">
     $(document).ready(function () {
+
+        var AccType = $('.selectAcctype').val();
+        var roleid = $('.roleId').val();
         $.ajax({
             url: '/AdminTab/AccOption',
             method: 'POST',
-            data: { AccType: 0 },
+            data: { AccType: AccType, roleid: roleid },
             success: function (response) {
                 $('.CheckOption').html(response);
             },
@@ -110,6 +135,7 @@
         }
 
         $('.SaveRole').click(function () {
+            var roleid = $('.roleId').val();
             var RoleName = $('.RoleName').val();
             var AccType = $('.selectAcctype').val();
             var Pages = pageList();
@@ -117,7 +143,7 @@
                 $.ajax({
                     url: '/AdminTab/SaveRole',
                     method: 'POST',
-                    data: { RoleName: RoleName, AccType: AccType, Pages: Pages },
+                    data: { roleid: roleid, RoleName: RoleName, AccType: AccType, Pages: Pages },
                     success: function (response) {
                         if (response.value == "error") {
                             $('.ServerMsg').text("Detail are not valid !").addClass("text-center");

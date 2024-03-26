@@ -1,8 +1,11 @@
-﻿using HalloDoc.Entity.AdminTab;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using HalloDoc.Entity.AdminTab;
 using HalloDoc.Entity.Models;
 using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.AccessControl;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static Uno.WinRTFeatureConfiguration;
 
 namespace HalloDoc.Controllers
@@ -208,6 +211,22 @@ namespace HalloDoc.Controllers
         #endregion
 
 
+        #region createAccount
+        public IActionResult NewProvider()
+        {
+            var region = _Admin.getAllRegion();
+            var data = new PhysicianProfileViewModel { Regions = region };
+            return PartialView("_CreateNewProvider", data);
+        }
+
+        public IActionResult AddNewProvider(PhysicianProfileViewModel model, IFormFile photo)
+        {
+            _physician.addNewPhysician(model);
+            return Ok();
+        }
+        #endregion
+
+
         #region Access
         public IActionResult Access()
         {
@@ -223,26 +242,69 @@ namespace HalloDoc.Controllers
             return PartialView("_CreateRole", data);
         }
 
-        public IActionResult AccOption(int AccType)
+        public IActionResult EditRole(int roleid)
         {
-            var menu = _Genral.getMenuNames(AccType);
-            return PartialView("_MenuOption", menu);
+            var role = _Admin.getAllAspnetrole();
+            var menu = _Genral.getMenuNames(0);
+            var roleinfo = _Genral.getRoleinfo(roleid);
+            var roleMenu = _Genral.getAllroleMenu(roleid);
+            var data = new CreateRoleViewModel { aspnetrole = role, Menus = menu, Role = roleinfo, rolemenus = roleMenu };
+            return PartialView("_CreateRole", data);
         }
 
-        public IActionResult SaveRole(string RoleName, short AccType, List<string> Pages)
+        public IActionResult DeletePopup(int roleid)
         {
+            TempData["roleId"] = roleid;
+            return PartialView("PopupDeleteRole");
+        }
+
+        public IActionResult deleteRole(int roleid)
+        {
+            _Genral.deleteRole(roleid);
+            return Ok();
+        }
+
+        public IActionResult AccOption(int AccType, int roleid)
+        {
+            var menu = _Genral.getMenuNames(AccType);
+            var roleMenu = _Genral.getAllroleMenu(roleid);
+            var data = new RoleMenuCheckbox { menus = menu, rolemenus = roleMenu };
+            return PartialView("_MenuOption", data);
+        }
+
+        public IActionResult SaveRole(int roleid, string RoleName, short AccType, List<int> Pages)
+        {
+            int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
             if (RoleName == null || AccType == 0 || Pages.Count() == 0)
             {
                 return Json(new { value = "error" });
             }
+            else if (roleid != 0)
+            {
+                _Admin.UpdateRole(roleid, RoleName, AccType, aspId);
+                var roleMenu = _Genral.getAllroleMenu(roleid);
+                foreach (var item in Pages)
+                {
+                    if (!_Admin.checkRoleMenu(roleid, item))
+                    {
+                        _Admin.addRoleMenu(roleid, item);
+                    }
+                }
+                foreach (var role in roleMenu)
+                {
+                    if (!Pages.Contains(role.Menuid))
+                    {
+                        _Admin.removeRoleMenu(roleid, role.Menuid);
+                    }
+                }
+                return Json(new { value = "done" });
+            }
             else
             {
-                int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
                 Role role = _Admin.AddRole(RoleName, AccType, aspId);
                 foreach (var item in Pages)
                 {
-                    Menu menu = _Genral.getSingleMenu(AccType, item);
-                    _Admin.addRoleMenu(role.Roleid, menu.Menuid);
+                    _Admin.addRoleMenu(role.Roleid, item);
                 }
                 return Json(new { value = "done" });
             }
@@ -304,11 +366,31 @@ namespace HalloDoc.Controllers
         {
             return View();
         }
-
         public IActionResult BlockHistory()
         {
+            return View();
+        }
+
+        public IActionResult BlockData(string name, string email, DateTime date, string phone)
+        {
             var data = _Admin.getallBlockRequest();
-            return View(data);
+            if (name != null)
+            {
+                data = data.Where(x => (x.Request?.Requestclients?.FirstOrDefault().Firstname.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Requestclients?.FirstOrDefault().Firstname.ToLower().Contains(name.ToLower()) ?? false)).ToList();
+            }
+            //if (email != null)
+            //{
+            //    data = data.Where(x => (x.Request?.Requestclients?.FirstOrDefault().Email.ToLower().Contains(email.ToLower());
+            //}
+            //if (crDate != DateTime.MinValue)
+            //{
+            //    data = data.Where(x => x.Createdate.Date.Equals(crDate)).ToList();
+            //}
+            //if (cgDate != DateTime.MinValue)
+            //{
+            //    data = data.Where(x => x.Sentdate.Equals(cgDate)).ToList();
+            //}
+            return PartialView("_BlockTableData", data);
         }
     }
 }

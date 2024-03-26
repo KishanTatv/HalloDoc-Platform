@@ -317,7 +317,9 @@ namespace HalloDoc.Controllers
         public IActionResult ViewCase(int reqid)
         {
             ViewBag.reqid = reqid;
-            var data = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
+            var client = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
+            var req = _Genral.getRequestData(reqid);
+            var data = new ViewcaseViewModel { clientInformation = client, request = req };
             return PartialView("_AViewCase", data);
         }
 
