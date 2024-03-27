@@ -28,7 +28,7 @@
             @foreach (var phy in Model)
             {
                 <tr>
-                    <td><input class="form-check-input" type="checkbox" @(phy.Physiciannotifications.FirstOrDefault().Isnotificationstopped[0] ? "checked" : "")></td>
+                    <td><input class="form-check-input checkb" type="checkbox" @(phy.Physiciannotifications.FirstOrDefault().Isnotificationstopped[0] ? "checked" : "") data-phid="@phy.Physicianid"></td>
                     <td>@phy.Firstname @phy.Lastname</td>
                     <td>@phy.Role.Name</td>
                     <td>Un Availiable</td>
@@ -104,6 +104,22 @@
             success: function (response) {
                 $(".Tabpartial").html(response);
                 $('.ProviderMain').addClass("d-none");
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.checkb').change(function () {
+        var phid = $(this).data('phid'); 
+        var ischeck = $(this).prop('checked');
+        $.ajax({
+            url: '/AdminTab/PhysicanNotification',
+            method: 'POST',
+            data: { phid: phid, ischeck: ischeck },
+            success: function (response) {
+                window.location.reload();
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

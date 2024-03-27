@@ -82,6 +82,10 @@ namespace HalloDoc.Repository.Interface
         void addAdminRegion(int adminId, int regioId);
         void removeAdminReg(int adminId, int regionId);
 
+        // admin create
+        Aspnetuser CreteAdminAspnetUser(adminViewModel model);
+        Admin CreateNewAdmin(adminViewModel model, int cretedBy, int aspId);
+
 
         //Physical Data
         List<Physician> getAllPhysicianData();

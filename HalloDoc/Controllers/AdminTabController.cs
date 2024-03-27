@@ -1,9 +1,12 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
+﻿using DocumentFormat.OpenXml.Office2016.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using HalloDoc.Entity.AdminTab;
 using HalloDoc.Entity.Models;
 using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 using System.Security.AccessControl;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static Uno.WinRTFeatureConfiguration;
@@ -119,6 +122,22 @@ namespace HalloDoc.Controllers
             return PartialView("_ProviderHome", data);
         }
 
+        public IActionResult PhysicanNotification(int phid, string ischeck)
+        {
+            BitArray bitArray = new BitArray(1);
+            if (ischeck == "true")
+            {
+                bitArray[0] = true;
+                _physician.updatePhysicianNotification(phid, bitArray);
+            }
+            else
+            {
+                bitArray[0] = false;
+                _physician.updatePhysicianNotification(phid, bitArray);
+            }
+            return Ok();
+        }
+
         public IActionResult PcontactPop(int phid)
         {
             TempData["phid"] = phid;
@@ -145,7 +164,24 @@ namespace HalloDoc.Controllers
             PhysicianCustom phinfo = _Admin.getPhyProfile(phid);
             var phy = _Admin.getPhysicianDetail(phid);
             var region = _Admin.getAllRegion();
-            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region };
+
+            List<string> files = new List<string>();
+            files.Add("ContractorAgreement"); files.Add("Background"); files.Add("HIPAA"); files.Add("discloure"); files.Add("License");
+
+            List<string> Doclist = new List<string>();
+            foreach (var file in files)
+            {
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/providerDoc/", phid + file + ".pdf");
+                if (System.IO.File.Exists(filePath))
+                {
+                    Doclist.Add("true");
+                }
+                else
+                {
+                    Doclist.Add("false");
+                }
+            }
+            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region, DocFile = Doclist };
             return PartialView("_ProPhysicianEdit", data);
         }
 
@@ -213,7 +249,7 @@ namespace HalloDoc.Controllers
         #endregion
 
 
-        #region createAccount
+        #region createAccount Provider
         public IActionResult NewProvider()
         {
             var region = _Admin.getAllRegion();
@@ -222,7 +258,7 @@ namespace HalloDoc.Controllers
             return PartialView("_CreateNewProvider", data);
         }
 
-        public IActionResult AddNewProvider(PhysicianProfileViewModel model, IFormFile photo)
+        public IActionResult AddNewProvider(PhysicianProfileViewModel model, IFormFile photo, IFormFile ContractorAgreement, IFormFile Background, IFormFile HIPAA, IFormFile discloure, IFormFile License)
         {
             int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
             byte[] photoBytes;
@@ -236,11 +272,71 @@ namespace HalloDoc.Controllers
                 photoBytes = memoryStream.ToArray();
             }
             var photoBase64 = Convert.ToBase64String(photoBytes);
-            Aspnetuser asp = _physician.CretephyAspnetUser(model.clientInformation ,model.PhysicianCustom);
-            _patient.addAspnetUserrole(asp.Id,1);
+            Aspnetuser asp = _physician.CretephyAspnetUser(model.clientInformation, model.PhysicianCustom);
+            _patient.addAspnetUserrole(asp.Id, 1);
             Physician phy = _physician.addNewPhysician(model, photoBase64, aspId, asp.Id);
             _physician.addPhysicianNotification(phy.Physicianid);
+
+            List<IFormFile> files = new List<IFormFile>();
+            files.Add(ContractorAgreement); files.Add(Background); files.Add(HIPAA); files.Add(discloure); files.Add(License);
+
+            if (files.Count > 0)
+            {
+                foreach (var file in files)
+                {
+                    if (file != null && file.Length > 0)
+                    {
+                        var format = ContractorAgreement.FileName.Split('.')[1];
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/providerDoc/", phy.Physicianid + file.Name + "." + format);
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            ContractorAgreement.CopyToAsync(stream);
+                        }
+                    }
+                }
+            }
+
             return RedirectToAction("Provider");
+        }
+        #endregion
+
+        #region createAccount Admin
+        public IActionResult AdminCreate()
+        {
+            TempData["SuccMsg"] = TempData["SuccMsg"];
+
+            var role = _Admin.getAllroleDetails();
+            var reg = _Admin.getAllRegion();
+            var data = new adminViewModel { Regions = reg, Roles = role };
+            return View(data);
+        }
+
+
+        public IActionResult AddNewAdmin(adminViewModel model)
+        {
+            if (!_Genral.CheckExistAspUser(model.Email))
+            {
+                int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+                var regList = Request.Form["checkReg"].ToList();
+                Aspnetuser asp = _Admin.CreteAdminAspnetUser(model);
+                _patient.addAspnetUserrole(asp.Id, 1);
+                Admin admin = _Admin.CreateNewAdmin(model, aspId, asp.Id);
+                foreach (var i in regList)
+                {
+                    _Admin.addAdminRegion(admin.Adminid, Convert.ToInt16(i));
+                }
+
+                TempData["SuccMsg"] = "Admin Created with Successfully !";
+                return RedirectToAction("AdminCreate");
+            }
+            else
+            {
+                TempData["EmailExist"] = "Email is alredy exist";
+                var role = _Admin.getAllroleDetails();
+                var reg = _Admin.getAllRegion();
+                var data = new adminViewModel { Regions = reg, Roles = role };
+                return View("AdminCreate", data);
+            }
         }
         #endregion
 

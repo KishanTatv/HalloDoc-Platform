@@ -56,10 +56,6 @@ public partial class Admin
     [StringLength(20)]
     public string? Altphone { get; set; }
 
-    [Column("createdby")]
-    [StringLength(128)]
-    public string Createdby { get; set; } = null!;
-
     [Column("createddate", TypeName = "timestamp without time zone")]
     public DateTime Createddate { get; set; }
 
@@ -77,6 +73,9 @@ public partial class Admin
 
     [Column("roleid")]
     public int? Roleid { get; set; }
+
+    [Column("createdby")]
+    public int? Createdby { get; set; }
 
     [InverseProperty("Admin")]
     public virtual ICollection<Adminregion> Adminregions { get; } = new List<Adminregion>();

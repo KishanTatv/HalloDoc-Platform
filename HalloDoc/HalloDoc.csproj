@@ -49,4 +49,8 @@
     <ProjectReference Include="..\HalloDoc.Repository\HalloDoc.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\providerDoc\" />
+  </ItemGroup>
+
 </Project>

@@ -1,0 +1,162 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HalloDoc.Entity.AdminTab.adminViewModel;
+
+@{
+    ViewData["Title"] = "Admin Create";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+
+
+
+<div class="MainContent pt-0 min-vh-100">
+    <partial name="partial/AdminNavTab" />
+
+    <div class="HContainer m-auto">
+        <div class="d-flex justify-content-between mt-4">
+            <h4>Create Account</h4>
+            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+                <strong class="pe-2">&lt Back</strong>
+            </a>
+        </div>
+
+        @if (TempData["SuccMsg"] != null)
+        {
+            <span class="text-success text-center"> @TempData["SuccMsg"] </span>
+        }
+
+        <form class="phydata" asp-action="AddNewAdmin" asp-controller="AdminTab" method="post" enctype="multipart/form-data">
+            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                <div class="mb-4">
+                    <p class="Addmsg text-center"></p>
+                    <h5>Account Information</h5>
+                    <div class="row form-floating">
+                        <div class="col-md-4 form-floating mt-2">
+                            <input type="text" class="form-control" placeholder="username" disabled>
+                            <label class="ms-3">User Name</label>
+                        </div>
+                        <div class="col-md-4 form-floating mt-2">
+                            <input type="password" class="form-control bg-transparent pass" placeholder="pass" asp-for="Password">
+                            <label class="ms-3">Password</label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <span class="pass-error text-danger"></span>
+                        </div>
+                        <div class="col-md-4 form-floating mt-2">
+                            <input type="hidden" id="Hiderole" asp-for="roleId" value="3" />
+                            <select class="form-select bg-transparent" aria-label="Floating label select example" onchange="updateRoleId(this)">
+                                <option disabled>Select Role</option>
+                                @foreach (var role in Model.Roles)
+                                {
+                                    <option value="@role.Roleid">@role.Name</option>
+                                }
+                            </select>
+                            <label class="ms-2" for="floatingSelect">Role</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 mb-4">
+                    <h5>Administator Information</h5>
+                    <div class="row form-floating">
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent AdIn fname" placeholder="firstNmae" asp-for="Firstname">
+                            <label class="ms-3">First Name</label>
+                            <span asp-validation-for="Firstname" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="Lastname">
+                            <label class="ms-3">Last Name</label>
+                            <span asp-validation-for="Lastname" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="email" class="form-control bg-transparent" id="email" placeholder="email" asp-for="Email">
+                            <label class="ms-3">Email</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            @if (TempData["EmailExist"] != null)
+                            {
+                                <span class="text-danger"> @TempData["EmailExist"] </span>
+                            }
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="email" class="form-control bg-transparent" id="email1" placeholder="email" asp-for="ConfirmEmail">
+                            <label class="ms-3">Confirm Email</label>
+                            <span asp-validation-for="ConfirmEmail" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="number" id="phone1" class="form-control bg-transparent AdIn" style="height:58px" asp-for="Phonenumber" />
+                            <span asp-validation-for="Phonenumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            @foreach (var reg in Model.Regions)
+                            {
+                                <div class="form-check form-check-inline">
+                                    <input name="checkReg" class="form-check-input AdIn checkb" type="checkbox" value="@reg.Regionid">
+                                    <label>@reg.Name</label>
+                                </div>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mt-4 mb-4">
+                    <h5>Mailing & Billing Information</h5>
+                    <div class="row form-floating">
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1" asp-for="Address1">
+                            <label class="ms-3">Address 1</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent Adad" placeholder="add2" asp-for="Address2">
+                            <label class="ms-3">Address 2</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2 ">
+                            <input type="text" class="form-control bg-transparent Adad" placeholder="city" asp-for="City">
+                            <label class="ms-3">City</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="hidden" asp-for="regionId" id="regionIdHidden" value="1" />
+                            <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRegionId(this)">
+                                @foreach (var state in Model.Regions)
+                                {
+                                    <option value="@state.Regionid">@state.Name</option>
+                                }
+                            </select>
+                            <label class="ms-2" for="floatingSelect">state</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" maxlength="6" class="form-control bg-transparent Adad" placeholder="zipCode" asp-for="Zipcode">
+                            <label class="ms-3">Zip Code</label>
+                            <span asp-validation-for="Zipcode" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="number" id="phone2" class="form-control bg-transparent Adad" style="height:58px" asp-for="AltPhonenumber" />
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success text-light">Create Account</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/js/contact-api.js" asp-append-version="true"></script>
+<script asp-append-version="true">
+    let cflag = document.querySelectorAll('.iti--allow-dropdown');
+    cflag.forEach(item => {
+        item.classList.add('h-75');
+    });
+
+    function updateRegionId(selectElement) {
+        const selectedRegionId = selectElement.value;
+        document.getElementById('regionIdHidden').value = selectedRegionId;
+    }
+</script>

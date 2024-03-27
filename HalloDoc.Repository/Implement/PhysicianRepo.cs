@@ -56,6 +56,14 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
+        public void updatePhysicianNotification(int PhyId, BitArray isnotification)
+        {
+            Physiciannotification phyNot = _context.Physiciannotifications.FirstOrDefault(x => x.Physicianid == PhyId);
+            phyNot.Isnotificationstopped = isnotification;
+            _context.Physiciannotifications.Update(phyNot);
+            _context.SaveChanges();
+        }
+
         public Physician addNewPhysician(PhysicianProfileViewModel model, string photo, int aspId, int phyAspId)
         {
             Physician ph = new Physician

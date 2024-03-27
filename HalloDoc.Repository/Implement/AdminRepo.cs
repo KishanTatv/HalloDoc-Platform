@@ -325,6 +325,48 @@ namespace HalloDoc.Repository.Implement
         }
 
 
+        //create admin
+        public Aspnetuser CreteAdminAspnetUser(adminViewModel model)
+        {
+            Aspnetuser asp = new Aspnetuser
+            {
+                Username = model.Firstname + model.Lastname,
+                Email = model.ConfirmEmail,
+                Phonenumber = model.Phonenumber,
+                Passwordhash = model.Password,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
+            };
+            _context.Aspnetusers.Add(asp);
+            _context.SaveChanges();
+
+            return asp;
+        }
+
+        public Admin CreateNewAdmin(adminViewModel model, int cretedBy, int aspId)
+        {
+            Admin admin = new Admin
+            {
+                Aspnetuserid = aspId,
+                Firstname = model.Firstname,
+                Lastname = model.Lastname,
+                Email = model.ConfirmEmail,
+                Mobile = model.Phonenumber,
+                Address1 = model.Address1,
+                Address2 = model.Address2,
+                City = model.City,
+                Regionid = model.regionId,
+                Zip = model.Zipcode,
+                Altphone = model.AltPhonenumber,
+                Createdby = cretedBy,
+            };
+            _context.Admins.Add(admin);
+            _context.SaveChanges(); 
+            return admin;
+        }
+
+
+
+
         //Physician record
 
         public PhysicianCustom getPhyProfile(int phid)

@@ -23,6 +23,8 @@ namespace HalloDoc.Entity.AdminTab
 
         public List<Role> Roles { get; set; }
 
+        public List<string> DocFile { get; set; }
+
         public int phid { get; set; }
     }
 }

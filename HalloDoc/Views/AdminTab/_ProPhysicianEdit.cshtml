@@ -71,7 +71,7 @@
                         <span asp-validation-for="PhysicianCustom.Email" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="text" id="phone1" class="form-control bg-transparent AdIn" style="height:58px" asp-for="PhysicianCustom.Mobile" />
+                        <input type="number" id="phone1" class="form-control bg-transparent AdIn" style="height:58px" asp-for="PhysicianCustom.Mobile" />
                         <span asp-validation-for="PhysicianCustom.Mobile" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
@@ -112,7 +112,7 @@
                         <label class="ms-3">City</label>
                     </div>
                     <div class="col-md-6 form-floating mt-2">
-                        <input type="hidden" asp-for="physician.Regionid" id="regionIdHidden" />
+                        <input type="hidden" asp-for="physician.Regionid" id="regionIdHidden" value="@Model.physician.Regionid" />
                         <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRegionId(this)">
                             @foreach (var state in Model.Regions)
                             {
@@ -184,7 +184,7 @@
                                     <span class="upload_txt ms-2 edi3">Upload</span>
                                 </label>
                             </div>
-                            <button class="btn btn-info cretesign text-light ms-2 d-flex h-25 edi3"><i class="bi bi-pen"></i> Create </button>
+                            <button type="button" class="btn btn-info cretesign text-light ms-2 d-flex h-25 edi3"><i class="bi bi-pen"></i> Create </button>
                         </div>
                     </div>
                 </div>
@@ -206,69 +206,106 @@
         <table class="w-50">
             <tr>
                 <td>
-                    <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    <input class="form-check-input AgreeCheck ms-2" type="checkbox" disabled />
                 </td>
                 <td>
                     <p class="ms-3 me-2 my-auto">Independent Contractor Agreement</p>
                 </td>
                 <td>
-                    <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    <span>
+                        <label class="btn btn-info pt-0 pb-0">
+                            <input type="file" class="AgreeFile fileonBoard" style="display: none;" id="FileInput1" name="ContractorAgreement">
+                            <span class="upload_txt text-light edi3">Upload</span>
+                        </label>
+                    </span>
                 </td>
                 <td>
-                    <button class="btn btn-info pt-0 pb-0 text-light">View</button>
+                    @if (Model.DocFile[0] == "true")
+                    {
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn1" onclick="loadFileContent1()"> View </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn1 d-none" onclick="loadFileContent1()"> View </button>
+                    }
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    <input class="form-check-input BackCheck ms-2" type="checkbox" disabled />
                 </td>
                 <td>
                     <p class="ms-3 me-2 my-auto">Background Check</p>
                 </td>
                 <td>
-                    <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    <span>
+                        <label class="btn btn-info pt-0 pb-0">
+                            <input type="file" class="BackFile fileonBoard" style="display: none;" id="FileInput2" name="Background">
+                            <span class="upload_txt text-light edi3">Upload</span>
+                        </label>
+                    </span>
                 </td>
                 <td>
-                    <button class="btn btn-info pt-0 pb-0 text-light">View</button>
+                    <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn2 d-none" onclick="loadFileContent2()"> View </button>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    <input class="form-check-input HIPAACheck ms-2" type="checkbox" disabled />
                 </td>
                 <td>
                     <p class="ms-3 me-2 my-auto">HIPAA Compliance</p>
-
                 </td>
                 <td>
-                    <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    <span>
+                        <label class="btn btn-info pt-0 pb-0">
+                            <input type="file" class="HIPAAFile fileonBoard" style="display: none;" id="FileInput3" name="HIPAA">
+                            <span class="upload_txt text-light edi3">Upload</span>
+                        </label>
+                    </span>
                 </td>
                 <td>
-                    <button class="btn btn-info pt-0 pb-0 text-light">View</button>
+                    <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn3 d-none" onclick="loadFileContent3()"> View </button>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    <input class="form-check-input DiscCheck ms-2" type="checkbox" disabled />
                 </td>
                 <td>
                     <p class="ms-3 me-2 my-auto">Non-discloure Agreement</p>
 
                 </td>
                 <td>
-                    <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    <span>
+                        <label class="btn btn-info pt-0 pb-0">
+                            <input type="file" class="DiscFile fileonBoard" style="display: none;" id="FileInput4" name="discloure">
+                            <span class="upload_txt text-light edi3">Upload</span>
+                        </label>
+                    </span>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn4 d-none" onclick="loadFileContent4()"> View </button>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <input class="form-check-input checkb ms-2" type="checkbox" value="Maharashtra">
+                    <input class="form-check-input LicCheck ms-2" type="checkbox" disabled />
                 </td>
                 <td>
-                    <p class="ms-3 me-2 my-auto">Licenec Document</p>
+                    <p class="ms-3 me-2 my-auto">License Document</p>
 
                 </td>
                 <td>
-                    <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                    <span>
+                        <label class="btn btn-info pt-0 pb-0">
+                            <input type="file" class="LicFile fileonBoard" style="display: none;" id="FileInput5" name="License">
+                            <span class="upload_txt text-light edi3">Upload</span>
+                        </label>
+                    </span>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn5 d-none" onclick="loadFileContent5()"> View </button>
                 </td>
             </tr>
         </table>
@@ -307,6 +344,7 @@
     let inputs = document.querySelectorAll('input');
     let select = document.querySelectorAll('select');
     let textarea = document.querySelector('textarea');
+    let fileonBoard = document.querySelectorAll('.fileonBoard');
     inputs.forEach(input => {
         input.disabled = true;
         input.classList.remove("bg-transparent");
@@ -323,7 +361,11 @@
     let pass = document.querySelector('.pass');
     pass.disabled = false;
     pass.classList.add("bg-transparent");
-   
+
+    fileonBoard.forEach(item => {
+        item.disabled = false;
+    });
+
     function editEnable1() {
         event.preventDefault();
         const edit = document.getElementById('editbtn1');
@@ -442,6 +484,97 @@
         textarea.classList.remove("bg-transparent");
     }
 
+
+    $('.AgreeFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.AgreeCheck').prop('checked', true);
+            $('.AgreeCheck').prop('disabled', false);
+            $('.viewBtn1').removeClass('d-none');
+        }
+    });
+    function loadFileContent1() {
+        const fileInput = document.getElementById('FileInput1');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
+    $('.BackFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.BackCheck').prop('checked', true);
+            $('.BackCheck').prop('disabled', false);
+            $('.viewBtn2').removeClass('d-none');
+        }
+    });
+    function loadFileContent2() {
+        const fileInput = document.getElementById('FileInput2');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
+    $('.HIPAAFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.HIPAACheck').prop('checked', true);
+            $('.HIPAACheck').prop('disabled', false);
+            $('.viewBtn3').removeClass('d-none');
+        }
+    });
+    function loadFileContent3() {
+        const fileInput = document.getElementById('FileInput3');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
+    $('.DiscFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.DiscCheck').prop('checked', true);
+            $('.DiscCheck').prop('disabled', false);
+            $('.viewBtn4').removeClass('d-none');
+        }
+    });
+    function loadFileContent4() {
+        const fileInput = document.getElementById('FileInput4');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
+    $('.LicFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.LicCheck').prop('checked', true);
+            $('.LicCheck').prop('disabled', false);
+            $('.viewBtn5').removeClass('d-none');
+        }
+    });
+    function loadFileContent5() {
+        const fileInput = document.getElementById('FileInput5');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
 </script>
 
 <script asp-append-version="true">
@@ -547,7 +680,7 @@
             $.ajax({
                 type: 'POST',
                 url: '/AdminTab/DeletePhy',
-                data: {phid: phid},
+                data: { phid: phid },
                 success: function (response) {
                     window.location.reload();
                 },

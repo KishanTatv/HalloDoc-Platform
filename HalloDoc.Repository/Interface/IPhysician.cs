@@ -3,6 +3,7 @@ using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace HalloDoc.Repository.Interface
         Physician addNewPhysician(PhysicianProfileViewModel model, string photo, int aspId, int phyAspId);
 
         void addPhysicianNotification(int phyId);
+        void updatePhysicianNotification(int PhyId, BitArray isnotification);
 
         void updatePhysicianInfo(PhysicianCustom physcian, string email, int aspId);
         void updatePhysicianLocation(Physician physician, string email, int aspId);
