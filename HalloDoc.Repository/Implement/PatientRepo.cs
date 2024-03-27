@@ -296,11 +296,12 @@ namespace HalloDoc.Repository.Implement
         {
             Aspnetuser asp = new Aspnetuser
             {
+                Username = user.Firstname + user.Lastname,
                 Email = user.Email,
+                Phonenumber = user.Phonenumber,
                 Passwordhash = user.ConfirmPassword.GetHashCode().ToString(),
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
-            Console.WriteLine(user.ConfirmPassword.GetHashCode().ToString());
             _context.Aspnetusers.Add(asp);
             _context.SaveChanges();
 

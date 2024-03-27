@@ -17,12 +17,14 @@ namespace HalloDoc.Controllers
         private readonly IGenral _Genral;
         private readonly IAdmin _Admin;
         private readonly IPhysician _physician;
-        public AdminTabController(ILogger<AdminDashController> logger, IGenral Genral, IAdmin Admin, IPhysician physician)
+        private readonly IPatient _patient;
+        public AdminTabController(ILogger<AdminDashController> logger, IGenral Genral, IAdmin Admin, IPhysician physician, IPatient patient)
         {
             _logger = logger;
             _Genral = Genral;
             _Admin = Admin;
             _physician = physician;
+            _patient = patient;
         }
         public IActionResult Index()
         {
@@ -198,7 +200,7 @@ namespace HalloDoc.Controllers
                 signatureBytes = memoryStream.ToArray();
             }
             var signatureBase64 = Convert.ToBase64String(signatureBytes);
-            _physician.updateAdditionPhyData(BusinessW, BusinessW, photoBase64, signatureBase64, phyEmail, aspId);
+            _physician.updateAdditionPhyData(BusinessW, BusinessW, photoBase64, signatureBase64, Note, phyEmail, aspId);
             return Json(new { value = "changed" });
         }
 
@@ -215,14 +217,30 @@ namespace HalloDoc.Controllers
         public IActionResult NewProvider()
         {
             var region = _Admin.getAllRegion();
-            var data = new PhysicianProfileViewModel { Regions = region };
+            var role = _Admin.getAllroleDetails();
+            var data = new PhysicianProfileViewModel { Regions = region, Roles = role };
             return PartialView("_CreateNewProvider", data);
         }
 
         public IActionResult AddNewProvider(PhysicianProfileViewModel model, IFormFile photo)
         {
-            _physician.addNewPhysician(model);
-            return Ok();
+            int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+            byte[] photoBytes;
+
+            using (var memoryStream = new MemoryStream())
+            {
+                if (photo != null)
+                {
+                    photo.CopyTo(memoryStream);
+                }
+                photoBytes = memoryStream.ToArray();
+            }
+            var photoBase64 = Convert.ToBase64String(photoBytes);
+            Aspnetuser asp = _physician.CretephyAspnetUser(model.clientInformation ,model.PhysicianCustom);
+            _patient.addAspnetUserrole(asp.Id,1);
+            Physician phy = _physician.addNewPhysician(model, photoBase64, aspId, asp.Id);
+            _physician.addPhysicianNotification(phy.Physicianid);
+            return RedirectToAction("Provider");
         }
         #endregion
 

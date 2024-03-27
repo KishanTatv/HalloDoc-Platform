@@ -1,6 +1,7 @@
 ﻿using HalloDoc.Entity.AdminTab;
 using HalloDoc.Entity.Data;
 using HalloDoc.Entity.Models;
+using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,21 +27,65 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public void addNewPhysician(PhysicianProfileViewModel model, string photo, int aspId)
+        public Aspnetuser CretephyAspnetUser(ClientInformation user, PhysicianCustom phy)
+        {
+            Aspnetuser asp = new Aspnetuser
+            {
+                Username = phy.Firstname + phy.Lastname,
+                Email = phy.Email,
+                Phonenumber = phy.Mobile,
+                Passwordhash = user.Password,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
+            };
+            _context.Aspnetusers.Add(asp);
+            _context.SaveChanges();
+
+            return asp;
+        }
+
+        public void addPhysicianNotification(int phyId)
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = false;
+            Physiciannotification phyNot = new Physiciannotification
+            {
+                Physicianid = phyId,
+                Isnotificationstopped = bitArray,
+            };
+            _context.Physiciannotifications.Add(phyNot);
+            _context.SaveChanges();
+        }
+
+        public Physician addNewPhysician(PhysicianProfileViewModel model, string photo, int aspId, int phyAspId)
         {
             Physician ph = new Physician
             {
-                Firstname = model.physician.Firstname,
-                Lastname = model.physician.Lastname,
-                Mobile = model.physician.Mobile,
-                Medicallicense = model.physician.Medicallicense,
-                Npinumber = model.physician.Npinumber,
-                Syncemailaddress = model.physician.Syncemailaddress,
-                Modifieddate = System.DateTime.Now,
-                Modifiedby = aspId,
+                Aspnetuserid = phyAspId,
+                Firstname = model.PhysicianCustom.Firstname,
+                Lastname = model.PhysicianCustom.Lastname,
+                Mobile = model.PhysicianCustom.Mobile,
+                Medicallicense = model.PhysicianCustom.Medicallicense,
+                Npinumber = model.PhysicianCustom.Npinumber,
+                Email = model.PhysicianCustom.Email,
+                Createddate = System.DateTime.Now,
+                Createdby = aspId,
+                Address1 = model.physician.Address1,
+                Address2 = model.physician.Address2,
+                Roleid = model.physician.Roleid,
+                Status = 1,
+                City = model.physician.City,
+                Regionid = model.physician.Regionid,
+                Zip = model.physician.Zip,
+                Altphone = model.physician.Altphone,
+                Businessname = model.physician.Businessname,
+                Businesswebsite = model.physician.Businesswebsite,
+                Photo = photo,
+                Adminnotes = model.physician.Adminnotes,
             };
             _context.Physicians.Add(ph);
             _context.SaveChanges();
+
+            return ph;
         }
 
 
@@ -73,13 +119,14 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        public void updateAdditionPhyData(string busName, string busWeb, string photo, string sign, string email, int aspId)
+        public void updateAdditionPhyData(string busName, string busWeb, string photo, string sign, string AdminNote, string email, int aspId)
         {
             Physician phy = _context.Physicians.FirstOrDefault(x => x.Email == email);
             phy.Businessname = busName;
             phy.Businesswebsite = busWeb;
             phy.Photo = photo;
             phy.Signature = sign;
+            phy.Adminnotes = AdminNote;
             phy.Modifieddate = System.DateTime.Now;
             phy.Modifiedby = aspId;
             _context.Physicians.Update(phy);

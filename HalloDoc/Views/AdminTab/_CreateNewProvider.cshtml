@@ -23,14 +23,18 @@
                         <label class="ms-3">User Name</label>
                     </div>
                     <div class="col-md-4 form-floating mt-2">
-                        <input type="password" class="form-control bg-transparent pass" placeholder="pass">
+                        <input type="password" class="form-control bg-transparent pass" placeholder="pass" asp-for="clientInformation.Password">
                         <label class="ms-3">Password</label>
                         <span class="pass-error text-danger"></span>
                     </div>
                     <div class="col-md-4 form-floating mt-2">
-                        <select class="form-select bg-transparent" aria-label="Floating label select example">
+                        <input type="hidden" id="Hiderole" asp-for="physician.Roleid" />
+                        <select class="form-select bg-transparent" aria-label="Floating label select example" onchange="updateRoleId(this)">
                             <option disabled>Select Role</option>
-                            <option value="1">One</option>
+                            @foreach(var role in Model.Roles)
+                            {
+                                <option value="@role.Roleid">@role.Name</option>
+                            }
                         </select>
                         <label class="ms-2" for="floatingSelect">Role</label>
                     </div>
@@ -152,10 +156,7 @@
                         <p class="ms-3 me-2 my-auto">Independent Contractor Agreement</p>
                     </td>
                     <td>
-                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-info pt-0 pb-0 text-light">View</button>
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
                     </td>
                 </tr>
                 <tr>
@@ -166,10 +167,7 @@
                         <p class="ms-3 me-2 my-auto">Background Check</p>
                     </td>
                     <td>
-                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-info pt-0 pb-0 text-light">View</button>
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
                     </td>
                 </tr>
                 <tr>
@@ -181,10 +179,7 @@
 
                     </td>
                     <td>
-                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
-                    </td>
-                    <td>
-                        <button class="btn btn-info pt-0 pb-0 text-light">View</button>
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
                     </td>
                 </tr>
                 <tr>
@@ -196,7 +191,7 @@
 
                     </td>
                     <td>
-                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
                     </td>
                 </tr>
                 <tr>
@@ -208,7 +203,7 @@
 
                     </td>
                     <td>
-                        <button class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light me-2">Upload</button>
                     </td>
                 </tr>
             </table>
@@ -236,8 +231,8 @@
         document.getElementById('selectedFile').value = this.files[0].name;
     })
 
-    function updateRegionId(selectElement) {
-        const selectedRegionId = selectElement.value;
-        document.getElementById('regionIdHidden').value = selectedRegionId;
+    function updateRoleId(selectElement) {
+        const selectedroleId = selectElement.value;
+        document.getElementById('Hiderole').value = selectedroleId;
     }
 </script>

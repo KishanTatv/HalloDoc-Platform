@@ -30,9 +30,18 @@
                 <tr>
                     <td><input class="form-check-input" type="checkbox" @(phy.Physiciannotifications.FirstOrDefault().Isnotificationstopped[0] ? "checked" : "")></td>
                     <td>@phy.Firstname @phy.Lastname</td>
-                    <td>@phy.Roleid</td>
+                    <td>@phy.Role.Name</td>
                     <td>Un Availiable</td>
-                    <td>@phy.Status</td>
+                    <td>
+                        @if(phy.Status == 1)
+                        {
+                            <span>Active</span>
+                        }
+                        else
+                        {
+                            <span>Pending</span>
+                        }
+                    </td>
                     <td class="text-center">
                         <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact" data-phid="@phy.Physicianid">
                             Contact
@@ -58,12 +67,12 @@
         <li class="page-item"><div class="page-link">@(ViewBag.CurrentPage + 1)</div></li>
 
             @*@if (ViewBag.TPage < (ViewBag.CurrentPage + 2))
-            {
-            <li><div class="btn"> <i class="bi bi-caret-right-fill text-info"></i>  </div></li>
-            }
-            else
-            {*@
-            <li><div class="page-link" data-page="@(ViewBag.CurrentPage + 1)"> <i class="bi bi-caret-right-fill text-info"></i> </div></li>
+        {
+        <li><div class="btn"> <i class="bi bi-caret-right-fill text-info"></i>  </div></li>
+        }
+        else
+        {*@
+        <li><div class="page-link" data-page="@(ViewBag.CurrentPage + 1)"> <i class="bi bi-caret-right-fill text-info"></i> </div></li>
             @*}*@
     </ul>
 </div>

@@ -260,7 +260,7 @@ namespace HalloDoc.Repository.Implement
         // admin profile
         public Admin getAdminProfile(string email)
         {
-            var data = _context.Admins.Include(x => x.Aspnetuser).FirstOrDefault(x => x.Email == email);
+            var data = _context.Admins.Include(x => x.Aspnetuser).Include(x => x.Role).FirstOrDefault(x => x.Email == email);
             return data;
         }
 
@@ -347,8 +347,8 @@ namespace HalloDoc.Repository.Implement
         public List<Physician> getAllPhysicianData()
         {
             BitArray bitArray = new BitArray(1);
-            bitArray[0] = false;
-            var data = _context.Physicians.Include(x => x.Physiciannotifications).Where(x => x.Isdeleted == bitArray).ToList();
+            bitArray[0] = true;
+            var data = _context.Physicians.Include(x => x.Physiciannotifications).Include(x => x.Role).Where(x => x.Isdeleted != bitArray).ToList();
             return data;
         }
 
@@ -359,7 +359,7 @@ namespace HalloDoc.Repository.Implement
 
         public Physician getPhysicianDetail(int phid)
         {
-            return _context.Physicians.Include(x => x.Aspnetuser).FirstOrDefault(x => x.Physicianid == phid);
+            return _context.Physicians.Include(x => x.Aspnetuser).Include(x => x.Role).FirstOrDefault(x => x.Physicianid == phid);
         }
 
         //role

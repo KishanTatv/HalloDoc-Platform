@@ -41,5 +41,11 @@ public partial class Role
     public int? Modifiedby { get; set; }
 
     [InverseProperty("Role")]
+    public virtual ICollection<Admin> Admins { get; } = new List<Admin>();
+
+    [InverseProperty("Role")]
+    public virtual ICollection<Physician> Physicians { get; } = new List<Physician>();
+
+    [InverseProperty("Role")]
     public virtual ICollection<Rolemenu> Rolemenus { get; } = new List<Rolemenu>();
 }

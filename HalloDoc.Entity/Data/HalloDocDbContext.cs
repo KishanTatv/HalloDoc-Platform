@@ -105,6 +105,8 @@ public partial class HalloDocDbContext : DbContext
                 .HasConstraintName("admin_aspnetuserid_fkey");
 
             entity.HasOne(d => d.ModifiedbyNavigation).WithMany(p => p.AdminModifiedbyNavigations).HasConstraintName("admin_modifiedby_fkey");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Admins).HasConstraintName("roleid_fk");
         });
 
         modelBuilder.Entity<Adminregion>(entity =>
@@ -149,7 +151,7 @@ public partial class HalloDocDbContext : DbContext
 
             entity.HasOne(d => d.User).WithOne(p => p.Aspnetuserrole)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_aspnetuserrole");
+                .HasConstraintName("aspnetuserroles_userid_fkey");
         });
 
         modelBuilder.Entity<Blockrequest>(entity =>
@@ -243,6 +245,8 @@ public partial class HalloDocDbContext : DbContext
                 .HasConstraintName("physician_createdby_fkey");
 
             entity.HasOne(d => d.ModifiedbyNavigation).WithMany(p => p.PhysicianModifiedbyNavigations).HasConstraintName("physician_modifiedby_fkey");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Physicians).HasConstraintName("role_fk");
         });
 
         modelBuilder.Entity<Physicianlocation>(entity =>

@@ -37,8 +37,7 @@ public partial class Physician
     [StringLength(500)]
     public string? Medicallicense { get; set; }
 
-    [Column("photo")]
-    [StringLength(100)]
+    [Column("photo", TypeName = "character varying")]
     public string? Photo { get; set; }
 
     [Column("adminnotes")]
@@ -116,8 +115,7 @@ public partial class Physician
     [Column("islicensedoc", TypeName = "bit(1)")]
     public BitArray? Islicensedoc { get; set; }
 
-    [Column("signature")]
-    [StringLength(100)]
+    [Column("signature", TypeName = "character varying")]
     public string? Signature { get; set; }
 
     [Column("iscredentialdoc", TypeName = "bit(1)")]
@@ -165,6 +163,10 @@ public partial class Physician
 
     [InverseProperty("Physician")]
     public virtual ICollection<Requestwisefile> Requestwisefiles { get; } = new List<Requestwisefile>();
+
+    [ForeignKey("Roleid")]
+    [InverseProperty("Physicians")]
+    public virtual Role? Role { get; set; }
 
     [InverseProperty("Physician")]
     public virtual ICollection<Shift> Shifts { get; } = new List<Shift>();
