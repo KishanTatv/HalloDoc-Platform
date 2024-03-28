@@ -1,0 +1,41 @@
+﻿.fc-col-header-cell {
+    background-color: gray;
+}
+
+a.fc-col-header-cell-cushion {
+    text-decoration: none;
+    color: white;
+}
+
+.fc-daygrid-day-number {
+    text-decoration: none;
+    color: black;
+}
+
+.fc-daygrid-day-top {
+    background-color: #ffadf8;
+    justify-content: center;
+}
+
+.fc-daygrid-day-events {
+    border-bottom: 1px solid #d3c4c4;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 1.5em;
+    display: none;
+} 
+
+.fc-timeline-slot-frame{
+    background-color: gray;
+}
+
+.fc-timeline-slot-cushion {
+    text-decoration: none;
+    color: white;
+}
+
+.fc-datagrid-cell-main {
+    text-decoration: none;
+    color: black;
+}

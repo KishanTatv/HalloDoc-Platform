@@ -111,5 +111,9 @@ namespace HalloDoc.Repository.Interface
         void addRoleMenu(int roleId, int menuId);
         void removeRoleMenu(int roleId, int menuId);
 
+
+        // user access
+        List<Aspnetuser> UserAccessData();
+
     }
 }

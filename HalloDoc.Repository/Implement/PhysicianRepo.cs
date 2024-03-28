@@ -31,7 +31,7 @@ namespace HalloDoc.Repository.Implement
         {
             Aspnetuser asp = new Aspnetuser
             {
-                Username = phy.Firstname + phy.Lastname,
+                Username = "MD." + phy.Lastname + "." + phy.Firstname.ToString().Substring(0, 1),
                 Email = phy.Email,
                 Phonenumber = phy.Mobile,
                 Passwordhash = user.Password,

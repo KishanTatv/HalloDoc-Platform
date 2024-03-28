@@ -330,7 +330,7 @@ namespace HalloDoc.Repository.Implement
         {
             Aspnetuser asp = new Aspnetuser
             {
-                Username = model.Firstname + model.Lastname,
+                Username = model.Lastname.Trim() + model.Firstname.Trim().ToString().Substring(0, 1),
                 Email = model.ConfirmEmail,
                 Phonenumber = model.Phonenumber,
                 Passwordhash = model.Password,
@@ -360,7 +360,7 @@ namespace HalloDoc.Repository.Implement
                 Createdby = cretedBy,
             };
             _context.Admins.Add(admin);
-            _context.SaveChanges(); 
+            _context.SaveChanges();
             return admin;
         }
 
@@ -489,5 +489,13 @@ namespace HalloDoc.Repository.Implement
             _context.Rolemenus.Remove(rolemenu);
             _context.SaveChanges();
         }
+
+
+        //user Access
+        public List<Aspnetuser> UserAccessData()
+        {
+            return _context.Aspnetusers.Include(x => x.Aspnetuserrole).Where(x => x.Aspnetuserrole.Roleid != 3).ToList();
+        }
+
     }
 }

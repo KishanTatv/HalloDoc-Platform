@@ -297,7 +297,7 @@ namespace HalloDoc.Controllers
             }
             var photoBase64 = Convert.ToBase64String(photoBytes);
             Aspnetuser asp = _physician.CretephyAspnetUser(model.clientInformation, model.PhysicianCustom);
-            _patient.addAspnetUserrole(asp.Id, 1);
+            _patient.addAspnetUserrole(asp.Id, 2);
             Physician phy = _physician.addNewPhysician(model, photoBase64, aspId, asp.Id);
             _physician.addPhysicianNotification(phy.Physicianid);
 
@@ -376,7 +376,7 @@ namespace HalloDoc.Controllers
         #endregion
 
 
-        #region Access
+        #region Account Access
         public IActionResult Access()
         {
             var data = _Admin.getAllroleDetails();
@@ -457,6 +457,21 @@ namespace HalloDoc.Controllers
                 }
                 return Json(new { value = "done" });
             }
+        }
+        #endregion
+
+        #region User Access
+        public IActionResult UserAccess()
+        {
+            var data = _Admin.UserAccessData();
+            return View(data);
+        }
+        #endregion
+
+        #region Scheduling
+        public IActionResult Scheduling()
+        {
+            return View();
         }
         #endregion
 

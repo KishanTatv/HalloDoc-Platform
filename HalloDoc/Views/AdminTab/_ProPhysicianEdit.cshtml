@@ -502,11 +502,11 @@
     }
 
     $(document).ready(function () {
-        const fileList = new DataTransfer();
         if ($('.AgreePath').text() != '') {
             $('.AgreeCheck').prop('checked', true);
             $('.AgreeCheck').prop('disabled', false);
             $('.viewBtn1').removeClass('d-none');
+            const fileList = new DataTransfer();
             const blob = new Blob([$('.AgreePath').text()], { type: 'application/octet-stream' });
             const fileName = 'file.' + $('.AgreePath').text().split('.')[2];
             const file = new File([blob], fileName, { type: 'application/octet-stream' });
@@ -518,6 +518,7 @@
             $('.BackCheck').prop('checked', true);
             $('.BackCheck').prop('disabled', false);
             $('.viewBtn2').removeClass('d-none');
+            const fileList = new DataTransfer();
             const blob = new Blob([$('.BackPath').text()], { type: 'application/octet-stream' });
             const fileName = 'file.' + $('.BackPath').text().split('.')[2];
             const file = new File([blob], fileName, { type: 'application/octet-stream' });
@@ -529,6 +530,7 @@
             $('.HIPAACheck').prop('checked', true);
             $('.HIPAACheck').prop('disabled', false);
             $('.viewBtn3').removeClass('d-none');
+            const fileList = new DataTransfer();
             const blob = new Blob([$('.HIPAAPath').text()], { type: 'application/octet-stream' });
             const fileName = 'file.' + $('.HIPAAPath').text().split('.')[2];
             const file = new File([blob], fileName, { type: 'application/octet-stream' });
@@ -540,6 +542,7 @@
             $('.DiscCheck').prop('checked', true);
             $('.DiscCheck').prop('disabled', false);
             $('.viewBtn4').removeClass('d-none');
+            const fileList = new DataTransfer();
             const blob = new Blob([$('.DiscPath').text()], { type: 'application/octet-stream' });
             const fileName = 'file.' + $('.DiscPath').text().split('.')[2];
             const file = new File([blob], fileName, { type: 'application/octet-stream' });
@@ -551,6 +554,7 @@
             $('.LicCheck').prop('checked', true);
             $('.LicCheck').prop('disabled', false);
             $('.viewBtn5').removeClass('d-none');
+            const fileList = new DataTransfer();
             const blob = new Blob([$('.LicPath').text()], { type: 'application/octet-stream' });
             const fileName = 'file.' + $('.LicPath').text().split('.')[2];
             const file = new File([blob], fileName, { type: 'application/octet-stream' });

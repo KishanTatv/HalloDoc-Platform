@@ -12,7 +12,7 @@
            aria-selected="false" asp-action="ProviderLoc" asp-controller="AdminTab">Provider Location</a>
         <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Profile" ? "underLine" : "")" id="profileTab"
            aria-selected="false" asp-action="Profile" asp-controller="AdminTab">My Profile</a>
-        <a class="nav-link ps-3 bg-transparent dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "Provider" ? "underLine" : "")" id="providerTab" data-bs-toggle="dropdown" aria-expanded="false">Providers</a>
+        <a class="nav-link ps-3 bg-transparent dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "Provider" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "Scheduling" ? "underLine" : "")" id="providerTab" data-bs-toggle="dropdown" aria-expanded="false">Providers</a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" asp-action="Provider" asp-controller="AdminTab">Provider</a></li>
             <li><a class="dropdown-item" asp-action="Scheduling" asp-controller="AdminTab">Scheduling</a></li>
@@ -20,10 +20,10 @@
         </ul>
         <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Partner" ? "underLine" : "")" id="AccessTab"
            aria-selected="false" asp-action="Partner" asp-controller="AdminTab">Partners</a>
-        <a class="nav-link ps-3 bg-transparent  dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "Access" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "userAccess" ? "underLine" : "")" data-bs-toggle="dropdown" aria-expanded="false">Access</a>
+        <a class="nav-link ps-3 bg-transparent  dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "Access" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "UserAccess" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "AdminCreate" ? "underLine" : "")" data-bs-toggle="dropdown" aria-expanded="false">Access</a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" asp-action="Access" asp-controller="AdminTab">Account Access</a></li>
-            <li><a class="dropdown-item" asp-action="userAccess" asp-controller="AdminTab"> User Access </a></li>
+            <li><a class="dropdown-item" asp-action="UserAccess" asp-controller="AdminTab"> User Access </a></li>
             <li><a class="dropdown-item" asp-action="AdminCreate" asp-controller="AdminTab">Create Admin</a></li>
         </ul>
         <a class="nav-link ps-3 bg-transparent dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "SearchRecord" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "Emaillog" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "SMSlog" ? "underLine" : "")  @(ViewContext.ActionDescriptor.RouteValues["action"] == "PatientHistory" ? "underLine" : "")  @(ViewContext.ActionDescriptor.RouteValues["action"] == "BlockHistory" ? "underLine" : "")" id="recordTab" data-bs-toggle="dropdown" aria-expanded="false">Records</a>
