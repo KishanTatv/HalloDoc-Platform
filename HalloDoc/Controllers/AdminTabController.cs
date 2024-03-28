@@ -7,6 +7,7 @@ using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
+using System.Linq;
 using System.Security.AccessControl;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static Uno.WinRTFeatureConfiguration;
@@ -164,6 +165,7 @@ namespace HalloDoc.Controllers
             PhysicianCustom phinfo = _Admin.getPhyProfile(phid);
             var phy = _Admin.getPhysicianDetail(phid);
             var region = _Admin.getAllRegion();
+            var phReg = _physician.phyRegionExist(phid);
 
             List<string> files = new List<string>();
             files.Add("ContractorAgreement"); files.Add("Background"); files.Add("HIPAA"); files.Add("discloure"); files.Add("License");
@@ -171,17 +173,18 @@ namespace HalloDoc.Controllers
             List<string> Doclist = new List<string>();
             foreach (var file in files)
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/providerDoc/", phid + file + ".pdf");
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "providerDoc", phid + file + ".pdf");
                 if (System.IO.File.Exists(filePath))
                 {
-                    Doclist.Add("true");
+                    var mimeType = "application/....";
+                    Doclist.Add(filePath);
                 }
                 else
                 {
-                    Doclist.Add("false");
+                    Doclist.Add(null);
                 }
             }
-            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region, DocFile = Doclist };
+            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region, phyReg= phReg, DocFile = Doclist };
             return PartialView("_ProPhysicianEdit", data);
         }
 
@@ -194,6 +197,18 @@ namespace HalloDoc.Controllers
 
         public IActionResult UpdatePhyProfile(PhysicianProfileViewModel phinfo)
         {
+            var regList = Request.Form["checkReg"].ToList();
+            var phReg = _physician.phyRegionExist(phinfo.phid);
+            var addReg = regList.Select(int.Parse).Except(phReg).ToList();
+            var remReg = phReg.Except(regList.Select(int.Parse)).ToList();
+            foreach(var reg in addReg)
+            {
+                _physician.addPhyRegion(phinfo.phid, reg);
+            }
+            foreach(var reg in remReg)
+            {
+                _physician.removeRegion(phinfo.phid, reg);
+            }
             int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
             string phyEmail = _Admin.getPhysicianEmail(phinfo.phid);
             _physician.updatePhysicianInfo(phinfo.PhysicianCustom, phyEmail, aspId);
@@ -240,6 +255,14 @@ namespace HalloDoc.Controllers
             return Json(new { value = "changed" });
         }
 
+        public IActionResult Phydocument( int phid, IFormFile ContractorAgreement, IFormFile Background, IFormFile HIPAA, IFormFile discloure, IFormFile License)
+        {
+            List<IFormFile> files = new List<IFormFile>();
+            files.Add(ContractorAgreement); files.Add(Background); files.Add(HIPAA); files.Add(discloure); files.Add(License);
+            UploadPhyDocumnet(files, phid);
+            return RedirectToAction("Provider");
+        }
+
         public IActionResult DeletePhy(int phid)
         {
             _physician.isDeletePhy(phid);
@@ -260,6 +283,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult AddNewProvider(PhysicianProfileViewModel model, IFormFile photo, IFormFile ContractorAgreement, IFormFile Background, IFormFile HIPAA, IFormFile discloure, IFormFile License)
         {
+            var regList = Request.Form["checkReg"].ToList();
             int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
             byte[] photoBytes;
 
@@ -277,28 +301,39 @@ namespace HalloDoc.Controllers
             Physician phy = _physician.addNewPhysician(model, photoBase64, aspId, asp.Id);
             _physician.addPhysicianNotification(phy.Physicianid);
 
+            foreach (var reg in regList)
+            {
+                _physician.addPhyRegion(phy.Physicianid, Convert.ToInt16(reg));
+            }
             List<IFormFile> files = new List<IFormFile>();
             files.Add(ContractorAgreement); files.Add(Background); files.Add(HIPAA); files.Add(discloure); files.Add(License);
 
+            UploadPhyDocumnet(files, phy.Physicianid);
+
+            return RedirectToAction("Provider");
+        }
+
+        public void UploadPhyDocumnet(List<IFormFile> files, int phyId)
+        {
             if (files.Count > 0)
             {
                 foreach (var file in files)
                 {
                     if (file != null && file.Length > 0)
                     {
-                        var format = ContractorAgreement.FileName.Split('.')[1];
-                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/providerDoc/", phy.Physicianid + file.Name + "." + format);
+                        var format = file.FileName.Split('.')[1];
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/providerDoc/", phyId + file.Name + "." + format);
                         using (var stream = System.IO.File.Create(filePath))
                         {
-                            ContractorAgreement.CopyToAsync(stream);
+                            file.CopyToAsync(stream);
                         }
                     }
                 }
             }
-
-            return RedirectToAction("Provider");
         }
         #endregion
+
+
 
         #region createAccount Admin
         public IActionResult AdminCreate()

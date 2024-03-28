@@ -43,6 +43,30 @@ namespace HalloDoc.Repository.Implement
             return asp;
         }
 
+        public void addPhyRegion(int phyId, int regionId)
+        {
+            Physicianregion phreg = new Physicianregion
+            {
+                Physicianid = phyId,
+                Regionid = regionId,
+            };
+            _context.Physicianregions.Add(phreg);
+            _context.SaveChanges();
+        }
+
+        public void removeRegion(int phyId, int regionId)
+        {
+            Physicianregion phreg = _context.Physicianregions.FirstOrDefault(x => x.Physicianid == phyId && regionId == regionId);
+            phreg.Regionid = regionId;
+            _context.Physicianregions.Remove(phreg);
+            _context.SaveChanges();
+        }
+
+        public List<int> phyRegionExist(int phyId)
+        {
+            return _context.Physicianregions.Where(x => x.Physicianid == phyId).Select(x => x.Regionid).ToList();
+        }
+
         public void addPhysicianNotification(int phyId)
         {
             BitArray bitArray = new BitArray(1);

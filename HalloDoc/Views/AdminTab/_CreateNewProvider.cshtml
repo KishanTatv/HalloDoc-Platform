@@ -72,10 +72,19 @@
                         <input type="text" class="form-control bg-transparent AdIn" placeholder="npi" asp-for="PhysicianCustom.Npinumber">
                         <label class="ms-3">NPI Number</label>
                     </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        @foreach (var reg in Model.Regions)
+                        {
+                            <div class="form-check form-check-inline">
+                                <input name="checkReg" class="form-check-input AdIn checkb" type="checkbox" value="@reg.Regionid">
+                                <label>@reg.Name</label>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-4 mb-4">
+            <div class="mt-5 mb-4">
                 <h5>Mailing & Billing Information</h5>
                 <div class="row form-floating">
                     <div class="col-md-6 form-floating mt-2">

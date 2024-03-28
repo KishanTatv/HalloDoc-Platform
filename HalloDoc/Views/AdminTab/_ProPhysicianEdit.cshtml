@@ -8,6 +8,7 @@
     Layout = "";
 }
 
+
 <div class="HContainer m-auto">
     <div class="d-flex justify-content-between mt-4">
         <h4>Edit Physician Account</h4>
@@ -85,6 +86,15 @@
                     <div class="col-md-6 form-floating mt-2">
                         <input type="text" class="form-control bg-transparent AdIn" placeholder="syncemail" asp-for="PhysicianCustom.Syncemailaddress">
                         <label class="ms-3">Synchronization  Email Address</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        @foreach (var reg in Model.Regions)
+                        {
+                            <div class="form-check form-check-inline">
+                                <input name="checkReg" id="@reg.Regionid-s" class="form-check-input AdIn checkb" type="checkbox" value="@reg.Regionid">
+                                <label>@reg.Name</label>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -174,12 +184,12 @@
                     <div class="col-md-6 form-floating mt-2">
                         <div class="d-flex m-auto">
                             <div class="p-0 w-75">
-                                <input type="text" class="form-control bg-transparent sfile" id="selectedFile1" placeholder="Select Signature" disabled>
+                                <input type="text" class="form-control bg-transparent sfile" id="selectedFiles" placeholder="Select Signature" disabled>
                                 <label class="ms-3"></label>
                             </div>
                             <div>
                                 <label class="btn btn-outline-info d-flex ">
-                                    <input type="file" class="uploadSign fileUplod" style="display: none;" id="FileInput1" name="Sign">
+                                    <input type="file" class="uploadSign fileUplod" style="display: none;" id="FileInputs" name="Sign">
                                     <i class="bi bi-cloud-arrow-up border-info"></i>
                                     <span class="upload_txt ms-2 edi3">Upload</span>
                                 </label>
@@ -203,124 +213,131 @@
         <hr />
 
         <h5>Onboarding</h5>
-        <table class="w-50">
-            <tr>
-                <td>
-                    <input class="form-check-input AgreeCheck ms-2" type="checkbox" disabled />
-                </td>
-                <td>
-                    <p class="ms-3 me-2 my-auto">Independent Contractor Agreement</p>
-                </td>
-                <td>
-                    <span>
-                        <label class="btn btn-info pt-0 pb-0">
-                            <input type="file" class="AgreeFile fileonBoard" style="display: none;" id="FileInput1" name="ContractorAgreement">
-                            <span class="upload_txt text-light edi3">Upload</span>
-                        </label>
-                    </span>
-                </td>
-                <td>
-                    @if (Model.DocFile[0] == "true")
-                    {
-                        <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn1" onclick="loadFileContent1()"> View </button>
-                    }
-                    else
-                    {
+        <form asp-action="Phydocument" asp-route-phid="@Model.PhysicianCustom.Physicianid" asp-controller="AdminTab" method="post" enctype="multipart/form-data">
+            <table class="w-50">
+                <tr>
+                    <td>
+                        <input class="form-check-input AgreeCheck ms-2" type="checkbox" disabled />
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">Independent Contractor Agreement</p>
+                        <span class="AgreePath d-none">@Model.DocFile[0]</span>
+                    </td>
+                    <td>
+                        <span>
+                            <label class="btn btn-info pt-0 pb-0">
+                                <input type="file" class="AgreeFile fileonBoard" style="display: none;" id="FileInput1" name="ContractorAgreement">
+                                <span class="upload_txt text-light edi3">Upload</span>
+                            </label>
+                        </span>
+                    </td>
+                    <td>
                         <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn1 d-none" onclick="loadFileContent1()"> View </button>
-                    }
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input BackCheck ms-2" type="checkbox" disabled />
-                </td>
-                <td>
-                    <p class="ms-3 me-2 my-auto">Background Check</p>
-                </td>
-                <td>
-                    <span>
-                        <label class="btn btn-info pt-0 pb-0">
-                            <input type="file" class="BackFile fileonBoard" style="display: none;" id="FileInput2" name="Background">
-                            <span class="upload_txt text-light edi3">Upload</span>
-                        </label>
-                    </span>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn2 d-none" onclick="loadFileContent2()"> View </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input HIPAACheck ms-2" type="checkbox" disabled />
-                </td>
-                <td>
-                    <p class="ms-3 me-2 my-auto">HIPAA Compliance</p>
-                </td>
-                <td>
-                    <span>
-                        <label class="btn btn-info pt-0 pb-0">
-                            <input type="file" class="HIPAAFile fileonBoard" style="display: none;" id="FileInput3" name="HIPAA">
-                            <span class="upload_txt text-light edi3">Upload</span>
-                        </label>
-                    </span>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn3 d-none" onclick="loadFileContent3()"> View </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input DiscCheck ms-2" type="checkbox" disabled />
-                </td>
-                <td>
-                    <p class="ms-3 me-2 my-auto">Non-discloure Agreement</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input BackCheck ms-2" type="checkbox" disabled />
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">Background Check</p>
+                        <span class="BackPath d-none">@Model.DocFile[1]</span>
+                    </td>
+                    <td>
+                        <span>
+                            <label class="btn btn-info pt-0 pb-0">
+                                <input type="file" class="BackFile fileonBoard" style="display: none;" id="FileInput2" name="Background">
+                                <span class="upload_txt text-light edi3">Upload</span>
+                            </label>
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn2 d-none" onclick="loadFileContent2()"> View </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input HIPAACheck ms-2" type="checkbox" disabled />
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">HIPAA Compliance</p>
+                        <span class="HIPAAPath d-none">@Model.DocFile[2]</span>
+                    </td>
+                    <td>
+                        <span>
+                            <label class="btn btn-info pt-0 pb-0">
+                                <input type="file" class="HIPAAFile fileonBoard" style="display: none;" id="FileInput3" name="HIPAA">
+                                <span class="upload_txt text-light edi3">Upload</span>
+                            </label>
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn3 d-none" onclick="loadFileContent3()"> View </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input DiscCheck ms-2" type="checkbox" disabled />
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">Non-discloure Agreement</p>
+                        <span class="DiscPath d-none">@Model.DocFile[3]</span>
 
-                </td>
-                <td>
-                    <span>
-                        <label class="btn btn-info pt-0 pb-0">
-                            <input type="file" class="DiscFile fileonBoard" style="display: none;" id="FileInput4" name="discloure">
-                            <span class="upload_txt text-light edi3">Upload</span>
-                        </label>
-                    </span>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn4 d-none" onclick="loadFileContent4()"> View </button>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input class="form-check-input LicCheck ms-2" type="checkbox" disabled />
-                </td>
-                <td>
-                    <p class="ms-3 me-2 my-auto">License Document</p>
+                    </td>
+                    <td>
+                        <span>
+                            <label class="btn btn-info pt-0 pb-0">
+                                <input type="file" class="DiscFile fileonBoard" style="display: none;" id="FileInput4" name="discloure">
+                                <span class="upload_txt text-light edi3">Upload</span>
+                            </label>
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn4 d-none" onclick="loadFileContent4()"> View </button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="form-check-input LicCheck ms-2" type="checkbox" disabled />
+                    </td>
+                    <td>
+                        <p class="ms-3 me-2 my-auto">License Document</p>
+                        <span class="LicPath d-none">@Model.DocFile[4]</span>
+                    </td>
+                    <td>
+                        <span>
+                            <label class="btn btn-info pt-0 pb-0">
+                                <input type="file" class="LicFile fileonBoard" style="display: none;" id="FileInput5" name="License">
+                                <span class="upload_txt text-light edi3">Upload</span>
+                            </label>
+                        </span>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn5 d-none" onclick="loadFileContent5()"> View </button>
+                    </td>
+                </tr>
+            </table>
 
-                </td>
-                <td>
-                    <span>
-                        <label class="btn btn-info pt-0 pb-0">
-                            <input type="file" class="LicFile fileonBoard" style="display: none;" id="FileInput5" name="License">
-                            <span class="upload_txt text-light edi3">Upload</span>
-                        </label>
-                    </span>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn5 d-none" onclick="loadFileContent5()"> View </button>
-                </td>
-            </tr>
-        </table>
+            <hr />
 
-        <hr />
-
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-danger text-light">Save</button>
-            <button class="btn btn-info text-light ms-3 deletePhy">Delete Account</button>
-        </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-danger text-light savePhy">Save</button>
+                <button type="button" class="btn btn-info text-light ms-3 deletePhy">Delete Account</button>
+            </div>
+        </form>
 
     </div>
 </div>
 
-
+@foreach (var reg in Model.phyReg)
+{
+    <script>
+        $(document).ready(function () {
+            $('#@reg-s').prop('checked', true);
+            console.log(reg);
+        });
+    </script>
+}
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/js/contact-api.js" asp-append-version="true"></script>
@@ -332,8 +349,8 @@
     document.getElementById('FileInput').addEventListener('change', function () {
         document.getElementById('selectedFile').value = this.files[0].name;
     })
-    document.getElementById('FileInput1').addEventListener('change', function () {
-        document.getElementById('selectedFile1').value = this.files[0].name;
+    document.getElementById('FileInputs').addEventListener('change', function () {
+        document.getElementById('selectedFiles').value = this.files[0].name;
     })
 
     function updateRegionId(selectElement) {
@@ -484,6 +501,63 @@
         textarea.classList.remove("bg-transparent");
     }
 
+    $(document).ready(function () {
+        const fileList = new DataTransfer();
+        if ($('.AgreePath').text() != '') {
+            $('.AgreeCheck').prop('checked', true);
+            $('.AgreeCheck').prop('disabled', false);
+            $('.viewBtn1').removeClass('d-none');
+            const blob = new Blob([$('.AgreePath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.AgreePath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput1').files = fileList.files;
+        }
+
+        if ($('.BackPath').text() != '') {
+            $('.BackCheck').prop('checked', true);
+            $('.BackCheck').prop('disabled', false);
+            $('.viewBtn2').removeClass('d-none');
+            const blob = new Blob([$('.BackPath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.BackPath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput2').files = fileList.files;
+        }
+
+        if ($('.HIPAAPath').text() != '') {
+            $('.HIPAACheck').prop('checked', true);
+            $('.HIPAACheck').prop('disabled', false);
+            $('.viewBtn3').removeClass('d-none');
+            const blob = new Blob([$('.HIPAAPath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.HIPAAPath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput3').files = fileList.files;
+        }
+
+        if ($('.DiscPath').text() != '') {
+            $('.DiscCheck').prop('checked', true);
+            $('.DiscCheck').prop('disabled', false);
+            $('.viewBtn4').removeClass('d-none');
+            const blob = new Blob([$('.DiscPath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.DiscPath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput4').files = fileList.files;
+        }
+
+        if ($('.LicPath').text() != '') {
+            $('.LicCheck').prop('checked', true);
+            $('.LicCheck').prop('disabled', false);
+            $('.viewBtn5').removeClass('d-none');
+            const blob = new Blob([$('.LicPath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.LicPath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput5').files = fileList.files;
+        }
+    });
 
     $('.AgreeFile').change(function () {
         if ($(this).val() !== '') {

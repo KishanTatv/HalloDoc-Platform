@@ -16,6 +16,10 @@ namespace HalloDoc.Repository.Interface
         Aspnetuser CretephyAspnetUser(ClientInformation user, PhysicianCustom phy);
         Physician addNewPhysician(PhysicianProfileViewModel model, string photo, int aspId, int phyAspId);
 
+        void addPhyRegion(int phyId, int regioId);
+        void removeRegion(int phyId, int regionId);
+        List<int> phyRegionExist(int phyId);
+
         void addPhysicianNotification(int phyId);
         void updatePhysicianNotification(int PhyId, BitArray isnotification);
 

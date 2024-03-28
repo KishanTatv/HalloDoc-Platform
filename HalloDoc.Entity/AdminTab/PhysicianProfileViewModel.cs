@@ -19,6 +19,8 @@ namespace HalloDoc.Entity.AdminTab
 
         public ClientInformation clientInformation { get; set; }
 
+        public List<int> phyReg { get; set; }
+
         public List<Region> Regions { get; set; }
 
         public List<Role> Roles { get; set; }
