@@ -30,10 +30,10 @@
                     <td> @item.Createddate </td>
                     <td>test</td>
                     <td>
-                        <input name="checkActive" class="form-check-input AdIn checkb" type="checkbox" value="">
+                        <input name="checkActive" class="form-check-input  @(item.Isactive[0] ? "checked" : "")" type="checkbox" value="">
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact">
+                        <a class="btn btn-outline-info ps-2 pe-2 p-0 unblockClick" data-blockid="@item.Blockrequestid">
                             Unblock
                         </a>
                     </td>
@@ -42,3 +42,37 @@
         </tbody>
     </table>
 </div>
+
+
+                   
+<script asp-append-version="true">
+
+    $('.unblockClick').click(function () {
+        var blockreqid = $(this).data('blockid');
+        $.ajax({
+            url: '/AdminTab/BlockDataUnblock',
+            method: 'POST',
+            data: { blockreqid: blockreqid },
+            success: function (response) {
+                $.ajax({
+                    url: '/AdminTab/BlockData',
+                    method: 'POST',
+                    data: { item: item },
+                    success: function (response) {
+                        $('.BlockTable').html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr["status"] == 401) {
+                            window.location.href = "/Patient/PatientLogin";
+                        } else {
+                            console.error(xhr.responseText)
+                        }
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>

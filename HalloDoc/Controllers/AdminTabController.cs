@@ -133,6 +133,10 @@ namespace HalloDoc.Controllers
             }
             var Tcount = data.Count();
             data = data.Skip(page * 5).Take(5).ToList();
+            if(data.Count() == 0)
+            {
+                TempData["DataMsg"] = "No More Records !";
+            }
             ViewBag.CurrentPage = page;
             return PartialView("_ProviderHome", data);
         }
@@ -322,7 +326,7 @@ namespace HalloDoc.Controllers
             files.Add(ContractorAgreement); files.Add(Background); files.Add(HIPAA); files.Add(discloure); files.Add(License);
 
             UploadPhyDocumnet(files, phy.Physicianid);
-            string body = "Try to login using credentials:\n" + $"Username: {"MD." + model.PhysicianCustom.Lastname.Trim()} {model.PhysicianCustom.Firstname.Trim().Substring(0, 1)}\n" + $"Password: {model.PhysicianCustom.Password}";
+            string body = "Try to login using credentials:\n" + $"Username: {"MD." + model.PhysicianCustom.Lastname.Trim().ToUpper()} {model.PhysicianCustom.Firstname.Trim().Substring(0, 1).ToUpper()}\n" + $"Password: {model.PhysicianCustom.Password}";
             _Genral.SendEmailOffice365(model.PhysicianCustom.Email, "Login Credintial", body, null);
             _Genral.addEmailLog(body, "Login Credintial", model.PhysicianCustom.Email, null, Convert.ToInt16(Request.Cookies["CookieRole"]), null, _Admin.getAdminId(Request.Cookies["CookieEmail"]), null);
             return RedirectToAction("Provider");
@@ -370,7 +374,7 @@ namespace HalloDoc.Controllers
                 Aspnetuser asp = _Admin.CreteAdminAspnetUser(model);
                 _patient.addAspnetUserrole(asp.Id, 1);
                 Admin admin = _Admin.CreateNewAdmin(model, aspId, asp.Id);
-                string body = "Try to login using credentials:\n" + $"Username: {model.Lastname.Trim()}{model.Firstname.Trim().Substring(0, 1)}\n" + $"Password: {model.Password}";
+                string body = "Try to login using credentials:\n" + $"Username: {model.Lastname.Trim().ToUpper()} {model.Firstname.Trim().Substring(0, 1).ToUpper()}\n" + $"Password: {model.Password}";
                 foreach (var i in regList)
                 {
                     _Admin.addAdminRegion(admin.Adminid, Convert.ToInt16(i));
@@ -499,10 +503,20 @@ namespace HalloDoc.Controllers
         #endregion
 
 
+        #region Search Record
         public IActionResult SearchRecord()
         {
             return View();
         }
+
+        public IActionResult searchData()
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = true;
+            var data = _Admin.getAllReqData().Where(x => x.Isdeleted != bitArray).ToList();
+            return PartialView("_SearchTableData", data);
+        }
+        #endregion
 
         #region EmailSMS Log
         public IActionResult SMSlog()
@@ -548,11 +562,36 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
-
+        #region Patient History
         public IActionResult PatientHistory()
         {
             return View();
         }
+
+        public IActionResult PatientHistoryData(string Hfname, string Hlname, string Hemail, string Hphone ) 
+        {
+            var data = _Admin.getAllUserData();
+            if(Hfname != null)
+            {
+                data = data.Where(x => x.Firstname.Contains(Hfname)).ToList();
+            }
+            if (Hlname != null)
+            {
+                data = data.Where(x => x.Lastname.Contains(Hlname)).ToList();
+            }
+            if (Hemail != null)
+            {
+                data = data.Where(x => x.Email.Contains(Hemail)).ToList();
+            }
+            if (Hphone != null)
+            {
+                data = data.Where(x => x.Mobile.Contains(Hphone)).ToList();
+            }
+            return PartialView("_PatientHistoryData", data);
+        }
+        #endregion
+
+        #region BlockHistory
         public IActionResult BlockHistory()
         {
             return View();
@@ -565,19 +604,25 @@ namespace HalloDoc.Controllers
             {
                 data = data.Where(x => (x.Request?.Requestclients?.FirstOrDefault().Firstname.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Requestclients?.FirstOrDefault().Firstname.ToLower().Contains(name.ToLower()) ?? false)).ToList();
             }
-            //if (email != null)
+            if (email != null)
+            {
+                data = data.Where(x => (x.Request.Requestclients.FirstOrDefault().Email.ToLower().Contains(email.ToLower()))).ToList();
+            }
+            //if (date != DateTime.MinValue)
             //{
-            //    data = data.Where(x => (x.Request?.Requestclients?.FirstOrDefault().Email.ToLower().Contains(email.ToLower());
+            //    data = data.Where(x => x.Createddate.Date.Equals(date)).ToList();
             //}
-            //if (crDate != DateTime.MinValue)
-            //{
-            //    data = data.Where(x => x.Createdate.Date.Equals(crDate)).ToList();
-            //}
-            //if (cgDate != DateTime.MinValue)
-            //{
-            //    data = data.Where(x => x.Sentdate.Equals(cgDate)).ToList();
-            //}
+            if (phone != null)
+            {
+                data = data.Where(x => x.Request.Requestclients.FirstOrDefault().Phonenumber.ToLower().Contains(phone)).ToList();
+            }
             return PartialView("_BlockTableData", data);
         }
+
+        public IActionResult BlockDataUnblock(int blockreqid)
+        {
+            return Ok();
+        }
+        #endregion
     }
 }

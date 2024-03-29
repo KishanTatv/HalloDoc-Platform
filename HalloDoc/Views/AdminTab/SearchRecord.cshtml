@@ -65,59 +65,53 @@
                         <button class="btn btn-info text-light ms-3">Search</button>
                     </div>
                 </div>
-                <div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="table-secondary">
-                                <tr>
-                                    <th scope="col"> Patient Name </th>
-                                    <th scope="col"> Requestor </th>
-                                    <th scope="col"> Date Of Service </th>
-                                    <th scope="col"> Close Case Date <i class="bi bi-arrow-down ms-1"> </th>
-                                    <th scope="col"> Email </th>
-                                    <th scope="col"> Phone Number </th>
-                                    <th scope="col"> Address </th>
-                                    <th scope="col"> Zip </th>
-                                    <th scope="col"> Request Status </th>
-                                    <th scope="col"> Physician </th>
-                                    <th scope="col"> Physician Note </th>
-                                    <th scope="col"> Cancelled By Provider Note </th>
-                                    <th scope="col"> Admin Note </th>
-                                    <th scope="col"> Patient Note </th>
-                                    <th scope="col">Delete Permanently</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @*@foreach (var phy in Model)
-                                {*@
-                                <tr>
-                                    <td>lkj vjk</td>
-                                    <td>ghjk</td>
-                                    <td>34, maty,4543</td>
-                                    <td>44, hkjh, 2324</td>
-                                    <td>testhggh@uj.cokm</td>
-                                    <td>3213433</td>
-                                    <td>gjjhgjkg</td>
-                                    <td>555</td>
-                                    <td>new</td>
-                                    <td>bxbxcb</td>
-                                    <td>note</td>
-                                    <td>pnote</td>
-                                    <td>Anote</td>
-                                    <td>patnote</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact">
-                                            Delete
-                                        </a>
-                                    </td>
-                                </tr>
-                                @*}*@
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="searchData">
+                   
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        var item;
+        $.ajax({
+            url: '/AdminTab/SearchData',
+            method: 'POST',
+            data: { item: item },
+            success: function (response) {
+                $('.searchData').html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+
+        $('.dataChng').change(function () {
+            var name = $('.blockName').val().trim();
+            var date = $('.blockDob').val();
+            var email = $('.blockEmail').val().trim();
+            var phone = $('.blockPhone').val().trim();
+            $.ajax({
+                url: '/AdminTab/SearchData',
+                method: 'POST',
+                data: { name: name, email: email, date: date, phone: phone },
+                success: function (response) {
+                    $('.BlockTable').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+    });
+</script>

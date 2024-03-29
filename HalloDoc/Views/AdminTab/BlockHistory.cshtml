@@ -84,7 +84,7 @@
                 method: 'POST',
                 data: { name: name, email: email, date: date, phone: phone },
                 success: function (response) {
-                    $('.LogPartial').html(response);
+                    $('.BlockTable').html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

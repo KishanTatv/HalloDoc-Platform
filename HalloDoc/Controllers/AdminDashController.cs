@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using DocumentFormat.OpenXml.Drawing;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace HalloDoc.Controllers
 {
@@ -19,6 +20,7 @@ namespace HalloDoc.Controllers
         private readonly IGenral _Genral;
         private readonly IAdmin _Admin;
         private readonly IPatient _Patient;
+
         public AdminDashController(ILogger<AdminDashController> logger, IGenral _Genral, IAdmin _Admin, IPatient _Patient)
         {
             _logger = logger;

@@ -7,6 +7,8 @@ using HalloDoc.Repository.Service.Interface;
 using HalloDoc.Repository.Service;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using System.Text.Json.Serialization;
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddDbContext<HalloDocDbContext>(options =>
 );
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 2; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
 
 
 builder.Services.AddDistributedMemoryCache();
@@ -53,6 +56,7 @@ app.UseRouting();
 app.UseCookiePolicy();
 app.UseAuthorization();
 //app.UseSession();
+app.UseNotyf();
 
 app.MapControllerRoute(
     name: "default",

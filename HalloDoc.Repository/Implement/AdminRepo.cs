@@ -349,7 +349,7 @@ namespace HalloDoc.Repository.Implement
         {
             Aspnetuser asp = new Aspnetuser
             {
-                Username = model.Lastname.Trim() + model.Firstname.Trim().ToString().Substring(0, 1),
+                Username = model.Lastname.Trim().ToUpper() + model.Firstname.Trim().ToString().Substring(0, 1).ToUpper(),
                 Email = model.ConfirmEmail,
                 Phonenumber = model.Phonenumber,
                 Passwordhash = model.Password,
@@ -516,5 +516,19 @@ namespace HalloDoc.Repository.Implement
             return _context.Aspnetusers.Include(x => x.Aspnetuserrole).Where(x => x.Aspnetuserrole.Roleid != 3).ToList();
         }
 
+
+
+        // All user Data
+        public List<User> getAllUserData()
+        {
+            BitArray bitArray = new BitArray(1);
+            bitArray[0] = true;
+            return _context.Users.Where(x => x.Isdeleted != bitArray).ToList();
+        }
+
+        public List<Request> getAllReqData()
+        {
+            return _context.Requests.Include(x => x.Physician).ToList();
+        }
     }
 }

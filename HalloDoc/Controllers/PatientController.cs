@@ -15,6 +15,8 @@ using HalloDoc.Repository.Service.Interface;
 using HalloDoc.Repository.Service;
 using Windows.Web.Http;
 using Microsoft.Net.Http.Headers;
+using DocumentFormat.OpenXml.ExtendedProperties;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace HalloDoc.Controllers
 {
@@ -24,13 +26,15 @@ namespace HalloDoc.Controllers
         private readonly IPatient _patient;
         private readonly IGenral _genral;
         private readonly IJwtToken _jwtToken;
+        private readonly INotyfService _notyf;
 
-        public PatientController(ILogger<PatientController> logger, IPatient patient, IGenral genral, IJwtToken jwtToken)
+        public PatientController(ILogger<PatientController> logger, IPatient patient, IGenral genral, IJwtToken jwtToken, INotyfService notyf)
         {
             _logger = logger;
             _patient = patient;
             _genral = genral;
             _jwtToken = jwtToken;
+            _notyf = notyf;
         }
 
         public IActionResult PatientSite()
@@ -82,10 +86,12 @@ namespace HalloDoc.Controllers
 
                         if (asp.Aspnetuserrole.Role.Name == "Patient")
                         {
+                            _notyf.Success("Login Successfully !");
                             return RedirectToAction("Dashbord", "PatientDash");
                         }
                         else if(asp.Aspnetuserrole.Role.Name == "Admin")
                         {
+                            _notyf.Success("Login Successfully !");
                             return RedirectToAction("Dashbord", "AdminDash");
                         }
 

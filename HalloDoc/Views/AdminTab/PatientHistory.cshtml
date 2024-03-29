@@ -22,19 +22,19 @@
                 <div class="mb-4">
                     <div class="row">
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="text" class="form-control bg-transparent Hfname dataChng" placeholder="add1">
                             <label class="ms-3">First Name</label>
                         </div>
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="text" class="form-control bg-transparent Hlname dataChng" placeholder="add1">
                             <label class="ms-3">Last Name</label>
                         </div>
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="email" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="email" class="form-control bg-transparent Hemail dataChng" placeholder="add1">
                             <label class="ms-3">Email</label>
                         </div>
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="number" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="number" class="form-control bg-transparent Hphone dataChng" placeholder="add1">
                             <label class="ms-3">Phone Number</label>
                         </div>
                     </div>
@@ -43,41 +43,51 @@
                         <button class="btn btn-info text-light ms-3">Search</button>
                     </div>
                 </div>
-                <div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead class="table-secondary">
-                                <tr>
-                                    <th scope="col"> First Name </th>
-                                    <th scope="col"> Last Name </th>
-                                    <th scope="col"> Email </th>
-                                    <th scope="col"> Phone Number </th>
-                                    <th scope="col"> Address </th>
-                                    <th scope="col" class="text-center">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @*@foreach (var phy in Model)
-                                {*@
-                                <tr>
-                                    <td>lkvjk</td>
-                                    <td>dsffdd</td>
-                                    <td>jklklm,m@gj.dcds</td>
-                                    <td>44434343</td>
-                                    <td>test</td>
-                                    <td class="text-center">
-                                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact">
-                                            Explore
-                                        </a>
-                                    </td>
-                                </tr>
-                                @*}*@
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="PHistoryTable">
+                    
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        var item;
+        $.ajax({
+            url: '/AdminTab/PatientHistoryData',
+            method: 'POST',
+            data: { item: item },
+            success: function (response) {
+                $('.PHistoryTable').html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+
+        $('.dataChng').change(function () {
+            var Hfname = $('.Hfname').val().trim();
+            var Hlname = $('.Hlname').val().trim();
+            var Hemail = $('.Hemail').val().trim();
+            var Hphone = $('.Hphone').val().trim();
+            $.ajax({
+                url: '/AdminTab/PatientHistoryData',
+                method: 'POST',
+                data: { Hfname: Hfname, Hlname: Hlname, Hemail: Hemail, Hphone: Hphone },
+                success: function (response) {
+                    $('.PHistoryTable').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+    });
+</script>

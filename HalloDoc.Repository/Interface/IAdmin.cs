@@ -116,5 +116,13 @@ namespace HalloDoc.Repository.Interface
         // user access
         List<Aspnetuser> UserAccessData();
 
+
+        // User table list
+        List<User> getAllUserData();
+
+
+        // Request whole data
+        List<Request> getAllReqData();
+
     }
 }

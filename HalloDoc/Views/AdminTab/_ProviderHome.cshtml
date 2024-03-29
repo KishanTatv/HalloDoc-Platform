@@ -25,30 +25,41 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var phy in Model)
+            @if (Model.Count() != 0)
+            {
+                @foreach (var phy in Model)
+                {
+                    <tr>
+                        <td><input class="form-check-input checkb" type="checkbox" @(phy.Physiciannotifications.FirstOrDefault().Isnotificationstopped[0] ? "checked" : "") data-phid="@phy.Physicianid"></td>
+                        <td>@phy.Firstname @phy.Lastname</td>
+                        <td>@phy.Role.Name</td>
+                        <td>Un Availiable</td>
+                        <td>
+                            @if (phy.Status == 1)
+                            {
+                                <span>Active</span>
+                            }
+                            else
+                            {
+                                <span>Pending</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact" data-phid="@phy.Physicianid">
+                                Contact
+                            </a>
+                            <div class="btn btn-outline-info ps-2 pe-2 p-0 PEdit" data-phid="@phy.Physicianid">
+                                Edit
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td><input class="form-check-input checkb" type="checkbox" @(phy.Physiciannotifications.FirstOrDefault().Isnotificationstopped[0] ? "checked" : "") data-phid="@phy.Physicianid"></td>
-                    <td>@phy.Firstname @phy.Lastname</td>
-                    <td>@phy.Role.Name</td>
-                    <td>Un Availiable</td>
-                    <td>
-                        @if(phy.Status == 1)
-                        {
-                            <span>Active</span>
-                        }
-                        else
-                        {
-                            <span>Pending</span>
-                        }
-                    </td>
-                    <td class="text-center">
-                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact" data-phid="@phy.Physicianid">
-                            Contact
-                        </a>
-                        <div class="btn btn-outline-info ps-2 pe-2 p-0 PEdit" data-phid="@phy.Physicianid">
-                            Edit
-                        </div>
+                    <td colspan="6">
+                        <p class="text-center text-danger">@TempData["DataMsg"]</p>
                     </td>
                 </tr>
             }
@@ -112,7 +123,7 @@
     });
 
     $('.checkb').change(function () {
-        var phid = $(this).data('phid'); 
+        var phid = $(this).data('phid');
         var ischeck = $(this).prop('checked');
         $.ajax({
             url: '/AdminTab/PhysicanNotification',

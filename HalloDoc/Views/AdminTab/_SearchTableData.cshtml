@@ -1,0 +1,66 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<HalloDoc.Entity.Models.Request>;
+
+@{
+    Layout = "";
+}
+
+
+<div class="table-responsive">
+    <table class="table">
+        <thead class="table-secondary">
+            <tr>
+                <th scope="col"> Patient Name </th>
+                <th scope="col"> Requestor </th>
+                <th scope="col"> Date Of Service </th>
+                <th scope="col"> Close Case Date <i class="bi bi-arrow-down ms-1"> </th>
+                <th scope="col"> Email </th>
+                <th scope="col"> Phone Number </th>
+                <th scope="col"> Address </th>
+                <th scope="col"> Zip </th>
+                <th scope="col"> Request Status </th>
+                <th scope="col"> Physician </th>
+                <th scope="col"> Physician Note </th>
+                <th scope="col"> Cancelled By Provider Note </th>
+                <th scope="col"> Admin Note </th>
+                <th scope="col"> Patient Note </th>
+                <th scope="col">Delete Permanently</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Firstname @item.Lastname</td>
+                    <td> @Enum.GetName(typeof(HalloEnum.repestType), item.Requesttypeid) </td>
+                    <td>@item.Createddate</td>
+                    <td>44, hkjh, 2324</td>
+                    <td>@item.Email</td>
+                    <td>@item.Phonenumber</td>
+                    <td>@item.Status</td>
+                    <td>555</td>
+                    <td>new</td>
+                    @if (item.Physician != null)
+                    {
+                        <td>@item.Physician.Firstname @item.Physician.Lastname</td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                    <td>note</td>
+                    <td>pnote</td>
+                    <td>Anote</td>
+                    <td>patnote</td>
+                    <td class="text-center">
+                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
