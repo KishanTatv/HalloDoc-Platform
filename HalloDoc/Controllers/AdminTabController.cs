@@ -6,6 +6,7 @@ using HalloDoc.Entity.Models;
 using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections;
 using System.Linq;
 using System.Security.AccessControl;
@@ -44,9 +45,10 @@ namespace HalloDoc.Controllers
         public IActionResult Profile()
         {
             string adminEmail = Request.Cookies["CookieEmail"];
-            var data = _Admin.getAdminProfile(adminEmail);
+            var admin = _Admin.getAdminProfile(adminEmail);
+            var adminCutstom = _Admin.getAdminCustomProfile(adminEmail);
             var region = _Admin.getAllRegion();
-            var modelData = new ProfileViewModel { Admin = data, Regions = region };
+            var modelData = new ProfileViewModel { Admin = admin, Regions = region, AdminCustom = adminCutstom };
             return View(modelData);
         }
 
@@ -65,31 +67,43 @@ namespace HalloDoc.Controllers
 
         public IActionResult UpdateAdminProfile(ProfileViewModel adminInfo)
         {
-            var regList = Request.Form["checkReg"].ToList();
-            string adminEmail = Request.Cookies["CookieEmail"];
-            int adminId = _Admin.getAdminId(adminEmail);
-            List<int> r = new List<int>();
-            foreach (var reg in _Admin.getAdminReg(adminId))
+            ModelState["AdminRegions"].ValidationState = ModelValidationState.Valid;
+            ModelState["Admin"].ValidationState = ModelValidationState.Valid;
+            ModelState["Regions"].ValidationState = ModelValidationState.Valid;
+            ModelState["AdminCustom.Email"].ValidationState = ModelValidationState.Valid;
+            if (ModelState.IsValid)
             {
-                r.Add(reg.Region.Regionid);
-            }
+                var regList = Request.Form["checkReg"].ToList();
+                string adminEmail = Request.Cookies["CookieEmail"];
+                int adminId = _Admin.getAdminId(adminEmail);
+                List<int> r = new List<int>();
+                foreach (var reg in _Admin.getAdminReg(adminId))
+                {
+                    r.Add(reg.Region.Regionid);
+                }
 
-            foreach (var i in regList)
-            {
-                if (!_Admin.CheckAdminReg(adminId, Convert.ToInt16(i)))
+                foreach (var i in regList)
                 {
-                    _Admin.addAdminRegion(adminId, Convert.ToInt16(i));
+                    if (!_Admin.CheckAdminReg(adminId, Convert.ToInt16(i)))
+                    {
+                        _Admin.addAdminRegion(adminId, Convert.ToInt16(i));
+                    }
                 }
-            }
-            foreach (var f in r)
-            {
-                if (!regList.Contains(f.ToString()))
+                foreach (var f in r)
                 {
-                    _Admin.removeAdminReg(adminId, f);
+                    if (!regList.Contains(f.ToString()))
+                    {
+                        _Admin.removeAdminReg(adminId, f);
+                    }
                 }
+                _Admin.updateAdminInfo(adminInfo.AdminCustom, adminEmail);
+                return Json(new { value = "changed" });
+
             }
-            _Admin.updateAdminInfo(adminInfo.Admin, adminEmail);
-            return Json(new { value = "changed" });
+            else
+            {
+                return RedirectToAction("Profile");
+            }
         }
 
         public IActionResult UpdateAdminLoc(ProfileViewModel adminInfo)
@@ -176,7 +190,6 @@ namespace HalloDoc.Controllers
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "providerDoc", phid + file + ".pdf");
                 if (System.IO.File.Exists(filePath))
                 {
-                    var mimeType = "application/....";
                     Doclist.Add(filePath);
                 }
                 else
@@ -184,7 +197,7 @@ namespace HalloDoc.Controllers
                     Doclist.Add(null);
                 }
             }
-            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region, phyReg= phReg, DocFile = Doclist };
+            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region, phyReg = phReg, DocFile = Doclist };
             return PartialView("_ProPhysicianEdit", data);
         }
 
@@ -201,11 +214,11 @@ namespace HalloDoc.Controllers
             var phReg = _physician.phyRegionExist(phinfo.phid);
             var addReg = regList.Select(int.Parse).Except(phReg).ToList();
             var remReg = phReg.Except(regList.Select(int.Parse)).ToList();
-            foreach(var reg in addReg)
+            foreach (var reg in addReg)
             {
                 _physician.addPhyRegion(phinfo.phid, reg);
             }
-            foreach(var reg in remReg)
+            foreach (var reg in remReg)
             {
                 _physician.removeRegion(phinfo.phid, reg);
             }
@@ -251,11 +264,11 @@ namespace HalloDoc.Controllers
                 signatureBytes = memoryStream.ToArray();
             }
             var signatureBase64 = Convert.ToBase64String(signatureBytes);
-            _physician.updateAdditionPhyData(BusinessW, BusinessW, photoBase64, signatureBase64, Note, phyEmail, aspId);
+            _physician.updateAdditionPhyData(BusinessN, BusinessW, photoBase64, signatureBase64, Note, phyEmail, aspId);
             return Json(new { value = "changed" });
         }
 
-        public IActionResult Phydocument( int phid, IFormFile ContractorAgreement, IFormFile Background, IFormFile HIPAA, IFormFile discloure, IFormFile License)
+        public IActionResult Phydocument(int phid, IFormFile ContractorAgreement, IFormFile Background, IFormFile HIPAA, IFormFile discloure, IFormFile License)
         {
             List<IFormFile> files = new List<IFormFile>();
             files.Add(ContractorAgreement); files.Add(Background); files.Add(HIPAA); files.Add(discloure); files.Add(License);
@@ -276,7 +289,7 @@ namespace HalloDoc.Controllers
         public IActionResult NewProvider()
         {
             var region = _Admin.getAllRegion();
-            var role = _Admin.getAllroleDetails();
+            var role = _Admin.getAllroleDetails().Where(x => x.Accounttype == 2).ToList();
             var data = new PhysicianProfileViewModel { Regions = region, Roles = role };
             return PartialView("_CreateNewProvider", data);
         }
@@ -296,7 +309,7 @@ namespace HalloDoc.Controllers
                 photoBytes = memoryStream.ToArray();
             }
             var photoBase64 = Convert.ToBase64String(photoBytes);
-            Aspnetuser asp = _physician.CretephyAspnetUser(model.clientInformation, model.PhysicianCustom);
+            Aspnetuser asp = _physician.CretephyAspnetUser(model.PhysicianCustom);
             _patient.addAspnetUserrole(asp.Id, 2);
             Physician phy = _physician.addNewPhysician(model, photoBase64, aspId, asp.Id);
             _physician.addPhysicianNotification(phy.Physicianid);
@@ -309,7 +322,9 @@ namespace HalloDoc.Controllers
             files.Add(ContractorAgreement); files.Add(Background); files.Add(HIPAA); files.Add(discloure); files.Add(License);
 
             UploadPhyDocumnet(files, phy.Physicianid);
-
+            string body = "Try to login using credentials:\n" + $"Username: {"MD." + model.PhysicianCustom.Lastname.Trim()} {model.PhysicianCustom.Firstname.Trim().Substring(0, 1)}\n" + $"Password: {model.PhysicianCustom.Password}";
+            _Genral.SendEmailOffice365(model.PhysicianCustom.Email, "Login Credintial", body, null);
+            _Genral.addEmailLog(body, "Login Credintial", model.PhysicianCustom.Email, null, Convert.ToInt16(Request.Cookies["CookieRole"]), null, _Admin.getAdminId(Request.Cookies["CookieEmail"]), null);
             return RedirectToAction("Provider");
         }
 
@@ -334,13 +349,12 @@ namespace HalloDoc.Controllers
         #endregion
 
 
-
         #region createAccount Admin
         public IActionResult AdminCreate()
         {
             TempData["SuccMsg"] = TempData["SuccMsg"];
 
-            var role = _Admin.getAllroleDetails();
+            var role = _Admin.getAllroleDetails().Where(x => x.Accounttype == 1).ToList();
             var reg = _Admin.getAllRegion();
             var data = new adminViewModel { Regions = reg, Roles = role };
             return View(data);
@@ -356,10 +370,13 @@ namespace HalloDoc.Controllers
                 Aspnetuser asp = _Admin.CreteAdminAspnetUser(model);
                 _patient.addAspnetUserrole(asp.Id, 1);
                 Admin admin = _Admin.CreateNewAdmin(model, aspId, asp.Id);
+                string body = "Try to login using credentials:\n" + $"Username: {model.Lastname.Trim()}{model.Firstname.Trim().Substring(0, 1)}\n" + $"Password: {model.Password}";
                 foreach (var i in regList)
                 {
                     _Admin.addAdminRegion(admin.Adminid, Convert.ToInt16(i));
                 }
+                _Genral.SendEmailOffice365(model.Email, "Login Credintial", body, null);
+                _Genral.addEmailLog(body, "Login Credintial", model.Email, null, Convert.ToInt16(Request.Cookies["CookieRole"]), null, _Admin.getAdminId(Request.Cookies["CookieEmail"]), null);
 
                 TempData["SuccMsg"] = "Admin Created with Successfully !";
                 return RedirectToAction("AdminCreate");
@@ -468,10 +485,16 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
+
         #region Scheduling
         public IActionResult Scheduling()
         {
             return View();
+        }
+
+        public IActionResult NewShiftPopUp()
+        {
+            return PartialView("_PopupCreateShft");
         }
         #endregion
 

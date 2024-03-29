@@ -27,14 +27,14 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public Aspnetuser CretephyAspnetUser(ClientInformation user, PhysicianCustom phy)
+        public Aspnetuser CretephyAspnetUser(PhysicianCustom phy)
         {
             Aspnetuser asp = new Aspnetuser
             {
                 Username = "MD." + phy.Lastname + "." + phy.Firstname.ToString().Substring(0, 1),
                 Email = phy.Email,
                 Phonenumber = phy.Mobile,
-                Passwordhash = user.Password,
+                Passwordhash = phy.Password,
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Aspnetusers.Add(asp);

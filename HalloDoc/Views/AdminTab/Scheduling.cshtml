@@ -20,11 +20,11 @@
     <div class="HContainer m-auto">
         <div class="d-flex justify-content-between mt-4">
             <h4>Schedulig</h4>
-            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="Dashbord" asp-action="AdminDash">
+            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
                 <strong class="pe-2">&lt Back</strong>
             </a>
         </div>
-        <div class="d-flex justify-content-between mt-4">
+        <div class="d-flex justify-content-between mt-2">
             <div class="w-25">
                 <select class="form-select" aria-label="Floating label select example">
                     <option selected>All Region</option>
@@ -34,15 +34,15 @@
             <div>
                 <button type="button" class="btn btn-info text-light me-2">Providers On Call</button>
                 <button type="button" class="btn btn-info text-light me-2">Shift For Review</button>
-                <button type="button" class="btn btn-info text-light">Add New Shift</button>
+                <button type="button" class="btn btn-info text-light AddNewShift">Add New Shift</button>
             </div>
         </div>
         <div>
-            <div class="fc-toolbar-chunk"><h2 class="fc-toolbar-title" id="fc-dom-1"></h2></div>
+            <div id="dateDisplay" class="h5 mt-3 mb-0"></div>
         </div>
         <div class="d-flex justify-content-end mb-4">
-            <span><button class="btn"></button></span><span class="me-3">Pending Shift</span>
-            <span><button class="btn"></button></span><span>Approved Shift</span>
+            <span><button class="btn penShift h-100 me-2"></button></span><span class="me-3">Pending Shift</span>
+            <span><button class="btn apprvShift h-100 me-2"></button></span><span>Approved Shift</span>
         </div>
         <div class="d-flex justify-content-between">
             <div>
@@ -56,11 +56,30 @@
                 <button id="MonthSchedule" class="btn btn-outline-info text-black">Month</</button>
             </div>
         </div>
+
         <div id='calendar' class="mt-4"></div>
+        <div id="PartialPopup"></div>
     </div>
 </div>
 
 <script asp-append-version="true">
+
+    function updateDateDisplay(date) {
+        var formattedDate;
+        if (calendar.view.type === 'dayGridMonth') {
+            formattedDate = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+        } else if (calendar.view.type === 'dayGridWeek') {
+            var startOfWeek = new Date(date);
+            startOfWeek.setDate(date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1)); // Get the first day of the week
+            var endOfWeek = new Date(date);
+            endOfWeek.setDate(startOfWeek.getDate() + 6); // Get the last day of the week
+            formattedDate = startOfWeek.toLocaleString('default', { month: 'short', day: '2-digit' }) + ' - ' +
+                endOfWeek.toLocaleString('default', { month: 'short', day: '2-digit', year: 'numeric' });
+        } else if (calendar.view.type === 'resourceTimelineDay') {
+            formattedDate = date.toLocaleString('default', { weekday: 'long', month: 'short', day: '2-digit', year: 'numeric' });
+        }
+        document.getElementById("dateDisplay").innerHTML = formattedDate;
+    }
 
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -68,14 +87,20 @@
         selectable: true,
     });
 
+    updateDateDisplay(calendar.getDate());
+    calendar.on('datesRender', function () {
+        updateDateDisplay(calendar.getDate());
+    });
     calendar.render();
 
     $('#WeekSchedule').click(function () {
         calendar.changeView('dayGridWeek');
+        updateDateDisplay(calendar.getDate());
     });
 
     $('#MonthSchedule').click(function () {
         calendar.changeView('dayGridMonth');
+        updateDateDisplay(calendar.getDate());
     });
 
     $('#DaySchedule').click(function () {
@@ -88,26 +113,46 @@
             }
         ]);
         calendar.setOption('resources', [
-            { id: 'a', title: 'Auditorium A', occupancy: 40 },
-            { id: 'b', title: 'Auditorium B', occupancy: 60 },
-            { id: 'c', title: 'Auditorium C', occupancy: 40 },
-            { id: 'd', title: 'Auditorium D', occupancy: 40 },
-            { id: 'e', title: 'Auditorium E', occupancy: 60 },
-            { id: 'f', title: 'Auditorium F', occupancy: 60 },
-            { id: 'g', title: 'Auditorium G', occupancy: 60 },
-            { id: 'h', title: 'Auditorium H', occupancy: 40 },
+            { id: 'a', title: 'Auditorium A' },
+            { id: 'b', title: 'Auditorium B' },
+            { id: 'c', title: 'Auditorium C' },
+            { id: 'd', title: 'Auditorium D' },
+            { id: 'e', title: 'Auditorium E' },
+            { id: 'f', title: 'Auditorium F' },
+            { id: 'g', title: 'Auditorium G' },
+            { id: 'h', title: 'Auditorium H' },
         ]);
+        updateDateDisplay(calendar.getDate());
     });
 
 
     $('#cal-prev').click(function () {
         calendar.prev();
+        var currentDate = calendar.getDate();
+        updateDateDisplay(currentDate);
     });
-
     $('#cal-next').click(function () {
         calendar.next();
+        var currentDate = calendar.getDate();
+        updateDateDisplay(currentDate);
     });
     $('#cal-today').click(function () {
         calendar.today();
+        var currentDate = calendar.getDate();
+        updateDateDisplay(currentDate);
+    });
+
+    $('.AddNewShift').click(function () {
+        $.ajax({
+            url: '/AdminTab/NewShiftPopUp',
+            success: function (response) {
+                $("#PartialPopup").html(response);
+                var my = new bootstrap.Modal(document.getElementById('NewShift'));
+                my.show();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
     });
 </script>

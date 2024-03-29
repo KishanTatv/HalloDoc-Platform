@@ -63,26 +63,26 @@
                             <h5>Administrartor Information</h5>
                             <div class="row form-floating">
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent InAdfname AdIn" placeholder="firstNmae" asp-for="Admin.Firstname">
+                                    <input type="text" class="form-control bg-transparent InAdfname AdIn" placeholder="firstNmae" asp-for="AdminCustom.Firstname">
                                     <label class="ms-3">First Name</label>
-                                    <span asp-validation-for="Admin.Firstname" class="text-danger"></span>
+                                    <span asp-validation-for="AdminCustom.Firstname" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="Admin.Lastname">
+                                    <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="AdminCustom.Lastname">
                                     <label class="ms-3">Last Name</label>
-                                    <span asp-validation-for="Admin.Lastname" class="text-danger"></span>
+                                    <span asp-validation-for="AdminCustom.Lastname" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="email" class="form-control bg-transparent" id="email" placeholder="email" asp-for="Admin.Email">
+                                    <input type="email" class="form-control bg-transparent" id="email" placeholder="email" asp-for="AdminCustom.Email">
                                     <label class="ms-3">Email</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="email" class="form-control bg-transparent" id="conEmail" placeholder="conEmail" asp-for="Admin.Email">
+                                    <input type="email" class="form-control bg-transparent" id="conEmail" placeholder="conEmail" asp-for="AdminCustom.Email">
                                     <label class="ms-3">Confirm Email</label>
                                 </div>
                                 <div class="col-md-6 form-floating mt-2">
-                                    <input type="number" id="phone1" class="form-control InAdmobile bg-transparent AdIn" style="height:58px" asp-for="Admin.Mobile" />
-                                    <span class="spAdmobile text-danger"></span>
+                                    <input type="number" id="phone1" class="form-control InAdmobile bg-transparent AdIn" style="height:58px" asp-for="AdminCustom.Mobile" />
+                                    <span asp-validation-for="AdminCustom.Mobile" class="text-danger"></span>
                                 </div>
                                 @foreach (var adminreg in Model.Admin.Adminregions)
                                 {

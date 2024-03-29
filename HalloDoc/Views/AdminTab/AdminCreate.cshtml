@@ -24,7 +24,7 @@
 
         @if (TempData["SuccMsg"] != null)
         {
-            <span class="text-success text-center"> @TempData["SuccMsg"] </span>
+            <div class="text-success text-center"> @TempData["SuccMsg"] </div>
         }
 
         <form class="phydata" asp-action="AddNewAdmin" asp-controller="AdminTab" method="post" enctype="multipart/form-data">

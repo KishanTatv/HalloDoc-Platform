@@ -8,16 +8,8 @@ using System.Threading.Tasks;
 
 namespace HalloDoc.Entity.AdminTab
 {
-    public class PhysicianCustom
+    public class AdminCustom
     {
-        [Column("physicianid")]
-        public int Physicianid { get; set; }
-
-        [Required(ErrorMessage = "Password is required")]
-        [StringLength(255, ErrorMessage = "Must be between 5 and 255 characters", MinimumLength = 5)]
-        [Display(Name = "Password")]
-        public string? Password { get; set; }
-
         [Column("firstname")]
         [Required(ErrorMessage = "Firstname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
@@ -40,16 +32,5 @@ namespace HalloDoc.Entity.AdminTab
         [StringLength(20)]
         public string? Mobile { get; set; }
 
-        [Column("medicallicense")]
-        [StringLength(500)]
-        public string? Medicallicense { get; set; }
-
-        [Column("npinumber")]
-        [StringLength(500)]
-        public string? Npinumber { get; set; }
-
-        [Column("syncemailaddress")]
-        [StringLength(50)]
-        public string? Syncemailaddress { get; set; }
     }
 }

@@ -39,3 +39,13 @@ a.fc-col-header-cell-cushion {
     text-decoration: none;
     color: black;
 }
+
+.penShift {
+    background-color: #ffadf8;
+    border: 1px solid #dd71d4;
+}
+
+.apprvShift {
+    background-color: #a5cda7;
+    border: 1px solid green;
+}

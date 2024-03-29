@@ -72,11 +72,12 @@ namespace HalloDoc.Repository.Interface
         // Admin Profile
         PhysicianCustom getPhyProfile(int phid);
         Admin getAdminProfile(string email);
+        AdminCustom getAdminCustomProfile(string email);
 
         List<Adminregion> getAdminReg(int adId);
         void updatePass(string email, string pass);
 
-        void updateAdminInfo(Admin adminData, string email);
+        void updateAdminInfo(AdminCustom adminData, string email);
         void updateAdminLocation(Admin adminData, string email);
         bool CheckAdminReg(int adminId, int Regid);
         void addAdminRegion(int adminId, int regioId);

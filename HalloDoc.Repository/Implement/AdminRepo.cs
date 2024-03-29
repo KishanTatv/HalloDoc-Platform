@@ -264,6 +264,25 @@ namespace HalloDoc.Repository.Implement
             return data;
         }
 
+        public AdminCustom getAdminCustomProfile(string email)
+        {
+            var admin = _context.Admins.FirstOrDefault(x => x.Email == email);
+            if (admin != null)
+            {
+                return new AdminCustom
+                {
+                    Firstname = admin.Firstname,
+                    Lastname = admin.Lastname,
+                    Email = admin.Email,
+                    Mobile = admin.Mobile
+                };
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public List<Adminregion> getAdminReg(int adId)
         {
             return _context.Adminregions.Include(x => x.Region).Where(x => x.Adminid == adId).ToList();
@@ -278,7 +297,7 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        public void updateAdminInfo(Admin adminData, string email)
+        public void updateAdminInfo(AdminCustom adminData, string email)
         {
             Admin admin = _context.Admins.FirstOrDefault(x => x.Email == email);
             admin.Firstname = adminData.Firstname;

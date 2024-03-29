@@ -1,0 +1,111 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+<div class="modal fade" id="NewShift" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-info p-2">
+                <h1 class="modal-title fs-5 text-light ms-2" id="exampleModalLabel">
+                    Create Shift
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Choose communication to send message</p>
+                <div class="form-floating">
+                    <select class="form-select selectReg" aria-label="Floating label select">
+                        <option value="" disabled>select Region</option>
+                    </select>
+                    <label for="floatingSelect">Region</label>
+                </div>
+                <div class="form-floating mt-2">
+                    <select class="form-select selectPhy" aria-label="Floating label select">
+                        <option value="" disabled>select</option>
+                    </select>
+                    <label for="floatingSelect">Physician</label>
+                </div>
+                <div class="form-floating mt-2">
+                    <input type="date" class="form-control bg-transparent"
+                           placeholder="shiftdate">
+                    <label> Shift Date </label>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6 form-floating">
+                        <input type="time" class="form-control bg-transparent"
+                               placeholder="start">
+                        <label class="ms-3"> Start </label>
+                    </div>
+                    <div class="col-md-6 form-floating">
+                        <input type="time" class="form-control bg-transparent"
+                               placeholder="end">
+                        <label class="ms-3"> End </label>
+                    </div>
+                </div>
+                <p class="ms-2">
+                    <div class="form-check form-switch">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Repeat</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="chekrep">
+                    </div>
+                </p>
+
+                <div class="mt-2 forrpt d-none">
+                    <p class="text-secondary">Repeat Days</p>
+                    <div class="form-check form-check-inline mb-3">
+                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
+                        <label>Every Sunday</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
+                        <label>Every Monday</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
+                        <label>Every Tuesday</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
+                        <label>Every Wednesday</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
+                        <label>Every Thursday</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
+                        <label>Every Friday</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-3">
+                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
+                        <label>Every Saturday</label>
+                    </div>
+                </div>
+                <div class="form-floating forrpt d-none mt-3">
+                    <select class="form-select" aria-label="Floating label select">
+                        <option value="" disabled>2-times</option>
+                    </select>
+                    <label for="floatingSelect">Repeat End</label>
+                </div>
+                <p class="text-msg text-danger m-0"></p>
+            </div>
+            <div class="modal-footer p-1">
+                <button type="submit" class="btn btn-secondary btn-info text-light sendcontPop"> Save </button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script asp-append-version="true">
+    $('#chekrep').change(function(){
+        if ($('#chekrep').is(':checked') == true){
+            $('.forrpt').removeClass('d-none');
+        }
+        else{
+            $('.forrpt').addClass('d-none');
+        }
+    });
+</script>

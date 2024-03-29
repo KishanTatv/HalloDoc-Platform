@@ -11,6 +11,9 @@ namespace HalloDoc.Entity.AdminTab
 {
     public class ProfileViewModel
     {
+
+        public AdminCustom AdminCustom { get; set; }
+
         public Admin Admin { get; set; }
 
         public List<Region> Regions { get; set; }

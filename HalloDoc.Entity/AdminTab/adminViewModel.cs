@@ -23,14 +23,14 @@ namespace HalloDoc.Entity.AdminTab
         [Column("firstname")]
         [Required(ErrorMessage = "Firstname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(100, MinimumLength = 3)]
+        [StringLength(15, MinimumLength = 3)]
         public string? Firstname { get; set; }
 
 
         [Column("lastname")]
         [Required(ErrorMessage = "Lastname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(100, MinimumLength = 3)]
+        [StringLength(15, MinimumLength = 3)]
         public string? Lastname { get; set; }
 
         [Column("phonenumber")]
@@ -67,7 +67,7 @@ namespace HalloDoc.Entity.AdminTab
         [Column("state")]
         [Required(ErrorMessage = "State is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only String Enter.")]
-        [StringLength(100)]
+        [StringLength(20, MinimumLength = 2)]
         public string? State { get; set; }
 
         [Column("zipcode")]

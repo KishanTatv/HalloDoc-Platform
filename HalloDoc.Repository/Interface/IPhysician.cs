@@ -13,7 +13,7 @@ namespace HalloDoc.Repository.Interface
 {
     public interface IPhysician
     {
-        Aspnetuser CretephyAspnetUser(ClientInformation user, PhysicianCustom phy);
+        Aspnetuser CretephyAspnetUser(PhysicianCustom phy);
         Physician addNewPhysician(PhysicianProfileViewModel model, string photo, int aspId, int phyAspId);
 
         void addPhyRegion(int phyId, int regioId);
