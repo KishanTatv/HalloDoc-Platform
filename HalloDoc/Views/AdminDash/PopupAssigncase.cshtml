@@ -73,9 +73,9 @@
                 data: { region: region },
                 success: function (response) {
                     $(".PhyOption").empty().append($('<option disabled selected>Select Physician</option>'));
-                    //console.log(response.physician[0]["firstname"]);
+                    //console.log(response.physician[0].physician.firstname);
                     $.each(response.physician, function (index, item) {
-                        $(".PhyOption").append($('<option></option>').val(item.physicianid).text(item.firstname));
+                        $(".PhyOption").append($('<option></option>').val(item.physician.physicianid).text(item.physician.firstname));
                     });
                 },
                 error: function (xhr, status, error) {

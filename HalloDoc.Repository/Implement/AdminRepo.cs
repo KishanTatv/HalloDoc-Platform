@@ -181,9 +181,9 @@ namespace HalloDoc.Repository.Implement
             return region;
         }
 
-        public List<Physician> GetAvaliablePhysician(int regionId)
+        public List<Physicianregion> GetAvaliablePhysician(int regionId)
         {
-            var phyList = _context.Physicians.Where(x => x.Regionid == regionId).ToList();
+            var phyList = _context.Physicianregions.Include(x => x.Physician).Where(x => x.Regionid == regionId).ToList();
             return phyList;
         }
 
@@ -530,5 +530,69 @@ namespace HalloDoc.Repository.Implement
         {
             return _context.Requests.Include(x => x.Physician).ToList();
         }
+
+
+
+        // shift schedule
+        public Shift addNewShift(ShiftPoupViewModel model, string weekdays, int aspId)
+        {
+            BitArray isRepeatbit = new BitArray(1);
+            isRepeatbit[0] = false;
+            if (model.isRepeat == true)
+            {
+                isRepeatbit[0] = true;
+            }
+
+            Shift shift = new Shift
+            {
+                Physicianid = model.phyid,
+                Startdate = model.shiftdate,
+                Isrepeat = isRepeatbit,
+                Weekdays = weekdays,
+                Repeatupto = model.repeatTime,
+                Createddate = System.DateTime.Now,
+                Createdby = aspId,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
+            };
+            _context.Shifts.Add(shift);
+            _context.SaveChanges();
+            return shift;
+        }
+
+        public Shiftdetail addNewShiftDetail(int shiftId, DateOnly shiftDate, ShiftPoupViewModel model, short status)
+        {
+            BitArray Deletebit = new BitArray(1);
+            Deletebit[0] = false;
+            Shiftdetail shiftdetail = new Shiftdetail
+            {
+                Shiftid = shiftId,
+                Shiftdate = shiftDate,
+                Regionid = model.regId,
+                Starttime = model.timeStart,
+                Endtime = model.timeEnd,
+                Status = status,
+                Isdeleted = Deletebit,
+            };
+            _context.Shiftdetails.Add(shiftdetail);
+            _context.SaveChanges();
+            return shiftdetail;
+        }
+
+        public List<phyCustomNameViewModel> getAllPhysicianName()
+        {
+            return _context.Physicians
+               .Select(x => new phyCustomNameViewModel
+               {
+                   Firstname = x.Firstname,
+                   Lastname = x.Lastname,
+                   Physicianid = x.Physicianid,
+               }).ToList();
+        }
+
+        public IEnumerable<Shiftdetail> getAllShiftdetail()
+        {
+            return _context.Shiftdetails.ToList();
+        }
+
     }
 }

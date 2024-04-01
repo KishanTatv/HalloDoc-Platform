@@ -87,14 +87,37 @@
         selectable: true,
     });
 
+    function scheduleRecord(){
+        $.ajax({
+            url: '/AdminTab/getScheduleData',
+            success: function (response) {
+                const shiftData = response.shiftdetail;
+                console.log(shiftData);
+
+                const events = shiftData.map((shift) => ({
+                    id: shift.shiftdetailid,
+                    title: `${shift.endtime} ${shift.shiftdetailid}`,
+                    start: `${shift.shiftdate}T${shift.starttime}`,
+                    end: `${shift.shiftdate}T${shift.endtime}`,
+                }));
+
+
+                calendar.setOption('events', events);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
+
     updateDateDisplay(calendar.getDate());
-    calendar.on('datesRender', function () {
-        updateDateDisplay(calendar.getDate());
-    });
+    scheduleRecord();
     calendar.render();
 
     $('#WeekSchedule').click(function () {
         calendar.changeView('dayGridWeek');
+        scheduleRecord();
         updateDateDisplay(calendar.getDate());
     });
 
@@ -104,6 +127,7 @@
     });
 
     $('#DaySchedule').click(function () {
+        scheduleRecord();
         calendar.changeView('resourceTimelineDay');
         calendar.setOption('aspectRatio', 1.5);
         calendar.setOption('resourceAreaColumns', [
@@ -112,16 +136,22 @@
                 headerContent: 'Staff'
             }
         ]);
-        calendar.setOption('resources', [
-            { id: 'a', title: 'Auditorium A' },
-            { id: 'b', title: 'Auditorium B' },
-            { id: 'c', title: 'Auditorium C' },
-            { id: 'd', title: 'Auditorium D' },
-            { id: 'e', title: 'Auditorium E' },
-            { id: 'f', title: 'Auditorium F' },
-            { id: 'g', title: 'Auditorium G' },
-            { id: 'h', title: 'Auditorium H' },
-        ]);
+
+        $.ajax({
+            url: '/AdminTab/getPhysicianRecord',
+            success: function (response) {
+                console.log(response.phyCustomNameViewModel);
+                const resources = response.phyCustomNameViewModel.map((physician) => ({
+                    id: physician.physicianid,
+                    title: `${physician.firstname} ${physician.lastname}`,
+                }));
+                calendar.setOption('resources', resources);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+        
         updateDateDisplay(calendar.getDate());
     });
 

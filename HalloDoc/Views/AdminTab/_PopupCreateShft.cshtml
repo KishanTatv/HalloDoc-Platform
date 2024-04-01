@@ -1,6 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
+@model HalloDoc.Entity.AdminTab.ShiftPoupViewModel;
 
 
 <div class="modal fade" id="NewShift" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -12,87 +13,101 @@
                 </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <p>Choose communication to send message</p>
-                <div class="form-floating">
-                    <select class="form-select selectReg" aria-label="Floating label select">
-                        <option value="" disabled>select Region</option>
-                    </select>
-                    <label for="floatingSelect">Region</label>
-                </div>
-                <div class="form-floating mt-2">
-                    <select class="form-select selectPhy" aria-label="Floating label select">
-                        <option value="" disabled>select</option>
-                    </select>
-                    <label for="floatingSelect">Physician</label>
-                </div>
-                <div class="form-floating mt-2">
-                    <input type="date" class="form-control bg-transparent"
-                           placeholder="shiftdate">
-                    <label> Shift Date </label>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-md-6 form-floating">
-                        <input type="time" class="form-control bg-transparent"
-                               placeholder="start">
-                        <label class="ms-3"> Start </label>
+            <form id="ShiftForm" novalidate class="needs-validation">
+                <div class="modal-body">
+                    <p>Choose communication to send message</p>
+                    <div class="form-floating">
+                        <input type="hidden" class="regId" asp-for="regId" />
+                        <select class="form-select selectReg" aria-label="Floating label select" onchange="checkData()">
+                            <option value="" selected disabled>select Region</option>
+                            @foreach (var reg in Model.Regions)
+                            {
+                                <option value="@reg.Regionid">@reg.Name</option>
+                            }
+                        </select>
+                        <label for="floatingSelect">Region</label>
+                        <span class="text-danger regMsg"></span>
                     </div>
-                    <div class="col-md-6 form-floating">
-                        <input type="time" class="form-control bg-transparent"
-                               placeholder="end">
-                        <label class="ms-3"> End </label>
+                    <input type="hidden" class="phid" asp-for="phyid" />
+                    <div class="form-floating mt-2">
+                        <select class="form-select PhyOption" aria-label="Floating label select" onchange="checkData()">
+                            <option value="" disabled>select</option>
+                        </select>
+                        <label for="floatingSelect">Physician</label>
+                        <span class="text-danger phyOptnMsg"></span>
                     </div>
-                </div>
-                <p class="ms-2">
-                    <div class="form-check form-switch">
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Repeat</label>
-                        <input class="form-check-input" type="checkbox" role="switch" id="chekrep">
+                    <div class="form-floating mt-2">
+                        <input type="date" class="form-control bg-transparent shiftDate"
+                               placeholder="shiftdate" asp-for="shiftdate" onchange="checkData()">
+                        <label> Shift Date </label>
+                        <span class="text-danger shiftdateMsg"></span>
                     </div>
-                </p>
+                    <div class="row mt-2">
+                        <div class="col-md-6 form-floating">
+                            <input type="time" class="form-control bg-transparent"
+                                   placeholder="start" asp-for="timeStart">
+                            <label class="ms-3"> Start </label>
+                        </div>
+                        <div class="col-md-6 form-floating">
+                            <input type="time" class="form-control bg-transparent"
+                                   placeholder="end" asp-for="timeEnd">
+                            <label class="ms-3"> End </label>
+                        </div>
+                    </div>
+                    <p class="ms-2">
+                        <div class="form-check form-switch">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Repeat</label>
+                            <input class="form-check-input" type="checkbox" role="switch" id="chekrep" asp-for="isRepeat">
+                        </div>
+                    </p>
 
-                <div class="mt-2 forrpt d-none">
-                    <p class="text-secondary">Repeat Days</p>
-                    <div class="form-check form-check-inline mb-3">
-                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
-                        <label>Every Sunday</label>
+                    <div class="mt-2 forrpt d-none">
+                        <p class="text-secondary">Repeat Days</p>
+                        <div class="form-check form-check-inline mb-3">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Sunday">
+                            <label>Every Sunday</label>
+                        </div>
+                        <div class="form-check form-check-inline mb-3">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Monday">
+                            <label>Every Monday</label>
+                        </div>
+                        <div class="form-check form-check-inline mb-3">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Tuesday">
+                            <label>Every Tuesday</label>
+                        </div>
+                        <div class="form-check form-check-inline mb-3">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Wednesday">
+                            <label>Every Wednesday</label>
+                        </div>
+                        <div class="form-check form-check-inline mb-3">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Thursday">
+                            <label>Every Thursday</label>
+                        </div>
+                        <div class="form-check form-check-inline mb-3">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Friday">
+                            <label>Every Friday</label>
+                        </div>
+                        <div class="form-check form-check-inline mb-3">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Saturday">
+                            <label>Every Saturday</label>
+                        </div>
                     </div>
-                    <div class="form-check form-check-inline mb-3">
-                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
-                        <label>Every Monday</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-3">
-                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
-                        <label>Every Tuesday</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-3">
-                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
-                        <label>Every Wednesday</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-3">
-                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
-                        <label>Every Thursday</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-3">
-                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
-                        <label>Every Friday</label>
-                    </div>
-                    <div class="form-check form-check-inline mb-3">
-                        <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="">
-                        <label>Every Saturday</label>
+                        <span class="text-danger selectreptMsg"></span>
+                    <div class="form-floating forrpt d-none mt-3">
+                        <input type="hidden" class="reptTime" asp-for="repeatTime" value="2" />
+                        <select class="form-select reptTimeSelect" aria-label="Floating label select" onchange="checkData()">
+                            <option value="2" selected>2-times</option>
+                            <option value="3"> 3-times</option>
+                            <option value="4"> 4-times</option>
+                        </select>
+                        <label for="floatingSelect">Repeat End</label>
                     </div>
                 </div>
-                <div class="form-floating forrpt d-none mt-3">
-                    <select class="form-select" aria-label="Floating label select">
-                        <option value="" disabled>2-times</option>
-                    </select>
-                    <label for="floatingSelect">Repeat End</label>
+                <div class="modal-footer p-1">
+                    <button type="submit" class="btn btn-secondary btn-info text-light sendcontPop"> Save </button>
+                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
                 </div>
-                <p class="text-msg text-danger m-0"></p>
-            </div>
-            <div class="modal-footer p-1">
-                <button type="submit" class="btn btn-secondary btn-info text-light sendcontPop"> Save </button>
-                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -100,12 +115,114 @@
 
 
 <script asp-append-version="true">
-    $('#chekrep').change(function(){
-        if ($('#chekrep').is(':checked') == true){
+    $('#chekrep').change(function () {
+        if ($('#chekrep').is(':checked') == true) {
             $('.forrpt').removeClass('d-none');
         }
-        else{
+        else {
             $('.forrpt').addClass('d-none');
         }
     });
+
+    $('.selectReg').change(function () {
+        var region = $('.selectReg').val();
+        $.ajax({
+            url: '/AdminDash/CheckPhysician',
+            method: 'POST',
+            data: { region: region },
+            success: function (response) {
+                $(".regId").val(region);
+                $(".PhyOption").empty().append($('<option disabled selected>Select Physician</option>'));
+                $.each(response.physician, function (index, item) {
+                    $(".PhyOption").append($('<option></option>').val(item.physician.physicianid).text(item.physician.firstname));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.PhyOption').change(function (e) {
+        e.preventDefault();
+        $('.phid').val($('.PhyOption').val());
+    });
+
+    $('.reptTimeSelect').change(function (e) {
+        e.preventDefault();
+        $('.reptTime').val($('.reptTimeSelect').val());
+    });
+
+    function reptList() {
+        let boxlist = [];
+        let inputs = $(".checkboxClass");
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].checked) {
+                boxlist.push(inputs[i].value);
+            }
+        }
+        return boxlist;
+    }
+
+    function checkData() {
+        console.log($('.shiftDate').val());
+        if ($('.selectReg').val() == null) {
+            $('.regMsg').text("Please Select Region");
+            return false;
+        }
+        else if ($('.PhyOption').val() == null) {
+            $('.phyOptnMsg').text("Please Select Account Type");
+            $('.regMsg').text("");
+            return false;
+        }
+        else if ($('.shiftDate').val() == '') {
+            $('.regMsg').text("");
+            $('.phyOptnMsg').text("");
+            $('.shiftdateMsg').text("please select Shift Date");
+            return false;
+        }
+        else if ($('#chekrep').is(':checked') == true) {
+            if (reptList().length <= 0) {
+                $('.regMsg').text("");
+                $('.phyOptnMsg').text("");
+                $('.shiftdateMsg').text("");
+                $('.selectreptMsg').text("please select opption");
+                return false;
+            }
+            else {
+                $('.phyOptnMsg').text("");
+                $('.shiftdateMsg').text("");
+                $('.selectreptMsg').text("");
+                return true;
+            }
+        }
+        else {
+            $('.phyOptnMsg').text("");
+            $('.shiftdateMsg').text("");
+            $('.selectreptMsg').text("");
+            return true;
+        }
+        
+    }
+
+    $('#ShiftForm').submit(function (e) {
+        e.preventDefault();
+        var formdata = $('#ShiftForm').serialize();
+        if (checkData()) {
+            $.ajax({
+                url: '/AdminTab/shiftData',
+                method: 'POST',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: formdata,
+                success: function (response) {
+                    if (response.value == "Ok") {
+                        window.location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    })
 </script>

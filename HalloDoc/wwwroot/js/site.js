@@ -1,9 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-
-let p = document.querySelectorAll('.iti--allow-dropdown');
+﻿let p = document.querySelectorAll('.iti--allow-dropdown');
 p.forEach(item => {
     item.classList.add('h-75');
 })

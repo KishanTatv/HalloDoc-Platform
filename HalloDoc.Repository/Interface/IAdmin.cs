@@ -52,7 +52,7 @@ namespace HalloDoc.Repository.Interface
 
         List<Region> getAllRegion();
 
-        List<Physician> GetAvaliablePhysician(int regionId);
+        List<Physicianregion> GetAvaliablePhysician(int regionId);
 
 
         //block req
@@ -123,6 +123,16 @@ namespace HalloDoc.Repository.Interface
 
         // Request whole data
         List<Request> getAllReqData();
+
+
+        // shift schedule
+        Shift addNewShift(ShiftPoupViewModel model, string weekdays, int aspId);
+
+        Shiftdetail addNewShiftDetail(int shiftId, DateOnly shiftDate, ShiftPoupViewModel model, short status);
+
+        List<phyCustomNameViewModel> getAllPhysicianName();
+
+        IEnumerable<Shiftdetail> getAllShiftdetail();
 
     }
 }

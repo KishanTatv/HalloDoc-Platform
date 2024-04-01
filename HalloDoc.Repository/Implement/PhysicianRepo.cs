@@ -175,5 +175,17 @@ namespace HalloDoc.Repository.Implement
             _context.Physicians.Update(ph);
             _context.SaveChanges();
         }
+
+        public void AddOnboardingInphysician(int phyId, BitArray contractBit, BitArray backgrundBit, BitArray hipaaBit, BitArray discloureBit, BitArray licenceBit)
+        {
+            Physician phy = _context.Physicians.FirstOrDefault(x => x.Physicianid == phyId);
+            phy.Isagreementdoc = contractBit;
+            phy.Isbackgrounddoc = backgrundBit;
+            phy.Istrainingdoc = hipaaBit;
+            phy.Isnondisclosuredoc = discloureBit;
+            phy.Islicensedoc = licenceBit;
+            _context.Physicians.Update(phy);
+            _context.SaveChanges();
+        }
     }
 }

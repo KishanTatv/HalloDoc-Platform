@@ -17,8 +17,8 @@ public partial class Shiftdetail
     [Column("shiftid")]
     public int Shiftid { get; set; }
 
-    [Column("shiftdate", TypeName = "timestamp without time zone")]
-    public DateTime Shiftdate { get; set; }
+    [Column("shiftdate")]
+    public DateOnly Shiftdate { get; set; }
 
     [Column("regionid")]
     public int? Regionid { get; set; }

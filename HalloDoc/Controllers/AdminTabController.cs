@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office2016.Excel;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Office2016.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HalloDoc.Entity.AdminTab;
@@ -9,7 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
+using System.Text;
+using static HalloDoc.HelperClass.HalloEnum;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static Uno.WinRTFeatureConfiguration;
 
@@ -133,7 +137,7 @@ namespace HalloDoc.Controllers
             }
             var Tcount = data.Count();
             data = data.Skip(page * 5).Take(5).ToList();
-            if(data.Count() == 0)
+            if (data.Count() == 0)
             {
                 TempData["DataMsg"] = "No More Records !";
             }
@@ -277,6 +281,38 @@ namespace HalloDoc.Controllers
             List<IFormFile> files = new List<IFormFile>();
             files.Add(ContractorAgreement); files.Add(Background); files.Add(HIPAA); files.Add(discloure); files.Add(License);
             UploadPhyDocumnet(files, phid);
+            BitArray contractBit = new BitArray(1);
+            contractBit[0] = false;
+            BitArray backgrundBit = new BitArray(1);
+            backgrundBit[0] = false;
+            BitArray hipaaBit = new BitArray(1);
+            hipaaBit[0] = false;
+            BitArray discloureBit = new BitArray(1);
+            discloureBit[0] = false;
+            BitArray licenceBit = new BitArray(1);
+            licenceBit[0] = false;
+
+            if (ContractorAgreement != null)
+            {
+                contractBit[0] = true;
+            }
+            if (Background != null)
+            {
+                backgrundBit[0] = true;
+            }
+            if (HIPAA != null)
+            {
+                hipaaBit[0] = true;
+            }
+            if (discloure != null)
+            {
+                discloureBit[0] = true;
+            }
+            if (License != null)
+            {
+                licenceBit[0] = true;
+            }
+            _physician.AddOnboardingInphysician(phid, contractBit, backgrundBit, hipaaBit, discloureBit, licenceBit);
             return RedirectToAction("Provider");
         }
 
@@ -313,6 +349,38 @@ namespace HalloDoc.Controllers
                 photoBytes = memoryStream.ToArray();
             }
             var photoBase64 = Convert.ToBase64String(photoBytes);
+            BitArray contractBit = new BitArray(1);
+            contractBit[0] = false;
+            BitArray backgrundBit = new BitArray(1);
+            backgrundBit[0] = false;
+            BitArray hipaaBit = new BitArray(1);
+            hipaaBit[0] = false;
+            BitArray discloureBit = new BitArray(1);
+            discloureBit[0] = false;
+            BitArray licenceBit = new BitArray(1);
+            licenceBit[0] = false;
+
+            if (ContractorAgreement != null)
+            {
+                contractBit[0] = true;
+            }
+            if (Background != null)
+            {
+                backgrundBit[0] = true;
+            }
+            if (HIPAA != null)
+            {
+                hipaaBit[0] = true;
+            }
+            if (discloure != null)
+            {
+                discloureBit[0] = true;
+            }
+            if (License != null)
+            {
+                licenceBit[0] = true;
+            }
+
             Aspnetuser asp = _physician.CretephyAspnetUser(model.PhysicianCustom);
             _patient.addAspnetUserrole(asp.Id, 2);
             Physician phy = _physician.addNewPhysician(model, photoBase64, aspId, asp.Id);
@@ -326,6 +394,7 @@ namespace HalloDoc.Controllers
             files.Add(ContractorAgreement); files.Add(Background); files.Add(HIPAA); files.Add(discloure); files.Add(License);
 
             UploadPhyDocumnet(files, phy.Physicianid);
+            _physician.AddOnboardingInphysician(phy.Physicianid, contractBit, backgrundBit, hipaaBit, discloureBit, licenceBit);
             string body = "Try to login using credentials:\n" + $"Username: {"MD." + model.PhysicianCustom.Lastname.Trim().ToUpper()} {model.PhysicianCustom.Firstname.Trim().Substring(0, 1).ToUpper()}\n" + $"Password: {model.PhysicianCustom.Password}";
             _Genral.SendEmailOffice365(model.PhysicianCustom.Email, "Login Credintial", body, null);
             _Genral.addEmailLog(body, "Login Credintial", model.PhysicianCustom.Email, null, Convert.ToInt16(Request.Cookies["CookieRole"]), null, _Admin.getAdminId(Request.Cookies["CookieEmail"]), null);
@@ -498,7 +567,83 @@ namespace HalloDoc.Controllers
 
         public IActionResult NewShiftPopUp()
         {
-            return PartialView("_PopupCreateShft");
+            var region = _Admin.getAllRegion();
+            var dataModel = new ShiftPoupViewModel { Regions = region };
+            return PartialView("_PopupCreateShft", dataModel);
+        }
+
+        public IActionResult shiftData(ShiftPoupViewModel formdata)
+        {
+            int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+            var repeatDayList = Request.Form["checkDays"].ToList();
+            StringBuilder weekDays = new StringBuilder("0000000");
+            if (repeatDayList.Contains("Sunday"))
+            {
+                weekDays[0] = '1';
+            }
+            if (repeatDayList.Contains("Monday"))
+            {
+                weekDays[1] = '1';
+            }
+            if (repeatDayList.Contains("Tuesday"))
+            {
+                weekDays[2] = '1';
+            }
+            if (repeatDayList.Contains("Wednesday"))
+            {
+                weekDays[3] = '1';
+            }
+            if (repeatDayList.Contains("Thursday"))
+            {
+                weekDays[4] = '1';
+            }
+            if (repeatDayList.Contains("Friday"))
+            {
+                weekDays[5] = '1';
+            }
+            if (repeatDayList.Contains("Saturday"))
+            {
+                weekDays[6] = '1';
+            }
+            string weekday = weekDays.ToString();
+            var shiftDateDay = formdata.shiftdate.DayOfWeek.ToString();
+
+            var dayToIntMapping = new Dictionary<string, int>
+            {
+                { "Sunday", 1 },
+                { "Monday", 2 },
+                { "Tuesday", 3 },
+                { "Wednesday", 4 },
+                { "Thursday", 5 },
+                { "Friday", 6 },
+                { "Saturday", 7 }
+            };
+            Shift shift = _Admin.addNewShift(formdata, weekday, aspId);
+            dayToIntMapping.TryGetValue(shiftDateDay, out int dayOfWeekInt1);
+            foreach (var dayList in repeatDayList)
+            {
+                dayToIntMapping.TryGetValue(dayList, out int dayOfWeekInt2);
+                DateOnly detailDate = formdata.shiftdate.AddDays(Math.Abs(dayOfWeekInt2 - dayOfWeekInt1));
+                _Admin.addNewShiftDetail(shift.Shiftid, detailDate, formdata, 1);
+                for (var i = 0; i < formdata.repeatTime - 1; i++)
+                {
+                    DateOnly detailDatesMore = detailDate.AddDays(7);
+                    _Admin.addNewShiftDetail(shift.Shiftid, detailDatesMore, formdata, 1);
+                }
+            }
+            return Json(new { value = "Ok" });
+        }
+
+        public IActionResult getPhysicianRecord()
+        {
+            var data = _Admin.getAllPhysicianName();
+            return Json(new { phyCustomNameViewModel = data });
+        }
+
+        public IActionResult getScheduleData()
+        {
+            var data = _Admin.getAllShiftdetail();
+            return Json(new { Shiftdetail = data});
         }
         #endregion
 
@@ -568,10 +713,10 @@ namespace HalloDoc.Controllers
             return View();
         }
 
-        public IActionResult PatientHistoryData(string Hfname, string Hlname, string Hemail, string Hphone ) 
+        public IActionResult PatientHistoryData(string Hfname, string Hlname, string Hemail, string Hphone)
         {
             var data = _Admin.getAllUserData();
-            if(Hfname != null)
+            if (Hfname != null)
             {
                 data = data.Where(x => x.Firstname.Contains(Hfname)).ToList();
             }

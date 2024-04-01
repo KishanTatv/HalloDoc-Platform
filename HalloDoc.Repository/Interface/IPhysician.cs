@@ -27,5 +27,6 @@ namespace HalloDoc.Repository.Interface
         void updatePhysicianLocation(Physician physician, string email, int aspId);
         void updateAdditionPhyData(string busName, string busWeb, string photo, string sign, string adminNote, string email, int aspId);
         void isDeletePhy(int phid);
+        void AddOnboardingInphysician(int phyid, BitArray contractBit, BitArray backgrundBit, BitArray hipaaBit, BitArray discloureBit, BitArray licenceBit);
     }
 }
