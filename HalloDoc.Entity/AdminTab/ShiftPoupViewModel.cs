@@ -12,6 +12,8 @@ namespace HalloDoc.Entity.AdminTab
     {
         public List<Region> Regions { get; set; }
 
+        public int shiftDetailId { get; set; }
+        
         public int regId { get; set; }
 
         [Required(ErrorMessage = "Please select Physician")]
@@ -19,6 +21,8 @@ namespace HalloDoc.Entity.AdminTab
 
         [Required(ErrorMessage = "Please select ShiftDate")]
         public DateOnly shiftdate { get; set; }
+
+        public string formatShiftDate { get; set; }
         public TimeOnly timeStart { get; set; }
         public TimeOnly timeEnd { get; set; }
 

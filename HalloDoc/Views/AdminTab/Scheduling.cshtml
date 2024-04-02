@@ -1,7 +1,7 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-
+@model List<HalloDoc.Entity.Models.Region>;
 
 @{
     ViewData["Title"] = "Provider Location";
@@ -28,7 +28,10 @@
             <div class="w-25">
                 <select class="form-select" aria-label="Floating label select example">
                     <option selected>All Region</option>
-                    <option value="1">Surat</option>
+                    @foreach (var reg in Model)
+                    {
+                        <option value="@reg.Regionid">@reg.Name</option>
+                    }
                 </select>
             </div>
             <div>
@@ -68,39 +71,57 @@
         var formattedDate;
         if (calendar.view.type === 'dayGridMonth') {
             formattedDate = date.toLocaleString('default', { month: 'short', year: 'numeric' });
-        } else if (calendar.view.type === 'dayGridWeek') {
+        } else if (calendar.view.type === 'resourceTimelineWeek') {
             var startOfWeek = new Date(date);
-            startOfWeek.setDate(date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1)); // Get the first day of the week
+            startOfWeek.setDate(date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1));
             var endOfWeek = new Date(date);
-            endOfWeek.setDate(startOfWeek.getDate() + 6); // Get the last day of the week
-            formattedDate = startOfWeek.toLocaleString('default', { month: 'short', day: '2-digit' }) + ' - ' +
-                endOfWeek.toLocaleString('default', { month: 'short', day: '2-digit', year: 'numeric' });
+            endOfWeek.setDate(startOfWeek.getDate() + 6);
+            formattedDate = startOfWeek.toLocaleString('default', { month: 'short', day: '2-digit' }) + ' - ' + endOfWeek.toLocaleString('default', { month: 'short', day: '2-digit', year: 'numeric' });
         } else if (calendar.view.type === 'resourceTimelineDay') {
             formattedDate = date.toLocaleString('default', { weekday: 'long', month: 'short', day: '2-digit', year: 'numeric' });
         }
         document.getElementById("dateDisplay").innerHTML = formattedDate;
+    }
+    function ViewShift(eventid) {
+        $.ajax({
+            url: '/AdminTab/viewShift',
+            method: 'POST',
+            data: { eventid: eventid },
+            success: function (response) {
+                $("#PartialPopup").html(response);
+                var my = new bootstrap.Modal(document.getElementById('ViewShift'));
+                my.show();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
     }
 
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         selectable: true,
+        eventClick: function (event, jsEvent, view) {
+            ViewShift(event.event.id);
+        },
+        themeSystem: 'bootstrap5',
+        headerToolbar: false,
     });
 
-    function scheduleRecord(){
+    function scheduleRecord() {
         $.ajax({
             url: '/AdminTab/getScheduleData',
             success: function (response) {
                 const shiftData = response.shiftdetail;
-                console.log(shiftData);
 
                 const events = shiftData.map((shift) => ({
                     id: shift.shiftdetailid,
-                    title: `${shift.endtime} ${shift.shiftdetailid}`,
+                    title: `${shift.starttime}-${shift.endtime} / ${shift.shift.physician.firstname}`,
                     start: `${shift.shiftdate}T${shift.starttime}`,
                     end: `${shift.shiftdate}T${shift.endtime}`,
+                    resourceId: `${shift.shift.physicianid}`,
                 }));
-
 
                 calendar.setOption('events', events);
             },
@@ -109,38 +130,10 @@
             }
         });
     }
-
-
-    updateDateDisplay(calendar.getDate());
-    scheduleRecord();
-    calendar.render();
-
-    $('#WeekSchedule').click(function () {
-        calendar.changeView('dayGridWeek');
-        scheduleRecord();
-        updateDateDisplay(calendar.getDate());
-    });
-
-    $('#MonthSchedule').click(function () {
-        calendar.changeView('dayGridMonth');
-        updateDateDisplay(calendar.getDate());
-    });
-
-    $('#DaySchedule').click(function () {
-        scheduleRecord();
-        calendar.changeView('resourceTimelineDay');
-        calendar.setOption('aspectRatio', 1.5);
-        calendar.setOption('resourceAreaColumns', [
-            {
-                field: 'title',
-                headerContent: 'Staff'
-            }
-        ]);
-
+    function setResources() {
         $.ajax({
             url: '/AdminTab/getPhysicianRecord',
             success: function (response) {
-                console.log(response.phyCustomNameViewModel);
                 const resources = response.phyCustomNameViewModel.map((physician) => ({
                     id: physician.physicianid,
                     title: `${physician.firstname} ${physician.lastname}`,
@@ -151,7 +144,44 @@
                 console.error(xhr.responseText);
             }
         });
-        
+    }
+
+
+    updateDateDisplay(calendar.getDate());
+    scheduleRecord();
+    calendar.event
+    calendar.render();
+
+    $('#WeekSchedule').click(function () {
+        calendar.changeView('resourceTimelineWeek');
+        calendar.setOption('slotLabelInterval', { days: 1 });
+        calendar.setOption('slotLabelContent', function (arg) {
+            let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            return days[arg.date.getDay()] + ' ' + arg.date.getDate();
+        });
+        setResources();
+        updateDateDisplay(calendar.getDate());
+    });
+
+    $('#MonthSchedule').click(function () {
+        calendar.changeView('dayGridMonth');
+        updateDateDisplay(calendar.getDate());
+    });
+
+    $('#DaySchedule').click(function () {
+        calendar.changeView('resourceTimelineDay');
+        calendar.setOption('slotLabelInterval', null);
+        calendar.setOption('slotLabelContent', function (arg) {
+            return (arg.date.getHours() % 12 || 12) + (arg.date.getHours() < 12 ? 'A' : 'P');
+        });
+        calendar.setOption('aspectRatio', 1.5);
+        calendar.setOption('resourceAreaColumns', [
+            {
+                field: 'title',
+                headerContent: 'Staff'
+            }
+        ]);
+        setResources();
         updateDateDisplay(calendar.getDate());
     });
 

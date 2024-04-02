@@ -128,11 +128,18 @@ namespace HalloDoc.Repository.Interface
         // shift schedule
         Shift addNewShift(ShiftPoupViewModel model, string weekdays, int aspId);
 
+        bool checkExistShift(ShiftPoupViewModel model, DateOnly newDate);
         Shiftdetail addNewShiftDetail(int shiftId, DateOnly shiftDate, ShiftPoupViewModel model, short status);
 
         List<phyCustomNameViewModel> getAllPhysicianName();
 
         IEnumerable<Shiftdetail> getAllShiftdetail();
+
+        ShiftPoupViewModel getShiftDetailSpecific(int evenetId);
+
+        void deleteShiftDetail(int shiftdetailId);
+
+        void updateShiftDetail(ShiftPoupViewModel model);
 
     }
 }

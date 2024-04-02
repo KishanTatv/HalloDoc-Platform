@@ -21,10 +21,6 @@ a.fc-col-header-cell-cushion {
     border-bottom: 1px solid #d3c4c4;
 }
 
-.fc .fc-toolbar.fc-header-toolbar {
-    margin-bottom: 1.5em;
-    display: none;
-} 
 
 .fc-timeline-slot-frame{
     background-color: gray;
@@ -52,4 +48,12 @@ a.fc-col-header-cell-cushion {
 
 .fc-event {
     background-color: #b2f3b2;
+}
+
+.fc-direction-ltr .fc-daygrid-event .fc-event-time {
+    display: none;
+}
+
+.fc-daygrid-dot-event .fc-event-title{
+    font-weight: 500;
 }

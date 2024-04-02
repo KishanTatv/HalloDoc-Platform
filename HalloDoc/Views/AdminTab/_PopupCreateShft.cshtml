@@ -16,6 +16,7 @@
             <form id="ShiftForm" novalidate class="needs-validation">
                 <div class="modal-body">
                     <p>Choose communication to send message</p>
+                    <p class="text-danger text-center checkMsg"></p>
                     <div class="form-floating">
                         <input type="hidden" class="regId" asp-for="regId" />
                         <select class="form-select selectReg" aria-label="Floating label select" onchange="checkData()">
@@ -64,43 +65,45 @@
                     <div class="mt-2 forrpt d-none">
                         <p class="text-secondary">Repeat Days</p>
                         <div class="form-check form-check-inline mb-3">
-                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Sunday">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="1">
                             <label>Every Sunday</label>
                         </div>
                         <div class="form-check form-check-inline mb-3">
-                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Monday">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="2">
                             <label>Every Monday</label>
                         </div>
                         <div class="form-check form-check-inline mb-3">
-                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Tuesday">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="3">
                             <label>Every Tuesday</label>
                         </div>
                         <div class="form-check form-check-inline mb-3">
-                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Wednesday">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="4">
                             <label>Every Wednesday</label>
                         </div>
                         <div class="form-check form-check-inline mb-3">
-                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Thursday">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="5">
                             <label>Every Thursday</label>
                         </div>
                         <div class="form-check form-check-inline mb-3">
-                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Friday">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="6">
                             <label>Every Friday</label>
                         </div>
                         <div class="form-check form-check-inline mb-3">
-                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="Saturday">
+                            <input name="checkDays" class="form-check-input me-2 checkboxClass" type="checkbox" value="7">
                             <label>Every Saturday</label>
                         </div>
                     </div>
                         <span class="text-danger selectreptMsg"></span>
                     <div class="form-floating forrpt d-none mt-3">
-                        <input type="hidden" class="reptTime" asp-for="repeatTime" value="2" />
+                        <input type="hidden" class="reptTime" asp-for="repeatTime"/>
                         <select class="form-select reptTimeSelect" aria-label="Floating label select" onchange="checkData()">
-                            <option value="2" selected>2-times</option>
+                            <option value="0" selected disabled> None </option>
+                            <option value="2">2-times</option>
                             <option value="3"> 3-times</option>
                             <option value="4"> 4-times</option>
                         </select>
                         <label for="floatingSelect">Repeat End</label>
+                        <span class="text-danger selectrepttimeMsg"></span>
                     </div>
                 </div>
                 <div class="modal-footer p-1">
@@ -165,7 +168,6 @@
     }
 
     function checkData() {
-        console.log($('.shiftDate').val());
         if ($('.selectReg').val() == null) {
             $('.regMsg').text("Please Select Region");
             return false;
@@ -189,10 +191,18 @@
                 $('.selectreptMsg').text("please select opption");
                 return false;
             }
+            else if ($('.reptTimeSelect').val() == null) {
+                $('.phyOptnMsg').text("");
+                $('.shiftdateMsg').text("");
+                $('.selectreptMsg').text("");
+                $('.selectrepttimeMsg').text("Please select repeat End.");
+                return false;
+            }
             else {
                 $('.phyOptnMsg').text("");
                 $('.shiftdateMsg').text("");
                 $('.selectreptMsg').text("");
+                $('.selectrepttimeMsg').text("");
                 return true;
             }
         }
@@ -200,6 +210,7 @@
             $('.phyOptnMsg').text("");
             $('.shiftdateMsg').text("");
             $('.selectreptMsg').text("");
+            $('.selectrepttimeMsg').text("");
             return true;
         }
         
@@ -208,15 +219,32 @@
     $('#ShiftForm').submit(function (e) {
         e.preventDefault();
         var formdata = $('#ShiftForm').serialize();
+        console.log(checkData());
         if (checkData()) {
             $.ajax({
-                url: '/AdminTab/shiftData',
+                url: '/AdminTab/checkShiftExist',
                 method: 'POST',
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                 data: formdata,
                 success: function (response) {
                     if (response.value == "Ok") {
-                        window.location.reload();
+                        $.ajax({
+                            url: '/AdminTab/shiftData',
+                            method: 'POST',
+                            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                            data: formdata,
+                            success: function (response) {
+                                if (response.value == "Ok") {
+                                    window.location.reload();
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                    else{
+                        $('.checkMsg').text("Physician is busy with other shift");
                     }
                 },
                 error: function (xhr, status, error) {

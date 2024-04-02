@@ -7,6 +7,7 @@ using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -559,6 +560,16 @@ namespace HalloDoc.Repository.Implement
             return shift;
         }
 
+        public bool IsInDateRange(TimeOnly dateToCheck, TimeOnly startDate, TimeOnly endDate)
+        {
+            return dateToCheck >= startDate && dateToCheck <= endDate;
+        }
+
+        public bool checkExistShift(ShiftPoupViewModel model, DateOnly newDate)
+        {
+            return _context.Shiftdetails.Include(x => x.Shift).Where(x => x.Shiftdate == newDate && x.Shift.Physicianid == model.phyid && x.Starttime== model.timeStart).Any();
+        }
+
         public Shiftdetail addNewShiftDetail(int shiftId, DateOnly shiftDate, ShiftPoupViewModel model, short status)
         {
             BitArray Deletebit = new BitArray(1);
@@ -591,8 +602,58 @@ namespace HalloDoc.Repository.Implement
 
         public IEnumerable<Shiftdetail> getAllShiftdetail()
         {
-            return _context.Shiftdetails.ToList();
+            BitArray deleteBit = new BitArray(1);
+            deleteBit[0] = true;
+            return _context.Shiftdetails.Include(x => x.Shift).ThenInclude(x => x.Physician).Where(x => x.Isdeleted != deleteBit).ToList();
         }
 
+
+
+        public ShiftPoupViewModel getShiftDetailSpecific(int evenetId)
+        {
+            var data = _context.Shiftdetails
+                .Include(x => x.Shift)
+                .ThenInclude(x => x.Physician)
+                .Where(x => x.Shiftdetailid == evenetId)
+                .Select(x => new ShiftPoupViewModel
+                {
+                    shiftdate = x.Shiftdate,
+                    timeStart = x.Starttime,
+                    timeEnd = x.Endtime,
+                    phyid = x.Shift.Physicianid,
+                    regId = (int)x.Regionid,
+                })
+                .FirstOrDefault();
+
+            return data;
+        }
+
+        public void deleteShiftDetail(int shiftdetailId)
+        {
+            BitArray deleteBit = new BitArray(1);
+            deleteBit[0] = true;
+            Shiftdetail shiftdetail = _context.Shiftdetails.FirstOrDefault(x => x.Shiftdetailid == shiftdetailId);
+            shiftdetail.Isdeleted = deleteBit;
+            _context.Shiftdetails.Update(shiftdetail);
+            _context.SaveChanges();
+        }
+
+        public void updateShiftDetail(ShiftPoupViewModel model)
+        {
+            Shiftdetail shiftdetail = _context.Shiftdetails.FirstOrDefault(x => x.Shiftdetailid == model.shiftDetailId);
+            shiftdetail.Shiftdate = model.shiftdate;
+            shiftdetail.Starttime = model.timeStart;
+            shiftdetail.Endtime = model.timeEnd;
+            shiftdetail.Regionid = model.regId;
+            _context.Shiftdetails.Update(shiftdetail);
+
+            if (model.phyid != 0)
+            {
+                Shift shift = _context.Shifts.FirstOrDefault(x => x.Shiftid == _context.Shiftdetails.FirstOrDefault(x => x.Shiftdetailid == model.shiftDetailId).Shiftid);
+                shift.Physicianid = model.phyid;
+                _context.Shifts.Update(shift);
+            }
+            _context.SaveChanges();
+        }
     }
 }

@@ -1,0 +1,180 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HalloDoc.Entity.AdminTab.ShiftPoupViewModel;
+@{
+}
+
+
+<div class="modal fade" id="ViewShift" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-info p-2">
+                <h1 class="modal-title fs-5 text-light ms-2" id="exampleModalLabel">
+                    View Shift
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="ShiftForm" novalidate class="needs-validation">
+                <div class="modal-body">
+                    <input type="hidden" id="schiftdetailId" asp-for="shiftDetailId" />
+                    <div class="form-floating">
+                        <input type="hidden" class="regId" asp-for="regId" />
+                        <select class="form-select selectReg" aria-label="Floating label select" onchange="checkData()" disabled>
+                            <option value="" disabled>select Region</option>
+                            @foreach (var reg in Model.Regions)
+                            {
+                                @if(Model.regId == reg.Regionid)
+                                {
+                                    <option value="@reg.Regionid" selected>@reg.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@reg.Regionid">@reg.Name</option>
+                                }
+                            }
+                        </select>
+                        <label for="floatingSelect">Region</label>
+                        <span class="text-danger regMsg"></span>
+                    </div>
+                    <input type="hidden" class="phid" asp-for="phyid" />
+                    <div class="form-floating mt-2">
+                        <select class="form-select PhyOption" aria-label="Floating label select" onchange="checkData()" disabled>
+                            <option value="" disabled>select</option>
+                        </select>
+                        <label for="floatingSelect">Physician</label>
+                        <span class="text-danger phyOptnMsg"></span>
+                    </div>
+                    <div class="form-floating mt-2">
+                        <input type="date" class="form-control shiftDate"
+                               placeholder="shiftdate" asp-for="shiftdate" value="@Model.shiftdate.ToString("yyyy-MM-dd")" onchange="checkData()" disabled>
+                        <label> Shift Date </label>
+                        <span class="text-danger shiftdateMsg"></span>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-6 form-floating">
+                            <input type="time" class="form-control"
+                                   placeholder="start" asp-for="timeStart" disabled>
+                            <label class="ms-3"> Start </label>
+                        </div>
+                        <div class="col-md-6 form-floating">
+                            <input type="time" class="form-control"
+                                   placeholder="end" asp-for="timeEnd" disabled>
+                            <label class="ms-3"> End </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer p-1">
+                    <button type="button" class="btn btn-info text-light sendcontPop" data-bs-dismiss="modal"> Return </button>
+                    <button type="button" class="btn btn-info text-light editbtn" onclick="EditEnable()"> Edit </button>
+                    <button type="submit" class="btn btn-success text-light SaveBtn d-none"> Save </button>
+                    <button type="button" class="btn btn-danger text-light deteteShift" data-bs-dismiss="modal"> Delete </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<script asp-append-version="true">
+    function EditEnable() {
+        $('input, select').prop('disabled', false);
+        $('.editbtn').addClass('d-none');
+        $('.SaveBtn').removeClass('d-none');
+    }
+    var region = $('.regId').val();
+    PhysicianDataRegionBase(region);
+
+
+    function checkData() {
+        console.log($('.shiftDate').val());
+        if ($('.selectReg').val() == null) {
+            $('.regMsg').text("Please Select Region");
+            return false;
+        }
+        else if ($('.PhyOption').val() == null) {
+            $('.phyOptnMsg').text("Please Select Account Type");
+            $('.regMsg').text("");
+            return false;
+        }
+        else if ($('.shiftDate').val() == '') {
+            $('.regMsg').text("");
+            $('.phyOptnMsg').text("");
+            $('.shiftdateMsg').text("please select Shift Date");
+            return false;
+        }
+        else {
+            $('.phyOptnMsg').text("");
+            $('.shiftdateMsg').text("");
+            return true;
+        }
+
+    }
+    function PhysicianDataRegionBase(region) {
+        $.ajax({
+            url: '/AdminDash/CheckPhysician',
+            method: 'POST',
+            data: { region: region },
+            success: function (response) {
+                $(".regId").val(region);
+                $(".PhyOption").empty().append($('<option disabled selected>Select Physician</option>'));
+                $.each(response.physician, function (index, item) {
+                    if ($('.phid').val() == item.physician.physicianid){
+                        $(".PhyOption").append($('<option selected></option>').val(item.physician.physicianid).text(item.physician.firstname));
+                    }
+                    else{
+                        $(".PhyOption").append($('<option></option>').val(item.physician.physicianid).text(item.physician.firstname));
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
+    $('.selectReg').change(function () {
+        var region = $('.selectReg').val();
+        PhysicianDataRegionBase(region);
+    });
+
+    $('.PhyOption').change(function (e) {
+        e.preventDefault();
+        $('.phid').val($('.PhyOption').val());
+    });
+
+    $('#ShiftForm').submit(function (e) {
+        e.preventDefault();
+        var formdata = $('#ShiftForm').serialize();
+        if (checkData()) {
+            $.ajax({
+                url: '/AdminTab/shiftDataEdit',
+                method: 'POST',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: formdata,
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    })
+
+    $('.deteteShift').click(function () {
+        var eventid = $('#schiftdetailId').val();
+        $.ajax({
+            url: '/AdminTab/deleteShift',
+            method: 'POST',
+            data: { eventid: eventid },
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>
