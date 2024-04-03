@@ -144,5 +144,7 @@ namespace HalloDoc.Repository.Interface
 
         void updateShiftDetail(ShiftPoupViewModel model);
 
+        IEnumerable<ProOncallModel> phyOncallAvialble();
+
     }
 }

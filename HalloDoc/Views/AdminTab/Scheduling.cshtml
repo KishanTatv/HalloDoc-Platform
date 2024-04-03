@@ -35,7 +35,7 @@
                 </select>
             </div>
             <div>
-                <button type="button" class="btn btn-info text-light me-2">Providers On Call</button>
+                <button type="button" class="btn btn-info text-light me-2 ProvderOnCall">Providers On Call</button>
                 <button type="button" class="btn btn-info text-light me-2 ShiftReviewBtn">Shift For Review</button>
                 <button type="button" class="btn btn-info text-light AddNewShift">Add New Shift</button>
             </div>
@@ -244,6 +244,19 @@
     $('.ShiftReviewBtn').click(function () {
         $.ajax({
             url: '/AdminTab/ShiftReview',
+            success: function (response) {
+                $('.schedulePage').remove();
+                $('#partialPage').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.ProvderOnCall').click(function () {
+        $.ajax({
+            url: '/AdminTab/ProviderCall',
             success: function (response) {
                 $('.schedulePage').remove();
                 $('#partialPage').html(response);

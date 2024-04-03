@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@model IEnumerable<HalloDoc.Entity.AdminTab.ProOncallModel>;
+
+<div class="container-fluid">
+    <div class="row g-3">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 d-flex">
+                <span class="PhyPhotoCnt">
+                    @if (item.photo != null)
+                    {
+                        <img src="data:image/png;base64,@item.photo" class="PhyPhotoCnt" alt="Photo">
+                    }
+                    else
+                    {
+                        <img src="~/image/Doctor.png" class="PhyPhotoCnt" alt="Photo" />
+                    }
+                </span>
+                <span class="m-3">Dr. @item.physicianFName @item.physicianLName</span>
+            </div>
+        }
+    </div>
+</div>

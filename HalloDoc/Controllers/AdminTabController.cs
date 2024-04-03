@@ -691,7 +691,7 @@ namespace HalloDoc.Controllers
         public IActionResult getPhysicianRecord(int reg)
         {
             var data = _Admin.getAllPhysicianName();
-            if (reg !=0)
+            if (reg != 0)
             {
                 data = data.Where(x => x.phyReg.Contains(reg)).ToList();
             }
@@ -701,7 +701,7 @@ namespace HalloDoc.Controllers
         public IActionResult getScheduleData(int reg)
         {
             var data = _Admin.getAllShiftdetail();
-            if(reg != 0)
+            if (reg != 0)
             {
                 data = data.Where(x => x.Regionid == reg).ToList();
             }
@@ -743,7 +743,7 @@ namespace HalloDoc.Controllers
                     _Admin.deleteShiftDetail(item);
                 }
             }
-            if(listApproveItem.Count != 0)
+            if (listApproveItem.Count != 0)
             {
                 foreach (var item in listApproveItem)
                 {
@@ -760,6 +760,23 @@ namespace HalloDoc.Controllers
                 data = data.Where(x => x.Shiftdate.Month == System.DateTime.Now.Month).ToList();
             }
             return PartialView("_ShiftReviewData", data);
+        }
+        #endregion
+
+
+        #region Schedule Pro On Call
+        public IActionResult ProviderCall()
+        {
+            var region = _Admin.getAllRegion();
+            return PartialView("_ProviderOnCall", region);
+        }
+
+        public IActionResult proOncallData()
+        {
+            TimeSpan currentTime = DateTime.Now.TimeOfDay;
+            TimeOnly currentTimeOnly = new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds);
+            var data = _Admin.phyOncallAvialble().Where(x => x.startTime != currentTimeOnly).GroupBy(x => x.phyId).ToList();
+            return PartialView("_ProviderOnCallData", data);
         }
         #endregion
 

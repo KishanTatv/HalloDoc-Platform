@@ -560,14 +560,20 @@ namespace HalloDoc.Repository.Implement
             return shift;
         }
 
-        public bool IsInDateRange(TimeOnly dateToCheck, TimeOnly startDate, TimeOnly endDate)
+        public bool IsDateRange(TimeOnly dbStartTime, TimeOnly dbEndTime, TimeOnly startTime, TimeOnly endTime)
         {
-            return dateToCheck >= startDate && dateToCheck <= endDate;
+            //(dbStartTime <= startTime && dbEndTime >= startTime) || (dbStartTime <= endTime && dbEndTime >= endTime)
+            return dbStartTime <= endTime && dbEndTime >= startTime;
         }
 
         public bool checkExistShift(ShiftPoupViewModel model, DateOnly newDate)
         {
-            return _context.Shiftdetails.Include(x => x.Shift).Where(x => x.Shiftdate == newDate && x.Shift.Physicianid == model.phyid && x.Starttime == model.timeStart).Any();
+            var filteredShifts = _context.Shiftdetails.Include(x => x.Shift)
+                .Where(x => x.Shiftdate == newDate && x.Shift.Physicianid == model.phyid)
+                .AsEnumerable()
+                .Where(x => IsDateRange(x.Starttime, x.Endtime, model.timeStart, model.timeEnd));
+            bool shiftExists = filteredShifts.Any();
+            return shiftExists;
         }
 
         public Shiftdetail addNewShiftDetail(int shiftId, DateOnly shiftDate, ShiftPoupViewModel model, short status)
@@ -667,6 +673,24 @@ namespace HalloDoc.Repository.Implement
             shiftdetail.Endtime = model.timeEnd;
             _context.Shiftdetails.Update(shiftdetail);
             _context.SaveChanges();
+        }
+
+
+        public IEnumerable<ProOncallModel> phyOncallAvialble()
+        {
+            BitArray deleteBit = new BitArray(1);
+            deleteBit[0] = true;
+            var data = _context.Shiftdetails.Include(x => x.Shift).ThenInclude(x => x.Physician).Where(x => x.Isdeleted != deleteBit).ToList()
+                .Select(x => new ProOncallModel
+                {
+                    phyId = x.Shift.Physician.Physicianid,
+                    physicianFName = x.Shift.Physician.Firstname,
+                    physicianLName = x.Shift.Physician.Lastname,
+                    photo = x.Shift.Physician.Photo,
+                    startTime = x.Starttime,
+                });
+
+            return data;
         }
     }
 }

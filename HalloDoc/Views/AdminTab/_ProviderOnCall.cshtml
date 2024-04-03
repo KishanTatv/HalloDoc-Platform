@@ -1,0 +1,64 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@model List<HalloDoc.Entity.Models.Region>;
+@{
+}
+
+
+<div class="d-flex w-100 justify-content-center pb-4">
+    <div class="HContainer ProviderMain m-auto">
+        <div class="d-flex justify-content-between align-items-center m-2">
+            <h4>MDs On Call</h4>
+            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="Scheduling">
+                <strong class="pe-2">&lt Back</strong>
+            </a>
+        </div>
+
+        <div class="mb-4">
+            <div class="d-flex justify-content-between mt-2 mb-2">
+                <div class="w-25">
+                    <select class="form-select" id="RegSearch">
+                        <option value="">All Regions</option>
+                        @foreach (var regName in Model)
+                        {
+                            <option value="@regName.Regionid">@regName.Name</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-info text-light">Calender View</button>
+                    <button type="button" class="btn btn-info text-light">Shift For Review</button>
+                </div>
+            </div>
+
+            <div class="rounded shadow p-4 mt-3 pt-3 bg-body-tertiary rounded">
+                <h5>MD's On Call</h5>
+
+                <p class="mt-2">Physician Off Duty</p>
+                <div id="partialPhyData" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $.ajax({
+            url: '/AdminTab/proOncallData',
+            success: function (response) {
+                $("#partialPhyData").html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText);
+                }
+            }
+        });
+    });
+</script>
