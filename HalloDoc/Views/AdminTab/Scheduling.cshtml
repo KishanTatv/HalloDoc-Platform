@@ -17,7 +17,7 @@
 <div class="MainContent pt-0 min-vh-100">
     <partial name="partial/AdminNavTab" />
 
-    <div class="HContainer m-auto">
+    <div class="HContainer m-auto schedulePage">
         <div class="d-flex justify-content-between mt-4">
             <h4>Schedulig</h4>
             <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
@@ -26,7 +26,7 @@
         </div>
         <div class="d-flex justify-content-between mt-2">
             <div class="w-25">
-                <select class="form-select" aria-label="Floating label select example">
+                <select class="form-select regSelect" aria-label="Floating label select example">
                     <option selected>All Region</option>
                     @foreach (var reg in Model)
                     {
@@ -36,7 +36,7 @@
             </div>
             <div>
                 <button type="button" class="btn btn-info text-light me-2">Providers On Call</button>
-                <button type="button" class="btn btn-info text-light me-2">Shift For Review</button>
+                <button type="button" class="btn btn-info text-light me-2 ShiftReviewBtn">Shift For Review</button>
                 <button type="button" class="btn btn-info text-light AddNewShift">Add New Shift</button>
             </div>
         </div>
@@ -54,15 +54,16 @@
                 <button id="cal-next" class="btn btn-info rounded-circle"><i class="bi bi-chevron-compact-right"></i></button>
             </div>
             <div>
-                <button id="DaySchedule" class="btn btn-outline-info text-black me-2">Day</</button>
-                <button id="WeekSchedule" class="btn btn-outline-info text-black me-2">Week</</button>
-                <button id="MonthSchedule" class="btn btn-outline-info text-black">Month</</button>
+                <button id="DaySchedule" class="btn btn-outline-info text-black Daybtn me-2">Day</</button>
+                <button id="WeekSchedule" class="btn btn-outline-info text-black Weekbtn me-2">Week</</button>
+                <button id="MonthSchedule" class="btn btn-outline-info btn-info text-black Monthbtn">Month</</button>
             </div>
         </div>
 
-        <div id='calendar' class="mt-4"></div>
+        <div id='calendar' class="table-responsive mt-4"></div>
         <div id="PartialPopup"></div>
     </div>
+    <div id="partialPage"></div>
 </div>
 
 <script asp-append-version="true">
@@ -102,6 +103,7 @@
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         selectable: true,
+        eventDisplay: 'block',
         eventClick: function (event, jsEvent, view) {
             ViewShift(event.event.id);
         },
@@ -110,8 +112,11 @@
     });
 
     function scheduleRecord() {
+        var reg = $('.regSelect').val();
         $.ajax({
             url: '/AdminTab/getScheduleData',
+            method: 'POST',
+            data: { reg: reg },
             success: function (response) {
                 const shiftData = response.shiftdetail;
 
@@ -120,6 +125,7 @@
                     title: `${shift.starttime}-${shift.endtime} / ${shift.shift.physician.firstname}`,
                     start: `${shift.shiftdate}T${shift.starttime}`,
                     end: `${shift.shiftdate}T${shift.endtime}`,
+                    backgroundColor: shift.status == '0' ? '#f74a4a' : '#65bb6a',
                     resourceId: `${shift.shift.physicianid}`,
                 }));
 
@@ -130,9 +136,13 @@
             }
         });
     }
+
     function setResources() {
+        var reg = $('.regSelect').val();
         $.ajax({
             url: '/AdminTab/getPhysicianRecord',
+            method: 'POST',
+            data: { reg: reg },
             success: function (response) {
                 const resources = response.phyCustomNameViewModel.map((physician) => ({
                     id: physician.physicianid,
@@ -149,26 +159,35 @@
 
     updateDateDisplay(calendar.getDate());
     scheduleRecord();
-    calendar.event
     calendar.render();
 
     $('#WeekSchedule').click(function () {
+        $('.Daybtn').removeClass('btn-info');
+        $('.Weekbtn').addClass('btn-info');
+        $('.Monthbtn').removeClass('btn-info');
         calendar.changeView('resourceTimelineWeek');
         calendar.setOption('slotLabelInterval', { days: 1 });
         calendar.setOption('slotLabelContent', function (arg) {
             let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             return days[arg.date.getDay()] + ' ' + arg.date.getDate();
         });
+        scheduleRecord();
         setResources();
         updateDateDisplay(calendar.getDate());
     });
 
     $('#MonthSchedule').click(function () {
+        $('.Daybtn').removeClass('btn-info');
+        $('.Weekbtn').removeClass('btn-info');
+        $('.Monthbtn').addClass('btn-info');
         calendar.changeView('dayGridMonth');
         updateDateDisplay(calendar.getDate());
     });
 
     $('#DaySchedule').click(function () {
+        $('.Daybtn').addClass('btn-info');
+        $('.Weekbtn').removeClass('btn-info');
+        $('.Monthbtn').removeClass('btn-info');
         calendar.changeView('resourceTimelineDay');
         calendar.setOption('slotLabelInterval', null);
         calendar.setOption('slotLabelContent', function (arg) {
@@ -181,6 +200,7 @@
                 headerContent: 'Staff'
             }
         ]);
+        scheduleRecord();
         setResources();
         updateDateDisplay(calendar.getDate());
     });
@@ -202,6 +222,11 @@
         updateDateDisplay(currentDate);
     });
 
+    $('.regSelect').change(function () {
+        scheduleRecord();
+        setResources();
+    });
+
     $('.AddNewShift').click(function () {
         $.ajax({
             url: '/AdminTab/NewShiftPopUp',
@@ -209,6 +234,19 @@
                 $("#PartialPopup").html(response);
                 var my = new bootstrap.Modal(document.getElementById('NewShift'));
                 my.show();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.ShiftReviewBtn').click(function () {
+        $.ajax({
+            url: '/AdminTab/ShiftReview',
+            success: function (response) {
+                $('.schedulePage').remove();
+                $('#partialPage').html(response);
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

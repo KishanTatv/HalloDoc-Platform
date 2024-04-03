@@ -46,19 +46,19 @@
                         <span class="text-danger phyOptnMsg"></span>
                     </div>
                     <div class="form-floating mt-2">
-                        <input type="date" class="form-control shiftDate"
+                        <input type="date" class="form-control shiftDate chngEnable"
                                placeholder="shiftdate" asp-for="shiftdate" value="@Model.shiftdate.ToString("yyyy-MM-dd")" onchange="checkData()" disabled>
                         <label> Shift Date </label>
                         <span class="text-danger shiftdateMsg"></span>
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-6 form-floating">
-                            <input type="time" class="form-control"
+                            <input type="time" class="form-control chngEnable"
                                    placeholder="start" asp-for="timeStart" disabled>
                             <label class="ms-3"> Start </label>
                         </div>
                         <div class="col-md-6 form-floating">
-                            <input type="time" class="form-control"
+                            <input type="time" class="form-control chngEnable"
                                    placeholder="end" asp-for="timeEnd" disabled>
                             <label class="ms-3"> End </label>
                         </div>
@@ -79,7 +79,7 @@
 
 <script asp-append-version="true">
     function EditEnable() {
-        $('input, select').prop('disabled', false);
+        $('.chngEnable').prop('disabled', false);
         $('.editbtn').addClass('d-none');
         $('.SaveBtn').removeClass('d-none');
     }

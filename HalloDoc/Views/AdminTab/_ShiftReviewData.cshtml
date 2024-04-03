@@ -1,0 +1,59 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<HalloDoc.Entity.Models.Shiftdetail>;
+@{
+}
+
+<div class="table-responsive">
+    <table class="table">
+        <thead class="table-secondary">
+            <tr>
+                <th>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="toggleAllCheck">
+                    </div>
+                </th>
+                <th scope="col">Staff <i class="bi bi-arrow-up ms-1"></i></th>
+                <th scope="col">Day</th>
+                <th scope="col">Time</th>
+                <th scope="col">Region</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><input class="form-check-input checkboxClass" type="checkbox" value="@item.Shiftdetailid"></td>
+                    <td>@item.Shift.Physician.Firstname  @item.Shift.Physician.Lastname</td>
+                    <td>@item.Shiftdate.ToString("MMMM d, yyyy")</td>
+                    <td>@item.Starttime - @item.Endtime</td>
+                    <td>
+                        @item.Shiftdetailregions.FirstOrDefault().Region.Name
+                    </td>
+                </tr>
+            }
+            @*else
+            {
+            <tr>
+            <td colspan="6">
+            <p class="text-center text-danger">@TempData["DataMsg"]</p>
+            </td>
+            </tr>
+            }*@
+        </tbody>
+    </table>
+</div>
+
+
+<script asp-append-version="true">
+    $("#toggleAllCheck").click(function () {
+        $(".checkboxClass").prop('checked', $(this).prop('checked'));
+    });
+    $(".checkboxClass").change(function () {
+        if (!$(this).prop("checked")) {
+            $("#toggleAllCheck").prop("checked", false);
+        }
+    });
+
+</script>

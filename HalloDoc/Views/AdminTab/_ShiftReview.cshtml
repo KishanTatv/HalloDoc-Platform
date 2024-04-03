@@ -1,0 +1,134 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<HalloDoc.Entity.Models.Region>;
+@{
+}
+
+
+<div class="d-flex w-100 justify-content-center pb-4">
+    <div class="HContainer ProviderMain m-auto">
+        <div class="d-flex justify-content-between m-3">
+            <h4>Requested Shift</h4>
+            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="Scheduling">
+                <strong class="pe-2">&lt Back</strong>
+            </a>
+        </div>
+
+        <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+            <div class="mb-4">
+                <div class="d-flex justify-content-between mt-2 mb-2">
+                    <div class="w-25">
+                        <select class="form-select" id="RegSearch">
+                            <option value="">All Regions</option>
+                            @foreach (var regName in Model)
+                            {
+                                <option value="@regName.Regionid">@regName.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-success viewMonthShift">View Current Month Shift</button>
+                        <button type="button" class="btn btn-success approveShift">Approved Selected</button>
+                        <button type="button" class="btn btn-danger deleteShift">Delete Selected</button>
+                    </div>
+                </div>
+
+                <div id="partialShiftTable" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $.ajax({
+            url: '/AdminTab/ReviewShiftData',
+            method: 'POST',
+            data: { page: 0 },
+            success: function (response) {
+                $("#partialShiftTable").html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText);
+                }
+            }
+        });
+    });
+
+    $('#RegSearch').change(function () {
+        var reg = $('#RegSearch').val();
+        $.ajax({
+            url: '/AdminTab/ReviewShiftData',
+            method: 'POST',
+            data: { reg: reg },
+            success: function (response) {
+                $("#partialShiftTable").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.viewMonthShift').click(function () {
+        var reg = $('#RegSearch').val();
+        var month = true;
+        $.ajax({
+            url: '/AdminTab/ReviewShiftData',
+            method: 'POST',
+            data: { reg: reg, month: month},
+            success: function (response) {
+                $("#partialShiftTable").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    function checkList() {
+        let itemList = [];
+        let inputs = $(".checkboxClass");
+        for (var i = 0; i < inputs.length; i++) {
+            if (inputs[i].checked) {
+                itemList.push(inputs[i].value);
+            }
+        }
+        return itemList;
+    }
+    $('.deleteShift').click(function () {
+        var listdeleteItem = checkList();
+        $.ajax({
+            url: '/AdminTab/ReviewShiftData',
+            method: 'POST',
+            data: { listdeleteItem: listdeleteItem },
+            success: function (response) {
+                $("#partialShiftTable").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.approveShift').click(function () {
+        var listApproveItem = checkList();
+        $.ajax({
+            url: '/AdminTab/ReviewShiftData',
+            method: 'POST',
+            data: { listApproveItem: listApproveItem },
+            success: function (response) {
+                $("#partialShiftTable").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+</script>

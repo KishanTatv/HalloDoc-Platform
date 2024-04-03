@@ -567,7 +567,7 @@ namespace HalloDoc.Repository.Implement
 
         public bool checkExistShift(ShiftPoupViewModel model, DateOnly newDate)
         {
-            return _context.Shiftdetails.Include(x => x.Shift).Where(x => x.Shiftdate == newDate && x.Shift.Physicianid == model.phyid && x.Starttime== model.timeStart).Any();
+            return _context.Shiftdetails.Include(x => x.Shift).Where(x => x.Shiftdate == newDate && x.Shift.Physicianid == model.phyid && x.Starttime == model.timeStart).Any();
         }
 
         public Shiftdetail addNewShiftDetail(int shiftId, DateOnly shiftDate, ShiftPoupViewModel model, short status)
@@ -589,22 +589,35 @@ namespace HalloDoc.Repository.Implement
             return shiftdetail;
         }
 
+        public void addShiftdetailRegion(int shiftDetailId, int regionId)
+        {
+            Shiftdetailregion shiftdetailregion = new Shiftdetailregion
+            {
+                Shiftdetailid = shiftDetailId,
+                Regionid = regionId,
+            };
+            _context.Shiftdetailregions.Add(shiftdetailregion);
+            _context.SaveChanges();
+        }
+
         public List<phyCustomNameViewModel> getAllPhysicianName()
         {
-            return _context.Physicians
+            var listData = _context.Physicians.Include(x => x.Physicianregions)
                .Select(x => new phyCustomNameViewModel
                {
                    Firstname = x.Firstname,
                    Lastname = x.Lastname,
                    Physicianid = x.Physicianid,
+                   phyReg = x.Physicianregions.Select(x => x.Regionid).ToList(),
                }).ToList();
+            return listData;
         }
 
         public IEnumerable<Shiftdetail> getAllShiftdetail()
         {
             BitArray deleteBit = new BitArray(1);
             deleteBit[0] = true;
-            return _context.Shiftdetails.Include(x => x.Shift).ThenInclude(x => x.Physician).Where(x => x.Isdeleted != deleteBit).ToList();
+            return _context.Shiftdetails.Include(x => x.Shiftdetailregions).ThenInclude(x => x.Region).Include(x => x.Shift).ThenInclude(x => x.Physician).Where(x => x.Isdeleted != deleteBit).ToList();
         }
 
 
@@ -638,21 +651,21 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
+        public void changeShiftdetailStatus(int shiftdetailId, short status)
+        {
+            Shiftdetail shiftdetail = _context.Shiftdetails.FirstOrDefault(x => x.Shiftdetailid == shiftdetailId);
+            shiftdetail.Status = status;
+            _context.Shiftdetails.Update(shiftdetail);
+            _context.SaveChanges();
+        }
+
         public void updateShiftDetail(ShiftPoupViewModel model)
         {
             Shiftdetail shiftdetail = _context.Shiftdetails.FirstOrDefault(x => x.Shiftdetailid == model.shiftDetailId);
             shiftdetail.Shiftdate = model.shiftdate;
             shiftdetail.Starttime = model.timeStart;
             shiftdetail.Endtime = model.timeEnd;
-            shiftdetail.Regionid = model.regId;
             _context.Shiftdetails.Update(shiftdetail);
-
-            if (model.phyid != 0)
-            {
-                Shift shift = _context.Shifts.FirstOrDefault(x => x.Shiftid == _context.Shiftdetails.FirstOrDefault(x => x.Shiftdetailid == model.shiftDetailId).Shiftid);
-                shift.Physicianid = model.phyid;
-                _context.Shifts.Update(shift);
-            }
             _context.SaveChanges();
         }
     }

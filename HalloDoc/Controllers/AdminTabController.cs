@@ -620,79 +620,91 @@ namespace HalloDoc.Controllers
 
         public IActionResult shiftData(ShiftPoupViewModel formdata)
         {
-            //int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
-            //var repeatDayList = Request.Form["checkDays"].ToList();
-            //StringBuilder weekDays = new StringBuilder("0000000");
-            //if (repeatDayList.Contains("Sunday"))
-            //{
-            //    weekDays[0] = '1';
-            //}
-            //if (repeatDayList.Contains("Monday"))
-            //{
-            //    weekDays[1] = '1';
-            //}
-            //if (repeatDayList.Contains("Tuesday"))
-            //{
-            //    weekDays[2] = '1';
-            //}
-            //if (repeatDayList.Contains("Wednesday"))
-            //{
-            //    weekDays[3] = '1';
-            //}
-            //if (repeatDayList.Contains("Thursday"))
-            //{
-            //    weekDays[4] = '1';
-            //}
-            //if (repeatDayList.Contains("Friday"))
-            //{
-            //    weekDays[5] = '1';
-            //}
-            //if (repeatDayList.Contains("Saturday"))
-            //{
-            //    weekDays[6] = '1';
-            //}
-            //string weekday = weekDays.ToString();
-            //int shiftDateDay = (int)formdata.shiftdate.DayOfWeek + 1;
+            int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+            var repeatDayList = Request.Form["checkDays"].ToList();
+            StringBuilder weekDays = new StringBuilder("0000000");
+            if (repeatDayList.Contains("Sunday"))
+            {
+                weekDays[0] = '1';
+            }
+            if (repeatDayList.Contains("Monday"))
+            {
+                weekDays[1] = '1';
+            }
+            if (repeatDayList.Contains("Tuesday"))
+            {
+                weekDays[2] = '1';
+            }
+            if (repeatDayList.Contains("Wednesday"))
+            {
+                weekDays[3] = '1';
+            }
+            if (repeatDayList.Contains("Thursday"))
+            {
+                weekDays[4] = '1';
+            }
+            if (repeatDayList.Contains("Friday"))
+            {
+                weekDays[5] = '1';
+            }
+            if (repeatDayList.Contains("Saturday"))
+            {
+                weekDays[6] = '1';
+            }
+            string weekday = weekDays.ToString();
+            int shiftDateDay = (int)formdata.shiftdate.DayOfWeek + 1;
 
-            //Shift shift = _Admin.addNewShift(formdata, weekday, aspId);
-            //if (formdata.isRepeat == false)
-            //{
-            //    _Admin.addNewShiftDetail(shift.Shiftid, formdata.shiftdate, formdata, 1);
-            //}
-            //else
-            //{
-            //    foreach (var repeatDateDay in repeatDayList)
-            //    {
-            //        DateOnly detailDate = new DateOnly();
-            //        if ((shiftDateDay - Convert.ToInt32(repeatDateDay)) < 0)
-            //        {
-            //            detailDate = formdata.shiftdate.AddDays(shiftDateDay - Convert.ToInt32(repeatDateDay) + 7);
-            //        }
-            //        else
-            //        {
-            //            detailDate = formdata.shiftdate.AddDays(shiftDateDay - Convert.ToInt32(repeatDateDay));
-            //        }
-            //        _Admin.addNewShiftDetail(shift.Shiftid, detailDate, formdata, 1);
-            //        for (var i = 0; i < formdata.repeatTime - 1; i++)
-            //        {
-            //            DateOnly detailDatesMore = detailDate.AddDays(7);
-            //            _Admin.addNewShiftDetail(shift.Shiftid, detailDatesMore, formdata, 1);
-            //            detailDate = detailDate.AddDays(7);
-            //        }
-            //    }
-            //}
+            Shift shift = _Admin.addNewShift(formdata, weekday, aspId);
+            Shiftdetail shiftdetail;
+            if (formdata.isRepeat == false)
+            {
+                shiftdetail = _Admin.addNewShiftDetail(shift.Shiftid, formdata.shiftdate, formdata, 0);
+                _Admin.addShiftdetailRegion(shiftdetail.Shiftdetailid, formdata.regId);
+            }
+            else
+            {
+                foreach (var repeatDateDay in repeatDayList)
+                {
+                    DateOnly detailDate = new DateOnly();
+                    if ((shiftDateDay - Convert.ToInt32(repeatDateDay)) < 0)
+                    {
+                        detailDate = formdata.shiftdate.AddDays(shiftDateDay - Convert.ToInt32(repeatDateDay) + 7);
+                    }
+                    else
+                    {
+                        detailDate = formdata.shiftdate.AddDays(shiftDateDay - Convert.ToInt32(repeatDateDay));
+                    }
+                    shiftdetail = _Admin.addNewShiftDetail(shift.Shiftid, detailDate, formdata, 0);
+                    _Admin.addShiftdetailRegion(shiftdetail.Shiftdetailid, formdata.regId);
+                    for (var i = 0; i < formdata.repeatTime - 1; i++)
+                    {
+                        DateOnly detailDatesMore = detailDate.AddDays(7);
+                        shiftdetail = _Admin.addNewShiftDetail(shift.Shiftid, detailDatesMore, formdata, 0);
+                        _Admin.addShiftdetailRegion(shiftdetail.Shiftdetailid, formdata.regId);
+                        detailDate = detailDate.AddDays(7);
+                    }
+                }
+            }
             return Json(new { value = "Ok" });
         }
 
-        public IActionResult getPhysicianRecord()
+        public IActionResult getPhysicianRecord(int reg)
         {
             var data = _Admin.getAllPhysicianName();
+            if (reg !=0)
+            {
+                data = data.Where(x => x.phyReg.Contains(reg)).ToList();
+            }
             return Json(new { phyCustomNameViewModel = data });
         }
 
-        public IActionResult getScheduleData()
+        public IActionResult getScheduleData(int reg)
         {
             var data = _Admin.getAllShiftdetail();
+            if(reg != 0)
+            {
+                data = data.Where(x => x.Regionid == reg).ToList();
+            }
             return Json(new { Shiftdetail = data });
         }
 
@@ -714,6 +726,40 @@ namespace HalloDoc.Controllers
         {
             _Admin.deleteShiftDetail(eventid);
             return Ok();
+        }
+
+        public IActionResult ShiftReview()
+        {
+            var region = _Admin.getAllRegion();
+            return PartialView("_ShiftReview", region);
+        }
+
+        public IActionResult ReviewShiftData(int page, int reg, bool month, List<int> listdeleteItem, List<int> listApproveItem)
+        {
+            if (listdeleteItem.Count != 0)
+            {
+                foreach (var item in listdeleteItem)
+                {
+                    _Admin.deleteShiftDetail(item);
+                }
+            }
+            if(listApproveItem.Count != 0)
+            {
+                foreach (var item in listApproveItem)
+                {
+                    _Admin.changeShiftdetailStatus(item, 1);
+                }
+            }
+            var data = _Admin.getAllShiftdetail().Where(x => x.Status == 0).ToList();
+            if (reg != 0)
+            {
+                data = data.Where(x => x.Shiftdetailregions.FirstOrDefault().Regionid == reg).ToList();
+            }
+            if (month == true)
+            {
+                data = data.Where(x => x.Shiftdate.Month == System.DateTime.Now.Month).ToList();
+            }
+            return PartialView("_ShiftReviewData", data);
         }
         #endregion
 

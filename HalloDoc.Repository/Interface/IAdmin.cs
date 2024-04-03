@@ -130,6 +130,7 @@ namespace HalloDoc.Repository.Interface
 
         bool checkExistShift(ShiftPoupViewModel model, DateOnly newDate);
         Shiftdetail addNewShiftDetail(int shiftId, DateOnly shiftDate, ShiftPoupViewModel model, short status);
+        void addShiftdetailRegion(int shiftDetailId, int regionId);
 
         List<phyCustomNameViewModel> getAllPhysicianName();
 
@@ -138,6 +139,8 @@ namespace HalloDoc.Repository.Interface
         ShiftPoupViewModel getShiftDetailSpecific(int evenetId);
 
         void deleteShiftDetail(int shiftdetailId);
+
+        void changeShiftdetailStatus(int shiftdetailId, short status);
 
         void updateShiftDetail(ShiftPoupViewModel model);
 

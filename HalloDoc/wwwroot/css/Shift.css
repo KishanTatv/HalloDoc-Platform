@@ -37,23 +37,23 @@ a.fc-col-header-cell-cushion {
 }
 
 .penShift {
-    background-color: #ffadf8;
-    border: 1px solid #dd71d4;
+    background-color: #f74a4a;
+    border: 1px solid #d71313;
 }
 
 .apprvShift {
-    background-color: #a5cda7;
+    background-color: #65bb6a;
     border: 1px solid green;
-}
-
-.fc-event {
-    background-color: #b2f3b2;
 }
 
 .fc-direction-ltr .fc-daygrid-event .fc-event-time {
     display: none;
 }
 
-.fc-daygrid-dot-event .fc-event-title{
+.fc-event-time{
+    display: none;
+}
+
+.fc-daygrid-dot-event .fc-event-title {
     font-weight: 500;
 }
