@@ -712,13 +712,34 @@ namespace HalloDoc.Controllers
         {
             var shiftData = _Admin.getShiftDetailSpecific(eventid);
             var region = _Admin.getAllRegion();
-            var dataModel = new ShiftPoupViewModel { Regions = region, regId = shiftData.regId, phyid = shiftData.phyid, shiftDetailId = eventid, shiftdate = shiftData.shiftdate, timeStart = shiftData.timeStart, timeEnd = shiftData.timeEnd };
+            var dataModel = new ShiftPoupViewModel { Regions = region, regId = shiftData.regId, phyid = shiftData.phyid, shiftDetailId = eventid, shiftdate = shiftData.shiftdate, timeStart = shiftData.timeStart, timeEnd = shiftData.timeEnd, shiftStatus = shiftData.shiftStatus };
             return PartialView("_PopupViewShift", dataModel);
         }
 
         public IActionResult shiftDataEdit(ShiftPoupViewModel formdata)
         {
-            _Admin.updateShiftDetail(formdata);
+            if (!_Admin.checkExistShift(formdata, formdata.shiftdate))
+            {
+                int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+                _Admin.updateShiftDetail(formdata, aspId);
+                return Json(new { value = "Ok" });
+            }
+            else
+            {
+                return Json(new { value = "Error" });
+            }
+        }
+
+        public IActionResult retuenShift(int eventid, int status)
+        {
+            if (status == 1)
+            {
+                _Admin.changeShiftdetailStatus(eventid, 0);
+            }
+            else
+            {
+                _Admin.changeShiftdetailStatus(eventid, 1);
+            }
             return Ok();
         }
 
@@ -771,11 +792,13 @@ namespace HalloDoc.Controllers
             return PartialView("_ProviderOnCall", region);
         }
 
-        public IActionResult proOncallData()
+        public IActionResult proOncallData(int reg)
         {
-            TimeSpan currentTime = DateTime.Now.TimeOfDay;
-            TimeOnly currentTimeOnly = new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds);
-            var data = _Admin.phyOncallAvialble().Where(x => x.startTime != currentTimeOnly).GroupBy(x => x.phyId).ToList();
+            IEnumerable<ProOncallModel> dataOnCall = _Admin.phyOncallAvialble().ToList();
+            IEnumerable<ProOffcallModel> dataOffCall = _Admin.phyOffcall().ToList();
+            dataOnCall = dataOnCall.Where(x => (reg == 0 || x.phyRegion.Contains(reg))).ToList();
+            dataOffCall = dataOffCall.Where(x => (reg == 0 || x.phyRegion.Contains(reg))).ToList();
+            var data = new ProviderCallViewModel { ProOncall = dataOnCall, ProOffcall = dataOffCall };
             return PartialView("_ProviderOnCallData", data);
         }
         #endregion
@@ -787,7 +810,7 @@ namespace HalloDoc.Controllers
             return View();
         }
 
-        public IActionResult searchData()
+        public IActionResult searchData(string reqStatus, string reqType, string ptName, DateTime formDate, DateTime toDate, string proName, string phone, string email)
         {
             BitArray bitArray = new BitArray(1);
             bitArray[0] = true;
@@ -815,22 +838,13 @@ namespace HalloDoc.Controllers
             if (checklog == "Email")
             {
                 var data = _Admin.getEmailLogData();
-                if (email != null)
-                {
-                    data = data.Where(x => x.Emailid.ToLower().Contains(email.ToLower())).ToList();
-                }
-                if (name != null)
-                {
-                    data = data.Where(x => (x.Request?.Firstname?.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Lastname?.ToLower().Contains(name.ToLower()) ?? false)).ToList();
-                }
-                if (crDate != DateTime.MinValue)
-                {
-                    data = data.Where(x => x.Createdate.Date.Equals(crDate)).ToList();
-                }
-                if (cgDate != DateTime.MinValue)
-                {
-                    data = data.Where(x => x.Sentdate.Equals(cgDate)).ToList();
-                }
+                data = data
+                    .Where(x =>
+                    (email == null || x.Emailid.ToLower().Contains(email.ToLower())) &&
+                    (name == null || (x.Request?.Firstname?.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Lastname?.ToLower().Contains(name.ToLower()) ?? false)) &&
+                    (crDate == DateTime.MinValue || x.Createdate.Date.Equals(crDate)) &&
+                    (cgDate == DateTime.MinValue || x.Sentdate.Equals(cgDate)))
+                    .ToList();
                 return PartialView("_EmailLog", data);
             }
             else
@@ -849,22 +863,12 @@ namespace HalloDoc.Controllers
         public IActionResult PatientHistoryData(string Hfname, string Hlname, string Hemail, string Hphone)
         {
             var data = _Admin.getAllUserData();
-            if (Hfname != null)
-            {
-                data = data.Where(x => x.Firstname.Contains(Hfname)).ToList();
-            }
-            if (Hlname != null)
-            {
-                data = data.Where(x => x.Lastname.Contains(Hlname)).ToList();
-            }
-            if (Hemail != null)
-            {
-                data = data.Where(x => x.Email.Contains(Hemail)).ToList();
-            }
-            if (Hphone != null)
-            {
-                data = data.Where(x => x.Mobile.Contains(Hphone)).ToList();
-            }
+            data = data.Where(x =>
+            (Hfname == null || x.Firstname.Contains(Hfname)) &&
+            (Hlname == null || x.Lastname.Contains(Hlname)) &&
+            (Hemail == null || x.Email.Contains(Hemail)) &&
+            (Hphone == null || x.Mobile.Contains(Hphone))
+            ).ToList();
             return PartialView("_PatientHistoryData", data);
         }
         #endregion
@@ -878,22 +882,15 @@ namespace HalloDoc.Controllers
         public IActionResult BlockData(string name, string email, DateTime date, string phone)
         {
             var data = _Admin.getallBlockRequest();
-            if (name != null)
-            {
-                data = data.Where(x => (x.Request?.Requestclients?.FirstOrDefault().Firstname.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Requestclients?.FirstOrDefault().Firstname.ToLower().Contains(name.ToLower()) ?? false)).ToList();
-            }
-            if (email != null)
-            {
-                data = data.Where(x => (x.Request.Requestclients.FirstOrDefault().Email.ToLower().Contains(email.ToLower()))).ToList();
-            }
+            data = data.Where(x =>
+            (name == null || (x.Request?.Requestclients?.FirstOrDefault().Firstname.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Requestclients?.FirstOrDefault().Lastname.ToLower().Contains(name.ToLower()) ?? false)) &&
+            (email == null || x.Request.Requestclients.FirstOrDefault().Email.ToLower().Contains(email.ToLower())) &&
+            (phone == null || x.Request.Requestclients.FirstOrDefault().Phonenumber.ToLower().Contains(phone))
+            ).ToList();
             //if (date != DateTime.MinValue)
             //{
             //    data = data.Where(x => x.Createddate.Date.Equals(date)).ToList();
             //}
-            if (phone != null)
-            {
-                data = data.Where(x => x.Request.Requestclients.FirstOrDefault().Phonenumber.ToLower().Contains(phone)).ToList();
-            }
             return PartialView("_BlockTableData", data);
         }
 

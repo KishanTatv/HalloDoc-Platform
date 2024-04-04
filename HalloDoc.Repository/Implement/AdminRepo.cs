@@ -614,6 +614,7 @@ namespace HalloDoc.Repository.Implement
                    Firstname = x.Firstname,
                    Lastname = x.Lastname,
                    Physicianid = x.Physicianid,
+                   photo = x.Photo,
                    phyReg = x.Physicianregions.Select(x => x.Regionid).ToList(),
                }).ToList();
             return listData;
@@ -636,6 +637,7 @@ namespace HalloDoc.Repository.Implement
                 .Where(x => x.Shiftdetailid == evenetId)
                 .Select(x => new ShiftPoupViewModel
                 {
+                    shiftStatus = x.Status,
                     shiftdate = x.Shiftdate,
                     timeStart = x.Starttime,
                     timeEnd = x.Endtime,
@@ -665,12 +667,14 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        public void updateShiftDetail(ShiftPoupViewModel model)
+        public void updateShiftDetail(ShiftPoupViewModel model, int aspId)
         {
             Shiftdetail shiftdetail = _context.Shiftdetails.FirstOrDefault(x => x.Shiftdetailid == model.shiftDetailId);
             shiftdetail.Shiftdate = model.shiftdate;
             shiftdetail.Starttime = model.timeStart;
             shiftdetail.Endtime = model.timeEnd;
+            shiftdetail.Modifieddate = System.DateTime.Now;
+            shiftdetail.Modifiedby = aspId;
             _context.Shiftdetails.Update(shiftdetail);
             _context.SaveChanges();
         }
@@ -678,18 +682,60 @@ namespace HalloDoc.Repository.Implement
 
         public IEnumerable<ProOncallModel> phyOncallAvialble()
         {
+            TimeSpan currentTime = DateTime.Now.TimeOfDay;
+            TimeOnly currentTimeOnly = new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds);
             BitArray deleteBit = new BitArray(1);
             deleteBit[0] = true;
-            var data = _context.Shiftdetails.Include(x => x.Shift).ThenInclude(x => x.Physician).Where(x => x.Isdeleted != deleteBit).ToList()
-                .Select(x => new ProOncallModel
-                {
-                    phyId = x.Shift.Physician.Physicianid,
-                    physicianFName = x.Shift.Physician.Firstname,
-                    physicianLName = x.Shift.Physician.Lastname,
-                    photo = x.Shift.Physician.Photo,
-                    startTime = x.Starttime,
-                });
+            var data = (from s in _context.Shiftdetails
+                        join p in _context.Physicians on s.Shift.Physicianid equals p.Physicianid
+                        where s.Shiftdate == DateOnly.FromDateTime(DateTime.Now) && (s.Starttime <= currentTimeOnly && s.Endtime > currentTimeOnly) && s.Isdeleted != deleteBit && p.Isdeleted != deleteBit
+                        select new ProOncallModel
+                        {
+                            phyId = p.Physicianid,
+                            physicianFName = p.Firstname,
+                            physicianLName = p.Lastname,
+                            photo = p.Photo,
+                            phyRegion = _context.Physicianregions.Where(x => x.Physicianid == p.Physicianid).Select(x => x.Regionid).ToList(),
+                        }).ToList();
+            data = data.DistinctBy(x => x.phyId).ToList();
+            return data;
+        }
 
+        public IEnumerable<ProOffcallModel> phyOffcall()
+        {
+            TimeSpan currentTime = DateTime.Now.TimeOfDay;
+            TimeOnly currentTimeOnly = new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds);
+            BitArray deleteBit = new BitArray(1);
+            deleteBit[0] = true;
+
+            //var data = (from s in _context.Shiftdetails
+            //            join p in _context.Physicians on s.Shift.Physicianid equals p.Physicianid
+            //            where !(s.Starttime <= currentTimeOnly && s.Endtime > currentTimeOnly) && s.Isdeleted != deleteBit && p.Isdeleted != deleteBit
+            //            select new ProOffcallModel
+            //            {
+            //                phyId = p.Physicianid,
+            //                physicianFName = p.Firstname,
+            //                physicianLName = p.Lastname,
+            //                photo = p.Photo,
+            //                phyRegion = _context.Physicianregions.Where(x => x.Physicianid == p.Physicianid).Select(x => x.Regionid).ToList(),
+            //            }).ToList();
+
+
+            var data = (from p in _context.Physicians
+                        where p.Isdeleted != deleteBit && !_context.Shiftdetails
+                        .Any(x =>
+                        x.Shift.Physicianid == p.Physicianid && x.Isdeleted != deleteBit &&
+                        x.Shiftdate == DateOnly.FromDateTime(DateTime.Now) &&
+                        !(x.Starttime <= currentTimeOnly && x.Endtime > currentTimeOnly))
+                        select new ProOffcallModel
+                        {
+                            phyId = p.Physicianid,
+                            physicianFName = p.Firstname,
+                            physicianLName = p.Lastname,
+                            photo = p.Photo,
+                            phyRegion = _context.Physicianregions.Where(x => x.Physicianid == p.Physicianid).Select(x => x.Regionid).ToList(),
+                        }).ToList();
+            data = data.DistinctBy(x => x.phyId).ToList();
             return data;
         }
     }

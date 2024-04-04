@@ -50,7 +50,11 @@ a.fc-col-header-cell-cushion {
     display: none;
 }
 
-.fc-event-time{
+.fc-h-event .fc-event-title {
+    margin-left: 4px;
+}
+
+.fc-event-time {
     display: none;
 }
 

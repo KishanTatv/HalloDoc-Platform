@@ -22,47 +22,55 @@
                 <div class="mb-4">
                     <div class="row">
                         <div class="col-md-3 form-floating mt-2">
-                            <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRoleId(this)">
+                            <select class="form-select SreqStatus" aria-label="Floating label select">
                                 <option value="0" selected> All  </option>
+                                @foreach (var i in Enum.GetValues(typeof(HalloEnum.DashName)))
+                                {
+                                    <option value="@i">@Enum.GetName(typeof(HalloEnum.DashName), i) </option>
+                                }
                             </select>
                             <label class="ms-3">Select Request Status</label>
                         </div>
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="text" class="form-control bg-transparent SptName" placeholder="add1">
                             <label class="ms-3">Patient Name</label>
                         </div>
                         <div class="col-md-3 form-floating mt-2">
-                            <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRoleId(this)">
+                            <select class="form-select SreqType" aria-label="Floating label select">
                                 <option value="0" selected> All </option>
+                                @foreach(var i in Enum.GetValues(typeof(HalloEnum.repestType)))
+                                {
+                                    <option value="@i">@Enum.GetName(typeof(HalloEnum.repestType), i) </option>
+                                }
                             </select>
                             <label class="ms-3">Select Request Type</label>
                         </div>
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="date" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="date" class="form-control bg-transparent SfromDate" placeholder="add1">
                             <label class="ms-3">From Date Of Service</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="date" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="date" class="form-control bg-transparent StoDate" placeholder="add1">
                             <label class="ms-3">To Date Of Service</label>
                         </div>
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="text" class="form-control bg-transparent SproName" placeholder="add1">
                             <label class="ms-3">Provider Name</label>
                         </div>
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="email" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="email" class="form-control bg-transparent SEmail" placeholder="add1">
                             <label class="ms-3">Email</label>
                         </div>
                         <div class="col-md-3 form-floating mt-2">
-                            <input type="number" class="form-control bg-transparent Adad" placeholder="add1">
+                            <input type="number" class="form-control bg-transparent SPhone" placeholder="add1">
                             <label class="ms-3">Phone Number</label>
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-2 mb-2">
-                        <button class="btn btn-outline-info text-info">Clear</button>
-                        <button class="btn btn-info text-light ms-3">Search</button>
+                        <button class="btn btn-outline-info text-info clerInput">Clear</button>
+                        <button class="btn btn-info text-light ms-3 serchBtn">Search</button>
                     </div>
                 </div>
                 <div class="searchData">
@@ -95,15 +103,19 @@
             }
         });
 
-        $('.dataChng').change(function () {
-            var name = $('.blockName').val().trim();
-            var date = $('.blockDob').val();
-            var email = $('.blockEmail').val().trim();
-            var phone = $('.blockPhone').val().trim();
+        $('.serchBtn').click(function () {
+            var reqStatus = $('.SreqStatus').val();
+            var reqType = $('.SreqType').val();
+            var ptName = $('.SptName').val().trim();
+            var formDate = $('.SfromDate').val();
+            var toDate = $('.StoDate').val();
+            var proName = $('.SproName').val().trim();
+            var email = $('.SEmail').val().trim();
+            var phone = $('.SPhone').val().trim();
             $.ajax({
                 url: '/AdminTab/SearchData',
                 method: 'POST',
-                data: { name: name, email: email, date: date, phone: phone },
+                data: { reqStatus: reqStatus, reqType: reqType, ptName: ptName, formDate: formDate, toDate: toDate, email: email, proName: proName, phone: phone },
                 success: function (response) {
                     $('.BlockTable').html(response);
                 },
@@ -111,6 +123,11 @@
                     console.error(xhr.responseText);
                 }
             });
+        });
+
+        $('.clerInput').click(function(){
+            $('input').val("");
+            $('select').val("0");
         });
 
     });

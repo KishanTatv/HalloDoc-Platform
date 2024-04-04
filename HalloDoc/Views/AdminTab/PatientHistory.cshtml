@@ -39,12 +39,11 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end mt-2 mb-2">
-                        <button class="btn btn-outline-info text-info">Clear</button>
-                        <button class="btn btn-info text-light ms-3">Search</button>
+                        <button class="btn btn-outline-info text-info clerInput">Clear</button>
+                        <button class="btn btn-info text-light ms-3 serchBtn">Search</button>
                     </div>
                 </div>
                 <div class="PHistoryTable">
-                    
                 </div>
             </div>
 
@@ -70,24 +69,37 @@
                 }
             }
         });
+    });
 
-        $('.dataChng').change(function () {
-            var Hfname = $('.Hfname').val().trim();
-            var Hlname = $('.Hlname').val().trim();
-            var Hemail = $('.Hemail').val().trim();
-            var Hphone = $('.Hphone').val().trim();
-            $.ajax({
-                url: '/AdminTab/PatientHistoryData',
-                method: 'POST',
-                data: { Hfname: Hfname, Hlname: Hlname, Hemail: Hemail, Hphone: Hphone },
-                success: function (response) {
-                    $('.PHistoryTable').html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
+    $('.serchBtn').click(function () {
+        var Hfname = $('.Hfname').val().trim();
+        var Hlname = $('.Hlname').val().trim();
+        var Hemail = $('.Hemail').val().trim();
+        var Hphone = $('.Hphone').val().trim();
+        $.ajax({
+            url: '/AdminTab/PatientHistoryData',
+            method: 'POST',
+            data: { Hfname: Hfname, Hlname: Hlname, Hemail: Hemail, Hphone: Hphone },
+            success: function (response) {
+                $('.PHistoryTable').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
         });
+    });
 
+    $('.clerInput').click(function () {
+        $('input').val("");
+        $.ajax({
+            url: '/AdminTab/PatientHistoryData',
+            method: 'POST',
+            success: function (response) {
+                $('.PHistoryTable').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
     });
 </script>

@@ -13,6 +13,8 @@ namespace HalloDoc.Entity.AdminTab
 
         public string Lastname { get; set; }
 
+        public string photo { get; set; }
+
         public List<int> phyReg { get; set; }
     }
 }

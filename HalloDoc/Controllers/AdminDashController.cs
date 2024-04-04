@@ -59,42 +59,37 @@ namespace HalloDoc.Controllers
             {
                 case 1:   //New
                     ViewBag.TPage = Math.Ceiling(Tcount[0] / 5.0);
-                    ViewBag.dTable = id;
                     status.Add(1);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 2:   //Pending
                     ViewBag.TPage = Math.Ceiling(Tcount[1] / 5.0);
-                    ViewBag.dTable = id;
                     status.Add(2);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 3:   //Active
                     ViewBag.TPage = Math.Ceiling(Tcount[2] / 5.0);
-                    ViewBag.dTable = id;
                     status.Add(4); status.Add(5);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 4:  //Conclude
                     ViewBag.TPage = Math.Ceiling(Tcount[3] / 5.0);
-                    ViewBag.dTable = id;
                     status.Add(6);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 5:   //To-close
                     ViewBag.TPage = Math.Ceiling(Tcount[4] / 5.0);
-                    ViewBag.dTable = id;
                     status.Add(3); status.Add(7); status.Add(8);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
                 case 6:   //Unpaid
                     ViewBag.TPage = Math.Ceiling(Tcount[5] / 5.0);
-                    ViewBag.dTable = id;
                     status.Add(9);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
                     break;
             }
 
+            ViewBag.dTable = id;
             ViewBag.CurrentPage = page;
             ViewBag.TPage = Math.Ceiling(Req.filterCount / 5.0);
             var region = _Admin.getAllRegion();

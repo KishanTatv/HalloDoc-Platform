@@ -38,7 +38,7 @@
                         <span class="text-danger phyOptnMsg"></span>
                     </div>
                     <div class="form-floating mt-2">
-                        <input type="date" class="form-control bg-transparent shiftDate"
+                        <input type="date" class="form-control bg-transparent shiftDate" id="ShiftDate"
                                placeholder="shiftdate" asp-for="shiftdate" onchange="checkData()">
                         <label> Shift Date </label>
                         <span class="text-danger shiftdateMsg"></span>
@@ -118,6 +118,11 @@
 
 
 <script asp-append-version="true">
+
+    var today = new Date();
+    var formattedDate = today.toISOString().split('T')[0];
+    document.getElementById('ShiftDate').min = formattedDate;
+
     $('#chekrep').change(function () {
         if ($('#chekrep').is(':checked') == true) {
             $('.forrpt').removeClass('d-none');
@@ -168,6 +173,7 @@
     }
 
     function checkData() {
+        var shiftDate = new Date($('.shiftDate').val());
         if ($('.selectReg').val() == null) {
             $('.regMsg').text("Please Select Region");
             return false;
@@ -181,6 +187,12 @@
             $('.regMsg').text("");
             $('.phyOptnMsg').text("");
             $('.shiftdateMsg').text("please select Shift Date");
+            return false;
+        }
+        else if (new Date() >= shiftDate){
+            $('.regMsg').text("");
+            $('.phyOptnMsg').text("");
+            $('.shiftdateMsg').text("Next Date Please");
             return false;
         }
         else if ($('#chekrep').is(':checked') == true) {

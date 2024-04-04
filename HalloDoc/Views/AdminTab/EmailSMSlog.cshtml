@@ -36,25 +36,25 @@
                             <label class="ms-3">Search by Role</label>
                         </div>
                         <div class="col-md-2 form-floating mt-2">
-                            <input type="text" class="form-control bg-transparent dataChng RecName" placeholder="add1">
+                            <input type="text" class="form-control bg-transparent RecName" placeholder="add1">
                             <label class="ms-3">Reciver Name</label>
                         </div>
                         <div class="col-md-2 form-floating mt-2">
-                            <input type="email" class="form-control bg-transparent dataChng EmailChng" placeholder="add1">
+                            <input type="email" class="form-control bg-transparent EmailChng" placeholder="add1">
                             <label class="ms-3">Email</label>
                         </div>
                         <div class="col-md-2 form-floating mt-2">
-                            <input type="date" class="form-control bg-transparent dataChng crDate" placeholder="add1">
+                            <input type="date" class="form-control bg-transparent crDate" placeholder="add1">
                             <label class="ms-3">Created Date</label>
                         </div>
                         <div class="col-md-2 form-floating mt-2">
-                            <input type="date" class="form-control bg-transparent dataChng cgDate" placeholder="add1">
+                            <input type="date" class="form-control bg-transparent cgDate" placeholder="add1">
                             <label class="ms-3">Sent Date</label>
                         </div>
                         <div class="col-md-2 mt-3">
-                            <div class="d-flex">
-                                <button class="btn btn-info text-light">Search</button>
-                                <button class="btn btn-outline-info text-info ms-2">Clear</button>
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-info text-light serchBtn">Search</button>
+                                <button class="btn btn-outline-info text-info ms-2 clerInput">Clear</button>
                             </div>
                         </div>
                     </div>
@@ -88,25 +88,42 @@
                 }
             }
         });
-
-        $('.dataChng').change(function () {
-            var checklog = $('.viewbag').val();
-            var name = $('.RecName').val().trim();
-            var email = $('.EmailChng').val().trim();
-            var crDate = $('.crDate').val();
-            var cgDate = $('.cgDate').val();
-            $.ajax({
-                url: '/AdminTab/EmailSMSlogData',
-                method: 'POST',
-                data: { email: email, name: name, crDate: crDate, cgDate: cgDate, checklog: checklog },
-                success: function (response) {
-                    $('.LogPartial').html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
     });
+
+    $('.serchBtn').click(function () {
+        var checklog = $('.viewbag').val();
+        var name = $('.RecName').val().trim();
+        var email = $('.EmailChng').val().trim();
+        var crDate = $('.crDate').val();
+        var cgDate = $('.cgDate').val();
+        $.ajax({
+            url: '/AdminTab/EmailSMSlogData',
+            method: 'POST',
+            data: { email: email, name: name, crDate: crDate, cgDate: cgDate, checklog: checklog },
+            success: function (response) {
+                $('.LogPartial').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.clerInput').click(function () {
+        var checklog = $('.viewbag').val();
+        $('input').val("");
+        $('select').val("0");
+        $.ajax({
+            url: '/AdminTab/EmailSMSlogData',
+            method: 'POST',
+            data: {checklog: checklog },
+            success: function (response) {
+                $('.LogPartial').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
 </script>

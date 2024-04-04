@@ -142,9 +142,10 @@ namespace HalloDoc.Repository.Interface
 
         void changeShiftdetailStatus(int shiftdetailId, short status);
 
-        void updateShiftDetail(ShiftPoupViewModel model);
+        void updateShiftDetail(ShiftPoupViewModel model, int aspId);
 
         IEnumerable<ProOncallModel> phyOncallAvialble();
+        IEnumerable<ProOffcallModel> phyOffcall();
 
     }
 }

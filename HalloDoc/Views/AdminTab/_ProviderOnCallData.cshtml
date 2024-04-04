@@ -3,11 +3,35 @@
 *@
 
 
-@model IEnumerable<HalloDoc.Entity.AdminTab.ProOncallModel>;
+@model HalloDoc.Entity.AdminTab.ProviderCallViewModel;
+
 
 <div class="container-fluid">
+    <h5>MD's On Call</h5>
+
     <div class="row g-3">
-        @foreach (var item in Model)
+        @foreach (var item in Model.ProOncall)
+        {
+            <div class="col-md-4 d-flex">
+                <span class="PhyPhotoCnt">
+                    @if (item.photo != null)
+                    {
+                        <img src="data:image/png;base64,@item.photo" class="PhyPhotoCnt" alt="Photo">
+                    }
+                    else
+                    {
+                        <img src="~/image/Doctor.png" class="PhyPhotoCnt" alt="Photo" />
+                    }
+                </span>
+                <span class="m-3">Dr. @item.physicianFName @item.physicianLName</span>
+            </div>
+        }
+    </div>
+
+
+    <h5 class="mt-2">Physician Off Duty</h5>
+    <div class="row g-3">
+        @foreach (var item in Model.ProOffcall)
         {
             <div class="col-md-4 d-flex">
                 <span class="PhyPhotoCnt">

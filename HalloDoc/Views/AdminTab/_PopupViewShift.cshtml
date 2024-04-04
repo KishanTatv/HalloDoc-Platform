@@ -18,13 +18,14 @@
             <form id="ShiftForm" novalidate class="needs-validation">
                 <div class="modal-body">
                     <input type="hidden" id="schiftdetailId" asp-for="shiftDetailId" />
+                    <input type="hidden" class="schiftStatus" asp-for="shiftStatus" />
                     <div class="form-floating">
                         <input type="hidden" class="regId" asp-for="regId" />
                         <select class="form-select selectReg" aria-label="Floating label select" onchange="checkData()" disabled>
                             <option value="" disabled>select Region</option>
                             @foreach (var reg in Model.Regions)
                             {
-                                @if(Model.regId == reg.Regionid)
+                                @if (Model.regId == reg.Regionid)
                                 {
                                     <option value="@reg.Regionid" selected>@reg.Name</option>
                                 }
@@ -46,14 +47,14 @@
                         <span class="text-danger phyOptnMsg"></span>
                     </div>
                     <div class="form-floating mt-2">
-                        <input type="date" class="form-control shiftDate chngEnable"
+                        <input type="date" class="form-control shiftDate chngEnable" id="shiftdate"
                                placeholder="shiftdate" asp-for="shiftdate" value="@Model.shiftdate.ToString("yyyy-MM-dd")" onchange="checkData()" disabled>
                         <label> Shift Date </label>
                         <span class="text-danger shiftdateMsg"></span>
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-6 form-floating">
-                            <input type="time" class="form-control chngEnable"
+                            <input type="time" class="form-control chngEnable" id="timeStart"
                                    placeholder="start" asp-for="timeStart" disabled>
                             <label class="ms-3"> Start </label>
                         </div>
@@ -63,9 +64,10 @@
                             <label class="ms-3"> End </label>
                         </div>
                     </div>
+                    <div class="text-danger mt-1 msg"></div>
                 </div>
                 <div class="modal-footer p-1">
-                    <button type="button" class="btn btn-info text-light sendcontPop" data-bs-dismiss="modal"> Return </button>
+                    <button type="button" class="btn btn-info text-light returnBtn" data-bs-dismiss="modal"> Return </button>
                     <button type="button" class="btn btn-info text-light editbtn" onclick="EditEnable()"> Edit </button>
                     <button type="submit" class="btn btn-success text-light SaveBtn d-none"> Save </button>
                     <button type="button" class="btn btn-danger text-light deteteShift" data-bs-dismiss="modal"> Delete </button>
@@ -76,19 +78,25 @@
 </div>
 
 
-
 <script asp-append-version="true">
+
     function EditEnable() {
-        $('.chngEnable').prop('disabled', false);
-        $('.editbtn').addClass('d-none');
-        $('.SaveBtn').removeClass('d-none');
+        var shiftDate = new Date('@Model.shiftdate.ToString("yyyy-MM-dd")');
+        if (new Date() <= shiftDate) {
+            var today = new Date();
+            var formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('shiftdate').min = formattedDate;
+            $('.chngEnable').prop('disabled', false);
+            $('.editbtn').addClass('d-none');
+            $('.SaveBtn').removeClass('d-none');
+        }
     }
     var region = $('.regId').val();
     PhysicianDataRegionBase(region);
 
 
     function checkData() {
-        console.log($('.shiftDate').val());
+        var shiftDate = new Date($('.shiftDate').val());
         if ($('.selectReg').val() == null) {
             $('.regMsg').text("Please Select Region");
             return false;
@@ -102,6 +110,12 @@
             $('.regMsg').text("");
             $('.phyOptnMsg').text("");
             $('.shiftdateMsg').text("please select Shift Date");
+            return false;
+        }
+        else if (new Date() >= shiftDate) {
+            $('.regMsg').text("");
+            $('.phyOptnMsg').text("");
+            $('.shiftdateMsg').text("Next Date Please");
             return false;
         }
         else {
@@ -120,10 +134,10 @@
                 $(".regId").val(region);
                 $(".PhyOption").empty().append($('<option disabled selected>Select Physician</option>'));
                 $.each(response.physician, function (index, item) {
-                    if ($('.phid').val() == item.physician.physicianid){
+                    if ($('.phid').val() == item.physician.physicianid) {
                         $(".PhyOption").append($('<option selected></option>').val(item.physician.physicianid).text(item.physician.firstname));
                     }
-                    else{
+                    else {
                         $(".PhyOption").append($('<option></option>').val(item.physician.physicianid).text(item.physician.firstname));
                     }
                 });
@@ -154,6 +168,30 @@
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                 data: formdata,
                 success: function (response) {
+                    if (response.value == "Ok") {
+                        window.location.reload();
+                    }
+                    else {
+                        $('.msg').text("Shift is not avaliable");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+
+    $('.returnBtn').click(function () {
+        var eventid = $('#schiftdetailId').val();
+        var status = $('.schiftStatus').val();
+        var shiftDate = new Date('@Model.shiftdate.ToString("yyyy-MM-dd")');
+        if (new Date() <= shiftDate) {
+            $.ajax({
+                url: '/AdminTab/retuenShift',
+                method: 'POST',
+                data: { eventid: eventid, status: status },
+                success: function (response) {
                     window.location.reload();
                 },
                 error: function (xhr, status, error) {
@@ -161,20 +199,23 @@
                 }
             });
         }
-    })
+    });
 
     $('.deteteShift').click(function () {
         var eventid = $('#schiftdetailId').val();
-        $.ajax({
-            url: '/AdminTab/deleteShift',
-            method: 'POST',
-            data: { eventid: eventid },
-            success: function (response) {
-                window.location.reload();
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
+        var shiftDate = new Date('@Model.shiftdate.ToString("yyyy-MM-dd")');
+        if (new Date() <= shiftDate) {
+            $.ajax({
+                url: '/AdminTab/deleteShift',
+                method: 'POST',
+                data: { eventid: eventid },
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
     });
 </script>

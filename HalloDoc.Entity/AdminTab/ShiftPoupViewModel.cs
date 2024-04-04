@@ -13,6 +13,8 @@ namespace HalloDoc.Entity.AdminTab
         public List<Region> Regions { get; set; }
 
         public int shiftDetailId { get; set; }
+
+        public int shiftStatus { get; set; }
         
         public int regId { get; set; }
 
