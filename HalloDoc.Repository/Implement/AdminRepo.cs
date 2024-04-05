@@ -221,6 +221,31 @@ namespace HalloDoc.Repository.Implement
         }
 
 
+        
+        // health Profession
+
+        public void addHealthProfesion(VenderBusinessViewModel model)
+        {
+            Healthprofessional healthprofessional = new Healthprofessional
+            {
+                Vendorname = model.Vendorname,
+                Profession = model.Profession,
+                Phonenumber = model.Phonenumber,
+                Email = model.Email,
+                Businesscontact = model.Businesscontact,
+                Faxnumber = model.Faxnumber,
+                Address = model.Address,
+                City = model.City,
+                State = model.State,
+                Zip = model.Zip,
+                Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
+                Createddate = System.DateTime.Now,
+            };
+            _context.Healthprofessionals.Add(healthprofessional);
+            _context.SaveChanges();
+        }
+
+
         public List<Healthprofessionaltype> getAllHealthProfession()
         {
             var data = _context.Healthprofessionaltypes.ToList();
@@ -229,7 +254,7 @@ namespace HalloDoc.Repository.Implement
 
         public List<Healthprofessional> getHealthProfessionBussiness(int professionTypeId)
         {
-            var data = _context.Healthprofessionals.Where(x => x.Profession == professionTypeId).ToList();
+            var data = _context.Healthprofessionals.Include(x => x.ProfessionNavigation).Where(x => professionTypeId == 0 || x.Profession == professionTypeId).ToList();
             return data;
         }
 

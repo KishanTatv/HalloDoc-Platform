@@ -17,7 +17,7 @@
     <partial name="partial/AdminNavTab" />
 
     <div>
-        <h5 class="ms-3 mt-4 mb-3">Location Provider tab</h5>
+        <h5 class="ms-3 mt-4 mb-3">Location Provider</h5>
         <div id="map" class="w-75 m-auto" style="height: 600px; background-color: #f3f3f3;"></div>
     </div>
 </div>
@@ -44,13 +44,12 @@
 
                 const infoWindow = new google.maps.InfoWindow();
 
-                // Create the markers.
                 phyLocData.forEach((item, i) => {
                     const marker = new google.maps.Marker({
                         position: { lat: item.lat, lng: item.lng },
                         map: map,
-                        title: `${i + 1}. ${i + 1}`,
-                        label: `${item.name}`,
+                        title: `Dr. ${item.name}`,
+                        label: `${ i + 1}`,
                         optimized: false,
                     });
 

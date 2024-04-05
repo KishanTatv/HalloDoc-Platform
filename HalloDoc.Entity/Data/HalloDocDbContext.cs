@@ -214,7 +214,7 @@ public partial class HalloDocDbContext : DbContext
         {
             entity.HasKey(e => e.Vendorid).HasName("healthprofessionals_pkey");
 
-            entity.HasOne(d => d.ProfessionNavigation).WithMany(p => p.Healthprofessionals).HasConstraintName("healthprofessionals_profession_fkey");
+            entity.HasOne(d => d.ProfessionNavigation).WithMany(p => p.Healthprofessionals).HasConstraintName("profession_fkey");
         });
 
         modelBuilder.Entity<Healthprofessionaltype>(entity =>

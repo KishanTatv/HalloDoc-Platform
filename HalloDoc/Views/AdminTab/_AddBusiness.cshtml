@@ -1,0 +1,101 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HalloDoc.Entity.AdminTab.VenderBusinessViewModel;
+
+@{
+}
+<div class="w-100 MainPartner">
+    <div class="d-flex justify-content-between m-3">
+        <h5> Add Bussiness </h5>
+        <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="PartnerTab">
+            <strong class="pe-2">&lt Back</strong>
+        </a>
+    </div>
+
+    <div class="rounded shadow p-4 ms-4 me-4 mb-5 bg-body-tertiary rounded">
+        <form asp-action="SaveBussiness" asp-controller="AdminTab" method="post">
+            <div class="mb-4">
+                <h6>Submit Information</h6>
+                <div class="row">
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="text" class="form-control bg-transparent" asp-for="Vendorname" placeholder="add1">
+                        <label class="ms-3">Bussiness Name</label>
+                        <span asp-validation-for="Vendorname" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="hidden" asp-for="Profession" id="ProfessionId" />
+                        <select class="form-select selectProfession" aria-label="Floating label select" onchange="updateId(this)">
+                            <option value="0" selected> Select Profession  </option>
+                            @foreach (var item in Model.Healthprofessionaltypes)
+                            {
+                                <option value="@item.Healthprofessionalid"> @item.Professionname </option>
+                            }
+                        </select>
+                        <label class="ms-3"> Profesion </label>
+                        <span asp-validation-for="Profession" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="number" class="form-control bg-transparent" asp-for="Faxnumber" placeholder="add1">
+                        <label class="ms-3">Fax Number</label>
+                        <span asp-validation-for="Faxnumber" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="number" id="phone1" class="form-control InAdmobile bg-transparent AdIn" asp-for="Phonenumber" style="height:58px" />
+                        <span asp-validation-for="Phonenumber" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="text" class="form-control bg-transparent" asp-for="Email" placeholder="add1">
+                        <label class="ms-3">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="number" class="form-control bg-transparent" asp-for="Businesscontact" placeholder="add1">
+                        <label class="ms-3">Bussiness Contact</label>
+                        <span asp-validation-for="Businesscontact" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="text" class="form-control bg-transparent" asp-for="Address" placeholder="add1">
+                        <label class="ms-3">Street</label>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="text" class="form-control bg-transparent" asp-for="City" placeholder="add1">
+                        <label class="ms-3">City</label>
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="text" class="form-control bg-transparent" asp-for="State" placeholder="add1">
+                        <label class="ms-3">State</label>
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 form-floating mt-3">
+                        <input type="number" class="form-control bg-transparent" asp-for="Zip" placeholder="add1">
+                        <label class="ms-3">Zip/postal</label>
+                        <span asp-validation-for="Zip" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-info text-light me-2 SaveBusiiness">Save</button>
+                <button type="button" class="btn btn-outline-info text-info">Back</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="~/js/contact-api.js" asp-append-version="true"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script asp-append-version="true">
+    let cflag = document.querySelectorAll('.iti--allow-dropdown');
+    cflag.forEach(item => {
+        item.classList.add('h-75');
+    })
+
+    function updateId(selectElement) {
+        const selectedId = selectElement.value;
+        document.getElementById('ProfessionId').value = selectedId;
+    }
+</script>

@@ -18,8 +18,8 @@
             <li><a class="dropdown-item" asp-action="Scheduling" asp-controller="AdminTab">Scheduling</a></li>
             <li><a class="dropdown-item" asp-action="Invoicing" asp-controller="AdminTab">Invoicing</a></li>
         </ul>
-        <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Partner" ? "underLine" : "")" id="AccessTab"
-           aria-selected="false" asp-action="Partner" asp-controller="AdminTab">Partners</a>
+        <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "PartnerTab" ? "underLine" : "")" id="AccessTab"
+           aria-selected="false" asp-action="PartnerTab" asp-controller="AdminTab">Partners</a>
         <a class="nav-link ps-3 bg-transparent  dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "Access" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "UserAccess" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "AdminCreate" ? "underLine" : "")" data-bs-toggle="dropdown" aria-expanded="false">Access</a>
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" asp-action="Access" asp-controller="AdminTab">Account Access</a></li>

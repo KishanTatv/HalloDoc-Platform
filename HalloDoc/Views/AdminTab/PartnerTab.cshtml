@@ -1,0 +1,134 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<HalloDoc.Entity.Models.Healthprofessionaltype>;
+
+@{
+    ViewData["Title"] = "Provider Location";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+<div class="MainContent pt-0 min-vh-100">
+    <partial name="partial/AdminNavTab" />
+
+    <div class="d-flex justify-content-center pb-4">
+        <div class="w-100 ms-4 me-4 MainPartner">
+            <div class="d-flex m-3">
+                <h5> Vendor(s)</h5>
+            </div>
+
+            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                <div class="mb-4">
+                    <div class="row">
+                        <div class="d-flex">
+                            <div class="col-md-2 form-floating mt-2 me-2">
+                                <input type="text" class="form-control bg-transparent vendorName" placeholder="add1">
+                                <label>Search Vendor</label>
+                            </div>
+                            <div class="col-md-2 form-floating mt-2">
+                                <select class="form-select selectProfession" aria-label="Floating label select">
+                                    <option value="0" selected> All  </option>
+                                    @foreach (var item in Model)
+                                    {
+                                        <option value="@item.Healthprofessionalid"> @item.Professionname </option>
+                                    }
+                                </select>
+                                <label> All Profesion </label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="d-flex justify-content-end">
+                                    <button class="btn btn-outline-info text-info ms-2 AddBusiness"> <i class="bi bi-plus-lg text-info"></i> Add Bussiness</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div>
+                    <div class="PartnerPartial"></div>
+                </div>
+            </div>
+        </div>
+        <div class="PartialBussinessPage"></div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $.ajax({
+            url: '/AdminTab/PartnerData',
+            method: 'POST',
+            success: function (response) {
+                $('.PartnerPartial').html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+    });
+
+    $('.selectProfession').change(function () {
+        var name = $('.vendorName').val();
+        var profesion = $('.selectProfession').val();
+        $.ajax({
+            url: '/AdminTab/PartnerData',
+            method: 'POST',
+            data: { name: name, profesion: profesion },
+            success: function (response) {
+                $('.PartnerPartial').html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+    });
+
+    $('.vendorName').keyup(function () {
+        var name = $('.vendorName').val();
+        var profesion = $('.selectProfession').val();
+        $.ajax({
+            url: '/AdminTab/PartnerData',
+            method: 'POST',
+            data: { name: name, profesion: profesion },
+            success: function (response) {
+                $('.PartnerPartial').html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+    });
+
+    $('.AddBusiness').click(function () {
+        $.ajax({
+            url: '/AdminTab/AddBusinessPartial',
+            method: 'POST',
+            success: function (response) {
+                $('.MainPartner').remove();
+                $('.PartialBussinessPage').html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+    });
+
+
+</script>

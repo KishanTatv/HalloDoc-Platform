@@ -1,0 +1,44 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model List<HalloDoc.Entity.Models.Healthprofessional>;
+
+
+<div class="table-responsive">
+    <table class="table">
+        <thead class="table-secondary">
+            <tr>
+                <th scope="col"> Profession </th>
+                <th scope="col"> Bussiness Name </th>
+                <th scope="col"> Email </th>
+                <th scope="col"> Fax Number </th>
+                <th scope="col"> Phone Number </th>
+                <th scope="col"> Bussiness Contact </th>
+                <th scope="col" class="text-center"> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Vendorname</td>
+                    <td>@item.ProfessionNavigation.Professionname</td>
+                    <td>@item.Email</td>
+                    <td>@item.Faxnumber</td>
+                    <td>@item.Phonenumber</td>
+                    <td>@item.Businesscontact</td>
+                    <td class="d-flex justify-content-end">
+                        <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit">
+                            Edit
+                        </div>
+                        <div class="btn btn-outline-info ps-2 pe-2 p-0 ms-2 ADelete">
+                            Delete
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -63,6 +63,7 @@ namespace HalloDoc.Repository.Interface
 
 
         // health profession
+        void addHealthProfesion(VenderBusinessViewModel model);
         List<Healthprofessionaltype> getAllHealthProfession();
         List<Healthprofessional> getHealthProfessionBussiness(int professionTypeId);
         Healthprofessional getVendorDetail(int vendorid);

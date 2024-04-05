@@ -50,7 +50,7 @@ namespace HalloDoc.Controllers
         public IActionResult ProviderLocData()
         {
             var data = _Admin.getAllPhysicianLocation();
-            return Json(new {data});
+            return Json(new { data });
         }
         #endregion
 
@@ -809,6 +809,47 @@ namespace HalloDoc.Controllers
             IEnumerable<ProOffcallModel> dataOffCall = _Admin.phyOffcall(reg).ToList();
             var data = new ProviderCallViewModel { ProOncall = dataOnCall, ProOffcall = dataOffCall };
             return PartialView("_ProviderOnCallData", data);
+        }
+        #endregion
+
+
+
+        #region Partner
+        public IActionResult PartnerTab()
+        {
+            var data = _Admin.getAllHealthProfession();
+            return View(data);
+        }
+
+        public IActionResult PartnerData(int profesion, string name)
+        {
+            var data = _Admin.getHealthProfessionBussiness(profesion).Where(x => name == null || x.Vendorname.Contains(name)).ToList();
+            return PartialView("_PartnerTabData", data);
+        }
+
+        public IActionResult AddBusinessPartial()
+        {
+            List<Healthprofessionaltype> proType = _Admin.getAllHealthProfession();
+            var data = new VenderBusinessViewModel { Healthprofessionaltypes = proType };
+            return PartialView("_AddBusiness", data);
+        }
+
+        public IActionResult SaveBussiness(VenderBusinessViewModel model)
+        {
+            ModelState["Healthprofessionaltypes"].ValidationState = ModelValidationState.Valid;
+            if (ModelState.IsValid)
+            {
+                if (!_Genral.CheckAvalibleRegion(model.State))
+                {
+                    TempData["RegMsg"] = "Not Avliable Region";
+                    return RedirectToAction("AddBusinessPartial");
+                }
+                else
+                {
+                    _Admin.addHealthProfesion(model);
+                }
+            }
+            return RedirectToAction("AddBusinessPartial");
         }
         #endregion
 
