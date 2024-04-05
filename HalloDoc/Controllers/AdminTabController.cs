@@ -45,6 +45,17 @@ namespace HalloDoc.Controllers
             return View();
         }
 
+
+        #region Provider Location
+        public IActionResult ProviderLocData()
+        {
+            var data = _Admin.getAllPhysicianLocation();
+            return Json(new {data});
+        }
+        #endregion
+
+
+
         #region Admin Profile
         public IActionResult Profile()
         {
@@ -794,10 +805,8 @@ namespace HalloDoc.Controllers
 
         public IActionResult proOncallData(int reg)
         {
-            IEnumerable<ProOncallModel> dataOnCall = _Admin.phyOncallAvialble().ToList();
-            IEnumerable<ProOffcallModel> dataOffCall = _Admin.phyOffcall().ToList();
-            dataOnCall = dataOnCall.Where(x => (reg == 0 || x.phyRegion.Contains(reg))).ToList();
-            dataOffCall = dataOffCall.Where(x => (reg == 0 || x.phyRegion.Contains(reg))).ToList();
+            IEnumerable<ProOncallModel> dataOnCall = _Admin.phyOncallAvialble(reg).ToList();
+            IEnumerable<ProOffcallModel> dataOffCall = _Admin.phyOffcall(reg).ToList();
             var data = new ProviderCallViewModel { ProOncall = dataOnCall, ProOffcall = dataOffCall };
             return PartialView("_ProviderOnCallData", data);
         }
@@ -889,7 +898,7 @@ namespace HalloDoc.Controllers
             ).ToList();
             //if (date != DateTime.MinValue)
             //{
-            //    data = data.Where(x => x.Createddate.Date.Equals(date)).ToList();
+            //    data = data.Where(x => (x.Createddate.ToString().FirstOrDefault().ToString().Contains(date.Date.ToString()))).ToList(); 
             //}
             return PartialView("_BlockTableData", data);
         }

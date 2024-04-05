@@ -69,6 +69,12 @@ namespace HalloDoc.Repository.Interface
         void AddOrderDetail(int vendorid, int adminid, int reqid, string prescription, int refil);
 
 
+
+        // provider Location
+        IEnumerable<Physicianlocation> getAllPhysicianLocation();
+
+
+
         // Admin Profile
         PhysicianCustom getPhyProfile(int phid);
         Admin getAdminProfile(string email);
@@ -144,8 +150,8 @@ namespace HalloDoc.Repository.Interface
 
         void updateShiftDetail(ShiftPoupViewModel model, int aspId);
 
-        IEnumerable<ProOncallModel> phyOncallAvialble();
-        IEnumerable<ProOffcallModel> phyOffcall();
+        IEnumerable<ProOncallModel> phyOncallAvialble(int reg);
+        IEnumerable<ProOffcallModel> phyOffcall(int reg);
 
     }
 }
