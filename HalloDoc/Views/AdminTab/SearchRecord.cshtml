@@ -14,8 +14,11 @@
 
     <div class="d-flex w-100 justify-content-center pb-4">
         <div class="m-auto ms-4 me-4">
-            <div class="d-flex m-3">
+            <div class="d-flex justify-content-between align-items-center m-3">
                 <h5>Search Record</h5>
+                <a class="btn btn-info text-light ExportData" asp-action="ExportFile">
+                    <i class="bi bi-send-arrow-down-fill"></i>Export Data to Excel
+                </a>
             </div>
 
             <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
@@ -40,7 +43,7 @@
                                 <option value="0" selected> All </option>
                                 @foreach (var i in Enum.GetValues(typeof(HalloEnum.repestType)))
                                 {
-                                    <option value="@i">@Enum.GetName(typeof(HalloEnum.repestType), i) </option>
+                                    <option value="@((int)i)">@Enum.GetName(typeof(HalloEnum.repestType), i) </option>
                                 }
                             </select>
                             <label class="ms-3">Select Request Type</label>
@@ -106,7 +109,7 @@
     $('.serchBtn').click(function () {
         var reqStatus = $('.SreqStatus').val();
         var reqType = $('.SreqType').val();
-        var ptName = $('.SptName').val().trim();
+        var ptName = $('.SptName').val().trim().toLowerCase();
         var formDate = $('.SfromDate').val();
         var toDate = $('.StoDate').val();
         var proName = $('.SproName').val().trim();
@@ -117,7 +120,7 @@
             method: 'POST',
             data: { reqStatus: reqStatus, reqType: reqType, ptName: ptName, formDate: formDate, toDate: toDate, email: email, proName: proName, phone: phone },
             success: function (response) {
-                $('.BlockTable').html(response);
+                $('.searchData').html(response);
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
@@ -128,5 +131,15 @@
     $('.clerInput').click(function () {
         $('input').val("");
         $('select').val("0");
+        $.ajax({
+            url: '/AdminTab/SearchData',
+            method: 'POST',
+            success: function (response) {
+                $('.searchData').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
     });
 </script>

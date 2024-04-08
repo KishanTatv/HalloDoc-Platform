@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Office2010.Excel;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Office2016.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -827,11 +828,28 @@ namespace HalloDoc.Controllers
             return PartialView("_PartnerTabData", data);
         }
 
-        public IActionResult AddBusinessPartial()
+        public IActionResult AddBusinessPartial(int helthproId)
         {
             List<Healthprofessionaltype> proType = _Admin.getAllHealthProfession();
-            var data = new VenderBusinessViewModel { Healthprofessionaltypes = proType };
-            return PartialView("_AddBusiness", data);
+            if (helthproId != 0)
+            {
+                Healthprofessional hp = _Admin.getVendorDetail(helthproId);
+                VenderBusinessViewModel data = new VenderBusinessViewModel { Healthprofessionaltypes = proType, Vendorid= hp.Vendorid, Vendorname = hp.Vendorname, Phonenumber = hp.Phonenumber, Faxnumber = hp.Faxnumber, Profession = hp.Profession, Email = hp.Email, Businesscontact = hp.Businesscontact, Address = hp.Address, City = hp.City, State = hp.State, Zip = hp.Zip };
+                ViewBag.bussinessTy = "Update";
+                return PartialView("_AddBusiness", data);
+            }
+            else
+            {
+                VenderBusinessViewModel data = new VenderBusinessViewModel { Healthprofessionaltypes = proType };
+                ViewBag.bussinessTy = "Edit";
+                return PartialView("_AddBusiness", data);
+            }
+        }
+
+        public IActionResult DeleteVendor(int helthproId)
+        {
+            _Admin.deleteVendor(helthproId);
+            return Ok();
         }
 
         public IActionResult SaveBussiness(VenderBusinessViewModel model)
@@ -842,11 +860,19 @@ namespace HalloDoc.Controllers
                 if (!_Genral.CheckAvalibleRegion(model.State))
                 {
                     TempData["RegMsg"] = "Not Avliable Region";
-                    return RedirectToAction("AddBusinessPartial");
+                    return Json(new { value = "Error" });
                 }
                 else
                 {
-                    _Admin.addHealthProfesion(model);
+                    if (model.Vendorid == 0)
+                    {
+                        _Admin.addHealthProfesion(model);
+                    }
+                    else
+                    {
+                        _Admin.updateHeaithProfession(model);
+                    }
+                    return Json(new { value = "Ok" });
                 }
             }
             return RedirectToAction("AddBusinessPartial");
@@ -860,14 +886,64 @@ namespace HalloDoc.Controllers
             return View();
         }
 
-        public IActionResult searchData(string reqStatus, string reqType, string ptName, DateTime formDate, DateTime toDate, string proName, string phone, string email)
+        public IActionResult ExportFile()
         {
-            BitArray bitArray = new BitArray(1);
-            bitArray[0] = true;
-            var data = _Admin.getAllReqData().Where(x => x.Isdeleted != bitArray).ToList();
+            var data = _Admin.getAllReqData(null, 0).ToList();
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("TableData");
+
+                worksheet.Cell(1, 1).Value = "Patient Name";
+                worksheet.Cell(1, 2).Value = "Requestor";
+                worksheet.Cell(1, 3).Value = "Date Of Service";
+                worksheet.Cell(1, 4).Value = "Close Case Date";
+                worksheet.Cell(1, 5).Value = "Email";
+                worksheet.Cell(1, 6).Value = "Phone Number";
+                worksheet.Cell(1, 7).Value = "Address";
+                worksheet.Cell(1, 8).Value = "Zip";
+                worksheet.Cell(1, 9).Value = "Request Status";
+                worksheet.Cell(1, 10).Value = "Physician";
+                worksheet.Cell(1, 11).Value = "Physician Note";
+
+                int row = 2;
+                foreach (var item in data)
+                {
+                    worksheet.Cell(row, 1).Value = item.Requestclients.FirstOrDefault().Firstname + item.Requestclients.FirstOrDefault().Lastname;
+                    worksheet.Cell(row, 2).Value = item.Requesttypeid;
+                    worksheet.Cell(row, 3).Value = item.Createddate;
+                    worksheet.Cell(row, 4).Value = item.Createddate;
+                    worksheet.Cell(row, 5).Value = item.Requestclients.FirstOrDefault().Email;
+                    worksheet.Cell(row, 6).Value = item.Requestclients.FirstOrDefault().Phonenumber;
+                    worksheet.Cell(row, 7).Value = item.Requestclients.FirstOrDefault().Street;
+                    worksheet.Cell(row, 8).Value = item.Requestclients.FirstOrDefault().Zipcode;
+                    worksheet.Cell(row, 9).Value = item.Status;
+                    worksheet.Cell(row, 10).Value = item.Physicianid;
+                    row++;
+                }
+
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
+                    var mimeType = "application/....";
+                    return File(content, mimeType, "Record.xlsx");
+                }
+            }
+        }
+
+        public IActionResult searchData(string reqStatus, int reqType, string ptName, DateTime formDate, DateTime toDate, string proName, string phone, string email)
+        {
+            var data = _Admin.getAllReqData(reqStatus, reqType).ToList();
+            data = data.Where(x => 
+            (ptName == null ? true : (x.Requestclients.FirstOrDefault().Firstname.Contains(ptName)) || (x.Requestclients.FirstOrDefault().Lastname.Contains(ptName))) &&
+            (formDate == DateTime.MinValue ? true : x.Createddate.Date.Equals(formDate)) &&
+            (email == null ? true: x.Requestclients.FirstOrDefault().Email.Contains(email)) &&
+            (phone == null ? true: x.Requestclients.FirstOrDefault().Phonenumber.Contains(phone))
+            ).ToList();
             return PartialView("_SearchTableData", data);
         }
         #endregion
+
 
         #region EmailSMS Log
         public IActionResult SMSlog()
@@ -895,11 +971,13 @@ namespace HalloDoc.Controllers
                     (crDate == DateTime.MinValue || x.Createdate.Date.Equals(crDate)) &&
                     (cgDate == DateTime.MinValue || x.Sentdate.Equals(cgDate)))
                     .ToList();
+                ViewBag.logType = checklog;
                 return PartialView("_EmailLog", data);
             }
             else
             {
-                return PartialView("_EmailLog");
+                var data = _Admin.getSMSLogData();
+                return PartialView("_SmsLog", data);
             }
         }
         #endregion

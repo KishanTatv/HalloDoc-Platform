@@ -10,6 +10,10 @@ using System.IO;
 using DocumentFormat.OpenXml.Drawing;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Twilio.TwiML.Messaging;
+using Twilio.Types;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 
 namespace HalloDoc.Controllers
 {
@@ -111,18 +115,39 @@ namespace HalloDoc.Controllers
             return PartialView("PopupSendlink");
         }
 
-        public IActionResult SendLinkData(string email, string name)
+        public IActionResult SendLinkData(string email, string mobile, string name)
         {
+            string link = Url.Action("SubmitReq", "Patient", null, Request.Scheme);
+            var bodyMsg = $"Hi {name}, Please click on the following link to submit the request." + link;
+            try
+            {
+                string accountSid = "AC6c9974bdd968d358144abc9d665e7ddb";
+                string authToken = "5e8d84b81e2f40ddc9ccb3caf5ab1f33";
+
+                TwilioClient.Init(accountSid, authToken);
+
+                var twilioMessage = MessageResource.Create(
+                    body: bodyMsg,
+                    from: new Twilio.Types.PhoneNumber("+19175127590"),
+                    to: new Twilio.Types.PhoneNumber(mobile)
+                );
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "Error sending SMS: " + ex.Message;
+                Console.WriteLine("Twilio Error");
+            }
+
+
             int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
             Nullable<int> Phyid = null;
             Nullable<int> reqid = null;
             int roleId = Convert.ToInt32(Request.Cookies["CookieRole"]);
             string sub = "Submit Requset";
-            string link = Url.Action("SubmitReq", "Patient", null, Request.Scheme);
-            var body = $"Hi {name}, Please click on the following link to submit the request." + link;
             string filepath = null;
-            _Genral.SendEmailOffice365(email, sub, body, null);
-            _Genral.addEmailLog(body, sub, email, filepath, roleId, reqid, AdminId, Phyid);
+            _Genral.SendEmailOffice365(email, sub, bodyMsg, null);
+            _Genral.addEmailLog(bodyMsg, sub, email, filepath, roleId, reqid, AdminId, Phyid);
+            _Genral.addSMSLog(bodyMsg, mobile, roleId, null, AdminId, Phyid);
             return Ok();
         }
         #endregion
@@ -401,13 +426,21 @@ namespace HalloDoc.Controllers
 
         public IActionResult AssignReq(string AssignNote, string phycase, int TransphyId, int reqid)
         {
+            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            Nullable<int> phyId = null;
+            short reqStatus;
             if (TransphyId != 0)
             {
-                int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
-                Nullable<int> phyId = null;
-                short Assignstatus = 2;
-                _Genral.AddreqLogStatus(reqid, AssignNote, Assignstatus, AdminId, phyId, TransphyId);
-                _Genral.updateReqStatusWithPhysician(reqid, TransphyId, Assignstatus);
+                if (phycase == "AssignPhy")
+                {
+                    reqStatus = 1;
+                }
+                else
+                {
+                    reqStatus = 2;
+                }
+                _Genral.AddreqLogStatus(reqid, AssignNote, reqStatus, AdminId, phyId, TransphyId);
+                _Genral.updateReqStatusWithPhysician(reqid, TransphyId, reqStatus);
                 return Json(new { value = "Ok" });
             }
             else

@@ -73,7 +73,6 @@ namespace HalloDoc.Entity.AdminTab
         public string? Businesscontact { get; set; }
 
 
-
         public List<Healthprofessionaltype> Healthprofessionaltypes { get; set; }
     }
 }

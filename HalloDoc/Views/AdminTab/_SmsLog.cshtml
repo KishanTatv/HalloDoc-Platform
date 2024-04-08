@@ -2,7 +2,7 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-@model IEnumerable<HalloDoc.Entity.Models.Emaillog>;
+@model IEnumerable<HalloDoc.Entity.Models.Smslog>;
 
 @{
     Layout = "";
@@ -16,14 +16,7 @@
                 <th scope="col"> Recipient </th>
                 <th scope="col"> Action </th>
                 <th scope="col"> Role Name </th>
-                @if (ViewBag.logType == "SMS")
-                {
-                    <th scope="col"> Mobile Number </th>
-                }
-                else
-                {
-                    <th scope="col"> Email Id </th>
-                }
+                <th scope="col"> Mobile Number </th>
                 <th scope="col"> Created Date <i class="bi bi-arrow-down ms-1"></i> </th>
                 <th scope="col"> Sent Date</th>
                 <th scope="col"> Sent </th>
@@ -44,23 +37,16 @@
                             }
                             else
                             {
-                                @log.Request.Firstname @log.Request.Lastname
+                                @*@log.Request.Firstname @log.Request.Lastname*@
                             }
                         </td>
-                        <td> @log.Subjectname </td>
+                        <td> -  </td>
                         <td> @log.Roleid </td>
-                        @if (ViewBag.logType == "SMS")
-                        {
-                            <td>6476354</td>
-                        }
-                        else
-                        {
-                            <td> @log.Emailid </td>
-                        }
+                        <td>@log.Mobilenumber</td>
                         <td>@log.Createdate.Date.ToString("MMM dd, yyyy")</td>
                         <td>@log.Sentdate.Value.Date.ToString("MMM dd, yyyy")</td>
                         <td>
-                            @if (log.Isemailsent != null)
+                            @if (log.Issmssent != null)
                             {
                                 <span>Yes</span>
                             }

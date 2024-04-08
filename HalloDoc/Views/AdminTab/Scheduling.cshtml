@@ -150,15 +150,15 @@
                     title: `${physician.firstname} ${physician.lastname}`,
                     imageUrl: `${physician.photo}`,
                 }));
-                calendar.setOption('resources', resources);
                 calendar.setOption('resourceLabelDidMount', function (resourceObj) {
                     const img = document.createElement('img');
                     const imgUrl = resourceObj.resource.extendedProps.imageUrl;
-                    img.src = `data:image/png;base64,${imgUrl}`;
+                    img.src = imgUrl != "null" ? `data:image/png;base64,${imgUrl}` : '/image/Doctor.png';
                     img.style.height = '40px';
                     img.style.width = '40px';
                     resourceObj.el.querySelector('.fc-datagrid-cell-main').appendChild(img);
                 });
+                calendar.setOption('resources', resources);
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

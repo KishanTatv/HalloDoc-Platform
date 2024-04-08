@@ -221,7 +221,7 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        
+
         // health Profession
 
         public void addHealthProfesion(VenderBusinessViewModel model)
@@ -245,6 +245,32 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
+        public void updateHeaithProfession(VenderBusinessViewModel model)
+        {
+            Healthprofessional healthprofessional = _context.Healthprofessionals.FirstOrDefault(x => x.Vendorid == model.Vendorid);
+            healthprofessional.Vendorname = model.Vendorname;
+            healthprofessional.Profession = model.Profession;
+            healthprofessional.Phonenumber = model.Phonenumber;
+            healthprofessional.Email = model.Email;
+            healthprofessional.Businesscontact = model.Businesscontact;
+            healthprofessional.Faxnumber = model.Faxnumber;
+            healthprofessional.Address = model.Address;
+            healthprofessional.City = model.City;
+            healthprofessional.State = model.State;
+            healthprofessional.Zip = model.Zip;
+            healthprofessional.Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString();
+            healthprofessional.Modifieddate = System.DateTime.Now;
+            _context.Healthprofessionals.Update(healthprofessional);
+            _context.SaveChanges();
+        }
+
+        public void deleteVendor(int venId)
+        {
+            Healthprofessional hp = _context.Healthprofessionals.FirstOrDefault(x => x.Vendorid == venId);
+            hp.Isdeleted = new BitArray(new bool[] { true });
+            _context.Healthprofessionals.Update(hp);
+            _context.SaveChanges();
+        }
 
         public List<Healthprofessionaltype> getAllHealthProfession()
         {
@@ -254,13 +280,13 @@ namespace HalloDoc.Repository.Implement
 
         public List<Healthprofessional> getHealthProfessionBussiness(int professionTypeId)
         {
-            var data = _context.Healthprofessionals.Include(x => x.ProfessionNavigation).Where(x => professionTypeId == 0 || x.Profession == professionTypeId).ToList();
+            var data = _context.Healthprofessionals.Include(x => x.ProfessionNavigation).Where(x => professionTypeId == 0 || x.Profession == professionTypeId).Where(x => x.Isdeleted != new BitArray(new bool[] { true })).ToList();
             return data;
         }
 
         public Healthprofessional getVendorDetail(int vendorid)
         {
-            return _context.Healthprofessionals.FirstOrDefault(x => x.Vendorid == vendorid);
+            return _context.Healthprofessionals.FirstOrDefault(x => vendorid == 0 || x.Vendorid == vendorid);
         }
 
         public void AddOrderDetail(int vendorid, int adminid, int reqid, string prescription, int refil)
@@ -473,6 +499,11 @@ namespace HalloDoc.Repository.Implement
             return _context.Emaillogs.Include(x => x.Request).ThenInclude(x => x.Requestclients).ToList();
         }
 
+        public IEnumerable<Smslog> getSMSLogData()
+        {
+            return _context.Smslogs.ToList();
+        }
+
         public IEnumerable<Blockrequest> getallBlockRequest()
         {
             return _context.Blockrequests.Include(x => x.Request).ThenInclude(x => x.Requestclients).ToList();
@@ -563,9 +594,36 @@ namespace HalloDoc.Repository.Implement
             return _context.Users.Where(x => x.Isdeleted != bitArray).ToList();
         }
 
-        public List<Request> getAllReqData()
+        public List<Request> getAllReqData(string reqStatus, int reqType)
         {
-            return _context.Requests.Include(x => x.Physician).ToList();
+            var data = _context.Requests.Include(x =>x.Requestclients).Include(x => x.Physician)
+                .Where(x => (x.Isdeleted != new BitArray(new bool[]{true})) &&
+                (reqType == 0 || x.Requesttypeid.Equals(reqType))).ToList();
+            if(reqStatus == "New")
+            {
+                data = data.Where(x => x.Status.Equals(1)).ToList();
+            }
+            if(reqStatus == "Pending")
+            {
+                data = data.Where(x => x.Status.Equals(2)).ToList();
+            }
+            if(reqStatus == "Active")
+            {
+                data = data.Where(x => x.Status.Equals(4) || x.Status.Equals(5)).ToList();
+            }
+            if(reqStatus == "Conclude")
+            {
+                data = data.Where(x => x.Status.Equals(6)).ToList();
+            }
+            if(reqStatus == "Toclose")
+            {
+                data = data.Where(x => x.Status.Equals(3) || x.Status.Equals(7) || x.Status.Equals(8)).ToList();
+            }
+            if (reqStatus == "Unpaid")
+            {
+                data = data.Where(x => x.Status.Equals(9)).ToList();
+            }
+            return data;
         }
 
 
@@ -662,6 +720,8 @@ namespace HalloDoc.Repository.Implement
             deleteBit[0] = true;
             return _context.Shiftdetails.Include(x => x.Shiftdetailregions).ThenInclude(x => x.Region).Include(x => x.Shift).ThenInclude(x => x.Physician).Where(x => x.Isdeleted != deleteBit).ToList();
         }
+
+
 
 
 

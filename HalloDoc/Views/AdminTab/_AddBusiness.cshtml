@@ -3,22 +3,31 @@
 *@
 @model HalloDoc.Entity.AdminTab.VenderBusinessViewModel;
 
-@{
-}
+
+<link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
+
 <div class="w-100 MainPartner">
-    <div class="d-flex justify-content-between m-3">
-        <h5> Add Bussiness </h5>
+    <div class="d-flex justify-content-between align-items-center m-3">
+        @if (ViewBag.bussinessTy == "Edit")
+        {
+            <h5> Add Bussiness </h5>
+        }
+        else
+        {
+            <h5>Update Bussiness</h5>
+        }
         <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="PartnerTab">
             <strong class="pe-2">&lt Back</strong>
         </a>
     </div>
 
     <div class="rounded shadow p-4 ms-4 me-4 mb-5 bg-body-tertiary rounded">
-        <form asp-action="SaveBussiness" asp-controller="AdminTab" method="post">
+        <form id="Formdata1" novalidate class="needs-validation">
             <div class="mb-4">
                 <h6>Submit Information</h6>
                 <div class="row">
                     <div class="col-md-6 form-floating mt-3">
+                        <input type="hidden" asp-for="Vendorid" />
                         <input type="text" class="form-control bg-transparent" asp-for="Vendorname" placeholder="add1">
                         <label class="ms-3">Bussiness Name</label>
                         <span asp-validation-for="Vendorname" class="text-danger"></span>
@@ -29,11 +38,18 @@
                             <option value="0" selected> Select Profession  </option>
                             @foreach (var item in Model.Healthprofessionaltypes)
                             {
-                                <option value="@item.Healthprofessionalid"> @item.Professionname </option>
+                                @if (Model.Profession == item.Healthprofessionalid)
+                                {
+                                    <option value="@item.Healthprofessionalid" selected> @item.Professionname </option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Healthprofessionalid"> @item.Professionname </option>
+                                }
                             }
                         </select>
                         <label class="ms-3"> Profesion </label>
-                        <span asp-validation-for="Profession" class="text-danger"></span>
+                        <span asp-validation-for="Profession" class="text-danger spanSelect"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-3">
                         <input type="number" class="form-control bg-transparent" asp-for="Faxnumber" placeholder="add1">
@@ -67,7 +83,7 @@
                     <div class="col-md-6 form-floating mt-3">
                         <input type="text" class="form-control bg-transparent" asp-for="State" placeholder="add1">
                         <label class="ms-3">State</label>
-                        <span asp-validation-for="State" class="text-danger"></span>
+                        <span asp-validation-for="State" class="text-danger stateMsg"></span>
                     </div>
                     <div class="col-md-6 form-floating mt-3">
                         <input type="number" class="form-control bg-transparent" asp-for="Zip" placeholder="add1">
@@ -77,25 +93,69 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-info text-light me-2 SaveBusiiness">Save</button>
-                <button type="button" class="btn btn-outline-info text-info">Back</button>
-            </div>
-        </form>
+                @if (ViewBag.bussinessTy == "Edit")
+                {
+                    <button type="submit" class="btn btn-info text-light me-2 SaveBussiness">Save</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-info text-light me-2 UpdateBusiiness">Update</button>
+                }
+                <a type="button" class="btn btn-outline-info text-info" asp-controller="AdminTab" asp-action="PartnerTab">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
 
-<script src="~/js/contact-api.js" asp-append-version="true"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-<script asp-append-version="true">
-    let cflag = document.querySelectorAll('.iti--allow-dropdown');
-    cflag.forEach(item => {
-        item.classList.add('h-75');
-    })
+    <script src="~/js/contact-api.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script asp-append-version="true">
+        let cflag = document.querySelectorAll('.iti--allow-dropdown');
+        cflag.forEach(item => {
+            item.classList.add('h-75');
+        })
 
-    function updateId(selectElement) {
-        const selectedId = selectElement.value;
-        document.getElementById('ProfessionId').value = selectedId;
-    }
-</script>
+        function updateId(selectElement) {
+            const selectedId = selectElement.value;
+            document.getElementById('ProfessionId').value = selectedId;
+            if ($('#ProfessionId').val() != '') {
+                $('.spanSelect').text("");
+            }
+        }
+
+        function checkData() {
+            if ($('#ProfessionId').val() == '') {
+                $('.spanSelect').text("please select");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        $('#Formdata1').submit(function (e) {
+            e.preventDefault();
+            var data = $("#Formdata1").serialize();
+            if (checkData()) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/AdminTab/SaveBussiness',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: data,
+                    success: function (response) {
+                        if (response.value == "Error") {
+                            $('.stateMsg').text("Not Avaliable region")
+                        }
+                        else if (response.value == "Ok") {
+                            window.location.reload();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    </script>

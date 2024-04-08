@@ -6,6 +6,7 @@ using HalloDoc.Entity.RequestForm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -64,6 +65,8 @@ namespace HalloDoc.Repository.Interface
 
         // health profession
         void addHealthProfesion(VenderBusinessViewModel model);
+        void updateHeaithProfession(VenderBusinessViewModel model);
+        void deleteVendor(int venId);
         List<Healthprofessionaltype> getAllHealthProfession();
         List<Healthprofessional> getHealthProfessionBussiness(int professionTypeId);
         Healthprofessional getVendorDetail(int vendorid);
@@ -108,6 +111,7 @@ namespace HalloDoc.Repository.Interface
 
         // log
         IEnumerable<Emaillog> getEmailLogData();
+        IEnumerable<Smslog> getSMSLogData();
         IEnumerable<Blockrequest> getallBlockRequest();
 
 
@@ -129,7 +133,7 @@ namespace HalloDoc.Repository.Interface
 
 
         // Request whole data
-        List<Request> getAllReqData();
+        List<Request> getAllReqData(string reqStatus, int reqType);
 
 
         // shift schedule

@@ -27,7 +27,7 @@ namespace HalloDoc.Repository.Interface
         Request getRequestData(int reqid);
 
         void addEmailLog(string eTemplate, string sub, string recemail, string? filepath, int roleid, int? reqid, int? adminid, int? phyid);
-        
+        void addSMSLog(string body, string mobile, int roleid, int? reqid, int? adminid, int? phyid);
 
         EncounterForm getEncounterDetail(int reqid);
         bool CheckEncounterForm(int reqid);

@@ -90,9 +90,6 @@ namespace HalloDoc.Repository.Implement
 
         public void addEmailLog(string eTemplate, string sub, string recemail, string? filepath, int roleid, int? reqid, int? adminid, int? phyid)
         {
-            BitArray bitArray = new BitArray(1);
-            bitArray[0] = true;
-
             Emaillog emailLog = new Emaillog
             {
                 Emailtemplate = eTemplate,
@@ -105,10 +102,30 @@ namespace HalloDoc.Repository.Implement
                 Filepath = filepath,
                 Createdate = DateTime.Now,
                 Sentdate = DateTime.Now,
-                Isemailsent = bitArray,
+                Isemailsent = new BitArray(new bool[] { true }),
                 Senttries = 1,
             };
             _context.Emaillogs.Add(emailLog);
+            _context.SaveChanges();
+        }
+
+
+        public void addSMSLog(string body, string mobile, int roleid, int? reqid, int? adminid, int? phyid)
+        {
+            Smslog smslog = new Smslog
+            {
+                Smstemplate = body,
+                Mobilenumber = mobile,
+                Roleid = roleid,
+                Requestid = reqid,
+                Physicianid = phyid,
+                Adminid = adminid,
+                Senttries = 1,
+                Issmssent = new BitArray(new bool[] { true }),
+                Createdate = System.DateTime.Now,
+                Sentdate = System.DateTime.Now,
+            };
+            _context.Smslogs.Add(smslog);
             _context.SaveChanges();
         }
 

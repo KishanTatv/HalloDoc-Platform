@@ -30,10 +30,10 @@
                     <td>@item.Phonenumber</td>
                     <td>@item.Businesscontact</td>
                     <td class="d-flex justify-content-end">
-                        <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit">
+                        <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit" data-id="@item.Vendorid">
                             Edit
                         </div>
-                        <div class="btn btn-outline-info ps-2 pe-2 p-0 ms-2 ADelete">
+                        <div class="btn btn-outline-info ps-2 pe-2 p-0 ms-2 ADelete" data-id="@item.Vendorid">
                             Delete
                         </div>
                     </td>
@@ -42,3 +42,46 @@
         </tbody>
     </table>
 </div>
+
+
+<script asp-append-version="true">
+    $('.ADelete').click(function() {
+        var helthproId = $(this).data('id');
+        $.ajax({
+            url: '/AdminTab/DeleteVendor',
+            method: 'POST',
+            data: { helthproId: helthproId },
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+    });
+
+    $('.AEdit').click(function(){
+        var helthproId = $(this).data('id');
+        $.ajax({
+            url: '/AdminTab/AddBusinessPartial',
+            method: 'POST',
+            data: { helthproId: helthproId },
+            success: function (response) {
+                $('.MainPartner').remove();
+                $('.PartialBussinessPage').html(response);
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+    });
+   
+</script>

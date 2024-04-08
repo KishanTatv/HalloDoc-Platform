@@ -1,4 +1,4 @@
-﻿let phContact = document.querySelectorAll('.iti--allow-dropdown');
+﻿var phContact = document.querySelectorAll('.iti--allow-dropdown');
 phContact.forEach(item => {
     item.classList.add('h-75');
 })

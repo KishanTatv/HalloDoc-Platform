@@ -33,15 +33,15 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Firstname @item.Lastname</td>
+                    <td>@item.Requestclients.FirstOrDefault().Firstname @item.Requestclients.FirstOrDefault().Lastname</td>
                     <td> @Enum.GetName(typeof(HalloEnum.repestType), item.Requesttypeid) </td>
-                    <td>@item.Createddate</td>
-                    <td>44, hkjh, 2324</td>
-                    <td>@item.Email</td>
-                    <td>@item.Phonenumber</td>
-                    <td>@item.Status</td>
-                    <td>555</td>
-                    <td>new</td>
+                    <td>@item.Createddate.Date.ToString("MMM dd, yyyy")</td>
+                    <td>54</td>
+                    <td>@item.Requestclients.FirstOrDefault().Email</td>
+                    <td>@item.Requestclients.FirstOrDefault().Phonenumber</td>
+                    <td>@item.Requestclients.FirstOrDefault().Street</td>
+                    <td>@item.Requestclients.FirstOrDefault().Zipcode</td>
+                    <td> @Enum.GetName(typeof(HalloEnum.DashName), item.Status)</td>
                     @if (item.Physician != null)
                     {
                         <td>@item.Physician.Firstname @item.Physician.Lastname</td>
