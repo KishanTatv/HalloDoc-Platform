@@ -29,11 +29,12 @@ namespace HalloDoc.Repository.Interface
 
         //Dashbord table Data 
 
-        DashTable GetPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype);
-        DashTable ExportPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype);
+        DashTable GetPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype, int? phyFilterId);
+        DashTable ExportPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int reqtype);
 
 
-        List<int> TotalCountPatient();
+
+        List<int> TotalCountPatient(int phyFilterId);
 
 
 
@@ -155,8 +156,8 @@ namespace HalloDoc.Repository.Interface
 
         void updateShiftDetail(ShiftPoupViewModel model, int aspId);
 
-        IEnumerable<ProOncallModel> phyOncallAvialble(int reg);
-        IEnumerable<ProOffcallModel> phyOffcall(int reg);
+        IEnumerable<ProcallModel> phyOncallAvialble(int reg);
+        IEnumerable<ProcallModel> phyOffcall(int reg);
 
     }
 }

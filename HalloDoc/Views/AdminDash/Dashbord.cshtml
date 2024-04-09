@@ -62,26 +62,29 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4 col-sm-4 col-lg-2 ">
-                    <div class="d-flex card p-2 text-decoration-none rounded-3 DashCard DashCardT" onclick="tocDash()" data-id="5">
-                        <div class=" p-0">
-                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                 src="~/image/Dash_toclose.png">
-                            <strong class="Dash-name">To CLOSE</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
+                @if (Context.Request.Cookies["CookieRole"] == "1")
+                {
+                    <div class="col-4 col-sm-4 col-lg-2 ">
+                        <div class="d-flex card p-2 text-decoration-none rounded-3 DashCard DashCardT" onclick="tocDash()" data-id="5">
+                            <div class=" p-0">
+                                <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                     src="~/image/Dash_toclose.png">
+                                <strong class="Dash-name">To CLOSE</strong>
+                                <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-4 col-sm-4 col-lg-2 ">
-                    <div class="d-flex card p-2 text-decoration-none rounded-3 DashCard DashCardU" onclick="unpDash()" data-id="6">
-                        <div class=" p-0">
-                            <img class="dashIcon rounded-circle w-5 p-1 text-inline"
-                                 src="~/image/Dash_unpaid.png">
-                            <strong class="Dash-name">UNPAID</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
+                    <div class="col-4 col-sm-4 col-lg-2 ">
+                        <div class="d-flex card p-2 text-decoration-none rounded-3 DashCard DashCardU" onclick="unpDash()" data-id="6">
+                            <div class=" p-0">
+                                <img class="dashIcon rounded-circle w-5 p-1 text-inline"
+                                     src="~/image/Dash_unpaid.png">
+                                <strong class="Dash-name">UNPAID</strong>
+                                <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
 
         </div>
@@ -95,9 +98,12 @@
             <div>
                 <button type="button" class="btn btn-info text-light sendLink"><i class="bi bi-send text-light"></i><span class="text-dashide"> Sendlink </span></button>
                 <div class="btn btn-info text-light NewReq" data-reqid="1"><i class="bi bi-file-earmark-plus text-light"></i><span class="text-dashide"> Create Patient </span></div>
-                <button type="button" class="btn btn-info text-light" onclick="ExportIndivisul()"> <i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
-                <a type="button" class="btn btn-info text-light" onclick="ExportAllDataClick()"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
-                <div class="btn btn-info text-light reqSupport"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></div>
+                @if (Context.Request.Cookies["CookieRole"] == "1")
+                {
+                    <button type="button" class="btn btn-info text-light" onclick="ExportIndivisul()"> <i class="bi bi-rocket text-light"></i><span class="text-dashide"> Export </span></button>
+                    <a type="button" class="btn btn-info text-light" onclick="ExportAllDataClick()"><i class="bi bi-rocket-takeoff-fill text-light"></i><span class="text-dashide"> Export All </span></a>
+                    <div class="btn btn-info text-light reqSupport"><i class="bi bi-person-check text-light"></i><span class="text-dashide"> Request DTY Support </span></div>
+                }
             </div>
         </div>
     </div>
@@ -106,13 +112,16 @@
         <div class=" d-flex justify-content-between flex-wrap DashSearch">
             <div class="d-flex flex-">
                 <input type="text" id="SearchPatient" class="form-control me-2" placeholder="Search Patient">
-                <select class="form-select" id="RegSearch">
-                    <option value="">All Regions</option>
-                    @foreach (var regName in Model.Regions)
-                    {
-                        <option value="@regName.Name">@regName.Name</option>
-                    }
-                </select>
+                @if (Context.Request.Cookies["CookieRole"] == "1")
+                {
+                    <select class="form-select" id="RegSearch">
+                        <option value="">All Regions</option>
+                        @foreach (var regName in Model.Regions)
+                        {
+                            <option value="@regName.Name">@regName.Name</option>
+                        }
+                    </select>
+                }
             </div>
             <div class=" d-flex align-self-center p-0 ">
                 <span class="btn btn-outline-secondary p-0 ps-1 pe-1 me-2 h-50 text-dashide reqFilter" data-reqtype="">All</span>
@@ -350,7 +359,7 @@
                 }
             });
         });
-        
+
         $('#SearchPatient').keyup(function () {
             var search = $(this).val();
             var reg = $('#RegSearch').val();

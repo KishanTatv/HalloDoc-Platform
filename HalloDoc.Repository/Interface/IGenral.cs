@@ -14,9 +14,11 @@ namespace HalloDoc.Repository.Interface
     {
         bool CheckAvalibleRegion(string state);
         bool CheckExistAspUser(string email);
+        bool CheckAspPassword(string email, string pass);
         Aspnetuser getUserRole(string email);
 
         int getAspId(string email);
+        int getPhyId(string email);
         bool checkBlockReq(string email);
 
         string userFullName(string email);
@@ -26,8 +28,8 @@ namespace HalloDoc.Repository.Interface
         string getClientEmailbyReqId(int reqid);
         Request getRequestData(int reqid);
 
-        void addEmailLog(string eTemplate, string sub, string recemail, string? filepath, int roleid, int? reqid, int? adminid, int? phyid);
-        void addSMSLog(string body, string mobile, int roleid, int? reqid, int? adminid, int? phyid);
+        void addEmailLog(string eTemplate, string sub, string recemail, string? filepath, int? roleid, int? reqid, int? adminid, int? phyid);
+        void addSMSLog(string body, string mobile, int? roleid, int? reqid, int? adminid, int? phyid);
 
         EncounterForm getEncounterDetail(int reqid);
         bool CheckEncounterForm(int reqid);
@@ -38,6 +40,7 @@ namespace HalloDoc.Repository.Interface
 
 
         Task SendEmailOffice365(string recEmail, string subject, string body, List<string>? attachment);
+        Task sendSMSwithTwilio(string mobile, string msg);
 
         //IEnumerable<RequestWithFile> GetRequestsFileswithReq(int reqId);
         List<Request> GetRequestsFileswithReq(int reqId);

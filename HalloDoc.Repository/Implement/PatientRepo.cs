@@ -353,7 +353,7 @@ namespace HalloDoc.Repository.Implement
         public void newPasswordCreate(ClientInformation user, string email)
         {
             Aspnetuser asp = _context.Aspnetusers.FirstOrDefault(u => u.Email == email);
-            asp.Passwordhash = user.ConfirmPassword;
+            asp.Passwordhash = BCrypt.Net.BCrypt.HashPassword(user.ConfirmPassword);
             _context.Aspnetusers.Update(asp);
             _context.SaveChanges();
         }

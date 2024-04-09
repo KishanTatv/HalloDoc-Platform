@@ -4,6 +4,7 @@ using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,8 @@ using System.Net.Mail;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace HalloDoc.Repository.Implement
@@ -43,6 +46,19 @@ namespace HalloDoc.Repository.Implement
             return _context.Aspnetusers.Any(u => u.Email == email);
         }
 
+        public bool CheckAspPassword(string email, string pass)
+        {
+            var Asppass = _context.Aspnetusers.FirstOrDefault(u => u.Email == email).Passwordhash;
+            if(BCrypt.Net.BCrypt.Verify(Asppass, pass))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public int getRegionId(string state)
         {
             return _context.Regions.FirstOrDefault(x => x.Name.ToLower() == state.ToLower()).Regionid;
@@ -57,6 +73,11 @@ namespace HalloDoc.Repository.Implement
         public int getAspId(string email)
         {
             return _context.Aspnetusers.FirstOrDefault(x => x.Email == email).Id;
+        }
+
+        public int getPhyId(string email)
+        {
+            return _context.Physicians.FirstOrDefault(x => x.Email == email).Physicianid;
         }
 
         public bool checkBlockReq(string email)
@@ -88,7 +109,7 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public void addEmailLog(string eTemplate, string sub, string recemail, string? filepath, int roleid, int? reqid, int? adminid, int? phyid)
+        public void addEmailLog(string eTemplate, string sub, string recemail, string? filepath, int? roleid, int? reqid, int? adminid, int? phyid)
         {
             Emaillog emailLog = new Emaillog
             {
@@ -110,7 +131,7 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public void addSMSLog(string body, string mobile, int roleid, int? reqid, int? adminid, int? phyid)
+        public void addSMSLog(string body, string mobile, int? roleid, int? reqid, int? adminid, int? phyid)
         {
             Smslog smslog = new Smslog
             {
@@ -281,6 +302,33 @@ namespace HalloDoc.Repository.Implement
 
         }
         #endregion
+
+        #region SMS Twilio
+        public Task sendSMSwithTwilio(string mobile, string msg)
+        {
+            try
+            {
+                string accountSid = "AC6c9974bdd968d358144abc9d665e7ddb";
+                string authToken = "5e8d84b81e2f40ddc9ccb3caf5ab1f33";
+
+                TwilioClient.Init(accountSid, authToken);
+
+                var twilioMessage = MessageResource.Create(
+                    body: msg,
+                    from: new Twilio.Types.PhoneNumber("+19175127590"),
+                    to: new Twilio.Types.PhoneNumber("+918866773923")
+                );
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Twilio Error");
+                return null;
+            }
+        }
+        #endregion
+
+
 
 
 

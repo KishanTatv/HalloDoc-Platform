@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HalloDoc.Entity.AdminTab
 {
-    public class ProOncallModel
+    public class ProcallModel
     {
         public int phyId { get; set; }
 

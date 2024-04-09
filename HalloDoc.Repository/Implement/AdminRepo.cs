@@ -51,16 +51,16 @@ namespace HalloDoc.Repository.Implement
 
 
         #region Request Count
-        public List<int> TotalCountPatient()
+        public List<int> TotalCountPatient(int phyFilterId)
         {
-            int Tnew = _context.Requests.Where(x => x.Status == 1).Count();
-            int Tpending = _context.Requests.Where(x => x.Status == 2).Count();
-            int Tactive = _context.Requests.Where(x => x.Status == 4 || x.Status == 5).Count();
-            int Tconclide = _context.Requests.Where(x => x.Status == 6).Count();
-            int Tclose = _context.Requests.Where(x => x.Status == 3 || x.Status == 7 || x.Status == 8).Count();
-            int Tunpaid = _context.Requests.Where(x => x.Status == 9).Count();
-            List<int> countList = new List<int>();
-            countList.Add(Tnew); countList.Add(Tpending); countList.Add(Tactive); countList.Add(Tconclide); countList.Add(Tclose); countList.Add(Tunpaid);
+            int Tnew = _context.Requests.Count(x => x.Status == 1 && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tpending = _context.Requests.Count(x => x.Status == 2 && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tactive = _context.Requests.Count(x => (x.Status == 4 || x.Status == 5) && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tconclide = _context.Requests.Count(x => x.Status == 6 && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tclose = _context.Requests.Count(x => (x.Status == 3 || x.Status == 7 || x.Status == 8) && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tunpaid = _context.Requests.Count(x => x.Status == 9 && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+
+            List<int> countList = new List<int>{Tnew, Tpending, Tactive, Tconclide, Tclose, Tunpaid};
 
             return countList;
         }
@@ -68,7 +68,7 @@ namespace HalloDoc.Repository.Implement
 
         #region AllRequest Data
 
-        public DashTable GetPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype)
+        public DashTable GetPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype, int? phyFilterId)
         {
             var data = from r in _context.Requests
                        join f in _context.Requestclients on r.Requestid equals f.Requestid
@@ -78,6 +78,7 @@ namespace HalloDoc.Repository.Implement
                        where (status == null ? true : status.Contains(r.Status)) &&
                       (search == null ? true : f.Firstname.ToLower().Contains(search.ToLower()) || f.Lastname.ToLower().Contains(search.ToLower())) &&
                       (reg == null ? true : f.State.ToLower().Equals(reg.ToLower())) &&
+                      (phyFilterId == 0 ? true : p.Physicianid.Equals(phyFilterId)) &&
                       (reqtype == 0 ? true : r.Requesttypeid.Equals(reqtype))
                        select new tableData
                        {
@@ -92,6 +93,7 @@ namespace HalloDoc.Repository.Implement
                            ReqTypeId = r.Requesttypeid,
                            Requestor = r.Firstname + "," + r.Lastname,
                            RequestedDate = r.Createddate,
+                           PhysicianId = r.Physicianid,
                            PhysicianName = p.Firstname + " " + p.Lastname,
                            DateOfService = r.Modifieddate,
                            Phonenumber = f.Phonenumber,
@@ -101,12 +103,11 @@ namespace HalloDoc.Repository.Implement
                            Notes = f.Notes,
                            ReqNotes = _context.Requeststatuslogs.Where(x => x.Requestid == r.Requestid).OrderByDescending(x => x.Requeststatuslogid).FirstOrDefault().Notes,
                        };
-
             var tableData = new DashTable { Tdata = data.Skip((int)(page * pageSize)).Take(5).ToList(), filterCount = data.Count() };
             return tableData;
         }
 
-        public DashTable ExportPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int? reqtype)
+        public DashTable ExportPartialTableData(List<short>? status, int? page, int? pageSize, string? search, string? reg, int reqtype)
         {
             var data = from r in _context.Requests
                        join f in _context.Requestclients on r.Requestid equals f.Requestid
@@ -596,26 +597,26 @@ namespace HalloDoc.Repository.Implement
 
         public List<Request> getAllReqData(string reqStatus, int reqType)
         {
-            var data = _context.Requests.Include(x =>x.Requestclients).Include(x => x.Physician)
-                .Where(x => (x.Isdeleted != new BitArray(new bool[]{true})) &&
+            var data = _context.Requests.Include(x => x.Requestclients).Include(x => x.Physician)
+                .Where(x => (x.Isdeleted != new BitArray(new bool[] { true })) &&
                 (reqType == 0 || x.Requesttypeid.Equals(reqType))).ToList();
-            if(reqStatus == "New")
+            if (reqStatus == "New")
             {
                 data = data.Where(x => x.Status.Equals(1)).ToList();
             }
-            if(reqStatus == "Pending")
+            if (reqStatus == "Pending")
             {
                 data = data.Where(x => x.Status.Equals(2)).ToList();
             }
-            if(reqStatus == "Active")
+            if (reqStatus == "Active")
             {
                 data = data.Where(x => x.Status.Equals(4) || x.Status.Equals(5)).ToList();
             }
-            if(reqStatus == "Conclude")
+            if (reqStatus == "Conclude")
             {
                 data = data.Where(x => x.Status.Equals(6)).ToList();
             }
-            if(reqStatus == "Toclose")
+            if (reqStatus == "Toclose")
             {
                 data = data.Where(x => x.Status.Equals(3) || x.Status.Equals(7) || x.Status.Equals(8)).ToList();
             }
@@ -776,7 +777,7 @@ namespace HalloDoc.Repository.Implement
         }
 
 
-        public IEnumerable<ProOncallModel> phyOncallAvialble(int reg)
+        public IEnumerable<ProcallModel> phyOncallAvialble(int reg)
         {
             TimeSpan currentTime = DateTime.Now.TimeOfDay;
             TimeOnly currentTimeOnly = new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds);
@@ -787,7 +788,7 @@ namespace HalloDoc.Repository.Implement
                         join pr in _context.Physicianregions on p.Physicianid equals pr.Physicianid
                         where (reg == 0 || pr.Regionid == reg) &&
                         s.Shiftdate == DateOnly.FromDateTime(DateTime.Now) && (s.Starttime <= currentTimeOnly && s.Endtime > currentTimeOnly) && s.Isdeleted != deleteBit && p.Isdeleted != deleteBit
-                        select new ProOncallModel
+                        select new ProcallModel
                         {
                             phyId = p.Physicianid,
                             physicianFName = p.Firstname,
@@ -798,7 +799,7 @@ namespace HalloDoc.Repository.Implement
             return data;
         }
 
-        public IEnumerable<ProOffcallModel> phyOffcall(int reg)
+        public IEnumerable<ProcallModel> phyOffcall(int reg)
         {
             TimeSpan currentTime = DateTime.Now.TimeOfDay;
             TimeOnly currentTimeOnly = new TimeOnly(currentTime.Hours, currentTime.Minutes, currentTime.Seconds);
@@ -812,7 +813,7 @@ namespace HalloDoc.Repository.Implement
                                                                  x.Shiftdate == DateOnly.FromDateTime(DateTime.Now) &&
                                                                  (currentTimeOnly >= x.Starttime && currentTimeOnly <= x.Endtime) &&
                                                                  x.Isdeleted != deleteBit)
-                        select new ProOffcallModel
+                        select new ProcallModel
                         {
                             phyId = physician.Physicianid,
                             physicianFName = physician.Firstname,

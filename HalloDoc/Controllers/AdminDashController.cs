@@ -17,7 +17,7 @@ using Twilio.Rest.Api.V2010.Account;
 
 namespace HalloDoc.Controllers
 {
-    [CustomAuthorize("Admin")]
+    [CustomAuthorize("Admin:Provider")]
     public class AdminDashController : Controller
     {
         private readonly ILogger<AdminDashController> _logger;
@@ -43,7 +43,12 @@ namespace HalloDoc.Controllers
         #region Main Dashbord 
         public IActionResult Dashbord()
         {
-            var Tcount = _Admin.TotalCountPatient();
+            int phyFilterId = 0;
+            if (Request.Cookies["CookieRole"] == "2")
+            {
+                phyFilterId = _Genral.getPhyId(Request.Cookies["CookieEmail"]);
+            }
+            var Tcount = _Admin.TotalCountPatient(phyFilterId);
             var region = _Admin.getAllRegion();
 
             var dashData = new DashTable { ToatlCount = Tcount, Regions = region };
@@ -53,7 +58,12 @@ namespace HalloDoc.Controllers
 
         public IActionResult DashbordData(int id, int page, string search, string reg, int reqtype)
         {
-            var Tcount = _Admin.TotalCountPatient();
+            int phyFilterId = 0;
+            if (Request.Cookies["CookieRole"] == "2")
+            {
+                phyFilterId = _Genral.getPhyId(Request.Cookies["CookieEmail"]);
+            }
+            var Tcount = _Admin.TotalCountPatient(phyFilterId);
             int pageSize = 5;
 
             DashTable Req = new DashTable();
@@ -64,32 +74,32 @@ namespace HalloDoc.Controllers
                 case 1:   //New
                     ViewBag.TPage = Math.Ceiling(Tcount[0] / 5.0);
                     status.Add(1);
-                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 2:   //Pending
                     ViewBag.TPage = Math.Ceiling(Tcount[1] / 5.0);
                     status.Add(2);
-                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 3:   //Active
                     ViewBag.TPage = Math.Ceiling(Tcount[2] / 5.0);
                     status.Add(4); status.Add(5);
-                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 4:  //Conclude
                     ViewBag.TPage = Math.Ceiling(Tcount[3] / 5.0);
                     status.Add(6);
-                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 5:   //To-close
                     ViewBag.TPage = Math.Ceiling(Tcount[4] / 5.0);
                     status.Add(3); status.Add(7); status.Add(8);
-                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 6:   //Unpaid
                     ViewBag.TPage = Math.Ceiling(Tcount[5] / 5.0);
                     status.Add(9);
-                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype);
+                    Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
             }
 
@@ -117,35 +127,16 @@ namespace HalloDoc.Controllers
 
         public IActionResult SendLinkData(string email, string mobile, string name)
         {
-            string link = Url.Action("SubmitReq", "Patient", null, Request.Scheme);
-            var bodyMsg = $"Hi {name}, Please click on the following link to submit the request." + link;
-            try
-            {
-                string accountSid = "AC6c9974bdd968d358144abc9d665e7ddb";
-                string authToken = "5e8d84b81e2f40ddc9ccb3caf5ab1f33";
-
-                TwilioClient.Init(accountSid, authToken);
-
-                var twilioMessage = MessageResource.Create(
-                    body: bodyMsg,
-                    from: new Twilio.Types.PhoneNumber("+19175127590"),
-                    to: new Twilio.Types.PhoneNumber(mobile)
-                );
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = "Error sending SMS: " + ex.Message;
-                Console.WriteLine("Twilio Error");
-            }
-
-
             int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
             Nullable<int> Phyid = null;
             Nullable<int> reqid = null;
             int roleId = Convert.ToInt32(Request.Cookies["CookieRole"]);
             string sub = "Submit Requset";
             string filepath = null;
+            string link = Url.Action("SubmitReq", "Patient", null, Request.Scheme);
+            var bodyMsg = $"Hi {name}, Please click on the following link to submit the request." + link;
             _Genral.SendEmailOffice365(email, sub, bodyMsg, null);
+            _Genral.sendSMSwithTwilio(mobile, bodyMsg);
             _Genral.addEmailLog(bodyMsg, sub, email, filepath, roleId, reqid, AdminId, Phyid);
             _Genral.addSMSLog(bodyMsg, mobile, roleId, null, AdminId, Phyid);
             return Ok();
@@ -620,10 +611,14 @@ namespace HalloDoc.Controllers
 
         public IActionResult AgrrementSent(int reqid, string email, string phone)
         {
+            int adminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
             string subject = "Agreement Acknowledgement";
             string link = Url.Action("ReviewAgreement", "Home", new { reqid = reqid }, Request.Scheme);
             string body = $"Hi,<br /><br />Please click on the following link For Agreement :<br /><br />" + link;
             _Genral.SendEmailOffice365(email, subject, body, null);
+            _Genral.addEmailLog(body, subject, email, null, null, reqid, null, null);
+            _Genral.sendSMSwithTwilio(phone, subject + body);
+            _Genral.addSMSLog(body, phone, null, reqid, adminId, null);
             return Json(new { value = "done" });
         }
         #endregion

@@ -8,8 +8,8 @@ namespace HalloDoc.Entity.AdminTab
 {
     public class ProviderCallViewModel
     {
-        public IEnumerable<ProOncallModel> ProOncall { get; set; } = new List<ProOncallModel>();
+        public IEnumerable<ProcallModel> ProOncall { get; set; } = new List<ProcallModel>();
 
-        public IEnumerable<ProOffcallModel> ProOffcall { get; set; } = new List<ProOffcallModel>();
+        public IEnumerable<ProcallModel> ProOffcall { get; set; } = new List<ProcallModel>();
     }
 }

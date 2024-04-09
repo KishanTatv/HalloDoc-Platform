@@ -20,7 +20,7 @@ using static Uno.WinRTFeatureConfiguration;
 
 namespace HalloDoc.Controllers
 {
-    [CustomAuthorize("Admin")]
+    [CustomAuthorize("Admin:Provider")]
     public class AdminTabController : Controller
     {
         private readonly ILogger<AdminDashController> _logger;
@@ -806,8 +806,8 @@ namespace HalloDoc.Controllers
 
         public IActionResult proOncallData(int reg)
         {
-            IEnumerable<ProOncallModel> dataOnCall = _Admin.phyOncallAvialble(reg).ToList();
-            IEnumerable<ProOffcallModel> dataOffCall = _Admin.phyOffcall(reg).ToList();
+            IEnumerable<ProcallModel> dataOnCall = _Admin.phyOncallAvialble(reg).ToList();
+            IEnumerable<ProcallModel> dataOffCall = _Admin.phyOffcall(reg).ToList();
             var data = new ProviderCallViewModel { ProOncall = dataOnCall, ProOffcall = dataOffCall };
             return PartialView("_ProviderOnCallData", data);
         }

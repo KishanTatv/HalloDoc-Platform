@@ -43,6 +43,10 @@ namespace HalloDoc.Entity.AdminDashTable
         [StringLength(70)]
         public string? Requestor { get; set; }
 
+        [Column("phyId")]
+        [StringLength(100)]
+        public int? PhysicianId { get; set; }
+
         [Column("PhysicianName")]
         [StringLength(100)]
         public string? PhysicianName { get; set; }

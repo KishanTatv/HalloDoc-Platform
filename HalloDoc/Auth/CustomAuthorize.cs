@@ -59,7 +59,7 @@ namespace HalloDoc.Repository
             }
 
             //var role = context.HttpContext.Request.Cookies["CookieRole"];
-            if (_role != roleClaims.Value || string.IsNullOrWhiteSpace(_role))
+            if (roleClaims.Value.Contains(_role) || string.IsNullOrWhiteSpace(_role))
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "PatientLogin" }));
                 return;

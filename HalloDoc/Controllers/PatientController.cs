@@ -64,7 +64,7 @@ namespace HalloDoc.Controllers
 
         [HttpPost]
         [ActionName("PatientVerification")]
-        public IActionResult PatientVerification(Aspnetuser user) 
+        public IActionResult PatientVerification(Aspnetuser user)
         {
             if (ModelState.IsValid)
             {
@@ -72,30 +72,26 @@ namespace HalloDoc.Controllers
                 {
                     if (_genral.CheckExistAspUser(user.Email))
                     {
-                        //if (user.Passwordhash.GetHashCode().ToString() == patient.CheckAspPassword(user.Email))
+                        //if (_genral.CheckAspPassword(user.Email, user.Passwordhash))
                         //{
-                        string userName = _genral.userFullName(user.Email);
-                        Aspnetuser asp = _genral.getUserRole(user.Email);
+                            string userName = _genral.userFullName(user.Email);
+                            Aspnetuser asp = _genral.getUserRole(user.Email);
+                            var UserToken = _jwtToken.GenrateJwtToken(asp);
+                            Response.Cookies.Append("HalloCookie", UserToken);
+                            Response.Cookies.Append("CookieEmail", user.Email);
+                            Response.Cookies.Append("CookieUserName", userName);
+                            Response.Cookies.Append("CookieRole", asp.Aspnetuserrole.Role.Id.ToString());
 
-                        //Console.WriteLine(user.Passwordhash.GetHashCode().ToString());
-                        var UserToken = _jwtToken.GenrateJwtToken(asp);
-                        Response.Cookies.Append("HalloCookie", UserToken);
-                        Response.Cookies.Append("CookieEmail", user.Email);
-                        Response.Cookies.Append("CookieUserName", userName);
-                        Response.Cookies.Append("CookieRole", asp.Aspnetuserrole.Role.Id.ToString());
-
-                        if (asp.Aspnetuserrole.Role.Name == "Patient")
-                        {
-                            _notyf.Success("Login Successfully !");
-                            return RedirectToAction("Dashbord", "PatientDash");
-                        }
-                        else if(asp.Aspnetuserrole.Role.Name == "Admin")
-                        {
-                            _notyf.Success("Login Successfully !");
-                            return RedirectToAction("Dashbord", "AdminDash");
-                        }
-
-
+                            if (asp.Aspnetuserrole.Role.Name == "Patient")
+                            {
+                                _notyf.Success("Login Successfully !");
+                                return RedirectToAction("Dashbord", "PatientDash");
+                            }
+                            else if (asp.Aspnetuserrole.Role.Name == "Admin" || asp.Aspnetuserrole.Role.Name == "Provider")
+                            {
+                                _notyf.Success("Login Successfully !");
+                                return RedirectToAction("Dashbord", "AdminDash");
+                            }
                         //}
                         //else
                         //{
@@ -159,7 +155,7 @@ namespace HalloDoc.Controllers
                 if (user.Password == user.ConfirmPassword)
                 {
                     _patient.newPasswordCreate(user, email);
-                    TempData["Error"] = "Password Changed succesfully!!";
+                    TempData["msg"] = "Password Changed succesfully!!";
                 }
                 else
                 {
