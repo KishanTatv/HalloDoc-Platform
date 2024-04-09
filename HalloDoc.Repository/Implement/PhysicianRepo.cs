@@ -1,4 +1,5 @@
-﻿using HalloDoc.Entity.AdminTab;
+﻿using GoogleMaps.LocationServices;
+using HalloDoc.Entity.AdminTab;
 using HalloDoc.Entity.Data;
 using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
@@ -78,6 +79,15 @@ namespace HalloDoc.Repository.Implement
             };
             _context.Physiciannotifications.Add(phyNot);
             _context.SaveChanges();
+        }
+
+        public void addPhysicianLocation(PhysicianProfileViewModel model)
+        {
+            var locationService = new GoogleLocationService();
+            var point = locationService.GetLatLongFromAddress(model.physician.Address1+ model.physician.City + model.physician.Status);
+
+            var latitude = point.Latitude;
+            var longitude = point.Longitude;
         }
 
         public void updatePhysicianNotification(int PhyId, BitArray isnotification)

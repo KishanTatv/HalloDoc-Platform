@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
@@ -361,16 +362,11 @@ namespace HalloDoc.Controllers
                 photoBytes = memoryStream.ToArray();
             }
             var photoBase64 = Convert.ToBase64String(photoBytes);
-            BitArray contractBit = new BitArray(1);
-            contractBit[0] = false;
-            BitArray backgrundBit = new BitArray(1);
-            backgrundBit[0] = false;
-            BitArray hipaaBit = new BitArray(1);
-            hipaaBit[0] = false;
-            BitArray discloureBit = new BitArray(1);
-            discloureBit[0] = false;
-            BitArray licenceBit = new BitArray(1);
-            licenceBit[0] = false;
+            BitArray contractBit = new BitArray(new bool[] { false });
+            BitArray backgrundBit = new BitArray(new bool[] { false });
+            BitArray hipaaBit = new BitArray(new bool[] { false });
+            BitArray discloureBit = new BitArray(new bool[] { false });
+            BitArray licenceBit = new BitArray(new bool[] { false });
 
             if (ContractorAgreement != null)
             {

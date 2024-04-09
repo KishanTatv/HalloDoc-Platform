@@ -72,8 +72,8 @@ namespace HalloDoc.Controllers
                 {
                     if (_genral.CheckExistAspUser(user.Email))
                     {
-                        //if (_genral.CheckAspPassword(user.Email, user.Passwordhash))
-                        //{
+                        if (_genral.CheckAspPassword(user.Email, user.Passwordhash))
+                        {
                             string userName = _genral.userFullName(user.Email);
                             Aspnetuser asp = _genral.getUserRole(user.Email);
                             var UserToken = _jwtToken.GenrateJwtToken(asp);
@@ -92,11 +92,11 @@ namespace HalloDoc.Controllers
                                 _notyf.Success("Login Successfully !");
                                 return RedirectToAction("Dashbord", "AdminDash");
                             }
-                        //}
-                        //else
-                        //{
-                        //    TempData["Error"] = "Password Not Matched";
-                        //}
+                        }
+                        else
+                        {
+                            TempData["Error"] = "Password Not Matched";
+                        }
                     }
                     else
                     {

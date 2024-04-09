@@ -85,6 +85,7 @@
                         </div>
                     </div>
                 }
+                <input type="hidden" class="d-none" id="CookieroleId" val="@Context.Request.Cookies["CookieRole"]" />
             </div>
 
         </div>
@@ -148,8 +149,8 @@
     window.addEventListener('DOMContentLoaded', (event) => {
         document.querySelector(".DashCardN").classList.add("new-active");
         newDash();
-    });
 
+    });
     function getIdFromCard() {
         var cardname = $('.dNameCard').html();
         var id;
@@ -175,59 +176,68 @@
         }
         return id;
     }
+
     function newDash() {
-        document.querySelector(".DashCardN").classList.add("new-active");
-        document.querySelector(".DashCardP").classList.remove("Pending-active");
-        document.querySelector(".DashCardA").classList.remove("Active-active");
-        document.querySelector(".DashCardC").classList.remove("Conclude-active");
-        document.querySelector(".DashCardT").classList.remove("ToClose-active");
-        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
+        $(".DashCardN").addClass("new-active");
+        $(".DashCardP").removeClass("Pending-active");
+        $(".DashCardA").removeClass("Active-active");
+        $(".DashCardC").removeClass("Conclude-active");
+        if ($('#CookieroleId').val() == '1') {
+            $(".DashCardT").removeClass("ToClose-active");
+            $(".DashCardU").removeClass("Unpaid-active");
+        }
         document.querySelector(".dNameCard").innerHTML = "(New)";
     }
     function penDash() {
-        document.querySelector(".DashCardN").classList.remove("new-active");
-        document.querySelector(".DashCardP").classList.add("Pending-active");
-        document.querySelector(".DashCardA").classList.remove("Active-active");
-        document.querySelector(".DashCardC").classList.remove("Conclude-active");
-        document.querySelector(".DashCardT").classList.remove("ToClose-active");
-        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
-        document.querySelector(".dNameCard").innerHTML = "(Pending)";
+        $(".DashCardN").removeClass("new-active");
+        $(".DashCardP").addClass("Pending-active");
+        $(".DashCardA").removeClass("Active-active");
+        $(".DashCardC").removeClass("Conclude-active");
+        if ($('#CookieroleId').val() == '1') {
+            $(".DashCardT").removeClass("ToClose-active");
+            $(".DashCardU").removeClass("Unpaid-active");
+        }
+         document.querySelector(".dNameCard").innerHTML = "(Pending)";
     }
     function actDash() {
-        document.querySelector(".DashCardN").classList.remove("new-active");
-        document.querySelector(".DashCardP").classList.remove("Pending-active");
-        document.querySelector(".DashCardA").classList.add("Active-active");
-        document.querySelector(".DashCardC").classList.remove("Conclude-active");
-        document.querySelector(".DashCardT").classList.remove("ToClose-active");
-        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
-        document.querySelector(".dNameCard").innerHTML = "(Active)";
+        $(".DashCardN").removeClass("new-active");
+        $(".DashCardP").removeClass("Pending-active");
+        $(".DashCardA").addClass("Active-active");
+        $(".DashCardC").removeClass("Conclude-active");
+        if ($('#CookieroleId').val() == '1') {
+            $(".DashCardT").removeClass("ToClose-active");
+            $(".DashCardU").removeClass("Unpaid-active");
+        }
+         document.querySelector(".dNameCard").innerHTML = "(Active)";
     }
     function conDash() {
-        document.querySelector(".DashCardN").classList.remove("new-active");
-        document.querySelector(".DashCardP").classList.remove("Pending-active");
-        document.querySelector(".DashCardA").classList.remove("Active-active");
-        document.querySelector(".DashCardC").classList.add("Conclude-active");
-        document.querySelector(".DashCardT").classList.remove("ToClose-active");
-        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
-        document.querySelector(".dNameCard").innerHTML = "(Conclude)";
+        $(".DashCardN").removeClass("new-active");
+        $(".DashCardP").removeClass("Pending-active");
+        $(".DashCardA").removeClass("Active-active");
+        $(".DashCardC").addClass("Conclude-active");
+        if ($('#CookieroleId').val() == '1') {
+            $(".DashCardT").removeClass("ToClose-active");
+            $(".DashCardU").removeClass("Unpaid-active");
+        }
+         document.querySelector(".dNameCard").innerHTML = "(Conclude)";
     }
     function tocDash() {
-        document.querySelector(".DashCardN").classList.remove("new-active");
-        document.querySelector(".DashCardP").classList.remove("Pending-active");
-        document.querySelector(".DashCardA").classList.remove("Active-active");
-        document.querySelector(".DashCardC").classList.remove("Conclude-active");
-        document.querySelector(".DashCardT").classList.add("ToClose-active");
-        document.querySelector(".DashCardU").classList.remove("Unpaid-active");
-        document.querySelector(".dNameCard").innerHTML = "(Toclose)";
+        $(".DashCardN").removeClass("new-active");
+        $(".DashCardP").removeClass("Pending-active");
+        $(".DashCardA").removeClass("Active-active");
+        $(".DashCardC").removeClass("Conclude-active");
+        $(".DashCardT").addClass("ToClose-active");
+        $(".DashCardU").removeClass("Unpaid-active");
+         document.querySelector(".dNameCard").innerHTML = "(Toclose)";
     }
     function unpDash() {
-        document.querySelector(".DashCardN").classList.remove("new-active");
-        document.querySelector(".DashCardP").classList.remove("Pending-active");
-        document.querySelector(".DashCardA").classList.remove("Active-active");
-        document.querySelector(".DashCardC").classList.remove("Conclude-active");
-        document.querySelector(".DashCardT").classList.remove("ToClose-active");
-        document.querySelector(".DashCardU").classList.add("Unpaid-active");
-        document.querySelector(".dNameCard").innerHTML = "(Unpaid)";
+        $(".DashCardN").removeClass("new-active");
+        $(".DashCardP").removeClass("Pending-active");
+        $(".DashCardA").removeClass("Active-active");
+        $(".DashCardC").removeClass("Conclude-active");
+        $(".DashCardT").removeClass("ToClose-active");
+        $(".DashCardU").addClass("Unpaid-active");
+         document.querySelector(".dNameCard").innerHTML = "(Unpaid)";
     }
 
     function ExportAllDataClick() {
@@ -419,7 +429,6 @@
                 method: 'POST',
                 data: { id: id },
                 success: function (response) {
-                    console.log('h');
                     const dashHead = document.querySelector('.dashHead');
                     const dashs = document.querySelector('.DashSearch');
                     dashHead.classList.remove('d-none');

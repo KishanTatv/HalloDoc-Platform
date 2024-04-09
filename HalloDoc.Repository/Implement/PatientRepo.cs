@@ -13,10 +13,13 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
+using System.Security.Cryptography;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using BCrypt.Net;
+using System.Web.Helpers;
 
 namespace HalloDoc.Repository.Implement
 {
@@ -353,7 +356,7 @@ namespace HalloDoc.Repository.Implement
         public void newPasswordCreate(ClientInformation user, string email)
         {
             Aspnetuser asp = _context.Aspnetusers.FirstOrDefault(u => u.Email == email);
-            asp.Passwordhash = BCrypt.Net.BCrypt.HashPassword(user.ConfirmPassword);
+            asp.Passwordhash = Crypto.HashPassword(user.ConfirmPassword);
             _context.Aspnetusers.Update(asp);
             _context.SaveChanges();
         }

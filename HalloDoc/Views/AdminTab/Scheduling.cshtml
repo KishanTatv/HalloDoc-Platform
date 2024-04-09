@@ -204,6 +204,7 @@
             return (arg.date.getHours() % 12 || 12) + (arg.date.getHours() < 12 ? 'A' : 'P');
         });
         calendar.setOption('aspectRatio', 1.5);
+        calendar.setOption('slotDuration', '01:00');
         calendar.setOption('resourceAreaColumns', [
             {
                 field: 'title',

@@ -18,6 +18,7 @@ using System.Net.Mail;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using static System.Net.Mime.MediaTypeNames;
@@ -49,7 +50,7 @@ namespace HalloDoc.Repository.Implement
         public bool CheckAspPassword(string email, string pass)
         {
             var Asppass = _context.Aspnetusers.FirstOrDefault(u => u.Email == email).Passwordhash;
-            if(BCrypt.Net.BCrypt.Verify(Asppass, pass))
+            if(Crypto.VerifyHashedPassword(Asppass, pass))
             {
                 return true;
             }

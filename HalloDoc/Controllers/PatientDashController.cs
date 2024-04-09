@@ -8,7 +8,7 @@ using System.IO.Compression;
 
 namespace HalloDoc.Controllers
 {
-    [CustomAuthorize("Patient")]
+    [CustomAuthorize("Patient:common")]
     public class PatientDashController : Controller
     {
         private readonly ILogger<PatientDashController> _logger;
