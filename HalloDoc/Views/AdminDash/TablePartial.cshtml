@@ -330,7 +330,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     <tr class=" @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))">
                         <td class="text-light" scope="row">
                             <p class="d-flex justify-content-between">
-                                @item.Name
+                                @item.RequestId @item.Name
                                 <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
                             </p>
                         </td>
@@ -369,7 +369,14 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                         }
                         @if (ViewBag.dTable == 3)
                         {
-                            <th class="text-light">Status</th>
+                            @if(item.status == 5)
+                            {
+                                <td> <button type="button" class="btn btn-info text-light proHouseCall" data-reqid="@item.RequestId"> HouseCall </button></td>
+                            }
+                            else
+                            {
+                                <td> - </td>
+                            }
                         }
                         <td class="text-light">
                             <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
@@ -380,7 +387,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                 @if (ViewBag.dTable == 1)
                                 {
                                     <li>
-                                        <div class="dropdown-item" data-reqid="@item.RequestId" data-phycase="AssignPhy"> <i class="bi bi-card-heading me-2"></i> Accept </div>
+                                        <div class="dropdown-item AcceptPhy" data-reqid="@item.RequestId"> <i class="bi bi-card-heading me-2"></i> Accept </div>
                                     </li>
                                 }
                                 @if (ViewBag.dTable == 2)
@@ -389,7 +396,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                 }
                                 @if (ViewBag.dTable == 4)
                                 {
-                                    <li><div class="dropdown-item SendAgreement" data-reqid="@item.RequestId"><i class="bi bi-journals me-2"></i> Conclude Care</div></li>
+                                    <li><div class="dropdown-item concludeCare " data-reqid="@item.RequestId"><i class="bi bi-journals me-2"></i> Conclude Care</div></li>
                                 }
                                 <li>
                                     <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> <i class="bi bi-journal-album me-2"></i> View Case </div>
@@ -403,13 +410,17 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                 </li>
                                 @if (ViewBag.dTable == 2)
                                 {
-                                    <li><div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="TransferPhy"><i class="bi bi-journal-medical me-2"></i> Transfer</div></li>
+                                    <li><div class="dropdown-item Transferpro" data-reqid="@item.RequestId"><i class="bi bi-journal-medical me-2"></i> Transfer</div></li>
                                 }
                                 @if (ViewBag.dTable == 3)
                                 {
                                     <li><div class="dropdown-item OrderCase" data-reqid="@item.RequestId"><i class="bi bi-journal-check me-2"></i> Order</div></li>
                                 }
-                                @if (ViewBag.dTable == 3 || ViewBag.dTable == 4)
+                                @if (ViewBag.dTable == 3)
+                                {
+                                    <li><a class="dropdown-item EncounterPro" data-reqid="@item.RequestId"><i class="bi bi-journal-plus me-2"></i> Encounter</a></li>
+                                }
+                                @if (ViewBag.dTable == 4)
                                 {
                                     <li><a class="dropdown-item Encounter" data-reqid="@item.RequestId"><i class="bi bi-journal-plus me-2"></i> Encounter</a></li>
                                 }
@@ -420,6 +431,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             </tbody>
         </table>
     </div>
+    <div class="BackOn d-none"></div>
 }
 
 <nav aria-label="Page navigation example">
@@ -667,5 +679,91 @@ For more information on enabling MVC for empty projects, visit https://go.micros
             });
         });
 
+
+        //Physician Task
+        $('.AcceptPhy').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/Physician/AcceptReq',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.Transferpro').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/Physician/TransferPopup',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    $(".PartialPopup").html(response);
+                    var my = new bootstrap.Modal(document.getElementById('TranPopupPro'));
+                    my.show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.EncounterPro').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/Physician/EncounterPopup',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    $(".PartialPopup").html(response);
+                    var my = new bootstrap.Modal(document.getElementById('EncounterPopupPhy'));
+                    my.show();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.proHouseCall').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/Physician/StatusHouseCall',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    $('.BackOn').click();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.concludeCare').click(function () {
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/Physician/ConcludeCare',
+                method: 'POST',
+                data: { reqid: reqid },
+                success: function (response) {
+                    if (response.value = "NotFinalize"){
+                        Swal.fire({
+                            title: "Not Usable!",
+                            text: "Encounter Not Finalize!",
+                            icon: "warning"
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
     });
 </script>

@@ -4,6 +4,7 @@ using HalloDoc.Entity.AdminTab;
 using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -35,12 +36,12 @@ namespace HalloDoc.Repository.Interface
 
 
         List<int> TotalCountPatient(int phyFilterId);
-
+        void isdeleteReq(int reqId, BitArray isdelete);
 
 
         //note
 
-        void addNote(int reqid, string note);
+        void addNote(int reqid, string? adminnote, string? phynote);
 
         ViewNotesViewModel getAllNotes(int reqid);
 
@@ -59,6 +60,7 @@ namespace HalloDoc.Repository.Interface
 
         //block req
         void AddBlockRequest(int reqId, string note);
+        void removeBlockRequest(int reqId);
 
         //delete doc
         void DeleteDocFile(string file, int reqid);
@@ -130,11 +132,11 @@ namespace HalloDoc.Repository.Interface
 
 
         // User table list
-        List<User> getAllUserData();
+        List<User> getAllUserData(string fname, string lname, string email, string phone);
 
 
         // Request whole data
-        List<Request> getAllReqData(string reqStatus, int reqType);
+        List<Request> getAllReqData(string? reqStatus, int reqType);
 
 
         // shift schedule
@@ -156,8 +158,11 @@ namespace HalloDoc.Repository.Interface
 
         void updateShiftDetail(ShiftPoupViewModel model, int aspId);
 
+
+        // MD on/off call
         IEnumerable<ProcallModel> phyOncallAvialble(int reg);
         IEnumerable<ProcallModel> phyOffcall(int reg);
+
 
     }
 }

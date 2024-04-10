@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Web.Helpers;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace HalloDoc.Repository.Implement
@@ -309,16 +310,16 @@ namespace HalloDoc.Repository.Implement
         {
             try
             {
-                string accountSid = "AC6c9974bdd968d358144abc9d665e7ddb";
-                string authToken = "5e8d84b81e2f40ddc9ccb3caf5ab1f33";
+                string accountSid = _config["Twilio:SID"];
+                string authToken = _config["Twilio:Token"];
 
                 TwilioClient.Init(accountSid, authToken);
 
-                var twilioMessage = MessageResource.Create(
-                    body: msg,
-                    from: new Twilio.Types.PhoneNumber("+19175127590"),
-                    to: new Twilio.Types.PhoneNumber("+918866773923")
-                );
+                var msgOption = new CreateMessageOptions(new PhoneNumber("+918866773923"));
+                msgOption.From = new PhoneNumber(_config["Twilio:Mobile"]);
+                msgOption.Body = msg;
+                
+                var twilioMessage = MessageResource.Create(msgOption);
                 return null;
             }
             catch (Exception ex)
@@ -427,7 +428,7 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        public void updateReqStatusWithPhysician(int reqid, int phyId, short status)
+        public void updateReqStatusWithPhysician(int reqid, int? phyId, short status)
         {
             Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
             req.Status = status;

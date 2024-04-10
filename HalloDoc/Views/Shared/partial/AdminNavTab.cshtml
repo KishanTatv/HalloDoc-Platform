@@ -19,7 +19,7 @@
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" asp-action="Provider" asp-controller="AdminTab">Provider</a></li>
                 <li><a class="dropdown-item" asp-action="Scheduling" asp-controller="AdminTab">Scheduling</a></li>
-                <li><a class="dropdown-item" asp-action="Invoicing" asp-controller="AdminTab">Invoicing</a></li>
+                <li><a class="dropdown-item" href="#">Invoicing</a></li>
             </ul>
             <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "PartnerTab" ? "underLine" : "")" id="AccessTab"
             aria-selected="false" asp-action="PartnerTab" asp-controller="AdminTab">Partners</a>
@@ -42,8 +42,8 @@
         {
             <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Dashbord" ? "underLine" : "")" id="dashTab"
                aria-selected="true" asp-action="Dashbord" asp-controller="AdminDash">Dashbord</a>
-            <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Invoice" ? "underLine" : "")" 
-               aria-selected="true" asp-action="Invoice" asp-controller="AdminDash">Invoice</a>
+            <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Invoice" ? "underLine" : "")"
+               aria-selected="true" href="#">Invoice</a>
             <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Scheduling" ? "underLine" : "")" id="dashTab"
                aria-selected="true" asp-action="Scheduling" asp-controller="AdminTab">My Schedule</a>
             <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "MyProfile" ? "underLine" : "")" id="dashTab"

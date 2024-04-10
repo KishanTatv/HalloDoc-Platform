@@ -30,10 +30,10 @@
                     <td> @item.Createddate </td>
                     <td>test</td>
                     <td>
-                        <input name="checkActive" class="form-check-input  @(item.Isactive[0] ? "checked" : "")" type="checkbox" value="">
+                        <input name="checkActive" class="form-check-input"  @(item.Isactive[0] ? "checked" : "") type="checkbox" value="">
                     </td>
                     <td class="text-center">
-                        <a class="btn btn-outline-info ps-2 pe-2 p-0 unblockClick" data-blockid="@item.Blockrequestid">
+                        <a class="btn btn-outline-info ps-2 pe-2 p-0 unblockClick" data-blockid="@item.Requestid">
                             Unblock
                         </a>
                     </td>
@@ -48,18 +48,17 @@
 <script asp-append-version="true">
 
     $('.unblockClick').click(function () {
-        var blockreqid = $(this).data('blockid');
+        var reqid = $(this).data('blockid');
         $.ajax({
             url: '/AdminTab/BlockDataUnblock',
             method: 'POST',
-            data: { blockreqid: blockreqid },
+            data: { reqid: reqid },
             success: function (response) {
                 $.ajax({
                     url: '/AdminTab/BlockData',
-                    method: 'POST',
-                    data: { item: item },
+                    method: 'GET',
                     success: function (response) {
-                        $('.BlockTable').html(response);
+                        window.location.reload();
                     },
                     error: function (xhr, status, error) {
                         if (xhr["status"] == 401) {

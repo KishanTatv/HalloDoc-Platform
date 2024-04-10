@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HalloDoc.Entity.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,6 +13,8 @@ namespace HalloDoc.Entity.AdminDashTable
     {
         [Column("ReqId")]
         public int? RequestId { get; set; }
+
+        public int? status { get; set; }
 
         [Column("ReqclientId")]
         public int? ReqClientId { get; set; }

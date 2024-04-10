@@ -55,7 +55,7 @@
                     <td>Anote</td>
                     <td>patnote</td>
                     <td class="text-center">
-                        <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact">
+                        <a class="btn btn-outline-info ps-2 pe-2 p-0 deleteBtn" data-id="@item.Requestid">
                             Delete
                         </a>
                     </td>
@@ -64,3 +64,38 @@
         </tbody>
     </table>
 </div>
+
+
+<nav aria-label="Page navigation example">
+    <div class="d-flex  justify-content-between">
+        <span id="CurrentPage">Page : 1</span>
+        <ul class="pagination d-flex  me-3 pb-2">
+
+            @for (int i = 1; i <= ViewBag.TPage; i++)
+            {
+                <li class="page-item">
+                    <div class="page-link" data-page="@(i - 1)">
+                        @i
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>
+
+<script asp-append-version="true">
+    $('.deleteBtn').click(function () {
+        var reqId = $(this).data('id');
+        $.ajax({
+            url: '/AdminTab/DeleteRequest',
+            method: 'POST',
+            data: { reqId: reqId},
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>

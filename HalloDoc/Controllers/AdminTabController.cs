@@ -9,6 +9,7 @@ using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using NReco.PdfGenerator;
 using System.Collections;
 using System.Linq;
 using System.Net;
@@ -927,17 +928,25 @@ namespace HalloDoc.Controllers
             }
         }
 
-        public IActionResult searchData(string reqStatus, int reqType, string ptName, DateTime formDate, DateTime toDate, string proName, string phone, string email)
+        public IActionResult searchData(string reqStatus, int reqType, string ptName, DateTime formDate, DateTime toDate, string proName, string phone, string email, int page)
         {
             var data = _Admin.getAllReqData(reqStatus, reqType).ToList();
             data = data.Where(x => 
             (ptName == null ? true : (x.Requestclients.FirstOrDefault().Firstname.Contains(ptName)) || (x.Requestclients.FirstOrDefault().Lastname.Contains(ptName))) &&
-            (formDate == DateTime.MinValue ? true : x.Createddate.Date.Equals(formDate)) &&
-            (email == null ? true: x.Requestclients.FirstOrDefault().Email.Contains(email)) &&
-            (phone == null ? true: x.Requestclients.FirstOrDefault().Phonenumber.Contains(phone))
+            (formDate == DateTime.MinValue || x.Createddate.Date.Equals(formDate)) &&
+            (email == null || x.Requestclients.FirstOrDefault().Email.Contains(email)) &&
+            (phone == null || x.Requestclients.FirstOrDefault().Phonenumber.Contains(phone))
             ).ToList();
-            return PartialView("_SearchTableData", data);
+            ViewBag.TPage = Math.Ceiling(data.Count() / 5.0);
+            return PartialView("_SearchTableData", data.Skip(page * 5).Take(5).ToList());
         }
+
+        public IActionResult DeleteRequest(int reqId)
+        {
+            _Admin.isdeleteReq(reqId, new BitArray(new bool[] { true }));
+            return Ok();
+        }
+
         #endregion
 
 
@@ -984,16 +993,17 @@ namespace HalloDoc.Controllers
             return View();
         }
 
-        public IActionResult PatientHistoryData(string Hfname, string Hlname, string Hemail, string Hphone)
+        public IActionResult PatientHistoryData(string Hfname, string Hlname, string Hemail, string Hphone, int page)
         {
-            var data = _Admin.getAllUserData();
-            data = data.Where(x =>
-            (Hfname == null || x.Firstname.Contains(Hfname)) &&
-            (Hlname == null || x.Lastname.Contains(Hlname)) &&
-            (Hemail == null || x.Email.Contains(Hemail)) &&
-            (Hphone == null || x.Mobile.Contains(Hphone))
-            ).ToList();
-            return PartialView("_PatientHistoryData", data);
+            List<User> data = _Admin.getAllUserData(Hfname, Hlname, Hemail, Hphone);
+            ViewBag.TPage = Math.Ceiling(data.Count() / 10.0);
+            return PartialView("_PatientHistoryData", data.Skip(page * 10).Take(10).ToList());
+        }
+
+        public IActionResult PatientRecord(int userId)
+        {
+            List<Request> data = _Admin.getAllReqData(null, 0).Where(x => x.Userid == userId).ToList();
+            return PartialView("_PatientRecordData", data);
         }
         #endregion
 
@@ -1005,21 +1015,20 @@ namespace HalloDoc.Controllers
 
         public IActionResult BlockData(string name, string email, DateTime date, string phone)
         {
-            var data = _Admin.getallBlockRequest();
+            IEnumerable<Blockrequest> data = _Admin.getallBlockRequest();
             data = data.Where(x =>
             (name == null || (x.Request?.Requestclients?.FirstOrDefault().Firstname.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Requestclients?.FirstOrDefault().Lastname.ToLower().Contains(name.ToLower()) ?? false)) &&
             (email == null || x.Request.Requestclients.FirstOrDefault().Email.ToLower().Contains(email.ToLower())) &&
-            (phone == null || x.Request.Requestclients.FirstOrDefault().Phonenumber.ToLower().Contains(phone))
+            (phone == null || x.Request.Requestclients.FirstOrDefault().Phonenumber.ToLower().Contains(phone)) &&
+            (date == DateTime.MinValue || x.Createddate.ToString().FirstOrDefault().ToString().Contains(date.Date.ToString()))
             ).ToList();
-            //if (date != DateTime.MinValue)
-            //{
-            //    data = data.Where(x => (x.Createddate.ToString().FirstOrDefault().ToString().Contains(date.Date.ToString()))).ToList(); 
-            //}
             return PartialView("_BlockTableData", data);
         }
 
-        public IActionResult BlockDataUnblock(int blockreqid)
+        public IActionResult BlockDataUnblock(int reqid)
         {
+            _Admin.removeBlockRequest(reqid);
+            _Genral.updateReqStatus(reqid, 1);
             return Ok();
         }
         #endregion

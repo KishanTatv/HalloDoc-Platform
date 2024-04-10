@@ -24,13 +24,15 @@ namespace HalloDoc.Controllers
         private readonly IGenral _Genral;
         private readonly IAdmin _Admin;
         private readonly IPatient _Patient;
+        private readonly IPhysician _Physician;
 
-        public AdminDashController(ILogger<AdminDashController> logger, IGenral _Genral, IAdmin _Admin, IPatient _Patient)
+        public AdminDashController(ILogger<AdminDashController> logger, IGenral Genral, IAdmin Admin, IPatient Patient, IPhysician physician)
         {
             _logger = logger;
-            this._Genral = _Genral;
-            this._Admin = _Admin;
-            this._Patient = _Patient;
+            _Genral = Genral;
+            _Admin = Admin;
+            _Patient = Patient;
+            _Physician = physician;
         }
 
 
@@ -349,7 +351,7 @@ namespace HalloDoc.Controllers
         {
             if (note != null)
             {
-                _Admin.addNote(reqid, note);
+                _Admin.addNote(reqid, note, null);
                 return RedirectToAction("ViewNotes", new { reqid = reqid });
             }
             else
@@ -575,7 +577,15 @@ namespace HalloDoc.Controllers
             }
             else
             {
-                int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                int AdminId = 0;
+                if (Request.Cookies["CookieRole"] == "1")
+                {
+                    AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                }
+                if (Request.Cookies["CookieRole"] == "2")
+                {
+                    AdminId = _Physician.getPhyId(Request.Cookies["CookieEmail"]);
+                }
                 _Admin.AddOrderDetail(vendorid, AdminId, reqid, prescription, refil);
                 return RedirectToAction("SendOrder", new { reqid = reqid });
             }
@@ -672,8 +682,17 @@ namespace HalloDoc.Controllers
 
         public IActionResult EncounterDone(EncounterViewModel data)
         {
-            int AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            Nullable<int> AdminId = null;
             Nullable<int> phyId = null;
+            if (Request.Cookies["CookieRole"] == "1")
+            {
+                AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            }
+            if (Request.Cookies["CookieRole"] == "2")
+            {
+                phyId = _Physician.getPhyId(Request.Cookies["CookieEmail"]);
+            }
+
             if (_Genral.CheckEncounterForm((int)data.EncounterForm.RequestId))
             {
                 _Genral.UpdateEncounterForm(data.EncounterForm, AdminId, phyId);

@@ -62,22 +62,42 @@
                     </div>
                 </div>
             </div>
-
-            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
-                <div class="form-floating">
-                    <textarea type="text" class="form-control bg-transparent h-100 adminNote"
-                              placeholder="Detail info" id="note" name="note" rows="3" aria-label="Detail info" data-adminote=""
-                              aria-describedby="button-addon2"> </textarea>
-                    <label for="ms-3 text-info">Admin Notes</label>
+            @if (Context.Request.Cookies["CookieRole"] == "1")
+            {
+                <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                    <div class="form-floating">
+                        <textarea type="text" class="form-control bg-transparent h-100 adminNote"
+                                  placeholder="Detail info" id="note" name="note" rows="3" aria-label="Detail info" data-adminote=""
+                                  aria-describedby="button-addon2"> </textarea>
+                        <label for="ms-3 text-info">Admin Notes</label>
+                    </div>
+                    @if (TempData["msg"] != null)
+                    {
+                        <p class="text-danger m-0">@TempData["msg"]</p>
+                    }
+                    <div class="d-flex justify-content-end mt-4 mb-2">
+                        <div class="btn btn-info text-light me-4 saveCng" data-reqid="@Model.RequestId">Save Changes</div>
+                    </div>
                 </div>
-                @if (TempData["msg"] != null)
-                {
-                    <p class="text-danger m-0">@TempData["msg"]</p>
-                }
-                <div class="d-flex justify-content-end mt-4 mb-2">
-                    <div class="btn btn-info text-light me-4 saveCng" data-reqid="@Model.RequestId">Save Changes</div>
+            }
+            @if (Context.Request.Cookies["CookieRole"] == "2")
+            {
+                <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                    <div class="form-floating">
+                        <textarea type="text" class="form-control bg-transparent h-100 PhyNote"
+                                  placeholder="Detail info" id="phynote" name="note" rows="3" aria-label="Detail info"
+                                  aria-describedby="button-addon2"> </textarea>
+                        <label for="ms-3 text-info">Physician Notes</label>
+                    </div>
+                    @if (TempData["msg"] != null)
+                    {
+                        <p class="text-danger m-0">@TempData["msg"]</p>
+                    }
+                    <div class="d-flex justify-content-end mt-4 mb-2">
+                        <div class="btn btn-info text-light me-4 saveCngPhy" data-reqid="@Model.RequestId">Save Changes</div>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
 </div>
@@ -92,7 +112,23 @@
                 method: 'POST',
                 data: { note: note, reqid: reqid },
                 success: function (response) {
-                        $("#partial").html(response);
+                    $("#partial").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.saveCngPhy').click(function () {
+            var note = document.querySelector("#phynote").value;
+            var reqid = $(this).data('reqid');
+            $.ajax({
+                url: '/Physician/ViewNotedata',
+                method: 'POST',
+                data: { note: note, reqid: reqid },
+                success: function (response) {
+                    $("#partial").html(response);
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);

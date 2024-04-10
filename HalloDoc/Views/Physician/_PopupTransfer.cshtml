@@ -1,0 +1,67 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="modal fade" id="TranPopupPro" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-info p-2">
+                <h1 class="modal-title fs-5 text-light ms-2" id="exampleModalLabel">Transfer Request</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <span> This request will be transfered to admin. </span>
+                <div class="text-center pt-2">
+                    <div class="form-floating mt-2">
+                        <textarea type="text" class="form-control bg-transparent h-25"
+                                  placeholder="Detail info" id="transNote" rows="3" aria-label="Detail info"
+                                  aria-describedby="button-addon2"></textarea>
+                        <label for="ms-3 text-info"> Description</label>
+                    </div>
+                </div>
+
+                <p class="text-danger m-0"></p>
+            </div>
+            <div class="modal-footer p-1">
+                <button type="submit" class="btn btn-secondary btn-info text-light TransSubmit" data-reqid="@Model"> Submit</button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                <div class="BackOn d-none"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        $('.TransSubmit').click(function () {
+            var reqid = $(this).data('reqid');
+            var note = $('#transNote').val().trim();
+            if (note != '') {
+                $.ajax({
+                    url: '/Physician/TransferDone',
+                    method: 'POST',
+                    data: { reqid: reqid, note: note },
+                    success: function (response) {
+                        if (response.value == "Ok") {
+                            $('#TranPopupPro').remove();
+                            $('.modal-backdrop').remove();
+                            $('.BackOn').click();
+                            $('body').css({
+                                'overflow': 'visible',
+                                'padding-right': '0'
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }else{
+                $(".text-danger").text("Please Add note!");
+            }
+        });
+    });
+</script>

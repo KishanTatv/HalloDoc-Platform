@@ -12,8 +12,8 @@
 <div class="MainContent pt-0 min-vh-100">
     <partial name="partial/AdminNavTab" />
 
-    <div class="d-flex w-100 justify-content-center pb-4">
-        <div class="HContainer ProviderMain m-auto">
+    <div class="d-flex w-100 HistoryMain justify-content-center pb-4">
+        <div class="HContainer m-auto">
             <div class="d-flex m-3">
                 <h5>Patient History</h5>
             </div>
@@ -46,9 +46,9 @@
                 <div class="PHistoryTable">
                 </div>
             </div>
-
         </div>
     </div>
+    <div class="PRocordTable"></div>
 </div>
 
 <script asp-append-version="true">
@@ -82,6 +82,26 @@
             data: { Hfname: Hfname, Hlname: Hlname, Hemail: Hemail, Hphone: Hphone },
             success: function (response) {
                 $('.PHistoryTable').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $(document).on('click', '.page-link', function () {
+        var page = $(this).data('page');
+        var Hfname = $('.Hfname').val().trim();
+        var Hlname = $('.Hlname').val().trim();
+        var Hemail = $('.Hemail').val().trim();
+        var Hphone = $('.Hphone').val().trim();
+        $.ajax({
+            url: '/AdminTab/PatientHistoryData',
+            method: 'POST',
+            data: { Hfname: Hfname, Hlname: Hlname, Hemail: Hemail, Hphone: Hphone, page: page },
+            success: function (response) {
+                $('.PHistoryTable').html(response);
+                $('#CurrentPage').text("Page : " + (page + 1));
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

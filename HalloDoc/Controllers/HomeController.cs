@@ -43,7 +43,7 @@ namespace HalloDoc.Controllers
                 }
             }
 
-            if (_admin.getAdminId(Request.Cookies["CookieEmail"]) == null)
+            if ((Request.Cookies["CookieRole"]) == "3")
             {
                 return RedirectToAction("ViewDocument", "PatientDash", new { id = id });
             }
@@ -110,7 +110,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult SendAgreement(int reqid)
         {
-            _genral.updateReqStatus(reqid, 2);
+            _genral.updateReqStatus(reqid, 4);
             return Ok();
         }
 

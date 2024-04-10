@@ -404,9 +404,6 @@ public partial class HalloDocDbContext : DbContext
         {
             entity.HasKey(e => e.Requestwisefileid).HasName("requestwisefile_pkey");
 
-            entity.Property(e => e.Requestwisefileid).UseIdentityAlwaysColumn();
-            entity.Property(e => e.Createddate).HasDefaultValueSql("CURRENT_DATE");
-
             entity.HasOne(d => d.Admin).WithMany(p => p.Requestwisefiles).HasConstraintName("requestwisefile_adminid_fkey");
 
             entity.HasOne(d => d.Physician).WithMany(p => p.Requestwisefiles).HasConstraintName("requestwisefile_physicianid_fkey");

@@ -1,0 +1,63 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<HalloDoc.Entity.Models.Request>;
+@{
+}
+<div class="d-flex w-100 justify-content-center pb-4">
+    <div class="HContainer m-auto">
+        <div class="d-flex justify-content-between align-items-center m-3">
+            <h5>Patient Record</h5>
+            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="PatientHistory">
+                <strong class="pe-2">&lt Back</strong>
+            </a>
+        </div>
+
+        <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th scope="col"> Client/Member </th>
+                            <th scope="col"> Created Date <i class="bi bi-arrow-down ms-1"></i> </th>
+                            <th scope="col"> Confirmation </th>
+                            <th scope="col"> Provider Name </th>
+                            <th scope="col"> Concluded Date </th>
+                            <th scope="col"> Status </th>
+                            <th scope="col"> Final Report </th>
+                            <th scope="col" class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Firstname @item.Lastname</td>
+                                <td>@item.Createddate.ToString("MMM dd, yyy")</td>
+                                <td>@item.Confirmationnumber</td>
+                                <td>Dr. hello</td>
+                                <td> date </td>
+                                <td> @item.Status </td>
+                                <td> - </td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-outline-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-id="@item.Requestid">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <div class="dropdown-item"> View Case </div>
+                                            <div class="dropdown-item"> Chat </div>
+                                            <div class="dropdown-item"> Document </div>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>

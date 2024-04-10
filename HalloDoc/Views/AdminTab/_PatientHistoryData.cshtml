@@ -23,19 +23,57 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@item.Firstname</td>
-                <td>@item.Lastname</td>
-                <td>@item.Email</td>
-                <td>@item.Mobile</td>
-                <td> - </td>
-                <td class="text-center">
-                    <a class="btn btn-outline-info ps-2 pe-2 p-0 PContact">
-                        Explore
-                    </a>
-                </td>
-            </tr>
+                <tr>
+                    <td>@item.Firstname</td>
+                    <td>@item.Lastname</td>
+                    <td>@item.Email</td>
+                    <td>@item.Mobile</td>
+                    <td> - </td>
+                    <td class="text-center">
+                        <a class="btn btn-outline-info ps-2 pe-2 p-0 Explorebtn" data-id="@item.Userid">
+                            Explore
+                        </a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
 </div>
+
+
+<nav aria-label="Page navigation example">
+    <div class="d-flex  justify-content-between">
+        <span id="CurrentPage">Page : 1</span>
+        <ul class="pagination d-flex  me-3 pb-2">
+
+            @for (int i = 1; i <= ViewBag.TPage; i++)
+            {
+                <li class="page-item">
+                    <div class="page-link" data-page="@(i - 1)">
+                        @i
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</nav>
+
+
+
+<script asp-append-version="true">
+    $('.Explorebtn').click(function (){
+        var userId = $(this).data('id');
+        $.ajax({
+            type: 'POST',
+            url: '/AdminTab/PatientRecord',
+            data: { userId: userId },
+            success: function (response) {
+                $('.HistoryMain').remove();
+                $('.PRocordTable').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>

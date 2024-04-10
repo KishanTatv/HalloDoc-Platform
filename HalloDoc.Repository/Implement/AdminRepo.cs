@@ -17,6 +17,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Helpers;
+using System.Xml.Linq;
 
 namespace HalloDoc.Repository.Implement
 {
@@ -50,16 +51,26 @@ namespace HalloDoc.Repository.Implement
             return reqData;
         }
 
+        public void isdeleteReq(int reqId, BitArray isdelete)
+        {
+            Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqId);
+            req.Isdeleted = isdelete;
+            _context.Requests.Update(req);
+            _context.SaveChanges();
+        }
+
 
         #region Request Count
         public List<int> TotalCountPatient(int phyFilterId)
         {
-            int Tnew = _context.Requests.Count(x => x.Status == 1 && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
-            int Tpending = _context.Requests.Count(x => x.Status == 2 && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
-            int Tactive = _context.Requests.Count(x => (x.Status == 4 || x.Status == 5) && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
-            int Tconclide = _context.Requests.Count(x => x.Status == 6 && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
-            int Tclose = _context.Requests.Count(x => (x.Status == 3 || x.Status == 7 || x.Status == 8) && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
-            int Tunpaid = _context.Requests.Count(x => x.Status == 9 && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            BitArray truebit = new BitArray(1);
+            truebit[0] = true;
+            int Tnew = _context.Requests.Count(x => x.Status == 1 && x.Isdeleted!=truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tpending = _context.Requests.Count(x => x.Status == 2 && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tactive = _context.Requests.Count(x => (x.Status == 4 || x.Status == 5) && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tconclide = _context.Requests.Count(x => x.Status == 6 && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tclose = _context.Requests.Count(x => (x.Status == 3 || x.Status == 7 || x.Status == 8) && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tunpaid = _context.Requests.Count(x => x.Status == 9 && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
 
             List<int> countList = new List<int>{Tnew, Tpending, Tactive, Tconclide, Tclose, Tunpaid};
 
@@ -76,7 +87,7 @@ namespace HalloDoc.Repository.Implement
                        join p in _context.Physicians on r.Physicianid equals p.Physicianid into rf
                        from p in rf.DefaultIfEmpty()
                        orderby r.Createddate descending
-                       where (status == null ? true : status.Contains(r.Status)) &&
+                       where (status == null ? true : status.Contains(r.Status)) && (r.Isdeleted != new BitArray(new bool[] {true})) &&
                       (search == null ? true : f.Firstname.ToLower().Contains(search.ToLower()) || f.Lastname.ToLower().Contains(search.ToLower())) &&
                       (reg == null ? true : f.State.ToLower().Equals(reg.ToLower())) &&
                       (phyFilterId == 0 ? true : p.Physicianid.Equals(phyFilterId)) &&
@@ -92,6 +103,7 @@ namespace HalloDoc.Repository.Implement
                            RequestId = f.Requestid,
                            ReqClientId = f.Requestclientid,
                            ReqTypeId = r.Requesttypeid,
+                           status = r.Status,
                            Requestor = r.Firstname + "," + r.Lastname,
                            RequestedDate = r.Createddate,
                            PhysicianId = r.Physicianid,
@@ -148,12 +160,13 @@ namespace HalloDoc.Repository.Implement
         #endregion
 
 
-        public void addNote(int reqid, string note)
+        public void addNote(int reqid, string? adminnote, string? phynote)
         {
             Requestnote reqNote = new Requestnote()
             {
                 Requestid = reqid,
-                Adminnotes = note,
+                Adminnotes = adminnote,
+                Physiciannotes = phynote,
                 Createddate = DateTime.Now,
                 Createdby = "yash"
             };
@@ -193,8 +206,6 @@ namespace HalloDoc.Repository.Implement
 
         public void AddBlockRequest(int reqId, string note)
         {
-            BitArray bitArray = new BitArray(1);
-            bitArray[0] = false;
             string email = _context.Requestclients.FirstOrDefault(x => x.Requestid == reqId).Email;
             string phoneNum = _context.Requestclients.FirstOrDefault(x => x.Requestid == reqId).Phonenumber;
 
@@ -204,7 +215,7 @@ namespace HalloDoc.Repository.Implement
                 Reason = note,
                 Email = email,
                 Phonenumber = phoneNum,
-                Isactive = bitArray,
+                Isactive = new BitArray(new bool[] { true}),
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Blockrequests.Add(req);
@@ -500,7 +511,6 @@ namespace HalloDoc.Repository.Implement
         {
             return _context.Emaillogs.Include(x => x.Request).ThenInclude(x => x.Requestclients).ToList();
         }
-
         public IEnumerable<Smslog> getSMSLogData()
         {
             return _context.Smslogs.ToList();
@@ -589,14 +599,20 @@ namespace HalloDoc.Repository.Implement
 
 
         // All user Data
-        public List<User> getAllUserData()
+        public List<User> getAllUserData(string fname, string lname, string email, string phone)
         {
             BitArray bitArray = new BitArray(1);
             bitArray[0] = true;
-            return _context.Users.Where(x => x.Isdeleted != bitArray).ToList();
+            return _context.Users.Where(x => 
+            (x.Isdeleted != new BitArray(new bool[] { true })) &&
+            (fname == null || x.Firstname.Contains(fname)) &&
+            (lname == null || x.Lastname.Contains(lname)) &&
+            (email == null || x.Email.Contains(email)) &&
+            (phone == null || x.Mobile.Contains(phone))
+            ).ToList();
         }
 
-        public List<Request> getAllReqData(string reqStatus, int reqType)
+        public List<Request> getAllReqData(string? reqStatus, int reqType)
         {
             var data = _context.Requests.Include(x => x.Requestclients).Include(x => x.Physician)
                 .Where(x => (x.Isdeleted != new BitArray(new bool[] { true })) &&
@@ -823,6 +839,14 @@ namespace HalloDoc.Repository.Implement
                         }).ToList();
             data = data.DistinctBy(x => x.phyId).ToList();
             return data;
+        }
+
+
+        public void removeBlockRequest(int reqId)
+        {
+            Blockrequest blockrequest = _context.Blockrequests.FirstOrDefault(x => x.Requestid == reqId);
+            _context.Blockrequests.Remove(blockrequest);
+            _context.SaveChanges();
         }
     }
 }

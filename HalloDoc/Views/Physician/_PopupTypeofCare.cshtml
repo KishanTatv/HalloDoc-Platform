@@ -1,0 +1,72 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div class="modal fade" id="EncounterPopupPhy" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-info p-2">
+                <h1 class="modal-title fs-5 text-light ms-2" id="exampleModalLabel">Select Type of Care</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="protype" />
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-outline-info me-2 houseCall"> HouseCall </button>
+                    <button type="button" class="btn btn-outline-info consultant"> Consultant </button>
+                </div>
+
+                <p class="text-danger m-0"></p>
+            </div>
+            <div class="modal-footer p-1">
+                <button type="submit" class="btn btn-secondary btn-info text-light TypeSubmit" data-reqid="@Model"> Save </button>
+                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                <div class="BackOn d-none"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script asp-append-version="true">
+    $(".consultant").click(function () {
+        $('.consultant').addClass("btn-info");
+        $('.houseCall').removeClass("btn-info");
+        $('#protype').val("Consultant");
+    });
+    $(".houseCall").click(function () {
+        $('.houseCall').addClass("btn-info");
+        $('.consultant').removeClass("btn-info");
+        $('#protype').val("Housecall");
+    });
+
+    $('.TypeSubmit').click(function () {
+        var reqid = $(this).data('reqid');
+        var type = $('#protype').val();
+        if (type != '') {
+            $.ajax({
+                url: '/Physician/EncounterProType',
+                method: 'POST',
+                data: { reqid: reqid, type: type },
+                success: function (response) {
+                    $('#EncounterPopupPhy').remove();
+                    $('.modal-backdrop').remove();
+                    $('.BackOn').click();
+                    $('body').css({
+                        'overflow': 'visible',
+                        'padding-right': '0'
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        else {
+            $('.text-danger').text("please select option");
+        }
+    });
+</script>

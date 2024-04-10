@@ -142,4 +142,28 @@
             }
         });
     });
+
+    $(document).on('click', '.page-link', function () {
+        var page = $(this).data('page');
+        var reqStatus = $('.SreqStatus').val();
+        var reqType = $('.SreqType').val();
+        var ptName = $('.SptName').val().trim().toLowerCase();
+        var formDate = $('.SfromDate').val();
+        var toDate = $('.StoDate').val();
+        var proName = $('.SproName').val().trim();
+        var email = $('.SEmail').val().trim();
+        var phone = $('.SPhone').val().trim();
+        $.ajax({
+            url: '/AdminTab/SearchData',
+            method: 'POST',
+            data: { reqStatus: reqStatus, reqType: reqType, ptName: ptName, formDate: formDate, toDate: toDate, email: email, proName: proName, phone: phone, page:page },
+            success: function (response) {
+                $('.searchData').html(response);
+                $('#CurrentPage').text("Page : " + (page+1));
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
 </script>

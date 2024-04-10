@@ -64,7 +64,7 @@ namespace HalloDoc.Repository.Interface
         void AddreqLogStatus(int reqid, string note, short status, int? adminId, int? phyid, int TransPhyid);
 
         void updateReqStatus(int reqid, short status);
-        void updateReqStatusWithPhysician(int reqid, int phyId, short status);
+        void updateReqStatusWithPhysician(int reqid, int? phyId, short status);
 
         List<Menu> getMenuNames(int? accType);
         Menu getSingleMenu(int accType, string name);
