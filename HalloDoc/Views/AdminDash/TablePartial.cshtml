@@ -133,7 +133,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                         <td><button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button></td>
                         <td>
                             <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                                    aria-expanded="false">
                                 Actions
                             </button>
                             <ul class="dropdown-menu">
@@ -214,11 +214,11 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                         <div class="d-flex justify-content-between">
                             <span>@item.Address</span>
                             <span class="btn btn-outline-info rounded-pill" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#flush-@item.ReqClientId" aria-expanded="false" aria-controls="flush-collapseOne">Map Location</span>
+                                  data-bs-target="#flush-@item.ReqClientId" aria-expanded="false" aria-controls="flush-collapseOne">Map Location</span>
                         </div>
                     </div>
                     <div id="flush-@item.ReqClientId" class="accordion-collapse collapse bg-lighinfo"
-                    data-bs-parent="#accordionFlushExample">
+                         data-bs-parent="#accordionFlushExample">
                         <div class="accordion-body">
                             <div class="d-flex flex-column px-3">
                                 <div class="d-flex flex-column px-5 position-relative new">
@@ -363,7 +363,9 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                         </td>
                         @if (ViewBag.dTable == 1)
                         {
-                            <td class="text-light">Chat With</td>
+                            <td class="text-light">
+                                <button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Chat With</button>
+                            </td>
                         }
                         @if (ViewBag.dTable == 3)
                         {
@@ -420,47 +422,47 @@ For more information on enabling MVC for empty projects, visit https://go.micros
     </div>
 }
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-between me-3 pb-2">
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-between me-3 pb-2">
 
-            <div>
-                <span>
-                    Page : <span class="text-primary">
-                        @(
-                            ViewBag.CurrentPage + 1
-                            )
-                    </span> / @ViewBag.TPage
-                </span>
-            </div>
-            <div class="d-flex">
-                @if (ViewBag.CurrentPage > 0)
-                {
-                <li>
-                    <div class="page-link text-warning" data-id="@ViewBag.dTable" data-page="@(ViewBag.CurrentPage - 1)">
-                        Previous
-                    </div>
-                </li>
-                }
-                @for (int i = 1; i <= ViewBag.TPage; i++)
-                {
-                <li class="page-item">
-                    <div class="page-link" data-id="@ViewBag.dTable" data-page="@(i - 1)">
-                            @i
-                    </div>
-                </li>
-                }
-                @if (ViewBag.TPage - 1 > ViewBag.CurrentPage)
-                {
-                <li>
-                    <div class="page-link text-warning" data-id="@ViewBag.dTable" data-page="@(ViewBag.CurrentPage + 1)">
-                        Next
-                    </div>
-                </li>
-                }
-            </div>
+        <div>
+            <span>
+                Page : <span class="text-primary">
+                    @(
+                        ViewBag.CurrentPage + 1
+                        )
+                </span> / @ViewBag.TPage
+            </span>
+        </div>
+        <div class="d-flex">
+            @if (ViewBag.CurrentPage > 0)
+            {
+            <li>
+                <div class="page-link text-warning" data-id="@ViewBag.dTable" data-page="@(ViewBag.CurrentPage - 1)">
+                    Previous
+                </div>
+            </li>
+            }
+            @for (int i = 1; i <= ViewBag.TPage; i++)
+            {
+            <li class="page-item">
+                <div class="page-link" data-id="@ViewBag.dTable" data-page="@(i - 1)">
+                        @i
+                </div>
+            </li>
+            }
+            @if (ViewBag.TPage - 1 > ViewBag.CurrentPage)
+            {
+            <li>
+                <div class="page-link text-warning" data-id="@ViewBag.dTable" data-page="@(ViewBag.CurrentPage + 1)">
+                    Next
+                </div>
+            </li>
+            }
+        </div>
 
-        </ul>
-    </nav>
+    </ul>
+</nav>
 
 
 

@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 
 namespace HalloDoc.Repository.Implement
 {
@@ -35,7 +36,7 @@ namespace HalloDoc.Repository.Implement
                 Username = "MD." + phy.Lastname.ToUpper() + "." + phy.Firstname.ToString().Substring(0, 1).ToUpper(),
                 Email = phy.Email,
                 Phonenumber = phy.Mobile,
-                Passwordhash = phy.Password,
+                Passwordhash = Crypto.HashPassword(phy.Password),
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Aspnetusers.Add(asp);

@@ -16,6 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 
 namespace HalloDoc.Repository.Implement
 {
@@ -355,7 +356,7 @@ namespace HalloDoc.Repository.Implement
         public void updatePass(string email, string pass)
         {
             Aspnetuser asp = _context.Aspnetusers.FirstOrDefault(x => x.Email == email);
-            asp.Passwordhash = pass;
+            asp.Passwordhash = Crypto.HashPassword(pass);
             asp.Modifieddate = System.DateTime.Now;
             _context.Aspnetusers.Update(asp);
             _context.SaveChanges();
@@ -416,7 +417,7 @@ namespace HalloDoc.Repository.Implement
                 Username = model.Lastname.Trim().ToUpper() + model.Firstname.Trim().ToString().Substring(0, 1).ToUpper(),
                 Email = model.ConfirmEmail,
                 Phonenumber = model.Phonenumber,
-                Passwordhash = model.Password,
+                Passwordhash = Crypto.HashPassword(model.Password),
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Aspnetusers.Add(asp);

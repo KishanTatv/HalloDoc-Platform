@@ -126,7 +126,7 @@ namespace HalloDoc.Controllers
                 var subject = "Password reset request";
                 string link = Url.Action("NewPassword", "Patient", new { email = userEmail }, Request.Scheme);
                 var body = $"Hi,<br /><br />Please click on the following link to change your password credential:<br /><br />" + link;
-                //_patient.sendMail(userEmail, subject, body);
+                _patient.sendMail(userEmail, subject, body);
                 TempData["Msg"] = "please check your Email";
             }
             else

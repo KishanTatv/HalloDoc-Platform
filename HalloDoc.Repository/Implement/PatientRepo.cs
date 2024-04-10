@@ -18,7 +18,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using BCrypt.Net;
 using System.Web.Helpers;
 
 namespace HalloDoc.Repository.Implement
@@ -56,7 +55,7 @@ namespace HalloDoc.Repository.Implement
             {
                 Email = client.Email,
                 Username = client.Firstname + " " + client.Lastname,
-                Passwordhash = client.Password,
+                Passwordhash = Crypto.HashPassword(client.Password),
                 Phonenumber = client.Phonenumber,
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
@@ -302,7 +301,7 @@ namespace HalloDoc.Repository.Implement
                 Username = user.Firstname + user.Lastname,
                 Email = user.Email,
                 Phonenumber = user.Phonenumber,
-                Passwordhash = user.ConfirmPassword.GetHashCode().ToString(),
+                Passwordhash = Crypto.HashPassword(user.ConfirmPassword),
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Aspnetusers.Add(asp);
