@@ -130,7 +130,12 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             </td>
 
                         }
-                        <td><button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button></td>
+                        <td>
+                            @if (item.PhysicianId != null)
+                            {
+                                <button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button>
+                            }
+                        </td>
                         <td>
                             <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
                                     aria-expanded="false">
@@ -330,7 +335,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     <tr class=" @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))">
                         <td class="text-light" scope="row">
                             <p class="d-flex justify-content-between">
-                                @item.RequestId @item.Name
+                                @item.Name
                                 <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
                             </p>
                         </td>
@@ -369,7 +374,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                         }
                         @if (ViewBag.dTable == 3)
                         {
-                            @if(item.status == 5)
+                            @if (item.status == 5)
                             {
                                 <td> <button type="button" class="btn btn-info text-light proHouseCall" data-reqid="@item.RequestId"> HouseCall </button></td>
                             }
@@ -752,12 +757,16 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    if (response.value = "NotFinalize"){
+                    if (response.value == "NotFinalize") {
                         Swal.fire({
                             title: "Not Usable!",
                             text: "Encounter Not Finalize!",
                             icon: "warning"
                         });
+                    }
+                    else {
+                        hideOtherPortion();
+                        $("#partial").html(response);
                     }
                 },
                 error: function (xhr, status, error) {

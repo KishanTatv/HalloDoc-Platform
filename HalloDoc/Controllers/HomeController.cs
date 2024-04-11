@@ -47,6 +47,9 @@ namespace HalloDoc.Controllers
             {
                 return RedirectToAction("ViewDocument", "PatientDash", new { id = id });
             }
+            else if((Request.Cookies["CookieRole"]) == "2") {
+                return RedirectToAction("ConcludeCare", "Physician", new { reqid = id });
+            }
             return RedirectToAction("ViewUploads", "AdminDash", new { reqid = id });
         }
 

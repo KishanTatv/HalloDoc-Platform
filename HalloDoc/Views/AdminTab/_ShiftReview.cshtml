@@ -81,7 +81,7 @@
         $.ajax({
             url: '/AdminTab/ReviewShiftData',
             method: 'POST',
-            data: { reg: reg, month: month},
+            data: { reg: reg, month: month },
             success: function (response) {
                 $("#partialShiftTable").html(response);
             },
@@ -103,32 +103,50 @@
     }
     $('.deleteShift').click(function () {
         var listdeleteItem = checkList();
-        $.ajax({
-            url: '/AdminTab/ReviewShiftData',
-            method: 'POST',
-            data: { listdeleteItem: listdeleteItem },
-            success: function (response) {
-                $("#partialShiftTable").html(response);
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
+        if (listdeleteItem.length > 0) {
+            $.ajax({
+                url: '/AdminTab/ReviewShiftData',
+                method: 'POST',
+                data: { listdeleteItem: listdeleteItem },
+                success: function (response) {
+                    $("#partialShiftTable").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        else {
+            Swal.fire({
+                title: "No Shift Selected!",
+                text: "Please select shift for delete",
+                icon: "warning"
+            });
+        }
     });
 
     $('.approveShift').click(function () {
         var listApproveItem = checkList();
-        $.ajax({
-            url: '/AdminTab/ReviewShiftData',
-            method: 'POST',
-            data: { listApproveItem: listApproveItem },
-            success: function (response) {
-                $("#partialShiftTable").html(response);
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
+        if (listApproveItem.length > 0) {
+            $.ajax({
+                url: '/AdminTab/ReviewShiftData',
+                method: 'POST',
+                data: { listApproveItem: listApproveItem },
+                success: function (response) {
+                    $("#partialShiftTable").html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        else {
+            Swal.fire({
+                title: "No Shift Selected!",
+                text: "Please select shift for Approved",
+                icon: "warning"
+            });
+        }
     });
 
 </script>

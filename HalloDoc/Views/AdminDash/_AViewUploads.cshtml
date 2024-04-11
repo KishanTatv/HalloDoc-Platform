@@ -11,7 +11,7 @@
     <div class="tab-content" id="nav-tabContent">
 
         <div class="HContainer m-auto pt-4">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between align-content-center">
                 <h4 class="m-0"> Documents </h4>
                 <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info BackOn">
                     <strong class="pe-2">&lt Back</strong>
@@ -44,14 +44,14 @@
                                     <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
                                     <input id="SpBtnUpload" data-reqid="@Model.FirstOrDefault().Requestid" style="display:none" />
                                     <i class="bi bi-cloud-arrow-up border-info"></i>
-                                    <span class="upload_txt ms-2">Upload</span>@Model.FirstOrDefault().Requestid
+                                    <span class="upload_txt ms-2">Upload</span>
                                 </label>
                             </div>
                         </div>
                     </form>
                 </div>
 
-                        <p class="text-danger text-center m-0"></p>
+                <p class="text-danger text-center m-0"></p>
                 <form class="d-inline" asp-controller="Home" asp-action="DownloadAllFile" method="post">
                     <div class="d-flex justify-content-between">
 
@@ -133,7 +133,6 @@
             }
             filedata.append('id', reqid);
 
-            console.log(filedata);
             $.ajax({
                 url: '/Home/UploadDoc',
                 method: 'POST',
@@ -233,7 +232,7 @@
             method: 'POST',
             data: { file: files, reqid: reqid },
             success: function (response) {
-                if (response.value == "Ok"){
+                if (response.value == "Ok") {
                     $(".text-success").text("Mail Sent Successfully !");
                     $(".checkboxClass").prop('checked', false);
                     $(".text-danger").text("");

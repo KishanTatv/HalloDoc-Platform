@@ -22,7 +22,6 @@ using static Uno.WinRTFeatureConfiguration;
 
 namespace HalloDoc.Controllers
 {
-    [CustomAuthorize("Admin:Provider")]
     public class AdminTabController : Controller
     {
         private readonly ILogger<AdminDashController> _logger;
@@ -43,13 +42,14 @@ namespace HalloDoc.Controllers
             return View();
         }
 
+        #region Provider Location
+        [CustomAuthorize("Admin:Provider", "Provider Location")]
         public IActionResult ProviderLoc()
         {
             return View();
         }
 
-
-        #region Provider Location
+        [CustomAuthorize("Admin:Provider", "Provider Location")]
         public IActionResult ProviderLocData()
         {
             var data = _Admin.getAllPhysicianLocation();
@@ -60,6 +60,7 @@ namespace HalloDoc.Controllers
 
 
         #region Admin Profile
+        [CustomAuthorize("Admin:Provider", "My Profile")]
         public IActionResult Profile()
         {
             string adminEmail = Request.Cookies["CookieEmail"];
@@ -70,12 +71,14 @@ namespace HalloDoc.Controllers
             return View(modelData);
         }
 
+        [CustomAuthorize("Admin:Provider", "My Profile")]
         public IActionResult adminReg(int adId)
         {
             var data = _Admin.getAdminReg(adId);
             return Json(new { Adminregion = data });
         }
 
+        [CustomAuthorize("Admin:Provider", "My Profile")]
         public IActionResult ResetPass(string pass)
         {
             string adminEmail = Request.Cookies["CookieEmail"];
@@ -83,6 +86,7 @@ namespace HalloDoc.Controllers
             return Json(new { value = "ok" });
         }
 
+        [CustomAuthorize("Admin:Provider", "My Profile")]
         public IActionResult UpdateAdminProfile(ProfileViewModel adminInfo)
         {
             ModelState["AdminRegions"].ValidationState = ModelValidationState.Valid;
@@ -134,12 +138,14 @@ namespace HalloDoc.Controllers
 
 
         #region Provider
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult Provider(int page)
         {
             var reg = _Admin.getAllRegion();
             return View(reg);
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult ProviderData(int page, int reg)
         {
             var data = _Admin.getAllPhysicianData().ToList();
@@ -159,6 +165,7 @@ namespace HalloDoc.Controllers
             return PartialView("_ProviderHome", data);
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult PhysicanNotification(int phid, string ischeck)
         {
             BitArray bitArray = new BitArray(1);
@@ -175,12 +182,14 @@ namespace HalloDoc.Controllers
             return Ok();
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult PcontactPop(int phid)
         {
             TempData["phid"] = phid;
             return PartialView("PopupProvidercontact");
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult Pcontactsend(int phid, string contType, string note)
         {
             int adminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
@@ -195,6 +204,7 @@ namespace HalloDoc.Controllers
             return Ok();
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult PhysicanEdit(int phid)
         {
             TempData["phid"] = phid;
@@ -219,10 +229,11 @@ namespace HalloDoc.Controllers
                     Doclist.Add(null);
                 }
             }
-            var data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region, phyReg = phReg, DocFile = Doclist };
+            PhysicianProfileViewModel data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region, phyReg = phReg, DocFile = Doclist };
             return PartialView("_ProPhysicianEdit", data);
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult ResetPhyPass(string pass, int phid)
         {
             string phyEmail = _Admin.getPhysicianEmail(phid);
@@ -230,6 +241,7 @@ namespace HalloDoc.Controllers
             return Json(new { value = "ok" });
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult UpdatePhyProfile(PhysicianProfileViewModel phinfo)
         {
             var regList = Request.Form["checkReg"].ToList();
@@ -250,6 +262,7 @@ namespace HalloDoc.Controllers
             return Json(new { value = "changed" });
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult UpdatePhyLoc(PhysicianProfileViewModel phinfo)
         {
             int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
@@ -258,6 +271,7 @@ namespace HalloDoc.Controllers
             return Json(new { value = "changed" });
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult UpdatePhyAdditional(string BusinessN, string BusinessW, string Note, int phid, IFormFile Photo, IFormFile Sign)
         {
 
@@ -290,6 +304,7 @@ namespace HalloDoc.Controllers
             return Json(new { value = "changed" });
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult Phydocument(int phid, IFormFile ContractorAgreement, IFormFile Background, IFormFile HIPAA, IFormFile discloure, IFormFile License)
         {
             List<IFormFile> files = new List<IFormFile>();
@@ -340,6 +355,7 @@ namespace HalloDoc.Controllers
 
 
         #region createAccount Provider
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult NewProvider()
         {
             var region = _Admin.getAllRegion();
@@ -348,6 +364,7 @@ namespace HalloDoc.Controllers
             return PartialView("_CreateNewProvider", data);
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult AddNewProvider(PhysicianProfileViewModel model, IFormFile photo, IFormFile ContractorAgreement, IFormFile Background, IFormFile HIPAA, IFormFile discloure, IFormFile License)
         {
             var regList = Request.Form["checkReg"].ToList();
@@ -410,6 +427,7 @@ namespace HalloDoc.Controllers
             return RedirectToAction("Provider");
         }
 
+        [CustomAuthorize("Admin:Provider", "Provider")]
         public void UploadPhyDocumnet(List<IFormFile> files, int phyId)
         {
             if (files.Count > 0)
@@ -432,6 +450,7 @@ namespace HalloDoc.Controllers
 
 
         #region createAccount Admin
+        [CustomAuthorize("Admin:Provider", "Create Admin")]
         public IActionResult AdminCreate()
         {
             TempData["SuccMsg"] = TempData["SuccMsg"];
@@ -442,7 +461,7 @@ namespace HalloDoc.Controllers
             return View(data);
         }
 
-
+        [CustomAuthorize("Admin:Provider", "Create Admin")]
         public IActionResult AddNewAdmin(adminViewModel model)
         {
             if (!_Genral.CheckExistAspUser(model.Email))
@@ -476,12 +495,14 @@ namespace HalloDoc.Controllers
 
 
         #region Account Access
+        [CustomAuthorize("Admin:Provider", "Account Access")]
         public IActionResult Access()
         {
             var data = _Admin.getAllroleDetails();
             return View(data);
         }
 
+        [CustomAuthorize("Admin:Provider", "Account Access")]
         public IActionResult CreateRole()
         {
             var role = _Admin.getAllAspnetrole();
@@ -490,6 +511,7 @@ namespace HalloDoc.Controllers
             return PartialView("_CreateRole", data);
         }
 
+        [CustomAuthorize("Admin:Provider", "Account Access")]
         public IActionResult EditRole(int roleid)
         {
             var role = _Admin.getAllAspnetrole();
@@ -500,18 +522,24 @@ namespace HalloDoc.Controllers
             return PartialView("_CreateRole", data);
         }
 
+
+        [CustomAuthorize("Admin:Provider", "Account Access")]
         public IActionResult DeletePopup(int roleid)
         {
             TempData["roleId"] = roleid;
             return PartialView("PopupDeleteRole");
         }
 
+
+        [CustomAuthorize("Admin:Provider", "Account Access")]
         public IActionResult deleteRole(int roleid)
         {
             _Genral.deleteRole(roleid);
             return Ok();
         }
 
+
+        [CustomAuthorize("Admin:Provider", "Account Access")]
         public IActionResult AccOption(int AccType, int roleid)
         {
             var menu = _Genral.getMenuNames(AccType);
@@ -520,6 +548,8 @@ namespace HalloDoc.Controllers
             return PartialView("_MenuOption", data);
         }
 
+
+        [CustomAuthorize("Admin:Provider", "Account Access")]
         public IActionResult SaveRole(int roleid, string RoleName, short AccType, List<int> Pages)
         {
             int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
@@ -559,7 +589,9 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
+        
         #region User Access
+        [CustomAuthorize("Admin:Provider", "User Access")]
         public IActionResult UserAccess()
         {
             var data = _Admin.UserAccessData();
@@ -569,12 +601,14 @@ namespace HalloDoc.Controllers
 
 
         #region Scheduling
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult Scheduling()
         {
             var region = _Admin.getAllRegion();
             return View(region);
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult NewShiftPopUp()
         {
             var region = _Admin.getAllRegion();
@@ -582,6 +616,7 @@ namespace HalloDoc.Controllers
             return PartialView("_PopupCreateShft", dataModel);
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult checkShiftExist(ShiftPoupViewModel formdata)
         {
             if (!_Admin.checkExistShift(formdata, formdata.shiftdate))
@@ -627,6 +662,7 @@ namespace HalloDoc.Controllers
             }
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult shiftData(ShiftPoupViewModel formdata)
         {
             int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
@@ -697,6 +733,7 @@ namespace HalloDoc.Controllers
             return Json(new { value = "Ok" });
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult getPhysicianRecord(int reg)
         {
             var data = _Admin.getAllPhysicianName();
@@ -707,6 +744,7 @@ namespace HalloDoc.Controllers
             return Json(new { phyCustomNameViewModel = data });
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult getScheduleData(int reg)
         {
             var data = _Admin.getAllShiftdetail();
@@ -717,6 +755,7 @@ namespace HalloDoc.Controllers
             return Json(new { Shiftdetail = data });
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult viewShift(int eventid)
         {
             var shiftData = _Admin.getShiftDetailSpecific(eventid);
@@ -725,6 +764,7 @@ namespace HalloDoc.Controllers
             return PartialView("_PopupViewShift", dataModel);
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult shiftDataEdit(ShiftPoupViewModel formdata)
         {
             if (!_Admin.checkExistShift(formdata, formdata.shiftdate))
@@ -739,6 +779,7 @@ namespace HalloDoc.Controllers
             }
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult retuenShift(int eventid, int status)
         {
             if (status == 1)
@@ -752,18 +793,21 @@ namespace HalloDoc.Controllers
             return Ok();
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult deleteShift(int eventid)
         {
             _Admin.deleteShiftDetail(eventid);
             return Ok();
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult ShiftReview()
         {
             var region = _Admin.getAllRegion();
             return PartialView("_ShiftReview", region);
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult ReviewShiftData(int page, int reg, bool month, List<int> listdeleteItem, List<int> listApproveItem)
         {
             if (listdeleteItem.Count != 0)
@@ -795,12 +839,14 @@ namespace HalloDoc.Controllers
 
 
         #region Schedule Pro On Call
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult ProviderCall()
         {
             var region = _Admin.getAllRegion();
             return PartialView("_ProviderOnCall", region);
         }
 
+        [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult proOncallData(int reg)
         {
             IEnumerable<ProcallModel> dataOnCall = _Admin.phyOncallAvialble(reg).ToList();
@@ -813,18 +859,21 @@ namespace HalloDoc.Controllers
 
 
         #region Partner
+        [CustomAuthorize("Admin:Provider", "Partners")]
         public IActionResult PartnerTab()
         {
             var data = _Admin.getAllHealthProfession();
             return View(data);
         }
 
+        [CustomAuthorize("Admin:Provider", "Partners")]
         public IActionResult PartnerData(int profesion, string name)
         {
             var data = _Admin.getHealthProfessionBussiness(profesion).Where(x => name == null || x.Vendorname.Contains(name)).ToList();
             return PartialView("_PartnerTabData", data);
         }
 
+        [CustomAuthorize("Admin:Provider", "Partners")]
         public IActionResult AddBusinessPartial(int helthproId)
         {
             List<Healthprofessionaltype> proType = _Admin.getAllHealthProfession();
@@ -843,12 +892,14 @@ namespace HalloDoc.Controllers
             }
         }
 
+        [CustomAuthorize("Admin:Provider", "Partners")]
         public IActionResult DeleteVendor(int helthproId)
         {
             _Admin.deleteVendor(helthproId);
             return Ok();
         }
 
+        [CustomAuthorize("Admin:Provider", "Partners")]
         public IActionResult SaveBussiness(VenderBusinessViewModel model)
         {
             ModelState["Healthprofessionaltypes"].ValidationState = ModelValidationState.Valid;
@@ -878,11 +929,14 @@ namespace HalloDoc.Controllers
 
 
         #region Search Record
+
+        [CustomAuthorize("Admin:Provider", "Search Records")]
         public IActionResult SearchRecord()
         {
             return View();
         }
 
+        [CustomAuthorize("Admin:Provider", "Search Records")]
         public IActionResult ExportFile()
         {
             var data = _Admin.getAllReqData(null, 0).ToList();
@@ -928,6 +982,7 @@ namespace HalloDoc.Controllers
             }
         }
 
+        [CustomAuthorize("Admin:Provider", "Search Records")]
         public IActionResult searchData(string reqStatus, int reqType, string ptName, DateTime formDate, DateTime toDate, string proName, string phone, string email, int page)
         {
             var data = _Admin.getAllReqData(reqStatus, reqType).ToList();
@@ -941,6 +996,7 @@ namespace HalloDoc.Controllers
             return PartialView("_SearchTableData", data.Skip(page * 5).Take(5).ToList());
         }
 
+        [CustomAuthorize("Admin:Provider", "Search Records")]
         public IActionResult DeleteRequest(int reqId)
         {
             _Admin.isdeleteReq(reqId, new BitArray(new bool[] { true }));
@@ -951,12 +1007,14 @@ namespace HalloDoc.Controllers
 
 
         #region EmailSMS Log
+        [CustomAuthorize("Admin:Provider", "SMS Logs")]
         public IActionResult SMSlog()
         {
             ViewBag.logType = "SMS";
             return View("EmailSMSlog");
         }
 
+        [CustomAuthorize("Admin:Provider", "Email Logs")]
         public IActionResult Emaillog(string email)
         {
             ViewBag.logType = "Email";
@@ -987,12 +1045,15 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
+
         #region Patient History
+        [CustomAuthorize("Admin:Provider", "Patient History")]
         public IActionResult PatientHistory()
         {
             return View();
         }
 
+        [CustomAuthorize("Admin:Provider", "Patient History")]
         public IActionResult PatientHistoryData(string Hfname, string Hlname, string Hemail, string Hphone, int page)
         {
             List<User> data = _Admin.getAllUserData(Hfname, Hlname, Hemail, Hphone);
@@ -1000,6 +1061,7 @@ namespace HalloDoc.Controllers
             return PartialView("_PatientHistoryData", data.Skip(page * 10).Take(10).ToList());
         }
 
+        [CustomAuthorize("Admin:Provider", "Patient History")]
         public IActionResult PatientRecord(int userId)
         {
             List<Request> data = _Admin.getAllReqData(null, 0).Where(x => x.Userid == userId).ToList();
@@ -1007,12 +1069,15 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
+
         #region BlockHistory
+        [CustomAuthorize("Admin:Provider", "Block History")]
         public IActionResult BlockHistory()
         {
             return View();
         }
 
+        [CustomAuthorize("Admin:Provider", "Block History")]
         public IActionResult BlockData(string name, string email, DateTime date, string phone)
         {
             IEnumerable<Blockrequest> data = _Admin.getallBlockRequest();
@@ -1025,6 +1090,7 @@ namespace HalloDoc.Controllers
             return PartialView("_BlockTableData", data);
         }
 
+        [CustomAuthorize("Admin:Provider", "Block History")]
         public IActionResult BlockDataUnblock(int reqid)
         {
             _Admin.removeBlockRequest(reqid);

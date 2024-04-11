@@ -27,8 +27,8 @@
                     <td> @item.Request.Requestclients.FirstOrDefault().Firstname @item.Request.Requestclients.FirstOrDefault().Lastname</td>
                     <td> @item.Request.Requestclients.FirstOrDefault().Phonenumber </td>
                     <td> @item.Request.Requestclients.FirstOrDefault().Email </td>
-                    <td> @item.Createddate </td>
-                    <td>test</td>
+                    <td> @item.Createddate.Value.Date.ToString("MMM dd, yyy") </td>
+                    <td> @item.Reason </td>
                     <td>
                         <input name="checkActive" class="form-check-input"  @(item.Isactive[0] ? "checked" : "") type="checkbox" value="">
                     </td>

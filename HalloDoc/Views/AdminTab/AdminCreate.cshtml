@@ -24,7 +24,7 @@
 
         @if (TempData["SuccMsg"] != null)
         {
-            <div class="text-success text-center"> @TempData["SuccMsg"] </div>
+            <div class="text-success text-center succMsg"> @TempData["SuccMsg"] </div>
         }
 
         <form class="phydata" asp-action="AddNewAdmin" asp-controller="AdminTab" method="post" enctype="multipart/form-data">
@@ -159,4 +159,9 @@
         const selectedRegionId = selectElement.value;
         document.getElementById('regionIdHidden').value = selectedRegionId;
     }
+    function updateRoleId(selectElement) {
+        const selectedRoleId = selectElement.value;
+        document.getElementById('Hiderole').value = selectedRoleId;
+    }
+
 </script>

@@ -51,7 +51,7 @@ namespace HalloDoc.Repository.Implement
         public bool CheckAspPassword(string email, string pass)
         {
             var Asppass = _context.Aspnetusers.FirstOrDefault(u => u.Email == email).Passwordhash;
-            if(Crypto.VerifyHashedPassword(Asppass, pass))
+            if (Crypto.VerifyHashedPassword(Asppass, pass))
             {
                 return true;
             }
@@ -70,6 +70,30 @@ namespace HalloDoc.Repository.Implement
         {
             var user = _context.Aspnetusers.Include(x => x.Aspnetuserrole).ThenInclude(x => x.Role).FirstOrDefault(x => x.Email == email);
             return user;
+        }
+
+        public int getroleIdFromEmail(string email, int aspnetRole)
+        {
+            if(aspnetRole == 1)
+            {
+                return _context.Admins.FirstOrDefault(x => x.Email == email).Roleid.Value;
+            }
+            else
+            {
+                return _context.Physicians.FirstOrDefault(x => x.Email == email).Roleid.Value;
+            }
+        }
+
+
+        public string getMenulistFromRole(int roleId)
+        {
+            string menulist = null;
+            Role role = _context.Roles.Include(x => x.Rolemenus).ThenInclude(x => x.Menu).FirstOrDefault(x => x.Roleid == roleId);
+            foreach(var item in role.Rolemenus)
+            {
+                menulist += item.Menu.Name + ", ";
+            }
+            return menulist;
         }
 
         public int getAspId(string email)
@@ -318,7 +342,7 @@ namespace HalloDoc.Repository.Implement
                 var msgOption = new CreateMessageOptions(new PhoneNumber("+918866773923"));
                 msgOption.From = new PhoneNumber(_config["Twilio:Mobile"]);
                 msgOption.Body = msg;
-                
+
                 var twilioMessage = MessageResource.Create(msgOption);
                 return null;
             }

@@ -1,0 +1,818 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HalloDoc.Entity.AdminTab.PhysicianProfileViewModel;
+
+
+@{
+    ViewData["Title"] = "My profile";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+<div class="MainContent pt-0 min-vh-100">
+    <partial name="partial/AdminNavTab" />
+
+    <div class="HContainer m-auto">
+        <div class="d-flex justify-content-between mt-4">
+            <h4> My Profile </h4>
+            <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="Provider">
+                <strong class="pe-2">&lt Back</strong>
+            </a>
+        </div>
+
+        <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+            <div class="mb-4">
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#reqAdminModal">Request To Admin</button>
+                </div>
+                <div class="modal fade" id="reqAdminModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog  modal-dialog-centered">
+                        <div class="modal-content rounded-4">
+                            <div class="modal-header bg-info p-2">
+                                <h1 class="modal-title fs-5 text-light ms-2" id="exampleModalLabel">Request To Administtor</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <span> Need to send message to edit </span>
+                                <div class="text-center pt-2">
+                                    <div class="form-floating mt-2">
+                                        <textarea type="text" class="form-control bg-transparent h-25"
+                                                  placeholder="Detail info" id="reqNote" rows="3" aria-label="Detail info"
+                                                  aria-describedby="button-addon2"></textarea>
+                                        <label for="ms-3 text-info"> Message</label>
+                                    </div>
+                                </div>
+
+                                <p class="popupMsg text-danger m-0"></p>
+                            </div>
+                            <div class="modal-footer p-1">
+                                <button type="submit" class="btn btn-secondary btn-info text-light SendReqAdmin" data-reqid="@Model"> Send </button>
+                                <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
+                                <div class="BackOn d-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                <input class="Phyid d-none" value="@Model.PhysicianCustom.Physicianid" />
+                <p class="Addmsg text-center"></p>
+                <h5>Account Information</h5>
+                <div class="row form-floating">
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="text" class="form-control bg-transparent" placeholder="username" asp-for="physician.Aspnetuser.Username" disabled>
+                        <label class="ms-3">User Name</label>
+                    </div>
+                    <div class="col-md-6 form-floating mt-2">
+                        <input type="password" class="form-control bg-transparent pass" placeholder="pass">
+                        <label class="ms-3">Password</label>
+                        <span class="pass-error text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end mt-4 mb-4">
+                <button type="submit" class="btn btn-outline-info changePass">Reset Password</button>
+            </div>
+
+            <form id="Formdata1" novalidate class="needs-validation">
+                <div class="mt-4 mb-4">
+                    <h5>Physician Information</h5>
+                    <input type="text" class="form-control bg-transparent d-none" placeholder="firstNmae" asp-for="PhysicianCustom.Physicianid">
+                    <div class="row form-floating">
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent AdIn fname" placeholder="firstNmae" asp-for="PhysicianCustom.Firstname">
+                            <label class="ms-3">First Name</label>
+                            <span asp-validation-for="PhysicianCustom.Firstname" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="PhysicianCustom.Lastname">
+                            <label class="ms-3">Last Name</label>
+                            <span asp-validation-for="PhysicianCustom.Lastname" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="email" class="form-control bg-transparent" id="email" placeholder="email" asp-for="PhysicianCustom.Email">
+                            <label class="ms-3">Email</label>
+                            <span asp-validation-for="PhysicianCustom.Email" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="number" id="phone1" class="form-control bg-transparent AdIn" style="height:58px" asp-for="PhysicianCustom.Mobile" />
+                            <span asp-validation-for="PhysicianCustom.Mobile" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent AdIn" placeholder="licence" asp-for="PhysicianCustom.Medicallicense">
+                            <label class="ms-3">Medical Licencse</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent AdIn" placeholder="npi" asp-for="PhysicianCustom.Npinumber">
+                            <label class="ms-3">NPI Number</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            @foreach (var reg in Model.Regions)
+                            {
+                                <div class="form-check form-check-inline">
+                                    <input name="checkReg" id="@reg.Regionid-s" class="form-check-input AdIn checkb" type="checkbox" value="@reg.Regionid">
+                                    <label>@reg.Name</label>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex d-none justify-content-end mt-4 mb-4">
+                    <button id="editbtn1" type="button" class="btn btn-info me-4" onclick="editEnable1()">Edit</button>
+                    <button type="submit" id="submitbtn1" class="btn btn-info d-none ps-4 pe-4 me-3">Submit</button>
+                    <button id="cancelbtn1" type="button" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable1()">Cancel</button>
+                </div>
+            </form>
+
+            <form id="Formdata2" novalidate class="needs-validation">
+                <div class="mt-4 mb-4">
+                    <h5>Mailing & Billing Information</h5>
+                    <div class="row form-floating">
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent Adad" placeholder="add1" asp-for="physician.Address1">
+                            <label class="ms-3">Address 1</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent Adad" placeholder="add2" asp-for="physician.Address2">
+                            <label class="ms-3">Address 2</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2 ">
+                            <input type="text" class="form-control bg-transparent Adad" placeholder="city" asp-for="physician.City">
+                            <label class="ms-3">City</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="hidden" asp-for="physician.Regionid" id="regionIdHidden" value="@Model.physician.Regionid" />
+                            <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRegionId(this)">
+                                @foreach (var state in Model.Regions)
+                                {
+                                    if (state.Regionid == Model.physician.Regionid)
+                                    {
+                                        <option value="@state.Regionid" selected>@state.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@state.Regionid">@state.Name</option>
+                                    }
+                                }
+                            </select>
+                            <label class="ms-2" for="floatingSelect">state</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" maxlength="6" class="form-control bg-transparent Adad" placeholder="zipCode" asp-for="physician.Zip">
+                            <label class="ms-3">Zip Code</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" id="phone2" class="form-control bg-transparent Adad" style="height:58px" asp-for="physician.Altphone" />
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex d-none justify-content-end mt-4 mb-4">
+                    <button id="editbtn2" type="button" class="btn btn-info me-4" onclick="editEnable2()">Edit</button>
+                    <button type="submit" id="submitbtn2" class="btn btn-info d-none ps-4 pe-4 me-3">Submit</button>
+                    <button id="cancelbtn2" type="button" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable2()">Cancel</button>
+                </div>
+            </form>
+
+            <form id="Formdata3" novalidate class="needs-validation" method="post" enctype="multipart/form-data">
+                <div class="mt-4 mb-4">
+                    <h5>Provider Profile</h5>
+                    <div class="row form-floating">
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent phybn edi3" placeholder="firstNmae" asp-for="physician.Businessname">
+                            <label class="ms-3">Bussiness Name</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="Email" class="form-control bg-transparent phybw edi3" placeholder="lastname" asp-for="physician.Businesswebsite">
+                            <label class="ms-3">Bussiness Website</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <div class="d-flex m-auto">
+                                <div class="p-0 w-100">
+                                    <input type="text" class="form-control bg-transparent sfile" id="selectedFile" placeholder="Select Photo" disabled>
+                                    <label class="ms-3"></label>
+                                </div>
+                                <div>
+                                    <label class="btn btn-outline-info d-flex">
+                                        <input type="file" class="uploadPhoto fileUplod" style="display: none;" id="FileInput" name="Photo">
+                                        <i class="bi bi-cloud-arrow-up border-info"></i>
+                                        <span class="upload_txt ms-2 edi3">Upload</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <div class="d-flex m-auto">
+                                <div class="p-0 w-75">
+                                    <input type="text" class="form-control bg-transparent sfile" id="selectedFiles" placeholder="Select Signature" disabled>
+                                    <label class="ms-3"></label>
+                                </div>
+                                <div>
+                                    <label class="btn btn-outline-info d-flex ">
+                                        <input type="file" class="uploadSign fileUplod" style="display: none;" id="FileInputs" name="Sign">
+                                        <i class="bi bi-cloud-arrow-up border-info"></i>
+                                        <span class="upload_txt ms-2 edi3">Upload</span>
+                                    </label>
+                                </div>
+                                <button type="button" class="btn btn-info cretesign text-light ms-2 d-flex h-25 edi3"><i class="bi bi-pen"></i> Create </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex d-none justify-content-end mt-4 mb-4">
+                    <button id="editbtn3" type="button" class="btn btn-info me-4" onclick="editEnable3()">Edit</button>
+                    <button type="submit" id="submitbtn3" class="btn btn-info d-none ps-4 pe-4 me-3">Submit</button>
+                    <button id="cancelbtn3" type="button" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable3()">Cancel</button>
+                </div>
+            </form>
+            <hr />
+
+            <h5>Onboarding</h5>
+            <form asp-action="Phydocument" asp-route-phid="@Model.PhysicianCustom.Physicianid" asp-controller="AdminTab" method="post" enctype="multipart/form-data">
+                <table class="w-50">
+                    <tr>
+                        <td>
+                            <input class="form-check-input AgreeCheck ms-2" type="checkbox" disabled />
+                        </td>
+                        <td>
+                            <p class="ms-3 me-2 my-auto">Independent Contractor Agreement</p>
+                            <span class="AgreePath d-none">@Model.DocFile[0]</span>
+                        </td>
+                        <td>
+                            <span>
+                                <label class="btn btn-info pt-0 pb-0">
+                                    <input type="file" class="AgreeFile fileonBoard" style="display: none;" id="FileInput1" name="ContractorAgreement">
+                                    <span class="upload_txt text-light edi3">Upload</span>
+                                </label>
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn1 d-none" onclick="loadFileContent1()"> View </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-check-input BackCheck ms-2" type="checkbox" disabled />
+                        </td>
+                        <td>
+                            <p class="ms-3 me-2 my-auto">Background Check</p>
+                            <span class="BackPath d-none">@Model.DocFile[1]</span>
+                        </td>
+                        <td>
+                            <span>
+                                <label class="btn btn-info pt-0 pb-0">
+                                    <input type="file" class="BackFile fileonBoard" style="display: none;" id="FileInput2" name="Background">
+                                    <span class="upload_txt text-light edi3">Upload</span>
+                                </label>
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn2 d-none" onclick="loadFileContent2()"> View </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-check-input HIPAACheck ms-2" type="checkbox" disabled />
+                        </td>
+                        <td>
+                            <p class="ms-3 me-2 my-auto">HIPAA Compliance</p>
+                            <span class="HIPAAPath d-none">@Model.DocFile[2]</span>
+                        </td>
+                        <td>
+                            <span>
+                                <label class="btn btn-info pt-0 pb-0">
+                                    <input type="file" class="HIPAAFile fileonBoard" style="display: none;" id="FileInput3" name="HIPAA">
+                                    <span class="upload_txt text-light edi3">Upload</span>
+                                </label>
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn3 d-none" onclick="loadFileContent3()"> View </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-check-input DiscCheck ms-2" type="checkbox" disabled />
+                        </td>
+                        <td>
+                            <p class="ms-3 me-2 my-auto">Non-discloure Agreement</p>
+                            <span class="DiscPath d-none">@Model.DocFile[3]</span>
+
+                        </td>
+                        <td>
+                            <span>
+                                <label class="btn btn-info pt-0 pb-0">
+                                    <input type="file" class="DiscFile fileonBoard" style="display: none;" id="FileInput4" name="discloure">
+                                    <span class="upload_txt text-light edi3">Upload</span>
+                                </label>
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn4 d-none" onclick="loadFileContent4()"> View </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-check-input LicCheck ms-2" type="checkbox" disabled />
+                        </td>
+                        <td>
+                            <p class="ms-3 me-2 my-auto">License Document</p>
+                            <span class="LicPath d-none">@Model.DocFile[4]</span>
+                        </td>
+                        <td>
+                            <span>
+                                <label class="btn btn-info pt-0 pb-0">
+                                    <input type="file" class="LicFile fileonBoard" style="display: none;" id="FileInput5" name="License">
+                                    <span class="upload_txt text-light edi3">Upload</span>
+                                </label>
+                            </span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info pt-0 pb-0 text-light viewBtn5 d-none" onclick="loadFileContent5()"> View </button>
+                        </td>
+                    </tr>
+                </table>
+
+                <hr />
+
+                <div class="d-flex d-none justify-content-end">
+                    <button type="submit" class="btn btn-success text-light savePhy">Save</button>
+                    <button type="button" class="btn btn-danger text-light ms-3 deletePhy">Delete Account</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@foreach (var reg in Model.phyReg)
+{
+    <script>
+        $(document).ready(function () {
+            $('#@reg-s').prop('checked', true);
+            console.log(reg);
+        });
+    </script>
+}
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/js/contact-api.js" asp-append-version="true"></script>
+<script asp-append-version="true">
+    $('.SendReqAdmin').click(function(){
+        var note = $('#reqNote').val().trim();
+        if(note != ''){
+            $('#reqAdminModal').remove();
+            $('.modal-backdrop').remove();
+            $('body').css({
+                'overflow': 'visible',
+                'padding-right': '0'
+            });
+            Swal.fire({
+                title: "Request Send",
+                text: "wait for admin responce to change!",
+                icon: "success"
+            });
+        }
+        else{
+            $('.popupMsg').text("add note");
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+<script asp-append-version="true">
+    let cflag = document.querySelectorAll('.iti--allow-dropdown');
+    cflag.forEach(item => {
+        item.classList.add('h-75');
+    })
+    document.getElementById('FileInput').addEventListener('change', function () {
+        document.getElementById('selectedFile').value = this.files[0].name;
+    })
+    document.getElementById('FileInputs').addEventListener('change', function () {
+        document.getElementById('selectedFiles').value = this.files[0].name;
+    })
+
+    function updateRegionId(selectElement) {
+        const selectedRegionId = selectElement.value;
+        document.getElementById('regionIdHidden').value = selectedRegionId;
+    }
+
+    let inputs = document.querySelectorAll('input');
+    let select = document.querySelectorAll('select');
+    let fileonBoard = document.querySelectorAll('.fileonBoard');
+    inputs.forEach(input => {
+        input.disabled = true;
+        input.classList.remove("bg-transparent");
+    });
+    select.forEach(select => {
+        select.disabled = true;
+        select.classList.remove("bg-transparent");
+    })
+    let reghide = document.getElementById('regionIdHidden');
+    reghide.disabled = false;
+
+    let pass = document.querySelector('.pass');
+    pass.disabled = false;
+    pass.classList.add("bg-transparent");
+
+    fileonBoard.forEach(item => {
+        item.disabled = false;
+    });
+
+    function editEnable1() {
+        event.preventDefault();
+        const edit = document.getElementById('editbtn1');
+        const submit = document.getElementById('submitbtn1');
+        const cancel = document.getElementById('cancelbtn1');
+        const checkb = document.querySelectorAll('.checkb');
+        edit.classList.add('d-none');
+        submit.classList.remove('d-none');
+        cancel.classList.remove('d-none');
+
+        let AdIn = document.querySelectorAll('.AdIn');
+        AdIn.forEach(AdIn => {
+            AdIn.disabled = false;
+            AdIn.classList.add("bg-transparent");
+        });
+        checkb.forEach(checkb => {
+            checkb.classList.remove("bg-transparent");
+        });
+    }
+
+    function cancelEnable1() {
+        event.preventDefault();
+        const edit = document.getElementById('editbtn1');
+        const submit = document.getElementById('submitbtn1');
+        const cancel = document.getElementById('cancelbtn1');
+        edit.classList.remove('d-none');
+        submit.classList.add('d-none');
+        cancel.classList.add('d-none');
+
+        let AdIn = document.querySelectorAll('.AdIn');
+        AdIn.forEach(AdIn => {
+            AdIn.disabled = true;
+            AdIn.classList.remove("bg-transparent");
+        });
+    }
+
+    function editEnable2() {
+        event.preventDefault();
+        const edit = document.getElementById('editbtn2');
+        const submit = document.getElementById('submitbtn2');
+        const cancel = document.getElementById('cancelbtn2');
+        const reg = document.querySelector('.selectReg');
+        edit.classList.add('d-none');
+        submit.classList.remove('d-none');
+        cancel.classList.remove('d-none');
+        let Adad = document.querySelectorAll('.Adad');
+        Adad.forEach(Adad => {
+            Adad.disabled = false;
+            Adad.classList.add("bg-transparent");
+        });
+        reg.disabled = false;
+        reg.classList.add("bg-transparent");
+    }
+
+    function cancelEnable2() {
+        event.preventDefault();
+        const edit = document.getElementById('editbtn2');
+        const submit = document.getElementById('submitbtn2');
+        const cancel = document.getElementById('cancelbtn2');
+        const reg = document.querySelector('.selectReg');
+        edit.classList.remove('d-none');
+        submit.classList.add('d-none');
+        cancel.classList.add('d-none');
+        let Adad = document.querySelectorAll('.Adad');
+        Adad.forEach(Adad => {
+            Adad.disabled = true;
+            Adad.classList.remove("bg-transparent");
+        });
+        reg.disabled = true;
+        reg.classList.remove("bg-transparent");
+    }
+
+    function editEnable3() {
+        const edit = document.getElementById('editbtn3');
+        const submit = document.getElementById('submitbtn3');
+        const cancel = document.getElementById('cancelbtn3');
+        const sfile = document.querySelectorAll('.sfile');
+        edit.classList.add('d-none');
+        submit.classList.remove('d-none');
+        cancel.classList.remove('d-none');
+        let item = document.querySelectorAll('.edi3');
+        let signBtn = document.querySelector('.cretesign');
+        item.forEach(item => {
+            item.disabled = false;
+            item.classList.add("bg-transparent");
+        });
+        sfile.forEach(sfile => {
+            sfile.classList.add("bg-transparent");
+        })
+        const upfile = document.querySelectorAll('.fileUplod');
+        upfile.forEach(item => {
+            item.disabled = false;
+        })
+        signBtn.classList.remove("bg-transparent");
+        textarea.disabled = false;
+        textarea.classList.add("bg-transparent");
+    }
+
+    function cancelEnable3() {
+        const edit = document.getElementById('editbtn3');
+        const submit = document.getElementById('submitbtn3');
+        const cancel = document.getElementById('cancelbtn3');
+        const sfile = document.querySelectorAll('.sfile');
+        edit.classList.remove('d-none');
+        submit.classList.add('d-none');
+        cancel.classList.add('d-none');
+        let item = document.querySelectorAll('.edi3');
+        item.forEach(item => {
+            item.disabled = true;
+            item.classList.remove("bg-transparent");
+        });
+        sfile.forEach(sfile => {
+            sfile.classList.remove("bg-transparent");
+        })
+        textarea.disabled = true;
+        textarea.classList.remove("bg-transparent");
+    }
+
+    $(document).ready(function () {
+        if ($('.AgreePath').text() != '') {
+            $('.AgreeCheck').prop('checked', true);
+            $('.AgreeCheck').prop('disabled', false);
+            $('.viewBtn1').removeClass('d-none');
+            const fileList = new DataTransfer();
+            const blob = new Blob([$('.AgreePath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.AgreePath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput1').files = fileList.files;
+        }
+
+        if ($('.BackPath').text() != '') {
+            $('.BackCheck').prop('checked', true);
+            $('.BackCheck').prop('disabled', false);
+            $('.viewBtn2').removeClass('d-none');
+            const fileList = new DataTransfer();
+            const blob = new Blob([$('.BackPath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.BackPath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput2').files = fileList.files;
+        }
+
+        if ($('.HIPAAPath').text() != '') {
+            $('.HIPAACheck').prop('checked', true);
+            $('.HIPAACheck').prop('disabled', false);
+            $('.viewBtn3').removeClass('d-none');
+            const fileList = new DataTransfer();
+            const blob = new Blob([$('.HIPAAPath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.HIPAAPath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput3').files = fileList.files;
+        }
+
+        if ($('.DiscPath').text() != '') {
+            $('.DiscCheck').prop('checked', true);
+            $('.DiscCheck').prop('disabled', false);
+            $('.viewBtn4').removeClass('d-none');
+            const fileList = new DataTransfer();
+            const blob = new Blob([$('.DiscPath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.DiscPath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput4').files = fileList.files;
+        }
+
+        if ($('.LicPath').text() != '') {
+            $('.LicCheck').prop('checked', true);
+            $('.LicCheck').prop('disabled', false);
+            $('.viewBtn5').removeClass('d-none');
+            const fileList = new DataTransfer();
+            const blob = new Blob([$('.LicPath').text()], { type: 'application/octet-stream' });
+            const fileName = 'file.' + $('.LicPath').text().split('.')[2];
+            const file = new File([blob], fileName, { type: 'application/octet-stream' });
+            fileList.items.add(file);
+            document.getElementById('FileInput5').files = fileList.files;
+        }
+    });
+
+    $('.AgreeFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.AgreeCheck').prop('checked', true);
+            $('.AgreeCheck').prop('disabled', false);
+            $('.viewBtn1').removeClass('d-none');
+        }
+    });
+    function loadFileContent1() {
+        const fileInput = document.getElementById('FileInput1');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
+    $('.BackFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.BackCheck').prop('checked', true);
+            $('.BackCheck').prop('disabled', false);
+            $('.viewBtn2').removeClass('d-none');
+        }
+    });
+    function loadFileContent2() {
+        const fileInput = document.getElementById('FileInput2');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
+    $('.HIPAAFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.HIPAACheck').prop('checked', true);
+            $('.HIPAACheck').prop('disabled', false);
+            $('.viewBtn3').removeClass('d-none');
+        }
+    });
+    function loadFileContent3() {
+        const fileInput = document.getElementById('FileInput3');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
+    $('.DiscFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.DiscCheck').prop('checked', true);
+            $('.DiscCheck').prop('disabled', false);
+            $('.viewBtn4').removeClass('d-none');
+        }
+    });
+    function loadFileContent4() {
+        const fileInput = document.getElementById('FileInput4');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
+    $('.LicFile').change(function () {
+        if ($(this).val() !== '') {
+            $('.LicCheck').prop('checked', true);
+            $('.LicCheck').prop('disabled', false);
+            $('.viewBtn5').removeClass('d-none');
+        }
+    });
+    function loadFileContent5() {
+        const fileInput = document.getElementById('FileInput5');
+        const file = fileInput.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            window.open(objectUrl, '_blank');
+        } else {
+            alert('No file selected.');
+        }
+    }
+
+</script>
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+
+        var phid = $('.Phyid').val();
+
+        $('.changePass').click(function () {
+            var pass = $('.pass').val().trim();
+            if (pass != '') {
+                $.ajax({
+                    url: '/AdminTab/ResetPhyPass',
+                    method: 'POST',
+                    data: { pass: pass, phid: phid },
+                    success: function (response) {
+                        $('.pass-error').text("");
+                        if (response.value == "ok") {
+                            $('.Addmsg').text("Password Changed").addClass('text-success');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+            else {
+                $('.pass-error').text("Add Password to change");
+            }
+        });
+
+        $('#Formdata1').submit(function (e) {
+            e.preventDefault();
+            var data = $("#Formdata1").serialize();
+            var phid = $('.Phyid').val();
+            data += "&phid=" + phid;
+            if ($('.fname').val().trim() != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '/AdminTab/UpdatePhyProfile',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: data,
+                    success: function (response) {
+                        if (response.value == "changed") {
+                            window.location.reload();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+        $('#Formdata2').submit(function (e) {
+            e.preventDefault();
+            var data = $("#Formdata2").serialize();
+            var phid = $('.Phyid').val();
+            data += "&phid=" + phid;
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdatePhyLoc',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: data,
+                success: function (response) {
+                    if (response.value == "changed") {
+                        window.location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+        $('#Formdata3').submit(function (e) {
+            e.preventDefault();
+
+            var formData = new FormData();
+            formData.append('phid', $('.Phyid').val());
+            formData.append('BusinessN', $('.phybn').val());
+            formData.append('BusinessW', $('.phybw').val());
+            formData.append('Note', document.querySelector('.phyAdmNote').value);
+            formData.append('Photo', $('.uploadPhoto')[0].files[0]);
+            formData.append('Sign', $('.uploadSign')[0].files[0]);
+
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdatePhyAdditional',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.value == "changed") {
+                        window.location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.deletePhy').click(function () {
+            var phid = $('.Phyid').val();
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/DeletePhy',
+                data: { phid: phid },
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

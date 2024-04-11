@@ -216,6 +216,7 @@ namespace HalloDoc.Repository.Implement
                 Email = email,
                 Phonenumber = phoneNum,
                 Isactive = new BitArray(new bool[] { true}),
+                Createddate = System.DateTime.Now,
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
             _context.Blockrequests.Add(req);
@@ -450,6 +451,7 @@ namespace HalloDoc.Repository.Implement
                 Address2 = model.Address2,
                 City = model.City,
                 Regionid = model.regionId,
+                Roleid = model.roleId,
                 Zip = model.Zipcode,
                 Altphone = model.AltPhonenumber,
                 Createdby = cretedBy,

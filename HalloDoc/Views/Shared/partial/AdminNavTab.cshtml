@@ -46,8 +46,8 @@
                aria-selected="true" href="#">Invoice</a>
             <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Scheduling" ? "underLine" : "")" id="dashTab"
                aria-selected="true" asp-action="Scheduling" asp-controller="AdminTab">My Schedule</a>
-            <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "MyProfile" ? "underLine" : "")" id="dashTab"
-               aria-selected="true" asp-action="Dashbord" asp-controller="AdminDash">My Profile</a>
+            <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Profile" ? "underLine" : "")" id="dashTab"
+               aria-selected="true" asp-action="Profile" asp-controller="Physician">My Profile</a>
         }
     </div>
 </nav>

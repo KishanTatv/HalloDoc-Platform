@@ -18,7 +18,7 @@
 
 
     <div class="dashHead">
-        <div class="container-fluid overflow-hidden">
+        <div class="container-fluid overflow-hidden" id="partialTadStatus">
 
             <div class="row g-3 nav pt-4 mb-3">
                 <div class="col-4 col-sm-4 col-lg-2 active">
@@ -27,7 +27,7 @@
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_new.jpg">
                             <strong class="Dash-name">NEW</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[0] </h5>
+                            <h5 class="NCount Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[0] </h5>
                         </div>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_pending.jpg">
                             <strong class="Dash-name">PENDING</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[1] </h5>
+                            <h5 class="PCount Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[1] </h5>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_active.png">
                             <strong class="Dash-name">ACTIVE</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[2] </h5>
+                            <h5 class="ACount Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[2] </h5>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                             <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                  src="~/image/Dash_conclude.png">
                             <strong class="Dash-name">CONCLUDE</strong>
-                            <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[3] </h5>
+                            <h5 class="CCount Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[3] </h5>
                         </div>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                                 <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                      src="~/image/Dash_toclose.png">
                                 <strong class="Dash-name">To CLOSE</strong>
-                                <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
+                                <h5 class="TCount Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[4] </h5>
                             </div>
                         </div>
                     </div>
@@ -80,7 +80,7 @@
                                 <img class="dashIcon rounded-circle w-5 p-1 text-inline"
                                      src="~/image/Dash_unpaid.png">
                                 <strong class="Dash-name">UNPAID</strong>
-                                <h5 class="Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
+                                <h5 class="UCount Dash-num fw-bold m-0 me-5"> @Model.ToatlCount[5] </h5>
                             </div>
                         </div>
                     </div>
@@ -424,6 +424,23 @@
 
         $(document).on('click', '.BackOn', function () {
             var id = getIdFromCard();
+            $.ajax({
+                url: '/AdminDash/backOnCount',
+                method: 'GET',
+                success: function (response) {
+                    $('.NCount').text(response.value[0]);
+                    $('.PCount').text(response.value[1]);
+                    $('.ACount').text(response.value[2]);
+                    $('.CCount').text(response.value[3]);
+                    $('.TCount').text(response.value[4]);
+                    $('.UCount').text(response.value[5]);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+
             $.ajax({
                 url: '/AdminDash/DashbordData',
                 method: 'POST',

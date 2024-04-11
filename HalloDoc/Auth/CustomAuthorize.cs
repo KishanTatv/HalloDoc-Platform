@@ -17,10 +17,12 @@ namespace HalloDoc.Repository
     public class CustomAuthorize : Attribute, IAuthorizationFilter
     {
         private readonly string _role;
+        private readonly string _page;
 
-        public CustomAuthorize(string role)
+        public CustomAuthorize(string role, string page)
         {
             _role = role;
+            _page = page;
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
@@ -59,7 +61,14 @@ namespace HalloDoc.Repository
             }
 
             //var role = context.HttpContext.Request.Cookies["CookieRole"];
-            if (roleClaims.Value.Contains(_role) || string.IsNullOrWhiteSpace(_role))
+            if (!_role.Contains(roleClaims.Value) || string.IsNullOrWhiteSpace(_role))
+            {
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "PatientLogin" }));
+                return;
+            }
+
+            var menuList = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "Menu");
+            if (!menuList.Value.Contains(_page))
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "PatientLogin" }));
                 return;

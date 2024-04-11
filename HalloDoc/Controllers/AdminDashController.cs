@@ -17,7 +17,7 @@ using Twilio.Rest.Api.V2010.Account;
 
 namespace HalloDoc.Controllers
 {
-    [CustomAuthorize("Admin:Provider")]
+    [CustomAuthorize("Admin:Provider", "Dashboard")]
     public class AdminDashController : Controller
     {
         private readonly ILogger<AdminDashController> _logger;
@@ -35,7 +35,7 @@ namespace HalloDoc.Controllers
             _Physician = physician;
         }
 
-
+       
         public IActionResult Index()
         {
             return View();
@@ -112,6 +112,18 @@ namespace HalloDoc.Controllers
             var dashData = new DashTable { Tdata = Req.Tdata.ToList(), Regions = region };
 
             return PartialView("TablePartial", dashData);
+        }
+
+
+        public IActionResult backOnCount()
+        {
+            int phyFilterId = 0;
+            if (Request.Cookies["CookieRole"] == "2")
+            {
+                phyFilterId = _Genral.getPhyId(Request.Cookies["CookieEmail"]);
+            }
+            var Tcount = _Admin.TotalCountPatient(phyFilterId);
+            return Json(new { value = Tcount });
         }
         #endregion
 

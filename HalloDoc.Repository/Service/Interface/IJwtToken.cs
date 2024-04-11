@@ -10,7 +10,7 @@ namespace HalloDoc.Repository.Service.Interface
 {
     public interface IJwtToken
     {
-        string GenrateJwtToken(Aspnetuser aspnetuser);
+        string GenrateJwtToken(Aspnetuser aspnetuser, string menuList);
 
         bool ValidateToken(string token, out JwtSecurityToken jwtSecurityToken);
     }

@@ -35,7 +35,7 @@
                     <div class="col-md-6 form-floating mt-3">
                         <input type="hidden" asp-for="Profession" id="ProfessionId" />
                         <select class="form-select selectProfession" aria-label="Floating label select" onchange="updateId(this)">
-                            <option value="0" selected> Select Profession  </option>
+                            <option value="0" selected disabled> Select Profession  </option>
                             @foreach (var item in Model.Healthprofessionaltypes)
                             {
                                 @if (Model.Profession == item.Healthprofessionalid)

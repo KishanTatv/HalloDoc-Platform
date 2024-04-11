@@ -16,6 +16,8 @@ namespace HalloDoc.Repository.Interface
         bool CheckExistAspUser(string email);
         bool CheckAspPassword(string email, string pass);
         Aspnetuser getUserRole(string email);
+        int getroleIdFromEmail(string email, int aspnetRole);
+        string getMenulistFromRole(int roleId);
 
         int getAspId(string email);
         int getPhyId(string email);

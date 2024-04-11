@@ -22,7 +22,7 @@ namespace HalloDoc.Repository.Service
             _Iconfig = config;
         }
 
-        public string GenrateJwtToken(Aspnetuser aspnetuser)
+        public string GenrateJwtToken(Aspnetuser aspnetuser, string menuList)
         {
             var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Iconfig["Jwt:Key"]));
             var credintal = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
@@ -30,7 +30,8 @@ namespace HalloDoc.Repository.Service
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email, aspnetuser.Email),
-                new Claim(ClaimTypes.Role, aspnetuser.Aspnetuserrole.Role.Name)
+                new Claim(ClaimTypes.Role, aspnetuser.Aspnetuserrole.Role.Name),
+                new Claim("Menu", menuList),
             };
 
             var token = new JwtSecurityToken(

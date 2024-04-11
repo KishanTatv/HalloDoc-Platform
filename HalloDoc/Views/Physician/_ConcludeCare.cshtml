@@ -1,0 +1,145 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<HalloDoc.Entity.Models.Request>;
+
+@{
+    Layout = "";
+}
+
+<div class="MainContent pt-0 min-vh-100">
+    <div class="tab-content" id="nav-tabContent">
+
+        <div class="HContainer m-auto pt-4">
+            <div class="d-flex justify-content-between align-content-center">
+                <h4 class="m-0"> Conclude Care </h4>
+                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info BackOn">
+                    <strong class="pe-2">&lt Back</strong>
+                </a>
+            </div>
+
+            <div class=" rounded shadow p-4 rounded-3">
+                <div class="mb-4">
+                    <p class="text-success text-center m-0"></p>
+                    <h5>Patient Name</h5>
+                    <div>
+                        <span class="text-info"> @Model.FirstOrDefault().Requestclients.FirstOrDefault().Firstname </span> <span class="text-inline">(@Model.FirstOrDefault().Confirmationnumber)</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-content-center mt-3 mb-4">
+                        <h5>Encounter Forms</h5>
+                        <form id="uploadDataFile">
+                            <div class="d-flex m-auto">
+                                <label class="btn btn-outline-info d-flex ">
+                                    <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
+                                    <input id="SpBtnUpload" data-reqid="@Model.FirstOrDefault().Requestid" style="display:none" />
+                                    <i class="bi bi-cloud-arrow-up border-info"></i>
+                                    <span class="upload_txt ms-2">Upload</span>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <td scope="col">Documents</td>
+                                    <td scope="col" class="d-flex justify-content-end pe-4">Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.FirstOrDefault().Requestwisefiles)
+                                {
+                                    <tr>
+                                        <td><p><i class="bi bi-file-earmark-pdf-fill"></i> @item.Filename</p></td>
+                                        <td>
+                                            <span class="d-flex justify-content-end pe-4">
+                                                <a class="btn btn-outline-info ps-1 pe-1 p-0" asp-route-file="@item.Filename" asp-controller="Home" asp-action="DownloadDocument">
+                                                    <i class="bi bi-cloud-check"></i>
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <div class="mt-4">
+                        <div class="form-floating">
+                            <textarea type="text" class="form-control bg-transparent h-100 providerNote"
+                                      placeholder="Detail info" id="Pronote" name="note" rows="3" aria-label="Detail info" data-adminote=""
+                                      aria-describedby="button-addon2"></textarea>
+                            <label for="ms-3 text-info">Provider Notes</label>
+                        </div>
+                        <p class="text-danger m-0">
+                            @if (TempData["msg"] != null)
+                            {
+                                @TempData["msg"]
+                            }
+                        </p>
+                        <div class="d-flex justify-content-end mt-4 mb-2">
+                            <div class="btn btn-info text-light FinalConclude" data-reqid="@Model.FirstOrDefault().Requestid"> Conclude Care </div>
+                            <div class="BackOn d-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+    $("#FileInput").change(function (e) {
+        e.preventDefault();
+        var reqid = $("#SpBtnUpload").data('reqid');
+        var files = this.files;
+        let filedata = new FormData();
+        if (files.length > 0) {
+            for (var x = 0; x < files.length; x++) {
+                filedata.append('DocFile', files[x]);
+            }
+        }
+        filedata.append('id', reqid);
+
+        $.ajax({
+            url: '/Home/UploadDoc',
+            method: 'POST',
+            data: filedata,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                $("#partial").empty();
+                $("#partial").html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $(".FinalConclude").click(function () {
+        var note = $('#Pronote').val().trim();
+        var reqid = $(this).data('reqid');
+        if (note != '') {
+            $.ajax({
+                url: '/Physician/ConcludeFinal',
+                method: 'POST',
+                data: { note: note, reqid: reqid },
+                success: function (response) {
+                    $('.BackOn').click();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        } else {
+            $('.text-danger').text("Please add Note");
+        }
+    });
+
+</script>
