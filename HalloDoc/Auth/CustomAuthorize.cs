@@ -70,7 +70,7 @@ namespace HalloDoc.Repository
             var menuList = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "Menu");
             if (!menuList.Value.Contains(_page))
             {
-                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Patient", Action = "PatientLogin" }));
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary(new { Controller = "Home", Action = "AccessDenied" }));
                 return;
             }
 
