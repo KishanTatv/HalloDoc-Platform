@@ -7,13 +7,10 @@ using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
-using DocumentFormat.OpenXml.Drawing;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using AspNetCoreHero.ToastNotification.Abstractions;
-using Twilio.TwiML.Messaging;
-using Twilio.Types;
-using Twilio;
-using Twilio.Rest.Api.V2010.Account;
+using System.Web;
+using Rotativa;
 
 namespace HalloDoc.Controllers
 {
@@ -35,7 +32,7 @@ namespace HalloDoc.Controllers
             _Physician = physician;
         }
 
-       
+
         public IActionResult Index()
         {
             return View();
@@ -589,16 +586,8 @@ namespace HalloDoc.Controllers
             }
             else
             {
-                int AdminId = 0;
-                if (Request.Cookies["CookieRole"] == "1")
-                {
-                    AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
-                }
-                if (Request.Cookies["CookieRole"] == "2")
-                {
-                    AdminId = _Physician.getPhyId(Request.Cookies["CookieEmail"]);
-                }
-                _Admin.AddOrderDetail(vendorid, AdminId, reqid, prescription, refil);
+                int aspId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                _Admin.AddOrderDetail(vendorid, aspId, reqid, prescription, refil);
                 return RedirectToAction("SendOrder", new { reqid = reqid });
             }
         }
@@ -638,9 +627,9 @@ namespace HalloDoc.Controllers
             string link = Url.Action("ReviewAgreement", "Home", new { reqid = reqid }, Request.Scheme);
             string body = $"Hi,<br /><br />Please click on the following link For Agreement :<br /><br />" + link;
             _Genral.SendEmailOffice365(email, subject, body, null);
-            _Genral.addEmailLog(body, subject, email, null, null, reqid, null, null);
+            _Genral.addEmailLog(body, subject, email, null, Convert.ToInt16(Request.Cookies["CookieRole"]), reqid, null, null);
             _Genral.sendSMSwithTwilio(phone, subject + body);
-            _Genral.addSMSLog(body, phone, null, reqid, adminId, null);
+            _Genral.addSMSLog(body, phone, Convert.ToInt16(Request.Cookies["CookieRole"]), reqid, adminId, null);
             return Json(new { value = "done" });
         }
         #endregion

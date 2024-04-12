@@ -136,6 +136,7 @@
 
         <div id="partial">
             @*@Html.Partial("TablePartial")*@
+            <div id="loading"></div>
         </div>
     </div>
 </div>
@@ -197,7 +198,7 @@
             $(".DashCardT").removeClass("ToClose-active");
             $(".DashCardU").removeClass("Unpaid-active");
         }
-         document.querySelector(".dNameCard").innerHTML = "(Pending)";
+        document.querySelector(".dNameCard").innerHTML = "(Pending)";
     }
     function actDash() {
         $(".DashCardN").removeClass("new-active");
@@ -208,7 +209,7 @@
             $(".DashCardT").removeClass("ToClose-active");
             $(".DashCardU").removeClass("Unpaid-active");
         }
-         document.querySelector(".dNameCard").innerHTML = "(Active)";
+        document.querySelector(".dNameCard").innerHTML = "(Active)";
     }
     function conDash() {
         $(".DashCardN").removeClass("new-active");
@@ -219,7 +220,7 @@
             $(".DashCardT").removeClass("ToClose-active");
             $(".DashCardU").removeClass("Unpaid-active");
         }
-         document.querySelector(".dNameCard").innerHTML = "(Conclude)";
+        document.querySelector(".dNameCard").innerHTML = "(Conclude)";
     }
     function tocDash() {
         $(".DashCardN").removeClass("new-active");
@@ -228,7 +229,7 @@
         $(".DashCardC").removeClass("Conclude-active");
         $(".DashCardT").addClass("ToClose-active");
         $(".DashCardU").removeClass("Unpaid-active");
-         document.querySelector(".dNameCard").innerHTML = "(Toclose)";
+        document.querySelector(".dNameCard").innerHTML = "(Toclose)";
     }
     function unpDash() {
         $(".DashCardN").removeClass("new-active");
@@ -237,7 +238,7 @@
         $(".DashCardC").removeClass("Conclude-active");
         $(".DashCardT").removeClass("ToClose-active");
         $(".DashCardU").addClass("Unpaid-active");
-         document.querySelector(".dNameCard").innerHTML = "(Unpaid)";
+        document.querySelector(".dNameCard").innerHTML = "(Unpaid)";
     }
 
     function ExportAllDataClick() {

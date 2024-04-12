@@ -21,3 +21,12 @@ function isPasswordSame() {
     }
 }
 
+//$(document).ready(function () {
+//    $(document).ajaxSend(function () {
+//        $(".loaderOnAjax").fadeIn(250);
+//    });
+//    $(document).ajaxComplete(function () {
+//        $(".loaderOnAjax").fadeOut(250);
+//    });
+//});
+

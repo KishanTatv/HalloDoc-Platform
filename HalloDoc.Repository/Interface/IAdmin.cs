@@ -73,7 +73,7 @@ namespace HalloDoc.Repository.Interface
         List<Healthprofessionaltype> getAllHealthProfession();
         List<Healthprofessional> getHealthProfessionBussiness(int professionTypeId);
         Healthprofessional getVendorDetail(int vendorid);
-        void AddOrderDetail(int vendorid, int adminid, int reqid, string prescription, int refil);
+        void AddOrderDetail(int vendorid, int aspId, int reqid, string prescription, int refil);
 
 
 
@@ -105,6 +105,7 @@ namespace HalloDoc.Repository.Interface
         List<Physician> getAllPhysicianData();
 
         string getPhysicianEmail(int phid);
+        string getPhysicianMobile(int phid);
 
         Physician getPhysicianDetail(int phid);
 

@@ -30,8 +30,12 @@
                 <div class="mb-4">
                     <div class="row">
                         <div class="col-md-2 form-floating mt-2">
-                            <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRoleId(this)">
+                            <select class="form-select selectRole" aria-label="Floating label select">
                                 <option value="0" selected> All  </option>
+                                @foreach (var i in Enum.GetValues(typeof(HalloEnum.HalloMainRole)))
+                                {
+                                    <option value="@((int)i)">@Enum.GetName(typeof(HalloEnum.HalloMainRole), i) </option>
+                                }
                             </select>
                             <label class="ms-3">Search by Role</label>
                         </div>
@@ -39,10 +43,20 @@
                             <input type="text" class="form-control bg-transparent RecName" placeholder="add1">
                             <label class="ms-3">Reciver Name</label>
                         </div>
-                        <div class="col-md-2 form-floating mt-2">
-                            <input type="email" class="form-control bg-transparent EmailChng" placeholder="add1">
-                            <label class="ms-3">Email</label>
-                        </div>
+                        @if (ViewBag.logType == "SMS")
+                        {
+                            <div class="col-md-2 form-floating mt-2">
+                                <input type="number" class="form-control bg-transparent MobileCon" placeholder="add1">
+                                <label class="ms-3">Mobile Number</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-2 form-floating mt-2">
+                                <input type="email" class="form-control bg-transparent EmailChng" placeholder="add1">
+                                <label class="ms-3">Email</label>
+                            </div>
+                        }
                         <div class="col-md-2 form-floating mt-2">
                             <input type="date" class="form-control bg-transparent crDate" placeholder="add1">
                             <label class="ms-3">Created Date</label>
@@ -60,7 +74,7 @@
                     </div>
                 </div>
                 <div>
-                    <div class="LogPartial"></div>
+                    <div class="LogPartial"><div id="loading"></div></div>
 
                 </div>
             </div>
@@ -93,13 +107,15 @@
     $('.serchBtn').click(function () {
         var checklog = $('.viewbag').val();
         var name = $('.RecName').val().trim();
-        var email = $('.EmailChng').val().trim();
+        var email = $('.EmailChng').val();
+        var mobile = $('.MobileCon').val();
+        var role = $('.selectRole').val();
         var crDate = $('.crDate').val();
         var cgDate = $('.cgDate').val();
         $.ajax({
             url: '/AdminTab/EmailSMSlogData',
             method: 'POST',
-            data: { email: email, name: name, crDate: crDate, cgDate: cgDate, checklog: checklog },
+            data: { role: role, email: email, mobile: mobile, name: name, crDate: crDate, cgDate: cgDate, checklog: checklog },
             success: function (response) {
                 $('.LogPartial').html(response);
             },

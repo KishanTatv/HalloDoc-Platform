@@ -473,6 +473,8 @@ public partial class HalloDocDbContext : DbContext
         modelBuilder.Entity<Smslog>(entity =>
         {
             entity.HasKey(e => e.Smslogid).HasName("smslog_pkey");
+
+            entity.HasOne(d => d.Request).WithMany(p => p.Smslogs).HasConstraintName("fkey_request");
         });
 
         modelBuilder.Entity<User>(entity =>

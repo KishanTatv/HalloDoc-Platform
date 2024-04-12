@@ -37,11 +37,11 @@
                             }
                             else
                             {
-                                @*@log.Request.Firstname @log.Request.Lastname*@
+                                @log.Request.Firstname @log.Request.Lastname
                             }
                         </td>
                         <td> -  </td>
-                        <td> @log.Roleid </td>
+                        <td> @Enum.GetName(typeof(HalloEnum.HalloMainRole), @log.Roleid) </td>
                         <td>@log.Mobilenumber</td>
                         <td>@log.Createdate.Date.ToString("MMM dd, yyyy")</td>
                         <td>@log.Sentdate.Value.Date.ToString("MMM dd, yyyy")</td>

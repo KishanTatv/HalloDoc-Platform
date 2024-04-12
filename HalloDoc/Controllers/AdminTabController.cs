@@ -194,12 +194,18 @@ namespace HalloDoc.Controllers
         {
             int adminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
             int roleId = Convert.ToInt16(Request.Cookies["CookieRole"]);
-            string phyEmail = _Admin.getPhysicianEmail(phid);
             string sub = "Communication Notification";
             if (contType == "Email" || contType == "Both")
             {
+                string phyEmail = _Admin.getPhysicianEmail(phid);
                 _Genral.SendEmailOffice365(phyEmail, sub, note, null);
                 _Genral.addEmailLog(note, sub, phyEmail, null, roleId, null, adminId, null);
+            }
+            if (contType == "SMS" || contType == "Both")
+            {
+                string phyCont = _Admin.getPhysicianMobile(phid);
+                _Genral.sendSMSwithTwilio(phyCont, sub);
+                _Genral.addSMSLog(note, phyCont, roleId, null, adminId, null);
             }
             return Ok();
         }
@@ -589,7 +595,7 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
-        
+
         #region User Access
         [CustomAuthorize("Admin:Provider", "User Access")]
         public IActionResult UserAccess()
@@ -880,7 +886,7 @@ namespace HalloDoc.Controllers
             if (helthproId != 0)
             {
                 Healthprofessional hp = _Admin.getVendorDetail(helthproId);
-                VenderBusinessViewModel data = new VenderBusinessViewModel { Healthprofessionaltypes = proType, Vendorid= hp.Vendorid, Vendorname = hp.Vendorname, Phonenumber = hp.Phonenumber, Faxnumber = hp.Faxnumber, Profession = hp.Profession, Email = hp.Email, Businesscontact = hp.Businesscontact, Address = hp.Address, City = hp.City, State = hp.State, Zip = hp.Zip };
+                VenderBusinessViewModel data = new VenderBusinessViewModel { Healthprofessionaltypes = proType, Vendorid = hp.Vendorid, Vendorname = hp.Vendorname, Phonenumber = hp.Phonenumber, Faxnumber = hp.Faxnumber, Profession = hp.Profession, Email = hp.Email, Businesscontact = hp.Businesscontact, Address = hp.Address, City = hp.City, State = hp.State, Zip = hp.Zip };
                 ViewBag.bussinessTy = "Update";
                 return PartialView("_AddBusiness", data);
             }
@@ -986,7 +992,7 @@ namespace HalloDoc.Controllers
         public IActionResult searchData(string reqStatus, int reqType, string ptName, DateTime formDate, DateTime toDate, string proName, string phone, string email, int page)
         {
             var data = _Admin.getAllReqData(reqStatus, reqType).ToList();
-            data = data.Where(x => 
+            data = data.Where(x =>
             (ptName == null ? true : (x.Requestclients.FirstOrDefault().Firstname.Contains(ptName)) || (x.Requestclients.FirstOrDefault().Lastname.Contains(ptName))) &&
             (formDate == DateTime.MinValue || x.Createddate.Date.Equals(formDate)) &&
             (email == null || x.Requestclients.FirstOrDefault().Email.Contains(email)) &&
@@ -1021,7 +1027,7 @@ namespace HalloDoc.Controllers
             return View("EmailSMSlog");
         }
 
-        public IActionResult EmailSMSlogData(string email, string name, DateTime crDate, DateTime cgDate, string checklog)
+        public IActionResult EmailSMSlogData(int role, string email, string mobile, string name, DateTime crDate, DateTime cgDate, string checklog)
         {
             ViewBag.logType = checklog;
             if (checklog == "Email")
@@ -1029,6 +1035,7 @@ namespace HalloDoc.Controllers
                 var data = _Admin.getEmailLogData();
                 data = data
                     .Where(x =>
+                    (role == 0 || x.Roleid == role) &&
                     (email == null || x.Emailid.ToLower().Contains(email.ToLower())) &&
                     (name == null || (x.Request?.Firstname?.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Lastname?.ToLower().Contains(name.ToLower()) ?? false)) &&
                     (crDate == DateTime.MinValue || x.Createdate.Date.Equals(crDate)) &&
@@ -1040,6 +1047,15 @@ namespace HalloDoc.Controllers
             else
             {
                 var data = _Admin.getSMSLogData();
+                data = data
+                    .Where(x =>
+                    (role == 0 || x.Roleid == role) &&
+                    (mobile == null || x.Mobilenumber.Contains(mobile)) &&
+                    (name == null || (x.Request?.Firstname?.ToLower().Contains(name.ToLower()) ?? false) || (x.Request?.Lastname?.ToLower().Contains(name.ToLower()) ?? false)) &&
+                    (crDate == DateTime.MinValue || x.Createdate.Date.Equals(crDate)) &&
+                    (cgDate == DateTime.MinValue || x.Sentdate.Equals(cgDate)))
+                    .ToList();
+                ViewBag.logType = checklog;
                 return PartialView("_SmsLog", data);
             }
         }

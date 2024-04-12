@@ -10,11 +10,11 @@
         @if (Context.Request.Cookies["CookieRole"] == "1")
         {
             <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Dashbord" ? "underLine" : "")" id="dashTab"
-            aria-selected="true" asp-action="Dashbord" asp-controller="AdminDash">Dashbord</a>
+               aria-selected="true" asp-action="Dashbord" asp-controller="AdminDash">Dashbord</a>
             <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "ProviderLoc" ? "underLine" : "")" id="proLocTab"
-            aria-selected="false" asp-action="ProviderLoc" asp-controller="AdminTab">Provider Location</a>
+               aria-selected="false" asp-action="ProviderLoc" asp-controller="AdminTab">Provider Location</a>
             <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "Profile" ? "underLine" : "")" id="profileTab"
-            aria-selected="false" asp-action="Profile" asp-controller="AdminTab">My Profile</a>
+               aria-selected="false" asp-action="Profile" asp-controller="AdminTab">My Profile</a>
             <a class="nav-link ps-3 bg-transparent dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "Provider" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "Scheduling" ? "underLine" : "")" id="providerTab" data-bs-toggle="dropdown" aria-expanded="false">Providers</a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" asp-action="Provider" asp-controller="AdminTab">Provider</a></li>
@@ -22,7 +22,7 @@
                 <li><a class="dropdown-item" href="#">Invoicing</a></li>
             </ul>
             <a class="nav-link ps-3 bg-transparent @(ViewContext.ActionDescriptor.RouteValues["action"] == "PartnerTab" ? "underLine" : "")" id="AccessTab"
-            aria-selected="false" asp-action="PartnerTab" asp-controller="AdminTab">Partners</a>
+               aria-selected="false" asp-action="PartnerTab" asp-controller="AdminTab">Partners</a>
             <a class="nav-link ps-3 bg-transparent  dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "Access" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "UserAccess" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "AdminCreate" ? "underLine" : "")" data-bs-toggle="dropdown" aria-expanded="false">Access</a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" asp-action="Access" asp-controller="AdminTab">Account Access</a></li>
@@ -32,10 +32,10 @@
             <a class="nav-link ps-3 bg-transparent dropdown-toggle @(ViewContext.ActionDescriptor.RouteValues["action"] == "SearchRecord" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "Emaillog" ? "underLine" : "") @(ViewContext.ActionDescriptor.RouteValues["action"] == "SMSlog" ? "underLine" : "")  @(ViewContext.ActionDescriptor.RouteValues["action"] == "PatientHistory" ? "underLine" : "")  @(ViewContext.ActionDescriptor.RouteValues["action"] == "BlockHistory" ? "underLine" : "")" id="recordTab" data-bs-toggle="dropdown" aria-expanded="false">Records</a>
             <ul class="dropdown-menu">
                 <li><a class="dropdown-item" asp-action="SearchRecord" asp-controller="AdminTab">Search Records</a></li>
-            <li><a class="dropdown-item" asp-action="Emaillog" asp-controller="AdminTab"> Email Logs</a></li>
-            <li><a class="dropdown-item" asp-action="SMSlog" asp-controller="AdminTab"> SMS Logs</a></li>
-            <li><a class="dropdown-item" asp-action="PatientHistory" asp-controller="AdminTab">Patient Records</a></li>
-            <li><a class="dropdown-item" asp-action="BlockHistory" asp-controller="AdminTab">Blocked History</a></li>
+                <li><a class="dropdown-item" asp-action="Emaillog" asp-controller="AdminTab"> Email Logs</a></li>
+                <li><a class="dropdown-item" asp-action="SMSlog" asp-controller="AdminTab"> SMS Logs</a></li>
+                <li><a class="dropdown-item" asp-action="PatientHistory" asp-controller="AdminTab">Patient Records</a></li>
+                <li><a class="dropdown-item" asp-action="BlockHistory" asp-controller="AdminTab">Blocked History</a></li>
             </ul>
         }
         else

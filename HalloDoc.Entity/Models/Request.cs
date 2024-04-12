@@ -148,6 +148,9 @@ public partial class Request
     [InverseProperty("Request")]
     public virtual ICollection<Requestwisefile> Requestwisefiles { get; } = new List<Requestwisefile>();
 
+    [InverseProperty("Request")]
+    public virtual ICollection<Smslog> Smslogs { get; } = new List<Smslog>();
+
     [ForeignKey("Userid")]
     [InverseProperty("Requests")]
     public virtual User? User { get; set; }

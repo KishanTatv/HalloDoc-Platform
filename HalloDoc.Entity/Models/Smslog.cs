@@ -51,4 +51,8 @@ public partial class Smslog
 
     [Column("action")]
     public int? Action { get; set; }
+
+    [ForeignKey("Requestid")]
+    [InverseProperty("Smslogs")]
+    public virtual Request? Request { get; set; }
 }

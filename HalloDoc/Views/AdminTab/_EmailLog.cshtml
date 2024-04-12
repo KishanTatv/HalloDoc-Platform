@@ -16,14 +16,7 @@
                 <th scope="col"> Recipient </th>
                 <th scope="col"> Action </th>
                 <th scope="col"> Role Name </th>
-                @if (ViewBag.logType == "SMS")
-                {
-                    <th scope="col"> Mobile Number </th>
-                }
-                else
-                {
-                    <th scope="col"> Email Id </th>
-                }
+                <th scope="col"> Email Id </th>
                 <th scope="col"> Created Date <i class="bi bi-arrow-down ms-1"></i> </th>
                 <th scope="col"> Sent Date</th>
                 <th scope="col"> Sent </th>
@@ -48,15 +41,8 @@
                             }
                         </td>
                         <td> @log.Subjectname </td>
-                        <td> @log.Roleid </td>
-                        @if (ViewBag.logType == "SMS")
-                        {
-                            <td>6476354</td>
-                        }
-                        else
-                        {
-                            <td> @log.Emailid </td>
-                        }
+                        <td> @Enum.GetName(typeof(HalloEnum.HalloMainRole), @log.Roleid) </td>
+                        <td> @log.Emailid </td>
                         <td>@log.Createdate.Date.ToString("MMM dd, yyyy")</td>
                         <td>@log.Sentdate.Value.Date.ToString("MMM dd, yyyy")</td>
                         <td>

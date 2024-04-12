@@ -35,13 +35,14 @@
             </div>
 
             <div class="rounded shadow p-4 mt-3 pt-3 bg-body-tertiary rounded">
-
-                <div id="partialPhyData" class="mt-3"></div>
+                <div id="partialPhyData" class="mt-3">
+                    <div id="loading"></div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-    <div id="Partialreview"></div>
+<div id="Partialreview"></div>
 
 
 <script asp-append-version="true">
@@ -61,7 +62,7 @@
         });
     });
 
-    $('#RegSearch').change(function(){
+    $('#RegSearch').change(function () {
         var reg = $('#RegSearch').val();
         $.ajax({
             url: '/AdminTab/proOncallData',
@@ -80,11 +81,11 @@
         });
     });
 
-    $('.calenderView').click(function (){
+    $('.calenderView').click(function () {
         window.location.reload();
     });
 
-    $('.shiftReview').click(function(){
+    $('.shiftReview').click(function () {
         $.ajax({
             url: '/AdminTab/ShiftReview',
             success: function (response) {

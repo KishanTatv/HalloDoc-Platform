@@ -303,7 +303,7 @@ namespace HalloDoc.Repository.Implement
             return _context.Healthprofessionals.FirstOrDefault(x => vendorid == 0 || x.Vendorid == vendorid);
         }
 
-        public void AddOrderDetail(int vendorid, int adminid, int reqid, string prescription, int refil)
+        public void AddOrderDetail(int vendorid, int aspId, int reqid, string prescription, int refil)
         {
             Healthprofessional vendor = getVendorDetail(vendorid);
             Orderdetail order = new Orderdetail
@@ -316,7 +316,7 @@ namespace HalloDoc.Repository.Implement
                 Prescription = prescription,
                 Noofrefill = refil,
                 Createddate = DateTime.Now,
-                Createdby = adminid.ToString(),
+                Createdby = aspId.ToString(),
             };
             _context.Orderdetails.Add(order);
             _context.SaveChanges();
@@ -495,6 +495,12 @@ namespace HalloDoc.Repository.Implement
         {
             return _context.Physicians.FirstOrDefault(x => x.Physicianid == phid).Email;
         }
+        
+        public string getPhysicianMobile(int phid)
+        {
+            return _context.Physicians.FirstOrDefault(x => x.Physicianid == phid).Mobile;
+
+        }
 
         public Physician getPhysicianDetail(int phid)
         {
@@ -515,7 +521,7 @@ namespace HalloDoc.Repository.Implement
         }
         public IEnumerable<Smslog> getSMSLogData()
         {
-            return _context.Smslogs.ToList();
+            return _context.Smslogs.Include(x => x.Request).ThenInclude(x => x.Requestclients).ToList();
         }
 
         public IEnumerable<Blockrequest> getallBlockRequest()

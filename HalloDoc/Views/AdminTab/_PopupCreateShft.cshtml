@@ -189,12 +189,6 @@
             $('.shiftdateMsg').text("please select Shift Date");
             return false;
         }
-        else if (new Date() >= shiftDate){
-            $('.regMsg').text("");
-            $('.phyOptnMsg').text("");
-            $('.shiftdateMsg').text("Next Date Please");
-            return false;
-        }
         else if ($('#chekrep').is(':checked') == true) {
             if (reptList().length <= 0) {
                 $('.regMsg').text("");

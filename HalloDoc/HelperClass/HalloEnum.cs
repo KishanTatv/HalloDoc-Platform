@@ -37,5 +37,10 @@
         {
             Gujrat = 1, Maharashtra, Delhi, Bihar, Goa
         }
+
+        public enum HalloMainRole
+        {
+            Admin = 1, Provider, Patient
+        }
     }
 }
