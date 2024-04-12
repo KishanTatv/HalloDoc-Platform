@@ -74,13 +74,12 @@ namespace HalloDoc.Controllers
                     {
                         if (_genral.CheckAspPassword(user.Email, user.Passwordhash))
                         {
-                            int roleId = 0;
                             string menulist = "Null";
                             string userName = _genral.userFullName(user.Email);
                             Aspnetuser asp = _genral.getUserRole(user.Email);
                             if (asp.Aspnetuserrole.Role.Id != 3)
                             {
-                                roleId = _genral.getroleIdFromEmail(user.Email, asp.Aspnetuserrole.Role.Id);
+                                int roleId = _genral.getroleIdFromEmail(user.Email, asp.Aspnetuserrole.Role.Id);
                                 menulist = _genral.getMenulistFromRole(roleId);
                             }
                             var UserToken = _jwtToken.GenrateJwtToken(asp, menulist);

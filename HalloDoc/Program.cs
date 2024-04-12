@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using System.Text.Json.Serialization;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,8 @@ app.UseCookiePolicy();
 app.UseAuthorization();
 //app.UseSession();
 app.UseNotyf();
+
+app.UseRotativa();
 
 app.MapControllerRoute(
     name: "default",

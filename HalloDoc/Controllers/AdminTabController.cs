@@ -9,7 +9,6 @@ using HalloDoc.Repository;
 using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using NReco.PdfGenerator;
 using System.Collections;
 using System.Linq;
 using System.Net;
@@ -416,6 +415,7 @@ namespace HalloDoc.Controllers
             Aspnetuser asp = _physician.CretephyAspnetUser(model.PhysicianCustom);
             _patient.addAspnetUserrole(asp.Id, 2);
             Physician phy = _physician.addNewPhysician(model, photoBase64, aspId, asp.Id);
+            _physician.addPhysicianLocation(model, phy.Physicianid);
             _physician.addPhysicianNotification(phy.Physicianid);
 
             foreach (var reg in regList)

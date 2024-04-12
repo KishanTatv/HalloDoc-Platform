@@ -87,13 +87,25 @@ namespace HalloDoc.Repository.Implement
             _context.SaveChanges();
         }
 
-        public void addPhysicianLocation(PhysicianProfileViewModel model)
+        public void addPhysicianLocation(PhysicianProfileViewModel model, int phyId)
         {
-            var locationService = new GoogleLocationService();
-            var point = locationService.GetLatLongFromAddress(model.physician.Address1+ model.physician.City + model.physician.Status);
+            string Address = model.physician.Address1 + "," + model.physician.Address2 + "," + model.physician.City + "," + model.physician.Status + "," + model.physician.Zip;
+            var locationService = new GoogleLocationService(apikey: "AIzaSyARrk6kY-nnnSpReeWotnQxCAo_MoI4qbU");
+            var point = locationService.GetLatLongFromAddress(Address);
+            decimal latitude = (decimal)point.Latitude;
+            decimal longitude = (decimal)point.Longitude;
 
-            var latitude = point.Latitude;
-            var longitude = point.Longitude;
+            Physicianlocation phyLoc = new Physicianlocation
+            {
+                Latitude = latitude,
+                Longitude = longitude,
+                Physicianid = phyId,
+                Physicianname = model.PhysicianCustom.Firstname,
+                Address = Address,
+                Createddate = System.DateTime.Now,
+            };
+            _context.Physicianlocations.Add(phyLoc);
+            _context.SaveChanges();
         }
 
         public void updatePhysicianNotification(int PhyId, BitArray isnotification)

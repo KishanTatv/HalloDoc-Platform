@@ -11,6 +11,12 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using System.Web;
 using Rotativa;
+using iText.Kernel.Pdf;
+using iText.Layout.Properties;
+using iText.Layout;
+using iText.Layout.Element;
+using Rotativa.AspNetCore;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace HalloDoc.Controllers
 {
@@ -712,18 +718,19 @@ namespace HalloDoc.Controllers
             return Ok();
         }
 
+
         public IActionResult EncounterDownload(int reqid)
         {
-            // Convert HTML to PDF using Rotativa
-            //var pdfBytes = new Rotativa.ViewAsPdf("_Encounter", new { reqid = reqid })
-            //{
-            //    FileName = "MedicalReport.pdf"
-            //}.BuildPdf(ControllerContext);
-
-            //// Return the PDF as a FileResult
-            //return File(pdfBytes, "application/pdf");
-            //return new ActionAsPdf("Encounter", new { reqid = reqid }) { FileName = "MediaclReport.pdf" };
-            return Ok();
+            var client = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
+            var encounter = _Genral.getEncounterDetail(reqid);
+            var model = new EncounterViewModel { ClientInformation = client, EncounterForm = encounter };
+            return new ViewAsPdf("../shared/EncounterReport/EncounterReport", model) {
+                FileName = "Report.pdf",
+                PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape,
+                PageMargins = { Left = 80, Bottom = 30, Right = 80, Top = 30 },
+                CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 12"
+            };
         }
         #endregion
     }

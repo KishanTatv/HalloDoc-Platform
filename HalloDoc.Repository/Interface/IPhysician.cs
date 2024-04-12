@@ -23,7 +23,7 @@ namespace HalloDoc.Repository.Interface
         List<int> phyRegionExist(int phyId);
 
         void addPhysicianNotification(int phyId);
-        void addPhysicianLocation(PhysicianProfileViewModel model);
+        void addPhysicianLocation(PhysicianProfileViewModel model, int phyId);
         void updatePhysicianNotification(int PhyId, BitArray isnotification);
 
         void updatePhysicianInfo(PhysicianCustom physcian, string email, int aspId);

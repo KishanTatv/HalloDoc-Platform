@@ -19,33 +19,21 @@
                 <p>Encounter form is finallized successfully !</p>
             </div>
             <div class="d-flex justify-content-center pb-4">
-                <button class="btn btn-info text-light ps-2 pe-2 EncounterDownload">Download</button>
+                <button class="btn btn-info text-light ps-2 pe-2" onclick="EncounterDownload()" data-bs-dismiss="modal"> Download </button>
             </div>
         </div>
     </div>
 </div>
 
-
 <script asp-append-version="true">
-    $(document).ready(function () {
-        $('.EncounterDownload').click(function () {
-            var reqid = $(".reqId").val();
-            $.ajax({
-                url: '/AdminDash/EncounterDownload',
-                method: 'POST',
-                data: { reqid: reqid },
-                success: function (response) {
-                    console.log('ok');
-                },
-                error: function (xhr, status, error) {
-                    if (xhr["status"] == 401) {
-                        window.location.href = "/Patient/PatientLogin";
-                    } else {
-                        console.error(xhr.responseText)
-                    }
-                }
-            });
-        });
-    });
+    function EncounterDownload() {
+        var reqId = $('.reqId').val();
+        var link = document.createElement('a');
+        link.href = '/AdminDash/EncounterDownload?reqid=' + reqId;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 </script>
 
