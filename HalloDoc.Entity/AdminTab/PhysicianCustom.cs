@@ -14,6 +14,7 @@ namespace HalloDoc.Entity.AdminTab
         public int Physicianid { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$", ErrorMessage = "Please Enter a Strong Password.")]
         [StringLength(255, ErrorMessage = "Must be between 5 and 255 characters", MinimumLength = 5)]
         [Display(Name = "Password")]
         public string? Password { get; set; }

@@ -287,7 +287,9 @@
 
         $('.changePass').click(function () {
             var pass = $('.pass').val().trim();
+            var passValid = (/[A-Z]/.test(pass) && /[0-9]/.test(pass) && /[^A-Za-z0-9]/.test(pass) && pass.length > 7);
             if (pass != '') {
+                if(passValid){
                 $.ajax({
                     url: '/AdminTab/ResetPass',
                     method: 'POST',
@@ -302,6 +304,10 @@
                         console.error(xhr.responseText);
                     }
                 });
+                }
+                else{
+                    $('.pass-error').text("Weak Password");
+                }
             } else {
                 $('.pass-error').text("Add Password to change");
             }

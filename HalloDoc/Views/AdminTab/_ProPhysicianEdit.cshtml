@@ -662,21 +662,27 @@
 
         $('.changePass').click(function () {
             var pass = $('.pass').val().trim();
+            var passValid = (/[A-Z]/.test(pass) && /[0-9]/.test(pass) && /[^A-Za-z0-9]/.test(pass) && pass.length > 7);
             if (pass != '') {
-                $.ajax({
-                    url: '/AdminTab/ResetPhyPass',
-                    method: 'POST',
-                    data: { pass: pass, phid: phid },
-                    success: function (response) {
-                        $('.pass-error').text("");
-                        if (response.value == "ok") {
-                            $('.Addmsg').text("Password Changed").addClass('text-success');
+                if (passValid) {
+                    $.ajax({
+                        url: '/AdminTab/ResetPhyPass',
+                        method: 'POST',
+                        data: { pass: pass, phid: phid },
+                        success: function (response) {
+                            $('.pass-error').text("");
+                            if (response.value == "ok") {
+                                $('.Addmsg').text("Password Changed").addClass('text-success');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
+                    });
+                }
+                else{
+                    $('.pass-error').text("Week Password");
+                }
             }
             else {
                 $('.pass-error').text("Add Password to change");
