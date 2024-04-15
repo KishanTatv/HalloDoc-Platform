@@ -13,14 +13,14 @@ namespace HalloDoc.Entity.RequestForm
         [Column("firstname")]
         [Required(ErrorMessage = "Firstname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(100, MinimumLength = 3)]
+        [StringLength(16, ErrorMessage = "Must be between 5 and 20 characters", MinimumLength = 5)]
         public string? Firstname { get; set; }
 
 
         [Column("lastname")]
         [Required(ErrorMessage = "Lastname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(100, MinimumLength = 3)]
+        [StringLength(16, ErrorMessage = "Must be between 5 and 20 characters", MinimumLength = 5)]
         public string? Lastname { get; set; }
 
         [Column("Dob")]
@@ -31,7 +31,8 @@ namespace HalloDoc.Entity.RequestForm
 
         [Column("phonenumber")]
         [Required(ErrorMessage = "Phone Number is required")]
-        [StringLength(23)]
+
+        [StringLength(16, ErrorMessage = "Must be between 10 and 15 digit", MinimumLength = 9)]
         public string? Phonenumber { get; set; }
 
         [Column("email")]

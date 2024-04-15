@@ -11,13 +11,13 @@ namespace HalloDoc.Entity.RequestForm
         [Column("patientFname")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
         [Required(ErrorMessage = "FirstName is required")]
-        [StringLength(100, MinimumLength = 3)]
+        [StringLength(16, ErrorMessage = "Must be between 5 and 20 characters", MinimumLength = 5)]
         public string? PatientFname { get; set; }
 
         [Column("patientLname")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
         [Required(ErrorMessage = "LastName is required")]
-        [StringLength(100, MinimumLength = 3)]
+        [StringLength(16, ErrorMessage = "Must be between 5 and 20 characters", MinimumLength = 5)]
         public string? PatientLname { get; set; }
 
         [Column("patientPhonenumber")]

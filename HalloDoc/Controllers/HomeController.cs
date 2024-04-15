@@ -4,6 +4,7 @@ using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.IO.Compression;
+using Windows.System;
 
 namespace HalloDoc.Controllers
 {
@@ -47,7 +48,8 @@ namespace HalloDoc.Controllers
             {
                 return RedirectToAction("ViewDocument", "PatientDash", new { id = id });
             }
-            else if((Request.Cookies["CookieRole"]) == "2") {
+            else if ((Request.Cookies["CookieRole"]) == "2")
+            {
                 return RedirectToAction("ConcludeCare", "Physician", new { reqid = id });
             }
             return RedirectToAction("ViewUploads", "AdminDash", new { reqid = id });
@@ -131,6 +133,16 @@ namespace HalloDoc.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+
+        public IActionResult getMenuList()
+        {
+            string userEmail = Request.Cookies["CookieEmail"];
+            int AspnetRole = Convert.ToInt16(Request.Cookies["CookieRole"]);
+            int roleId = _genral.getroleIdFromEmail(userEmail, AspnetRole);
+            string menulist = _genral.getMenulistFromRole(roleId);
+            return Json(new { value = menulist });
         }
 
 

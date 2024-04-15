@@ -33,6 +33,14 @@ namespace HalloDoc.Repository.Implement
             return _context.Physicians.FirstOrDefault(x => x.Email == email).Physicianid;
         }
 
+        public void acceptReqByPhysician(int reqid)
+        {
+            Request req = _context.Requests.FirstOrDefault(x => x.Requestid == reqid);
+            req.Accepteddate = System.DateTime.Now;
+            _context.Requests.Update(req);
+            _context.SaveChanges();
+        }
+
 
         public Aspnetuser CretephyAspnetUser(PhysicianCustom phy)
         {

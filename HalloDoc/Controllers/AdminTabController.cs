@@ -1,8 +1,10 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Office2016.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
+using GoogleMaps.LocationServices;
 using HalloDoc.Entity.AdminTab;
 using HalloDoc.Entity.Models;
 using HalloDoc.Repository;
@@ -603,6 +605,23 @@ namespace HalloDoc.Controllers
             var data = _Admin.UserAccessData();
             return View(data);
         }
+
+        public IActionResult editUserAccess(int aspid, int roleid)
+        {
+            if(roleid == 2)
+            {
+                int phyid = _Genral.getPhyId(_Genral.getEmailfromAspId(aspid));
+                return RedirectToAction("PhysicanEdit", new { phid = phyid });
+            }
+            else
+            {
+                var admin = _Admin.getAdminProfile(_Genral.getEmailfromAspId(aspid));
+                var adminCutstom = _Admin.getAdminCustomProfile(_Genral.getEmailfromAspId(aspid));
+                var region = _Admin.getAllRegion();
+                var modelData = new ProfileViewModel { Admin = admin, Regions = region, AdminCustom = adminCutstom };
+                return PartialView("_AdminEdit", modelData);
+            }
+        }
         #endregion
 
 
@@ -617,9 +636,19 @@ namespace HalloDoc.Controllers
         [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult NewShiftPopUp()
         {
-            var region = _Admin.getAllRegion();
-            var dataModel = new ShiftPoupViewModel { Regions = region };
-            return PartialView("_PopupCreateShft", dataModel);
+            if (Request.Cookies["CookieRole"] == "2")
+            {
+                int phyId = _Genral.getPhyId(Request.Cookies["CookieEmail"]);
+                var phyRegion = _Admin.getRegionFromPhyID(phyId);
+                ShiftPoupViewModel dataModel = new ShiftPoupViewModel { phyRegion = phyRegion, phyid = phyId };
+                return PartialView("_PopupCreateShft", dataModel);
+            }
+            else
+            {
+                var region = _Admin.getAllRegion();
+                ShiftPoupViewModel dataModel = new ShiftPoupViewModel { Regions = region };
+                return PartialView("_PopupCreateShft", dataModel);
+            }
         }
 
         [CustomAuthorize("Admin:Provider", "Scheduling")]
@@ -753,10 +782,11 @@ namespace HalloDoc.Controllers
         [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult getScheduleData(int reg)
         {
-            var data = _Admin.getAllShiftdetail();
-            if (reg != 0)
+            IEnumerable<Shiftdetail> data = _Admin.getAllShiftdetail(reg);
+            if (Request.Cookies["CookieRole"] == "2")
             {
-                data = data.Where(x => x.Regionid == reg).ToList();
+                int phyId = _Genral.getPhyId(Request.Cookies["CookieEmail"]);
+                data = data.Where(x => x.Shift.Physicianid == phyId).ToList();
             }
             return Json(new { Shiftdetail = data });
         }
@@ -830,11 +860,7 @@ namespace HalloDoc.Controllers
                     _Admin.changeShiftdetailStatus(item, 1);
                 }
             }
-            var data = _Admin.getAllShiftdetail().Where(x => x.Status == 0).ToList();
-            if (reg != 0)
-            {
-                data = data.Where(x => x.Shiftdetailregions.FirstOrDefault().Regionid == reg).ToList();
-            }
+            var data = _Admin.getAllShiftdetail(reg).Where(x => x.Status == 0).ToList();
             if (month == true)
             {
                 data = data.Where(x => x.Shiftdate.Month == System.DateTime.Now.Month).ToList();

@@ -1,0 +1,355 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model HalloDoc.Entity.AdminTab.ProfileViewModel;
+
+<div>
+    <div class="d-flex w-100 justify-content-center pb-4">
+        <div class="HContainer m-auto">
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <h4>Edit Admin Account</h4>
+                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="Admintab" asp-action="UserAccess">
+                    <strong class="pe-2">&lt Back</strong>
+                </a>
+            </div>
+
+            <input class="AdminId d-none" value="@Model.Admin.Adminid" />
+            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                <div class="mb-4">
+                    <p class="msg text-center"></p>
+                    <h5>Account Information</h5>
+                    <div class="row form-floating">
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="text" class="form-control bg-transparent" placeholder="username" asp-for="Admin.Aspnetuser.Username">
+                            <label class="ms-3">User Name</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <input type="password" class="form-control bg-transparent pass" placeholder="pass">
+                            <label class="ms-3">Password</label>
+                            <span class="pass-error text-danger"></span>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <select class="form-select" aria-label="Floating label select example" disabled>
+                                <option selected>Active</option>
+                                <option value="1">One</option>
+                            </select>
+                            <label class="ms-2" for="floatingSelect">Status</label>
+                        </div>
+                        <div class="col-md-6 form-floating mt-2">
+                            <select class="form-select" aria-label="Floating label select example" disabled>
+                                <option selected>@Model.Admin.Role.Name</option>
+                            </select>
+                            <label class="ms-2" for="floatingSelect">Role</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-4 mb-4">
+                    <button type="submit" class="btn btn-outline-info changePass">Reset Password</button>
+                </div>
+
+                <form id="Formdata1" novalidate class="needs-validation">
+                    <div class="mt-4 mb-4">
+                        <h5>Administrartor Information</h5>
+                        <div class="row form-floating">
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent InAdfname AdIn" placeholder="firstNmae" asp-for="AdminCustom.Firstname">
+                                <label class="ms-3">First Name</label>
+                                <span asp-validation-for="AdminCustom.Firstname" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent AdIn" placeholder="lastname" asp-for="AdminCustom.Lastname">
+                                <label class="ms-3">Last Name</label>
+                                <span asp-validation-for="AdminCustom.Lastname" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="email" class="form-control bg-transparent" id="email" placeholder="email" asp-for="AdminCustom.Email">
+                                <label class="ms-3">Email</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="email" class="form-control bg-transparent" id="conEmail" placeholder="conEmail" asp-for="AdminCustom.Email">
+                                <label class="ms-3">Confirm Email</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="number" id="phone1" class="form-control InAdmobile bg-transparent AdIn" style="height:58px" asp-for="AdminCustom.Mobile" />
+                                <span asp-validation-for="AdminCustom.Mobile" class="text-danger"></span>
+                            </div>
+                            @foreach (var adminreg in Model.Admin.Adminregions)
+                            {
+                                <p>@Enum.GetName(typeof(HalloEnum.regName), adminreg.Regionid)</p>
+                            }
+
+                            <div class="col-md-6 form-floating mt-2">
+                                @foreach (var reg in Model.Regions)
+                                {
+                                    <div class="form-check form-check-inline">
+                                        <input name="checkReg" class="form-check-input AdIn checkb" type="checkbox" value="@reg.Regionid">
+                                        <label>@reg.Name</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-4 mb-4">
+                        <button id="editbtn1" type="button" class="btn btn-info me-4" onclick="editEnable1()">Edit</button>
+                        <button type="submit" id="submitbtn1" class="btn btn-info d-none ps-4 pe-4 me-3">Update</button>
+                        <button id="cancelbtn1" type="button" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable1()">Cancel</button>
+                    </div>
+                </form>
+
+                <form id="Formdata2" novalidate class="needs-validation">
+                    <div class="mt-4 mb-4">
+                        <h5>Mailing & Billing Information</h5>
+                        <div class="row form-floating">
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent Adad" placeholder="add1" asp-for="Admin.Address1">
+                                <label class="ms-3">Address 1</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent Adad" placeholder="add2" asp-for="Admin.Address2">
+                                <label class="ms-3">Address 2</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2 ">
+                                <input type="text" class="form-control bg-transparent Adad" placeholder="city" asp-for="Admin.City">
+                                <label class="ms-3">City</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="hidden" asp-for="Admin.Regionid" id="regionIdHidden" />
+                                <select class="form-select selectReg" aria-label="Floating label select" onchange="updateRegionId(this)">
+                                    @foreach (var state in Model.Regions)
+                                    {
+                                        @if (state.Regionid == Model.Admin.Regionid)
+                                        {
+                                            <option value="@state.Regionid" selected>@state.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@state.Regionid">@state.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <label class="ms-2" for="floatingSelect">state</label>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="text" maxlength="6" class="form-control bg-transparent Adad" placeholder="zipCode" asp-for="Admin.Zip">
+                                <label class="ms-3">Zip Code</label>
+                                <span asp-validation-for="Admin.Zip" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 form-floating mt-2">
+                                <input type="text" id="phone2" class="form-control bg-transparent Adad" style="height:58px" asp-for="Admin.Altphone" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-4 mb-4">
+                        <button id="editbtn2" type="button" class="btn btn-info me-4" onclick="editEnable2()">Edit</button>
+                        <button type="submit" id="submitbtn2" class="btn btn-info d-none ps-4 pe-4 me-3">Update</button>
+                        <button id="cancelbtn2" type="button" class="btn btn-danger d-none ps-4 pe-4" onclick="cancelEnable2()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/js/contact-api.js" asp-append-version="true"></script>
+<script asp-append-version="true">
+    window.addEventListener('DOMContentLoaded', (event) => {
+        document.getElementById('profileTab').classList.add('underLine');
+    });
+
+    let inputs = document.querySelectorAll('input');
+    let select = document.querySelectorAll('select');
+    inputs.forEach(input => {
+        input.disabled = true;
+        input.classList.remove("bg-transparent");
+    });
+    select.forEach(select => {
+        select.disabled = true;
+        select.classList.remove("bg-transparent");
+    });
+    let reghide = document.getElementById('regionIdHidden');
+    reghide.disabled = false;
+
+    function updateRegionId(selectElement) {
+        const selectedRegionId = selectElement.value;
+        document.getElementById('regionIdHidden').value = selectedRegionId;
+    }
+
+    let pass = document.querySelector('.pass');
+    pass.disabled = false;
+    pass.classList.add("bg-transparent");
+
+    function editEnable1() {
+        event.preventDefault();
+        const edit = document.getElementById('editbtn1');
+        const submit = document.getElementById('submitbtn1');
+        const cancel = document.getElementById('cancelbtn1');
+        const checkb = document.querySelectorAll('.checkb');
+        edit.classList.add('d-none');
+        submit.classList.remove('d-none');
+        cancel.classList.remove('d-none');
+
+        let AdIn = document.querySelectorAll('.AdIn');
+        AdIn.forEach(AdIn => {
+            AdIn.disabled = false;
+            AdIn.classList.add("bg-transparent");
+        });
+        checkb.forEach(checkb => {
+            checkb.classList.remove("bg-transparent");
+        });
+    }
+
+    function cancelEnable1() {
+        event.preventDefault();
+        const edit = document.getElementById('editbtn1');
+        const submit = document.getElementById('submitbtn1');
+        const cancel = document.getElementById('cancelbtn1');
+        edit.classList.remove('d-none');
+        submit.classList.add('d-none');
+        cancel.classList.add('d-none');
+
+        let AdIn = document.querySelectorAll('.AdIn');
+        AdIn.forEach(AdIn => {
+            AdIn.disabled = true;
+            AdIn.classList.remove("bg-transparent");
+        });
+    }
+
+    function editEnable2() {
+        event.preventDefault();
+        const edit = document.getElementById('editbtn2');
+        const submit = document.getElementById('submitbtn2');
+        const cancel = document.getElementById('cancelbtn2');
+        const reg = document.querySelector('.selectReg');
+        let reghide = document.getElementById('regionIdHidden');
+        reghide.disabled = false;
+        edit.classList.add('d-none');
+        submit.classList.remove('d-none');
+        cancel.classList.remove('d-none');
+        let Adad = document.querySelectorAll('.Adad');
+        Adad.forEach(Adad => {
+            Adad.disabled = false;
+            Adad.classList.add("bg-transparent");
+        });
+        reg.disabled = false;
+        reg.classList.add("bg-transparent");
+    }
+
+    function cancelEnable2() {
+        event.preventDefault();
+        const edit = document.getElementById('editbtn2');
+        const submit = document.getElementById('submitbtn2');
+        const cancel = document.getElementById('cancelbtn2');
+        const reg = document.querySelector('.selectReg');
+        edit.classList.remove('d-none');
+        submit.classList.add('d-none');
+        cancel.classList.add('d-none');
+        let Adad = document.querySelectorAll('.Adad');
+        Adad.forEach(Adad => {
+            Adad.disabled = true;
+            Adad.classList.remove("bg-transparent");
+        });
+        reg.disabled = true;
+        reg.classList.remove("bg-transparent");
+    }
+</script>
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        var adId = $('.AdminId').val();
+        $.ajax({
+            url: '/AdminTab/adminReg',
+            method: 'POST',
+            data: { adId: adId },
+            success: function (response) {
+                var regName = [];
+                $.each(response.adminregion, function (index, item) {
+                    regName.push(item.region.regionid);
+                });
+                regName.forEach((regName) => {
+                    const checkbox = $(`input[type="checkbox"][value="${regName}"]`);
+                    if (checkbox.length) {
+                        checkbox.prop('checked', true);
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                if (xhr["status"] == 401) {
+                    window.location.href = "/Patient/PatientLogin";
+                } else {
+                    console.error(xhr.responseText)
+                }
+            }
+        });
+
+
+        $('.changePass').click(function () {
+            var pass = $('.pass').val().trim();
+            if (pass != '') {
+                $.ajax({
+                    url: '/AdminTab/ResetPass',
+                    method: 'POST',
+                    data: { pass: pass },
+                    success: function (response) {
+                        $('.pass-error').text("");
+                        if (response.value == "ok") {
+                            $('.msg').text("Password Changed").addClass('text-success');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            } else {
+                $('.pass-error').text("Add Password to change");
+            }
+
+        });
+
+        $('#Formdata1').submit(function (e) {
+            e.preventDefault();
+            var data = $("#Formdata1").serialize();
+
+            if ($('.InAdmobile').val().trim() == undefined) {
+                $('.spAdmobile').text("PhoneNumber is required!");
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/AdminTab/UpdateAdminProfile',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: data,
+                    success: function (response) {
+                        if (response.value == "changed") {
+                            window.location.reload();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        $('#Formdata2').submit(function (e) {
+            e.preventDefault();
+            var data = $("#Formdata2").serialize();
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateAdminLoc',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: data,
+                success: function (response) {
+                    if (response.value == "changed") {
+                        window.location.reload();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+
+        });
+    });
+</script>

@@ -17,26 +17,49 @@
                 <div class="modal-body">
                     <p>Choose communication to send message</p>
                     <p class="text-danger text-center checkMsg"></p>
-                    <div class="form-floating">
-                        <input type="hidden" class="regId" asp-for="regId" />
-                        <select class="form-select selectReg" aria-label="Floating label select" onchange="checkData()">
-                            <option value="" selected disabled>select Region</option>
-                            @foreach (var reg in Model.Regions)
-                            {
-                                <option value="@reg.Regionid">@reg.Name</option>
-                            }
+                    @if (Context.Request.Cookies["CookieRole"] == "1")
+                    {
+                        <div class="form-floating">
+                            <input type="hidden" class="regId" asp-for="regId" />
+                            <select class="form-select selectReg" aria-label="Floating label select" onchange="checkData()">
+                                <option value="" selected disabled>select Region</option>
+                                @foreach (var reg in Model.Regions)
+                                {
+                                    <option value="@reg.Regionid">@reg.Name</option>
+                                }
+                            </select>
+                            <label for="floatingSelect">Region</label>
+                            <span class="text-danger regMsg"></span>
+                        </div>
+                        <input type="hidden" class="phid" asp-for="phyid" />
+                        <div class="form-floating mt-2">
+                            <select class="form-select PhyOption" aria-label="Floating label select" onchange="checkData()">
+                                <option value="" disabled>select</option>
+                            </select>
+                            <label for="floatingSelect">Physician</label>
+                            <span class="text-danger phyOptnMsg"></span>
+                        </div>
+                    }
+                    <input type="hidden" class="ScheduleRole" value="@Context.Request.Cookies["CookieRole"]" />
+                    @if (Context.Request.Cookies["CookieRole"] == "2")
+                    {
+                        <div class="form-floating">
+                            <input type="hidden" class="regId" asp-for="regId" />
+                            <select class="form-select selectReg" aria-label="Floating label select" onchange="checkData()">
+                                <option value="" selected disabled>select Region</option>
+                                @foreach (var reg in Model.phyRegion)
+                                {
+                                    <option value="@reg.Region.Regionid">@reg.Region.Name</option>
+                                }
+                            </select>
+                            <label for="floatingSelect">Region</label>
+                            <span class="text-danger regMsg"></span>
+                        </div>
+                        <input type="hidden" class="phid" asp-for="phyid" />
+                        <select class="form-select PhyOption d-none" aria-label="Floating label select">
+                            <option value="@Model.phyid" selected>select</option>
                         </select>
-                        <label for="floatingSelect">Region</label>
-                        <span class="text-danger regMsg"></span>
-                    </div>
-                    <input type="hidden" class="phid" asp-for="phyid" />
-                    <div class="form-floating mt-2">
-                        <select class="form-select PhyOption" aria-label="Floating label select" onchange="checkData()">
-                            <option value="" disabled>select</option>
-                        </select>
-                        <label for="floatingSelect">Physician</label>
-                        <span class="text-danger phyOptnMsg"></span>
-                    </div>
+                    }
                     <div class="form-floating mt-2">
                         <input type="date" class="form-control bg-transparent shiftDate" id="ShiftDate"
                                placeholder="shiftdate" asp-for="shiftdate" onchange="checkData()">
@@ -93,9 +116,9 @@
                             <label>Every Saturday</label>
                         </div>
                     </div>
-                        <span class="text-danger selectreptMsg"></span>
+                    <span class="text-danger selectreptMsg"></span>
                     <div class="form-floating forrpt d-none mt-3">
-                        <input type="hidden" class="reptTime" asp-for="repeatTime"/>
+                        <input type="hidden" class="reptTime" asp-for="repeatTime" />
                         <select class="form-select reptTimeSelect" aria-label="Floating label select" onchange="checkData()">
                             <option value="0" selected disabled> None </option>
                             <option value="2">2-times</option>
@@ -134,21 +157,27 @@
 
     $('.selectReg').change(function () {
         var region = $('.selectReg').val();
-        $.ajax({
-            url: '/AdminDash/CheckPhysician',
-            method: 'POST',
-            data: { region: region },
-            success: function (response) {
-                $(".regId").val(region);
-                $(".PhyOption").empty().append($('<option disabled selected>Select Physician</option>'));
-                $.each(response.physician, function (index, item) {
-                    $(".PhyOption").append($('<option></option>').val(item.physician.physicianid).text(item.physician.firstname));
-                });
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
+        var role = $('.ScheduleRole').val();
+        if (role == "1") {
+            $.ajax({
+                url: '/AdminDash/CheckPhysician',
+                method: 'POST',
+                data: { region: region },
+                success: function (response) {
+                    $(".regId").val(region);
+                    $(".PhyOption").empty().append($('<option disabled selected>Select Physician</option>'));
+                    $.each(response.physician, function (index, item) {
+                        $(".PhyOption").append($('<option></option>').val(item.physician.physicianid).text(item.physician.firstname));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        else{
+            $(".regId").val(region);
+        }
     });
 
     $('.PhyOption').change(function (e) {
@@ -179,7 +208,7 @@
             return false;
         }
         else if ($('.PhyOption').val() == null) {
-            $('.phyOptnMsg').text("Please Select Account Type");
+            $('.phyOptnMsg').text("Please Select Physician");
             $('.regMsg').text("");
             return false;
         }
@@ -194,7 +223,7 @@
                 $('.regMsg').text("");
                 $('.phyOptnMsg').text("");
                 $('.shiftdateMsg').text("");
-                $('.selectreptMsg').text("please select opption");
+                $('.selectreptMsg').text("please select option");
                 return false;
             }
             else if ($('.reptTimeSelect').val() == null) {
@@ -219,7 +248,7 @@
             $('.selectrepttimeMsg').text("");
             return true;
         }
-        
+
     }
 
     $('#ShiftForm').submit(function (e) {
@@ -249,7 +278,7 @@
                             }
                         });
                     }
-                    else{
+                    else {
                         $('.checkMsg').text("Physician is busy with other shift");
                     }
                 },

@@ -100,6 +100,10 @@ namespace HalloDoc.Repository.Implement
         {
             return _context.Aspnetusers.FirstOrDefault(x => x.Email == email).Id;
         }
+        public string getEmailfromAspId(int aspId)
+        {
+            return _context.Aspnetusers.FirstOrDefault(x => x.Id == aspId).Email;
+        }
 
         public int getPhyId(string email)
         {

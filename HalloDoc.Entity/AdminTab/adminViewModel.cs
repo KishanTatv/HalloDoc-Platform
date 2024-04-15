@@ -35,7 +35,7 @@ namespace HalloDoc.Entity.AdminTab
 
         [Column("phonenumber")]
         [Required(ErrorMessage = "Phone Number is required")]
-        [StringLength(23)]
+        [StringLength(16, ErrorMessage = "Must be between 10 and 15 digit", MinimumLength = 9)]
         public string? Phonenumber { get; set; }
 
         [Column("Altphonenumber")]

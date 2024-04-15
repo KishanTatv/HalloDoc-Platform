@@ -29,6 +29,7 @@ namespace HalloDoc.Controllers
         public IActionResult AcceptReq(int reqid)
         {
             _Genral.updateReqStatus(reqid, 2);
+            _physician.acceptReqByPhysician(reqid);
             return Ok();
         }
         #endregion

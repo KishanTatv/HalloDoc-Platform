@@ -108,7 +108,7 @@ namespace HalloDoc.Repository.Implement
                            RequestedDate = r.Createddate,
                            PhysicianId = r.Physicianid,
                            PhysicianName = p.Firstname + " " + p.Lastname,
-                           DateOfService = r.Modifieddate,
+                           DateOfService = r.Accepteddate,
                            Phonenumber = f.Phonenumber,
                            ReqPhonenumber = r.Phonenumber,
                            Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
@@ -145,7 +145,7 @@ namespace HalloDoc.Repository.Implement
                            Requestor = r.Firstname + "," + r.Lastname,
                            RequestedDate = r.Createddate,
                            PhysicianName = p.Firstname + " " + p.Lastname,
-                           DateOfService = r.Modifieddate,
+                           DateOfService = r.Accepteddate,
                            Phonenumber = f.Phonenumber,
                            ReqPhonenumber = r.Phonenumber,
                            Address = f.Street + ", " + f.City + ", " + f.State + ", " + f.Zipcode,
@@ -201,6 +201,11 @@ namespace HalloDoc.Repository.Implement
         {
             var phyList = _context.Physicianregions.Include(x => x.Physician).Where(x => x.Regionid == regionId).ToList();
             return phyList;
+        }
+
+        public List<Physicianregion> getRegionFromPhyID(int phyId)
+        {
+            return _context.Physicianregions.Include(x => x.Region).Where(x => x.Physicianid == phyId).ToList();
         }
 
 
@@ -698,8 +703,6 @@ namespace HalloDoc.Repository.Implement
 
         public Shiftdetail addNewShiftDetail(int shiftId, DateOnly shiftDate, ShiftPoupViewModel model, short status)
         {
-            BitArray Deletebit = new BitArray(1);
-            Deletebit[0] = false;
             Shiftdetail shiftdetail = new Shiftdetail
             {
                 Shiftid = shiftId,
@@ -708,7 +711,7 @@ namespace HalloDoc.Repository.Implement
                 Starttime = model.timeStart,
                 Endtime = model.timeEnd,
                 Status = status,
-                Isdeleted = Deletebit,
+                Isdeleted = new BitArray(new bool[] {false}),
             };
             _context.Shiftdetails.Add(shiftdetail);
             _context.SaveChanges();
@@ -740,15 +743,14 @@ namespace HalloDoc.Repository.Implement
             return listData;
         }
 
-        public IEnumerable<Shiftdetail> getAllShiftdetail()
+        public IEnumerable<Shiftdetail> getAllShiftdetail(int reg)
         {
             BitArray deleteBit = new BitArray(1);
             deleteBit[0] = true;
-            return _context.Shiftdetails.Include(x => x.Shiftdetailregions).ThenInclude(x => x.Region).Include(x => x.Shift).ThenInclude(x => x.Physician).Where(x => x.Isdeleted != deleteBit).ToList();
+            return _context.Shiftdetails.Include(x => x.Shiftdetailregions).ThenInclude(x => x.Region).Include(x => x.Shift).ThenInclude(x => x.Physician)
+                .Where(x => x.Isdeleted != deleteBit && 
+                (reg == 0 || x.Shiftdetailregions.FirstOrDefault().Regionid == reg)).ToList();
         }
-
-
-
 
 
         public ShiftPoupViewModel getShiftDetailSpecific(int evenetId)

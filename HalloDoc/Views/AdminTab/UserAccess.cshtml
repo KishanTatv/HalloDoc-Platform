@@ -68,7 +68,7 @@
                                             0
                                         </td>
                                         <td class="d-flex justify-content-center">
-                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit" data-roleid="@item.Id">
+                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit" data-roleid="@item.Aspnetuserrole.Roleid" data-aspid="@item.Id">
                                                 Edit
                                             </div>
                                         </td>
@@ -80,8 +80,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="Tabpartial">
+        <div class="Tabpartial">
+        </div>
     </div>
 
 </div>
@@ -92,12 +92,14 @@
 
     $('.AEdit').click(function () {
         var roleid = $(this).data('roleid');
+        var aspid = $(this).data('aspid');
         $.ajax({
-            url: '/AdminTab/EditAccess',
+            url: '/AdminTab/editUserAccess',
             method: 'POST',
-            data: { roleid: roleid },
+            data: { aspid: aspid, roleid: roleid },
             success: function (response) {
-                
+                $('.AccessMain').remove();
+                $('.Tabpartial').html(response);
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

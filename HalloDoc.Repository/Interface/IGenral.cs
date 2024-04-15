@@ -20,6 +20,7 @@ namespace HalloDoc.Repository.Interface
         string getMenulistFromRole(int roleId);
 
         int getAspId(string email);
+        string getEmailfromAspId(int aspId);
         int getPhyId(string email);
         bool checkBlockReq(string email);
 

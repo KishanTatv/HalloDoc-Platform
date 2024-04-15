@@ -56,6 +56,8 @@ namespace HalloDoc.Repository.Interface
         List<Region> getAllRegion();
 
         List<Physicianregion> GetAvaliablePhysician(int regionId);
+        List<Physicianregion> getRegionFromPhyID(int phyId);
+
 
 
         //block req
@@ -149,7 +151,7 @@ namespace HalloDoc.Repository.Interface
 
         List<phyCustomNameViewModel> getAllPhysicianName();
 
-        IEnumerable<Shiftdetail> getAllShiftdetail();
+        IEnumerable<Shiftdetail> getAllShiftdetail(int reg);
 
         ShiftPoupViewModel getShiftDetailSpecific(int evenetId);
 
