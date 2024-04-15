@@ -131,7 +131,7 @@ namespace HalloDoc.Repository.Interface
 
 
         // user access
-        List<Aspnetuser> UserAccessData();
+        IEnumerable<UserAccessViewModel> userAccessData();
 
 
         // User table list

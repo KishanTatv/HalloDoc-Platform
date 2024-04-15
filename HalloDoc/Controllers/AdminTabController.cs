@@ -602,7 +602,7 @@ namespace HalloDoc.Controllers
         [CustomAuthorize("Admin:Provider", "User Access")]
         public IActionResult UserAccess()
         {
-            var data = _Admin.UserAccessData();
+            IEnumerable<UserAccessViewModel> data = _Admin.userAccessData();
             return View(data);
         }
 

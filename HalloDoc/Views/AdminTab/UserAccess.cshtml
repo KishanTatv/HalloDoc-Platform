@@ -5,7 +5,8 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@model List<HalloDoc.Entity.Models.Aspnetuser>;
+@*@model List<HalloDoc.Entity.Models.Aspnetuser>;*@
+    @model IEnumerable<HalloDoc.Entity.AdminTab.UserAccessViewModel>;
 
 
 @{
@@ -46,7 +47,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            @if (item.Aspnetuserrole.Roleid == 1)
+                                            @if (item.roleId == 1)
                                             {
                                                 <span>Admin</span>
                                             }
@@ -56,19 +57,26 @@
                                             }
                                         </td>
                                         <td>
-                                            @item.Username
+                                            @item.userName
                                         </td>
                                         <td>
-                                            @item.Phonenumber
+                                            @item.Phone
                                         </td>
                                         <td>
-                                            Active
+                                            @if(item.status == 1)
+                                            {
+                                                <p>Active</p>
+                                            }
+                                            else
+                                            {
+                                                <p>Pending</p>
+                                            }
                                         </td>
                                         <td>
-                                            0
+                                            @item.totalRequest
                                         </td>
-                                        <td class="d-flex justify-content-center">
-                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit" data-roleid="@item.Aspnetuserrole.Roleid" data-aspid="@item.Id">
+                                        <td class="text-center">
+                                            <div class="btn btn-outline-info ps-2 pe-2 p-0 AEdit" data-roleid="@item.roleId" data-aspid="@item.aspId">
                                                 Edit
                                             </div>
                                         </td>

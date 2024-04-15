@@ -334,7 +334,6 @@
     <script>
         $(document).ready(function () {
             $('#@reg-s').prop('checked', true);
-            console.log(reg);
         });
     </script>
 }
@@ -680,7 +679,7 @@
                         }
                     });
                 }
-                else{
+                else {
                     $('.pass-error').text("Week Password");
                 }
             }
@@ -761,17 +760,28 @@
 
         $('.deletePhy').click(function () {
             var phid = $('.Phyid').val();
-            $.ajax({
-                type: 'POST',
-                url: '/AdminTab/DeletePhy',
-                data: { phid: phid },
-                success: function (response) {
-                    window.location.reload();
+            Swal.fire({
+                title: "Confirm to delete Provider Account",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Delete",
+                showLoaderOnConfirm: true,
+                preConfirm: async (login) => {
+                    $.ajax({
+                        type: 'POST',
+                        url: '/AdminTab/DeletePhy',
+                        data: { phid: phid },
+                        success: function (response) {
+                            window.location.reload();
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
                 },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
+                allowOutsideClick: () => !Swal.isLoading()
             });
+
         });
     });
 </script>

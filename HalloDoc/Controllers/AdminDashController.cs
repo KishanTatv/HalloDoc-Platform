@@ -592,7 +592,7 @@ namespace HalloDoc.Controllers
             }
             else
             {
-                int aspId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                int  aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
                 _Admin.AddOrderDetail(vendorid, aspId, reqid, prescription, refil);
                 return RedirectToAction("SendOrder", new { reqid = reqid });
             }
@@ -628,14 +628,24 @@ namespace HalloDoc.Controllers
 
         public IActionResult AgrrementSent(int reqid, string email, string phone)
         {
-            int adminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            Nullable<int> adminId = null;
+            Nullable<int> phyId = null;
+
+            if (Request.Cookies["CookieRole"] == "1")
+            { 
+                adminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+            }
+            if (Request.Cookies["CookieRole"] == "2")
+            {
+                phyId = _Physician.getPhyId(Request.Cookies["CookieEmail"]);
+            }
             string subject = "Agreement Acknowledgement";
             string link = Url.Action("ReviewAgreement", "Home", new { reqid = reqid }, Request.Scheme);
             string body = $"Hi,<br /><br />Please click on the following link For Agreement :<br /><br />" + link;
             _Genral.SendEmailOffice365(email, subject, body, null);
-            _Genral.addEmailLog(body, subject, email, null, Convert.ToInt16(Request.Cookies["CookieRole"]), reqid, null, null);
+            _Genral.addEmailLog(body, subject, email, null, Convert.ToInt16(Request.Cookies["CookieRole"]), reqid, adminId, phyId);
             _Genral.sendSMSwithTwilio(phone, subject + body);
-            _Genral.addSMSLog(body, phone, Convert.ToInt16(Request.Cookies["CookieRole"]), reqid, adminId, null);
+            _Genral.addSMSLog(body, phone, Convert.ToInt16(Request.Cookies["CookieRole"]), reqid, adminId, phyId);
             return Json(new { value = "done" });
         }
         #endregion

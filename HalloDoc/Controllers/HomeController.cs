@@ -116,14 +116,14 @@ namespace HalloDoc.Controllers
         public IActionResult SendAgreement(int reqid)
         {
             _genral.updateReqStatus(reqid, 4);
-            return Ok();
+            return RedirectToAction("PatientLogin", "Patient");
         }
 
         public IActionResult AgreeCancel(int reqid, string note)
         {
             short status = 1;
             _genral.AddreqLogStatus(reqid, note, null, null, status);
-            return Ok();
+            return RedirectToAction("PatientLogin", "Patient");
         }
         #endregion
 

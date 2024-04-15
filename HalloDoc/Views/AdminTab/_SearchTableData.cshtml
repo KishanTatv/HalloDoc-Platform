@@ -50,10 +50,10 @@
                     {
                         <td>-</td>
                     }
-                    <td>note</td>
-                    <td>pnote</td>
-                    <td>Anote</td>
-                    <td>patnote</td>
+                    <td>@(item.Requestnotes.LastOrDefault()?.Physiciannotes ?? "-")</td>
+                    <td>@(item.Requeststatuslogs.Where(x => x.Status == 3).LastOrDefault()?.Notes ?? "-")</td>
+                    <td>@(item.Requestnotes.LastOrDefault()?.Adminnotes ?? "-")</td>
+                    <td>@(item.Requestclients.FirstOrDefault()?.Notes ?? "-")</td>
                     <td class="text-center">
                         <a class="btn btn-outline-info ps-2 pe-2 p-0 deleteBtn" data-id="@item.Requestid">
                             Delete

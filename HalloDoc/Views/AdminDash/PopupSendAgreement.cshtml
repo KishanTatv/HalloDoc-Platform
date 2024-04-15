@@ -55,6 +55,10 @@
                     success: function (response) {
                         $("#sendAgree").remove();
                         $('.modal-backdrop').remove();
+                        Swal.fire({
+                            title: "Agreement Send !",
+                            icon: "success"
+                        });
                     },
                     error: function (xhr, status, error) {
                         console.error(xhr.responseText);

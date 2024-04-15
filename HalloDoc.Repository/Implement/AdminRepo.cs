@@ -604,11 +604,21 @@ namespace HalloDoc.Repository.Implement
 
 
         //user Access
-        public List<Aspnetuser> UserAccessData()
-        {
-            return _context.Aspnetusers.Include(x => x.Aspnetuserrole).Where(x => x.Aspnetuserrole.Roleid != 3).ToList();
-        }
 
+        public IEnumerable<UserAccessViewModel> userAccessData()
+        {
+            IEnumerable<UserAccessViewModel> data = _context.Aspnetusers.Include(x => x.Aspnetuserrole).Where(x => x.Aspnetuserrole.Roleid != 3).Include(x => x.PhysicianAspnetusers).Include(x => x.AdminAspnetusers).ToList()
+                .Select(x => new UserAccessViewModel
+                {
+                    aspId = x.Id,
+                    roleId = x.Aspnetuserrole.Roleid,
+                    userName = x.Username,
+                    Phone = x.Phonenumber,
+                    status = (int)(x.Aspnetuserrole.Roleid == 1 ? x.AdminAspnetusers?.FirstOrDefault()?.Status : x.PhysicianAspnetusers.FirstOrDefault()?.Status),
+                    totalRequest = x.Aspnetuserrole.Roleid == 2 ? _context.Requests.Where(i => i.Physicianid == x.PhysicianAspnetusers.FirstOrDefault().Physicianid).Count(): 0,
+                });
+            return data;
+        }
 
 
         // All user Data
@@ -627,7 +637,7 @@ namespace HalloDoc.Repository.Implement
 
         public List<Request> getAllReqData(string? reqStatus, int reqType)
         {
-            var data = _context.Requests.Include(x => x.Requestclients).Include(x => x.Physician)
+            var data = _context.Requests.Include(x => x.Requestclients).Include(x => x.Physician).Include(x => x.Requestnotes).Include(x => x.Requeststatuslogs)
                 .Where(x => (x.Isdeleted != new BitArray(new bool[] { true })) &&
                 (reqType == 0 || x.Requesttypeid.Equals(reqType))).ToList();
             if (reqStatus == "New")
