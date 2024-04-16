@@ -15,18 +15,18 @@
             <div class="modal-body">
                 <p>To all unscheduled Physicians: we are short on Coverage and needs additional support on call to respond to Request.</p>
                 <div class="text-center pt-2">
-                        <div class="form-floating mt-2">
-                            <textarea type="text" class="form-control bg-transparent h-25"
-                                      placeholder="Detail info" id="SupReq" rows="3" aria-label="Detail info"
-                                      aria-describedby="button-addon2"> </textarea>
-                            <label for="ms-3 text-info">Message</label>
-                        </div>
+                    <div class="form-floating mt-2">
+                        <textarea type="text" class="form-control bg-transparent h-25"
+                                  placeholder="Detail info" id="SupReq" rows="3" aria-label="Detail info" onkeyup="checkNote()"
+                                  aria-describedby="button-addon2"></textarea>
+                        <label for="ms-3 text-info">Message</label>
+                    </div>
                 </div>
 
-                <p class="text-danger m-0"></p>
+                <span class="text-danger noteError"></span>
             </div>
             <div class="modal-footer p-1">
-                <button type="submit" class="btn btn-secondary btn-info text-light blockReq">Continue</button>
+                <button type="submit" class="btn btn-secondary btn-info text-light ReqSupportDty">Continue</button>
                 <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
             </div>
         </div>
@@ -35,25 +35,33 @@
 
 
 <script asp-append-version="true">
-    //$(document).ready(function () {
-    //    $('.blockReq').click(function () {
-    //        var reqid = $(this).data('reqid');
-    //        var note = $('#SupReq').val();
-    //        $.ajax({
-    //            url: '/AdminDash/ReqSupportSend',
-    //            method: 'POST',
-    //            data: { reqid: reqid, note: note },
-    //            success: function (response) {
-    //                if (response.value == "Ok") {
-    //                    window.location.reload();
-    //                } else if (response.value == "Error") {
-    //                    $(".text-danger").text("Please Add note!");
-    //                }
-    //            },
-    //            error: function (xhr, status, error) {
-    //                console.error(xhr.responseText);
-    //            }
-    //        });
-    //    });
-    //});
+    function checkNote(){
+        if ($('#SupReq').val().trim() != ""){
+            $(".noteError").text("");
+        }
+    }
+
+    $('.ReqSupportDty').click(function () {
+        var note = $('#SupReq').val().trim();
+        if (note != '') {
+            $.ajax({
+                url: '/AdminDash/ReqSupportSend',
+                method: 'POST',
+                data: { note: note },
+                success: function (response) {
+                    if (response.value == "Ok") {
+                        window.location.reload();
+                    } else if (response.value == "Error") {
+                        $(".noteError").text("required Add note!");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        else {
+            $('.noteError').text("Please add message.");
+        }
+    });
 </script>

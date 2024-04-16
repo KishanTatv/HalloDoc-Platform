@@ -5,7 +5,7 @@
 }
 
 
-<nav class="shadow-sm bg-body-tertiary rounded collapse show" id="collapseExample">
+<nav class="shadow-sm bg-body-tertiary rounded collapse show" id="DashNavCollapse">
     <div class="Dash-nav nav nav-underline nav-item text-info" id="nav-tab" role="tablist">
         @if (Context.Request.Cookies["CookieRole"] == "1")
         {
@@ -52,7 +52,7 @@
     </div>
 </nav>
 
-<script asp-append-version="true">
+@*<script asp-append-version="true">
     $(document).ready(function () {
         
         $.ajax({
@@ -108,4 +108,4 @@
         });
 
     });
-</script>
+</script>*@

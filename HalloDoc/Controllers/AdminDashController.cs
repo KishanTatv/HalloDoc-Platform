@@ -77,32 +77,26 @@ namespace HalloDoc.Controllers
             switch (id)
             {
                 case 1:   //New
-                    ViewBag.TPage = Math.Ceiling(Tcount[0] / 5.0);
                     status.Add(1);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 2:   //Pending
-                    ViewBag.TPage = Math.Ceiling(Tcount[1] / 5.0);
                     status.Add(2);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 3:   //Active
-                    ViewBag.TPage = Math.Ceiling(Tcount[2] / 5.0);
                     status.Add(4); status.Add(5);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 4:  //Conclude
-                    ViewBag.TPage = Math.Ceiling(Tcount[3] / 5.0);
                     status.Add(6);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 5:   //To-close
-                    ViewBag.TPage = Math.Ceiling(Tcount[4] / 5.0);
                     status.Add(3); status.Add(7); status.Add(8);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
                 case 6:   //Unpaid
-                    ViewBag.TPage = Math.Ceiling(Tcount[5] / 5.0);
                     status.Add(9);
                     Req = _Admin.GetPartialTableData(status, page, pageSize, search, reg, reqtype, phyFilterId);
                     break;
@@ -131,10 +125,25 @@ namespace HalloDoc.Controllers
         #endregion
 
 
+        #region request Support
         public IActionResult requestSupport()
         {
             return PartialView("PopupReqSupport");
         }
+
+        public IActionResult ReqSupportSend(string note)
+        {
+            if(note != "")
+            {
+                return Json(new { Value = "Ok" });
+            }
+            else
+            {
+                return Json(new { Value = "Error" });
+            }
+            return Ok();
+        }
+        #endregion
 
         #region SendLink
         public IActionResult SendLink()
@@ -159,6 +168,7 @@ namespace HalloDoc.Controllers
             return Ok();
         }
         #endregion
+
 
         #region NewRequest
         public IActionResult NewRequest(int reqid)
@@ -343,6 +353,7 @@ namespace HalloDoc.Controllers
         #endregion
 
 
+        #region ViewCase
         [ActionName("ViewCase")]
         public IActionResult ViewCase(int reqid)
         {
@@ -352,6 +363,7 @@ namespace HalloDoc.Controllers
             var data = new ViewcaseViewModel { clientInformation = client, request = req };
             return PartialView("_AViewCase", data);
         }
+        #endregion
 
 
         #region viewNote
