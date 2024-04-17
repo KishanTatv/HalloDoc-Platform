@@ -24,14 +24,14 @@ namespace HalloDoc.Entity.AdminTab
         [Column("firstname")]
         [Required(ErrorMessage = "Firstname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(15, MinimumLength = 3)]
+        [StringLength(16, ErrorMessage = "Must be between 2 and 16 characters", MinimumLength = 2)]
         public string? Firstname { get; set; }
 
 
         [Column("lastname")]
         [Required(ErrorMessage = "Lastname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(15, MinimumLength = 3)]
+        [StringLength(16, ErrorMessage = "Must be between 2 and 16 characters", MinimumLength = 2)]
         public string? Lastname { get; set; }
 
         [Column("phonenumber")]

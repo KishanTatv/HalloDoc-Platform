@@ -13,13 +13,13 @@ namespace HalloDoc.Entity.AdminTab
         [Column("firstname")]
         [Required(ErrorMessage = "Firstname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(16, ErrorMessage = "Must be between 5 and 20 characters", MinimumLength = 5)]
+        [StringLength(16, ErrorMessage = "Must be between 2 and 16 characters", MinimumLength = 2)]
         public string Firstname { get; set; } = null!;
 
         [Column("lastname")]
         [Required(ErrorMessage = "Lastname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(16, ErrorMessage = "Must be between 5 and 20 characters", MinimumLength = 5)]
+        [StringLength(16, ErrorMessage = "Must be between 2 and 16 characters", MinimumLength = 2)]
         public string? Lastname { get; set; }
 
         [Column("email")]
@@ -29,6 +29,7 @@ namespace HalloDoc.Entity.AdminTab
 
         [Column("mobile")]
         [Required(ErrorMessage = "Phone Number is required")]
+        [StringLength(16, ErrorMessage = "Must be between 10 and 15 digit", MinimumLength = 9)]
         public string? Mobile { get; set; }
 
     }

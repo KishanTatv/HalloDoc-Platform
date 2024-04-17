@@ -121,7 +121,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult AgreeCancel(int reqid, string note)
         {
-            short status = 1;
+            short status = 7;
             _genral.AddreqLogStatus(reqid, note, null, null, status);
             return RedirectToAction("PatientLogin", "Patient");
         }

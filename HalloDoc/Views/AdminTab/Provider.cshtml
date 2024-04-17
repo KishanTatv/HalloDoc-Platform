@@ -101,17 +101,21 @@
 
         $(document).on('click', '.page-link', function () {
             var page = $(this).data('page');
-            $.ajax({
-                url: '/AdminTab/ProviderData',
-                method: 'POST',
-                data: { page: page },
-                success: function (response) {
-                    $("#ProviderPartial").html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
+            var tpage = $(this).data('tpage');
+            console.log(page + " " + tpage);
+            if (page < tpage+1) {
+                $.ajax({
+                    url: '/AdminTab/ProviderData',
+                    method: 'POST',
+                    data: { page: page },
+                    success: function (response) {
+                        $("#ProviderPartial").html(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
         });
 
     });

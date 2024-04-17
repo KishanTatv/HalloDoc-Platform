@@ -16,27 +16,30 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="text-center pt-2">
+                <div class="pt-2">
                     <div class="form-floating mt-2">
                         <input type="text" class="form-control bg-transparent fName" placeholder="firstNmae">
                         <label>First Name</label>
                     </div>
+                    <p class="text-danger FnameError m-0"></p>
                     <div class="form-floating mt-2">
                         <input type="text" class="form-control bg-transparent lName" placeholder="lastName">
                         <label>Last Name</label>
                     </div>
+                    <p class="text-danger LnameError m-0"></p>
                     <div class="form-floating mt-2">
                         <input type="number" id="phone1" style="height:58px" class="form-control bg-transparent mobile" />
                     </div>
+                    <p class="text-danger mobError m-0"></p>
                     <div class="form-floating mt-2">
                         <input type="email" class="form-control bg-transparent emailInput" placeholder="eamil">
                         <label>Email</label>
                     </div>
+                    <p class="text-danger emailError m-0"></p>
                 </div>
-                <p class="text-danger m-0"></p>
             </div>
             <div class="modal-footer p-1">
-                <button type="submit" class="btn btn-secondary btn-info text-light sendlink" >Send</button>
+                <button type="submit" class="btn btn-secondary btn-info text-light sendlink">Send</button>
                 <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal"> Cancel </button>
             </div>
         </div>
@@ -52,7 +55,7 @@
             if (CheckData()) {
                 var email = $('.emailInput').val();
                 var mobile = $('.mobile').val();
-                var fname = $('.fName').val(); 
+                var fname = $('.fName').val();
                 var lname = $('.lname').val();
                 var name = fname + " " + lname;
                 $.ajax({
@@ -72,13 +75,60 @@
     });
 
     function CheckData() {
-        var email = $('.emailInput').val();
-        if (email) {
-            return true;
+        var email = $('.emailInput').val().trim();
+        var mobile = $('.mobile').val().trim();
+        var fName = $('.fName').val().trim();
+        var lName = $('.lName').val().trim();
+        var nameRegex = /^[A-Za-z]{2,10}$/;
+        if(fName == ''){
+            $('.FnameError').text("FirstName required");
         }
-        else {
-            $('.text-danger').text("please Add Email");
+        else if(!fName.match(nameRegex)){
+            $('.FnameError').text("only character,length must be 2 to 10");
+        }
+        else if(lName == ''){
+            $('.FnameError').text("");
+            $('.LnameError').text("LatName required");
+        }
+        else if (!lName.match(nameRegex)){
+            $('.LnameError').text("only character,length must be 2 to 10");
+        }
+        else if (mobile == '') {
+            $('.FnameError').text("");
+            $('.LnameError').text("");
+            $('.mobError').text("Please Add Mobile");
             return false;
         }
+        else if (email == '') {
+            $('.FnameError').text("");
+            $('.LnameError').text("");
+            $('.mobError').text("");
+            $('.emailError').text("please Add Email");
+            return false;
+        }
+        else {
+            var validRegex =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            var PhoneRegx = /^\d{10}$/;
+            $('.FnameError').text("");
+            $('.LnameError').text("");
+            $('.mobError').text("");
+            if (!mobile.match(PhoneRegx)) {
+                $('.emailError').text("");
+                $('.mobError').text("Incorrect Mobile");
+                return false;
+            }
+            else if (!email.match(validRegex)) {
+                $('.mobError').text("");
+                $('.emailError').text("Incorrect Email");
+                return false;
+            }
+            else {
+                $('.emailError').text("");
+                $('.mobError').text("");
+                return true;
+            }
+        }
+
     }
+
 </script>

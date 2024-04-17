@@ -69,22 +69,17 @@
 <div aria-label="Page navigation example">
     <ul class="pagination justify-content-between me-3 pb-2">
 
-        <div>
+        <span>
             <span> Page : </span> <span class="text-primary">@(ViewBag.CurrentPage + 1) / @ViewBag.TPage </span>
-        </div>
-        <div class="d-flex">
-        <li><div class="page-link" data-page="@(ViewBag.CurrentPage - 1)"> <i class="bi bi-caret-left-fill text-info"></i> </div></li>
+        </span>
+
+        <span class="d-flex">
+        <li><div class="page-link" data-page="@(ViewBag.CurrentPage - 1)" data-tpage="@ViewBag.TPage"> <i class="bi bi-caret-left-fill text-info"></i> </div></li>
 
         <li class="page-item"><div class="page-link">@(ViewBag.CurrentPage + 1)</div></li>
 
-            @*@if (ViewBag.TPage < (ViewBag.CurrentPage + 2))
-        {
-        <li><div class="btn"> <i class="bi bi-caret-right-fill text-info"></i>  </div></li>
-        }
-        else
-        {*@
-        <li><div class="page-link" data-page="@(ViewBag.CurrentPage + 1)"> <i class="bi bi-caret-right-fill text-info"></i> </div></li>
-            @*}*@
+        <li><div class="page-link" data-page="@(ViewBag.CurrentPage + 1)" data-tpage="@ViewBag.TPage"> <i class="bi bi-caret-right-fill text-info"></i> </div></li>
+        </span>
     </ul>
 </div>
 

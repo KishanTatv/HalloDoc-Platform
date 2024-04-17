@@ -5,7 +5,14 @@
 @model HalloDoc.Entity.AdminDashTable.DashTable;
 
 @{
-    ViewData["Title"] = "Patient Dashbord";
+    @if (Context.Request.Cookies["CookieRole"] == "1")
+    {
+        ViewData["Title"] = "Admin Dashbord";
+    }
+    @if (Context.Request.Cookies["CookieRole"] == "2")
+    {
+        ViewData["Title"] = "Provider Dashbord";
+    }
     Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
 }
 

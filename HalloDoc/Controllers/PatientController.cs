@@ -62,6 +62,7 @@ namespace HalloDoc.Controllers
         }
 
 
+        #region Login Authorization
         [HttpPost]
         [ActionName("PatientVerification")]
         public IActionResult PatientVerification(Aspnetuser user)
@@ -117,8 +118,10 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("PatientLogin");
         }
+        #endregion
 
 
+        #region reset Password
         public IActionResult PatientForgotpass()
         {
             return View();
@@ -142,16 +145,16 @@ namespace HalloDoc.Controllers
             }
             return RedirectToAction("PatientForgotpass");
         }
+        #endregion
 
 
+        #region New Password
         [HttpGet]
         [Route("Patient/NewPassword/{email}")]
         public IActionResult NewPassword(string email)
         {
             return View();
         }
-
-
 
         [HttpPost]
         [Route("Patient/NewPassword/{email}")]
@@ -175,8 +178,10 @@ namespace HalloDoc.Controllers
             }
             return View();
         }
+        #endregion
 
 
+        #region CreatePatient
         [HttpGet]
         public IActionResult CreatePatient()
         {
@@ -218,13 +223,16 @@ namespace HalloDoc.Controllers
                 return RedirectToAction("PatientLogin");
             }
         }
+        #endregion
 
 
+        #region logout
         public IActionResult logOut()
         {
             Response.Cookies.Delete("HalloCookie");
             return View("PatientLogin");
         }
+        #endregion
 
 
 

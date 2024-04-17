@@ -59,7 +59,6 @@ namespace HalloDoc.Controllers
         #endregion
 
 
-
         #region Admin Profile
         [CustomAuthorize("Admin:Provider", "My Profile")]
         public IActionResult Profile()
@@ -887,7 +886,6 @@ namespace HalloDoc.Controllers
             return PartialView("_ProviderOnCallData", data);
         }
         #endregion
-
 
 
         #region Partner

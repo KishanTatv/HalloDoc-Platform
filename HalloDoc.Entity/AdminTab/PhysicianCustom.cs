@@ -15,20 +15,20 @@ namespace HalloDoc.Entity.AdminTab
 
         [Required(ErrorMessage = "Password is required")]
         [RegularExpression(@"^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$", ErrorMessage = "Please Enter a Strong Password.")]
-        [StringLength(255, ErrorMessage = "Must be between 5 and 255 characters", MinimumLength = 5)]
+        [StringLength(255, ErrorMessage = "Must be between 5 and 100 characters", MinimumLength = 5)]
         [Display(Name = "Password")]
         public string? Password { get; set; }
 
         [Column("firstname")]
         [Required(ErrorMessage = "Firstname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(16, ErrorMessage = "Must be between 5 and 20 characters", MinimumLength = 5)]
+        [StringLength(16, ErrorMessage = "Must be between 2 and 16 characters", MinimumLength = 2)]
         public string Firstname { get; set; } = null!;
 
         [Column("lastname")]
         [Required(ErrorMessage = "Lastname is required")]
         [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Only Characters Enter.")]
-        [StringLength(16, ErrorMessage = "Must be between 5 and 20 characters", MinimumLength = 5)]
+        [StringLength(16, ErrorMessage = "Must be between 2 and 16 characters", MinimumLength = 2)]
         public string? Lastname { get; set; }
 
         [Column("email")]

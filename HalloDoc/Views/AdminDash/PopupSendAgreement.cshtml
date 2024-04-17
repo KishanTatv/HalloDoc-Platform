@@ -19,15 +19,17 @@
             <div class="modal-body">
                 <p>To Send Agreement please make sure you are updating the correct contact information below for the responsible party.</p>
 
-                <div class="text-center pt-2">
+                <div class="pt-2">
                     <div class="form-floating mt-2">
-                        <input type="number" class="form-control bg-transparent phoneAgree" placeholder="contact" asp-for="Phonenumber">
+                        <input type="text" class="form-control bg-transparent phoneAgree" placeholder="contact" asp-for="Phonenumber">
                         <label>Phone Number</label>
                     </div>
+                    <p class="text-danger m-0 mobError"></p>
                     <div class="form-floating mt-2">
                         <input type="email" class="form-control bg-transparent emailAgree" placeholder="eamil" asp-for="Email">
                         <label>Email</label>
                     </div>
+                    <p class="text-danger m-0 emailError"></p>
                 </div>
                 <p class="text-danger m-0"></p>
             </div>
@@ -71,12 +73,26 @@
     function CheckData() {
         var email = $('.emailAgree').val().trim();
         var phone = $('.phoneAgree').val().trim();
-        if (email && phone) {
-            return true;
-        }
-        else {
-            $('.text-danger').text("please Add Email");
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        var PhoneRegx = /^\d{10}$/;
+        if (phone == '') {
+            $('.mobError').text("Please Add Mobile");
             return false;
+        }
+        else if (email == '') {
+            $('.mobError').text("");
+            $('.emailError').text("please Add Email");
+            return false;
+        }
+        else if (!email.match(validRegex)) {
+            $('.mobError').text("");
+            $('.emailError').text("Incorrect Email");
+            return false;
+        }
+        else{
+            $('.mobError').text("");
+            $('.emailError').text("");
+            return true;
         }
     }
 </script>

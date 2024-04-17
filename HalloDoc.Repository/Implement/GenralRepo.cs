@@ -74,7 +74,7 @@ namespace HalloDoc.Repository.Implement
 
         public int getroleIdFromEmail(string email, int aspnetRole)
         {
-            if(aspnetRole == 1)
+            if (aspnetRole == 1)
             {
                 return _context.Admins.FirstOrDefault(x => x.Email == email).Roleid.Value;
             }
@@ -89,7 +89,7 @@ namespace HalloDoc.Repository.Implement
         {
             string menulist = null;
             Role role = _context.Roles.Include(x => x.Rolemenus).ThenInclude(x => x.Menu).FirstOrDefault(x => x.Roleid == roleId);
-            foreach(var item in role.Rolemenus)
+            foreach (var item in role.Rolemenus)
             {
                 menulist += item.Menu.Name + ", ";
             }
@@ -362,7 +362,8 @@ namespace HalloDoc.Repository.Implement
 
 
 
-        #region not work left join GetRequestsFileswithReq
+        #region Exploring
+        //Not work left join
         //public IEnumerable<RequestWithFile> GetRequestsFileswithReq(int reqId)
         //{
         //    var reqFile = from r in _context.Requests
