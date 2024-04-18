@@ -214,8 +214,11 @@ namespace HalloDoc.Repository.Implement
         {
             EncounterForm form = _context.EncounterForms.FirstOrDefault(x => x.RequestId == reqid);
             form.IsFinalize = true;
-            _context.EncounterForms.Update(form);
-            _context.SaveChanges();
+            if (form != null)
+            {
+                _context.EncounterForms.Update(form);
+                _context.SaveChanges();
+            }
         }
 
         public void AddEncounterForm(EncounterForm modeldata, int? AdminId, int? PhyId)

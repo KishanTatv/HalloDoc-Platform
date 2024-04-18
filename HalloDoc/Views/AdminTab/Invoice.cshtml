@@ -1,0 +1,74 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "Invoice";
+    Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
+
+
+
+<div class="MainContent pt-0 min-vh-100">
+    <partial name="partial/AdminNavTab" />
+
+    <div class="d-flex w-100 MainInvoice justify-content-center pb-4">
+        <div class="HContainer m-auto">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4> Timesheets</h4>
+                <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminDash" asp-action="Dashbord">
+                    <strong class="pe-2">&lt Back</strong>
+                </a>
+            </div>
+
+            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="col-md-3 form-floating mt-2">
+                        <select class="form-select selectTimePeriod ms-2" aria-label="Floating label select">
+                            <option value="0" selected>2024/04/01 - 2024/04/15</option>
+                            <option value="1">2024/04/16 - 2024/04/30</option>
+                        </select>
+                        <label class="ms-2" for="floatingSelect">Search by TimesheetPeriod</label>
+                    </div>
+                    <div class="col-2 justify-content-end">
+                        <button type="button" class="btn btn-outline-info FinalizeBtn">Finalize Timesheet</button>
+                    </div>
+                </div>
+                <div>
+                    <p class="ms-2">No record(s) found</p>
+                </div>
+            </div>
+            <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+                <div class="mb-4">
+                    <h6>TimeSheet Reimbursement</h6>
+                </div>
+
+                <div>
+                    <p class="">No record(s) found</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="PartialSheet"></div>
+</div>
+
+
+<script asp-append-version="true">
+    $('.FinalizeBtn').click(function () {
+        var period = $('.selectTimePeriod').val();
+        $.ajax({
+            url: '/AdminTab/FinalizeSheet',
+            method: 'POST',
+            data: {period : period},
+            success: function (response) {
+                $('.MainInvoice').remove();
+                $('#PartialSheet').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+</script>

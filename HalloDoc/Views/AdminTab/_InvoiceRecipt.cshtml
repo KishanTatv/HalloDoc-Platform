@@ -1,0 +1,80 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15);
+    DateTime endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
+}
+
+<div class="table-responsive mt-2">
+    <table class="table">
+        <thead class="table-secondary">
+            <tr>
+                <th scope="col"> Date </th>
+                <th scope="col"> Item </th>
+                <th scope="col"> Amount </th>
+                <th scope="col"> Bill </th>
+                <th scope="col"> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == 0)
+            {
+                @for (var i = 1; i <= startDate.Date.Day; i++)
+                {
+                    <tr>
+                        <td>@System.DateTime.Now.Date.ToString("MM")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy") </td>
+                        <td><input type="text" class="form-control" /></td>
+                        <td><input type="number" class="form-control" valuex="0" /></td>
+                        <td>
+                            <div class="d-flex m-auto">
+                                <div class="p-0 w-100">
+                                    <input type="text" class="form-control bg-transparent" id="selectedFile" placeholder="select File"
+                                           disabled>
+                                    <label class="ms-3"></label>
+                                </div>
+                                <div>
+                                    <label class="btn btn-outline-info d-flex ">
+                                        <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
+                                        <i class="bi bi-cloud-arrow-up border-info"></i>
+                                        <span class="upload_txt ms-2">Upload</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                @for (var i = 16; i <= endDate.Date.Day; i++)
+                {
+                    <tr>
+                        <td>@System.DateTime.Now.Date.ToString("MM")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy") </td>
+                        <td><input type="text" class="form-control" /></td>
+                        <td><input type="number" class="form-control" valuex="0" /></td>
+                        <td>
+                            <div class="d-flex m-auto">
+                                <div class="p-0 w-100">
+                                    <input type="text" class="form-control bg-transparent" id="selectedFile" placeholder="select File"
+                                           disabled>
+                                    <label class="ms-3"></label>
+                                </div>
+                                <div>
+                                    <label class="btn btn-outline-info d-flex ">
+                                        <input type="file" style="display: none;" id="FileInput" name="DocFile" multiple>
+                                        <i class="bi bi-cloud-arrow-up border-info"></i>
+                                        <span class="upload_txt ms-2">Upload</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

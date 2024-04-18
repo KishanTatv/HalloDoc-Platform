@@ -133,7 +133,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult ReqSupportSend(string note)
         {
-            if(note != "")
+            if (note != "")
             {
                 return Json(new { Value = "Ok" });
             }
@@ -604,7 +604,7 @@ namespace HalloDoc.Controllers
             }
             else
             {
-                int  aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
+                int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
                 _Admin.AddOrderDetail(vendorid, aspId, reqid, prescription, refil);
                 return RedirectToAction("SendOrder", new { reqid = reqid });
             }
@@ -644,7 +644,7 @@ namespace HalloDoc.Controllers
             Nullable<int> phyId = null;
 
             if (Request.Cookies["CookieRole"] == "1")
-            { 
+            {
                 adminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
             }
             if (Request.Cookies["CookieRole"] == "2")
@@ -711,33 +711,41 @@ namespace HalloDoc.Controllers
 
         public IActionResult EncounterDone(EncounterViewModel data)
         {
-            Nullable<int> AdminId = null;
-            Nullable<int> phyId = null;
-            if (Request.Cookies["CookieRole"] == "1")
+            ModelState["ClientInformation"].ValidationState = ModelValidationState.Valid;
+            if (ModelState.IsValid)
             {
-                AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
-            }
-            if (Request.Cookies["CookieRole"] == "2")
-            {
-                phyId = _Physician.getPhyId(Request.Cookies["CookieEmail"]);
-            }
+                Nullable<int> AdminId = null;
+                Nullable<int> phyId = null;
+                if (Request.Cookies["CookieRole"] == "1")
+                {
+                    AdminId = _Admin.getAdminId(Request.Cookies["CookieEmail"]);
+                }
+                if (Request.Cookies["CookieRole"] == "2")
+                {
+                    phyId = _Physician.getPhyId(Request.Cookies["CookieEmail"]);
+                }
 
-            if (_Genral.CheckEncounterForm((int)data.EncounterForm.RequestId))
-            {
-                _Genral.UpdateEncounterForm(data.EncounterForm, AdminId, phyId);
+                if (_Genral.CheckEncounterForm((int)data.EncounterForm.RequestId))
+                {
+                    _Genral.UpdateEncounterForm(data.EncounterForm, AdminId, phyId);
+                }
+                else
+                {
+                    _Genral.AddEncounterForm(data.EncounterForm, AdminId, phyId);
+                }
+                return Json(new { value = "Ok" });
             }
-            else
-            {
-                _Genral.AddEncounterForm(data.EncounterForm, AdminId, phyId);
-            }
-
-            return Ok();
+            return Json(new { value = "Error" });
         }
 
         public IActionResult EncounFinalze(int reqid)
         {
-            _Genral.EncounterFinalize(reqid);
-            return Ok();
+            if (_Genral.CheckEncounterForm(reqid))
+            {
+                _Genral.EncounterFinalize(reqid);
+                return Json(new { value = "Ok" });
+            }
+            return Json(new { value = "Error" });
         }
 
 
@@ -746,7 +754,8 @@ namespace HalloDoc.Controllers
             var client = _Genral.getClientProfile(_Genral.getClientEmailbyReqId(reqid));
             var encounter = _Genral.getEncounterDetail(reqid);
             var model = new EncounterViewModel { ClientInformation = client, EncounterForm = encounter };
-            return new ViewAsPdf("../shared/EncounterReport/EncounterReport", model) {
+            return new ViewAsPdf("../shared/EncounterReport/EncounterReport", model)
+            {
                 FileName = "Report.pdf",
                 PageSize = Rotativa.AspNetCore.Options.Size.A4,
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape,

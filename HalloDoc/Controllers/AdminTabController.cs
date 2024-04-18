@@ -1138,5 +1138,24 @@ namespace HalloDoc.Controllers
             return Ok();
         }
         #endregion
+
+
+        #region Invoice 
+        public IActionResult Invoice()
+        {
+            return View();
+        }
+
+        public IActionResult FinalizeSheet(int period)
+        {
+            return PartialView("_BiweeklySheet", period);
+        }
+
+        public IActionResult AddRecipt(int period)
+        {
+            return PartialView("_InvoiceRecipt", period);
+        }
+
+        #endregion
     }
 }

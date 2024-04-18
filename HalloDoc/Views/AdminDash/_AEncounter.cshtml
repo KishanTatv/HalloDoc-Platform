@@ -27,7 +27,7 @@
 
                         <div class="row form-floating">
                             <div class="col-md-6 form-floating mt-3">
-                                <input type="text" class="d-none EncountrtReq" asp-for="@Model.EncounterForm.RequestId" value="@TempData["reqid"]"/>
+                                <input type="text" class="d-none EncountrtReq" asp-for="@Model.EncounterForm.RequestId" value="@TempData["reqid"]" />
                                 <input type="text" class="form-control clientFeild" placeholder="firstNmae" asp-for="@Model.ClientInformation.Firstname" disabled>
                                 <label class="ms-3 text-secondary">First Name</label>
                                 <span asp-validation-for="ClientInformation.Firstname" class="text-danger"></span>
@@ -61,21 +61,26 @@
                                 <label class="ms-3 text-secondary">Email</label>
                                 <span asp-validation-for="ClientInformation.Email" class="text-danger"></span>
                             </div>
+                            <p class="text-danger EncounterError"></p>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.HistoryOfPresentIllnessOrInjury">
                                 <label class="ms-3 text-secondary">History Of Present illness Or injury</label>
+                                <span class="text-danger" asp-validation-for="@Model.EncounterForm.HistoryOfPresentIllnessOrInjury"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.MedicalHistory">
                                 <label class="ms-3 text-secondary">Medical History</label>
+                                <span class="text-danger" asp-validation-for="@Model.EncounterForm.MedicalHistory"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Medications">
                                 <label class="ms-3 text-secondary">Medications</label>
+                                <span class="text-danger" asp-validation-for="@Model.EncounterForm.Medications"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Allergies">
                                 <label class="ms-3 text-secondary">Allergies</label>
+                                <span class="text-danger" asp-validation-for="@Model.EncounterForm.Allergies"></span>
                             </div>
                         </div>
 
@@ -83,14 +88,17 @@
                             <div class="col-md-4 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Temp">
                                 <label class="ms-3 text-secondary">Temp</label>
+                                <span class="text-danger" asp-validation-for="@Model.EncounterForm.Temp"></span>
                             </div>
                             <div class="col-md-4 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Hr">
                                 <label class="ms-3 text-secondary">HR</label>
+                                <span class="text-danger" asp-validation-for="@Model.EncounterForm.Hr"></span>
                             </div>
                             <div class="col-md-4 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Rr">
                                 <label class="ms-3 text-secondary">RR</label>
+                                <span class="text-danger" asp-validation-for="@Model.EncounterForm.Rr"></span>
                             </div>
                         </div>
 
@@ -129,10 +137,12 @@
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Chest">
                                 <label class="ms-3 text-secondary">Chest</label>
+                                <span class="text-danger" asp-validation-for="@Model.EncounterForm.Chest"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Abd">
                                 <label class="ms-3 text-secondary">ABD</label>
+                                <span class="text-danger" asp-validation-for="@Model.EncounterForm.Abd"></span>
                             </div>
                             <div class="col-md-6 form-floating mt-3">
                                 <input type="text" class="form-control bg-transparent" placeholder="loc" asp-for="@Model.EncounterForm.Extremeties">
@@ -210,7 +220,9 @@
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                 data: data,
                 success: function (response) {
-                    $(".msgShow").text("Change Successfully!");
+                    if (response.value == "Ok") {
+                        $(".msgShow").text("Change Successfully!");
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
@@ -225,7 +237,16 @@
                 method: 'POST',
                 data: { reqid: reqid },
                 success: function (response) {
-                    $('.BackOn').click();
+                    if (response.value == "Ok") {
+                        $('.BackOn').click();
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Not Saved ",
+                            text: "Save change then after do finalize for report !",
+                            icon: "error"
+                        });
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
