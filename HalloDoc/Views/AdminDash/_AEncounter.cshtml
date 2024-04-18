@@ -221,7 +221,10 @@
                 data: data,
                 success: function (response) {
                     if (response.value == "Ok") {
-                        $(".msgShow").text("Change Successfully!");
+                        Swal.fire({
+                            title: "Change Saved!",
+                            icon: "success"
+                        });
                     }
                 },
                 error: function (xhr, status, error) {

@@ -88,69 +88,70 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
 
 <script asp-append-version="true">
-    $(document).ready(function () {
-        $('#professionOption').change(function () {
-            var profession = $(this).val();
-            $.ajax({
-                url: '/AdminDash/checkHealthProfessional',
-                method: 'POST',
-                data: { profession: profession },
-                success: function (response) {
-                    //console.log(response.healthprofessional[0]["vendorname"]);
-                    $("#bussinessOption").empty().append($('<option disabled selected> Bussiness </option>'));
-                    $.each(response.healthprofessional, function (index, item) {
-                        $("#bussinessOption").append($('<option></option>').val(item.vendorid).text(item.vendorname));
+
+    $('#professionOption').change(function () {
+        var profession = $(this).val();
+        $.ajax({
+            url: '/AdminDash/checkHealthProfessional',
+            method: 'POST',
+            data: { profession: profession },
+            success: function (response) {
+                //console.log(response.healthprofessional[0]["vendorname"]);
+                $("#bussinessOption").empty().append($('<option disabled selected> Bussiness </option>'));
+                $.each(response.healthprofessional, function (index, item) {
+                    $("#bussinessOption").append($('<option></option>').val(item.vendorid).text(item.vendorname));
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('#bussinessOption').change(function () {
+        var reqid = $(this).attr('data-id');
+        var vendorid = $('#bussinessOption').val();
+        $.ajax({
+            url: '/AdminDash/UpdateSendOrder',
+            method: 'POST',
+            data: { vendorid: vendorid, reqid: reqid },
+            success: function (response) {
+                console.log(response.healthprofessional);
+                $(".VenFax").val(response.healthprofessional.faxnumber);
+                $(".VenEmail").val(response.healthprofessional.email);
+                $(".busCon").val(response.healthprofessional.businesscontact)
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $('.SendOrder').click(function () {
+        var reqid = $(this).attr('data-id');
+        var vendorid = $('#bussinessOption').val();
+        var prescription = $('.prescription').val().trim();
+        var refil = $('.refil').val();
+        $.ajax({
+            url: '/AdminDash/AddOrder',
+            method: 'POST',
+            data: { vendorid: vendorid, reqid: reqid, prescription: prescription, refil: refil },
+            success: function (response) {
+                if (response.value == "ErrorP") {
+                    $(".text-danger").text("Please Add Prescription!");
+                } else if (response.value == "ErrorV") {
+                    $(".text-danger").text("Please Select Bussiness!");
+                } else {
+                    $("#partial").html(response);
+                    Swal.fire({
+                        title: "Order Placed !",
+                        icon: "success"
                     });
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
         });
-
-        $('#bussinessOption').change(function () {
-            var reqid = $(this).attr('data-id');
-            var vendorid = $('#bussinessOption').val();
-            $.ajax({
-                url: '/AdminDash/UpdateSendOrder',
-                method: 'POST',
-                data: { vendorid: vendorid, reqid: reqid },
-                success: function (response) {
-                    console.log(response.healthprofessional);
-                    $(".VenFax").val(response.healthprofessional.faxnumber);
-                    $(".VenEmail").val(response.healthprofessional.email);
-                    $(".busCon").val(response.healthprofessional.businesscontact)
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
-        $('.SendOrder').click(function () {
-            var reqid = $(this).attr('data-id');
-            var vendorid = $('#bussinessOption').val();
-            var prescription = $('.prescription').val().trim();
-            var refil = $('.refil').val();
-            $.ajax({
-                url: '/AdminDash/AddOrder',
-                method: 'POST',
-                data: { vendorid: vendorid, reqid: reqid, prescription: prescription, refil: refil },
-                success: function (response) {
-                    if (response.value == "ErrorP") {
-                        $(".text-danger").text("Please Add Prescription!");
-                    } else if (response.value == "ErrorV") {
-                        $(".text-danger").text("Please Select Bussiness!");
-                    } else {
-                        $("#partial").html(response);
-                        $(".text-success").text("Order Send Successfully !");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
     });
 </script>

@@ -280,7 +280,6 @@ namespace HalloDoc.Controllers
         [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult UpdatePhyAdditional(string BusinessN, string BusinessW, string Note, int phid, IFormFile Photo, IFormFile Sign)
         {
-
             int aspId = _Genral.getAspId(Request.Cookies["CookieEmail"]);
             string phyEmail = _Admin.getPhysicianEmail(phid);
 
@@ -607,7 +606,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult editUserAccess(int aspid, int roleid)
         {
-            if(roleid == 2)
+            if (roleid == 2)
             {
                 int phyid = _Genral.getPhyId(_Genral.getEmailfromAspId(aspid));
                 return RedirectToAction("PhysicanEdit", new { phid = phyid });
