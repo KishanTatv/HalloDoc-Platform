@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-md-6 form-floating mt-2">
                         <input type="date" class="form-control bg-transparent" 
-                               placeholder="Date of birth" asp-for="Dob">
+                               placeholder="Date of birth" asp-for="Dob" max="2015-12-31" min="1998-01-02">
                         <label class="ms-3">Date of Birth</label>
                         <span asp-validation-for="Dob" class="text-danger"></span>
                     </div>

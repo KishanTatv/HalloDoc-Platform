@@ -704,7 +704,7 @@ namespace HalloDoc.Repository.Implement
         public bool checkExistShift(ShiftPoupViewModel model, DateOnly newDate)
         {
             var filteredShifts = _context.Shiftdetails.Include(x => x.Shift)
-                .Where(x => x.Shiftdate == newDate && x.Shift.Physicianid == model.phyid)
+                .Where(x => x.Shiftdate == newDate && x.Shift.Physicianid == model.phyid && x.Isdeleted != new BitArray(new bool[] {true}))
                 .AsEnumerable()
                 .Where(x => IsDateRange(x.Starttime, x.Endtime, model.timeStart, model.timeEnd));
             bool shiftExists = filteredShifts.Any();

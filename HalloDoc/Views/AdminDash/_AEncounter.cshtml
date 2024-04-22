@@ -214,23 +214,28 @@
         $('#Formdata').submit(function (e) {
             e.preventDefault();
             var data = $("#Formdata").serialize();
-            $.ajax({
-                type: 'POST',
-                url: '/AdminDash/EncounterDone',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                data: data,
-                success: function (response) {
-                    if (response.value == "Ok") {
-                        Swal.fire({
-                            title: "Change Saved!",
-                            icon: "success"
-                        });
+            var dataValidt = $("#Formdata");
+            $.validator.unobtrusive.parse(dataValidt);
+            dataValidt.validate();
+            if (dataValidt.valid()) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/AdminDash/EncounterDone',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: data,
+                    success: function (response) {
+                        if (response.value == "Ok") {
+                            Swal.fire({
+                                title: "Change Saved!",
+                                icon: "success"
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
+                });
+            }
         });
 
         $(".ChnageFinalize").click(function () {

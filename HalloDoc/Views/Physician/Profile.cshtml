@@ -361,19 +361,59 @@
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 <script src="~/js/contact-api.js" asp-append-version="true"></script>
 <script asp-append-version="true">
+
+    $('.changePass').click(function () {
+        var pass = $('.pass').val().trim();
+        var passValid = (/[A-Z]/.test(pass) && /[0-9]/.test(pass) && /[^A-Za-z0-9]/.test(pass) && pass.length > 7);
+        if (pass != '') {
+            if (passValid) {
+                $.ajax({
+                    url: '/AdminTab/ResetPhyPass',
+                    method: 'POST',
+                    data: { pass: pass, phid: phid },
+                    success: function (response) {
+                        $('.pass-error').text("");
+                        if (response.value == "ok") {
+                            $('.Addmsg').text("Password Changed").addClass('text-success');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+            else {
+                $('.pass-error').text("Week Password");
+            }
+        }
+        else {
+            $('.pass-error').text("Add Password to change");
+        }
+    });
+
     $('.SendReqAdmin').click(function(){
         var note = $('#reqNote').val().trim();
         if(note != ''){
-            $('#reqAdminModal').remove();
-            $('.modal-backdrop').remove();
-            $('body').css({
-                'overflow': 'visible',
-                'padding-right': '0'
-            });
-            Swal.fire({
-                title: "Request Send",
-                text: "wait for admin responce to change!",
-                icon: "success"
+            $.ajax({
+                url: '/Physician/providerProfileChange',
+                method: 'POST',
+                data: { note: note},
+                success: function (response) {
+                    $('#reqAdminModal').remove();
+                    $('.modal-backdrop').remove();
+                    $('body').css({
+                        'overflow': 'visible',
+                        'padding-right': '0'
+                    });
+                    Swal.fire({
+                        title: "Request Send",
+                        text: "wait for admin response to change!",
+                        icon: "success"
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
             });
         }
         else{
@@ -403,11 +443,6 @@
         document.getElementById('selectedFiles').value = this.files[0].name;
     })
 
-    function updateRegionId(selectElement) {
-        const selectedRegionId = selectElement.value;
-        document.getElementById('regionIdHidden').value = selectedRegionId;
-    }
-
     let inputs = document.querySelectorAll('input');
     let select = document.querySelectorAll('select');
     let fileonBoard = document.querySelectorAll('.fileonBoard');
@@ -430,389 +465,4 @@
         item.disabled = false;
     });
 
-    function editEnable1() {
-        event.preventDefault();
-        const edit = document.getElementById('editbtn1');
-        const submit = document.getElementById('submitbtn1');
-        const cancel = document.getElementById('cancelbtn1');
-        const checkb = document.querySelectorAll('.checkb');
-        edit.classList.add('d-none');
-        submit.classList.remove('d-none');
-        cancel.classList.remove('d-none');
-
-        let AdIn = document.querySelectorAll('.AdIn');
-        AdIn.forEach(AdIn => {
-            AdIn.disabled = false;
-            AdIn.classList.add("bg-transparent");
-        });
-        checkb.forEach(checkb => {
-            checkb.classList.remove("bg-transparent");
-        });
-    }
-
-    function cancelEnable1() {
-        event.preventDefault();
-        const edit = document.getElementById('editbtn1');
-        const submit = document.getElementById('submitbtn1');
-        const cancel = document.getElementById('cancelbtn1');
-        edit.classList.remove('d-none');
-        submit.classList.add('d-none');
-        cancel.classList.add('d-none');
-
-        let AdIn = document.querySelectorAll('.AdIn');
-        AdIn.forEach(AdIn => {
-            AdIn.disabled = true;
-            AdIn.classList.remove("bg-transparent");
-        });
-    }
-
-    function editEnable2() {
-        event.preventDefault();
-        const edit = document.getElementById('editbtn2');
-        const submit = document.getElementById('submitbtn2');
-        const cancel = document.getElementById('cancelbtn2');
-        const reg = document.querySelector('.selectReg');
-        edit.classList.add('d-none');
-        submit.classList.remove('d-none');
-        cancel.classList.remove('d-none');
-        let Adad = document.querySelectorAll('.Adad');
-        Adad.forEach(Adad => {
-            Adad.disabled = false;
-            Adad.classList.add("bg-transparent");
-        });
-        reg.disabled = false;
-        reg.classList.add("bg-transparent");
-    }
-
-    function cancelEnable2() {
-        event.preventDefault();
-        const edit = document.getElementById('editbtn2');
-        const submit = document.getElementById('submitbtn2');
-        const cancel = document.getElementById('cancelbtn2');
-        const reg = document.querySelector('.selectReg');
-        edit.classList.remove('d-none');
-        submit.classList.add('d-none');
-        cancel.classList.add('d-none');
-        let Adad = document.querySelectorAll('.Adad');
-        Adad.forEach(Adad => {
-            Adad.disabled = true;
-            Adad.classList.remove("bg-transparent");
-        });
-        reg.disabled = true;
-        reg.classList.remove("bg-transparent");
-    }
-
-    function editEnable3() {
-        const edit = document.getElementById('editbtn3');
-        const submit = document.getElementById('submitbtn3');
-        const cancel = document.getElementById('cancelbtn3');
-        const sfile = document.querySelectorAll('.sfile');
-        edit.classList.add('d-none');
-        submit.classList.remove('d-none');
-        cancel.classList.remove('d-none');
-        let item = document.querySelectorAll('.edi3');
-        let signBtn = document.querySelector('.cretesign');
-        item.forEach(item => {
-            item.disabled = false;
-            item.classList.add("bg-transparent");
-        });
-        sfile.forEach(sfile => {
-            sfile.classList.add("bg-transparent");
-        })
-        const upfile = document.querySelectorAll('.fileUplod');
-        upfile.forEach(item => {
-            item.disabled = false;
-        })
-        signBtn.classList.remove("bg-transparent");
-        textarea.disabled = false;
-        textarea.classList.add("bg-transparent");
-    }
-
-    function cancelEnable3() {
-        const edit = document.getElementById('editbtn3');
-        const submit = document.getElementById('submitbtn3');
-        const cancel = document.getElementById('cancelbtn3');
-        const sfile = document.querySelectorAll('.sfile');
-        edit.classList.remove('d-none');
-        submit.classList.add('d-none');
-        cancel.classList.add('d-none');
-        let item = document.querySelectorAll('.edi3');
-        item.forEach(item => {
-            item.disabled = true;
-            item.classList.remove("bg-transparent");
-        });
-        sfile.forEach(sfile => {
-            sfile.classList.remove("bg-transparent");
-        })
-        textarea.disabled = true;
-        textarea.classList.remove("bg-transparent");
-    }
-
-    $(document).ready(function () {
-        if ($('.AgreePath').text() != '') {
-            $('.AgreeCheck').prop('checked', true);
-            $('.AgreeCheck').prop('disabled', false);
-            $('.viewBtn1').removeClass('d-none');
-            const fileList = new DataTransfer();
-            const blob = new Blob([$('.AgreePath').text()], { type: 'application/octet-stream' });
-            const fileName = 'file.' + $('.AgreePath').text().split('.')[2];
-            const file = new File([blob], fileName, { type: 'application/octet-stream' });
-            fileList.items.add(file);
-            document.getElementById('FileInput1').files = fileList.files;
-        }
-
-        if ($('.BackPath').text() != '') {
-            $('.BackCheck').prop('checked', true);
-            $('.BackCheck').prop('disabled', false);
-            $('.viewBtn2').removeClass('d-none');
-            const fileList = new DataTransfer();
-            const blob = new Blob([$('.BackPath').text()], { type: 'application/octet-stream' });
-            const fileName = 'file.' + $('.BackPath').text().split('.')[2];
-            const file = new File([blob], fileName, { type: 'application/octet-stream' });
-            fileList.items.add(file);
-            document.getElementById('FileInput2').files = fileList.files;
-        }
-
-        if ($('.HIPAAPath').text() != '') {
-            $('.HIPAACheck').prop('checked', true);
-            $('.HIPAACheck').prop('disabled', false);
-            $('.viewBtn3').removeClass('d-none');
-            const fileList = new DataTransfer();
-            const blob = new Blob([$('.HIPAAPath').text()], { type: 'application/octet-stream' });
-            const fileName = 'file.' + $('.HIPAAPath').text().split('.')[2];
-            const file = new File([blob], fileName, { type: 'application/octet-stream' });
-            fileList.items.add(file);
-            document.getElementById('FileInput3').files = fileList.files;
-        }
-
-        if ($('.DiscPath').text() != '') {
-            $('.DiscCheck').prop('checked', true);
-            $('.DiscCheck').prop('disabled', false);
-            $('.viewBtn4').removeClass('d-none');
-            const fileList = new DataTransfer();
-            const blob = new Blob([$('.DiscPath').text()], { type: 'application/octet-stream' });
-            const fileName = 'file.' + $('.DiscPath').text().split('.')[2];
-            const file = new File([blob], fileName, { type: 'application/octet-stream' });
-            fileList.items.add(file);
-            document.getElementById('FileInput4').files = fileList.files;
-        }
-
-        if ($('.LicPath').text() != '') {
-            $('.LicCheck').prop('checked', true);
-            $('.LicCheck').prop('disabled', false);
-            $('.viewBtn5').removeClass('d-none');
-            const fileList = new DataTransfer();
-            const blob = new Blob([$('.LicPath').text()], { type: 'application/octet-stream' });
-            const fileName = 'file.' + $('.LicPath').text().split('.')[2];
-            const file = new File([blob], fileName, { type: 'application/octet-stream' });
-            fileList.items.add(file);
-            document.getElementById('FileInput5').files = fileList.files;
-        }
-    });
-
-    $('.AgreeFile').change(function () {
-        if ($(this).val() !== '') {
-            $('.AgreeCheck').prop('checked', true);
-            $('.AgreeCheck').prop('disabled', false);
-            $('.viewBtn1').removeClass('d-none');
-        }
-    });
-    function loadFileContent1() {
-        const fileInput = document.getElementById('FileInput1');
-        const file = fileInput.files[0];
-        if (file) {
-            const objectUrl = URL.createObjectURL(file);
-            window.open(objectUrl, '_blank');
-        } else {
-            alert('No file selected.');
-        }
-    }
-
-    $('.BackFile').change(function () {
-        if ($(this).val() !== '') {
-            $('.BackCheck').prop('checked', true);
-            $('.BackCheck').prop('disabled', false);
-            $('.viewBtn2').removeClass('d-none');
-        }
-    });
-    function loadFileContent2() {
-        const fileInput = document.getElementById('FileInput2');
-        const file = fileInput.files[0];
-        if (file) {
-            const objectUrl = URL.createObjectURL(file);
-            window.open(objectUrl, '_blank');
-        } else {
-            alert('No file selected.');
-        }
-    }
-
-    $('.HIPAAFile').change(function () {
-        if ($(this).val() !== '') {
-            $('.HIPAACheck').prop('checked', true);
-            $('.HIPAACheck').prop('disabled', false);
-            $('.viewBtn3').removeClass('d-none');
-        }
-    });
-    function loadFileContent3() {
-        const fileInput = document.getElementById('FileInput3');
-        const file = fileInput.files[0];
-        if (file) {
-            const objectUrl = URL.createObjectURL(file);
-            window.open(objectUrl, '_blank');
-        } else {
-            alert('No file selected.');
-        }
-    }
-
-    $('.DiscFile').change(function () {
-        if ($(this).val() !== '') {
-            $('.DiscCheck').prop('checked', true);
-            $('.DiscCheck').prop('disabled', false);
-            $('.viewBtn4').removeClass('d-none');
-        }
-    });
-    function loadFileContent4() {
-        const fileInput = document.getElementById('FileInput4');
-        const file = fileInput.files[0];
-        if (file) {
-            const objectUrl = URL.createObjectURL(file);
-            window.open(objectUrl, '_blank');
-        } else {
-            alert('No file selected.');
-        }
-    }
-
-    $('.LicFile').change(function () {
-        if ($(this).val() !== '') {
-            $('.LicCheck').prop('checked', true);
-            $('.LicCheck').prop('disabled', false);
-            $('.viewBtn5').removeClass('d-none');
-        }
-    });
-    function loadFileContent5() {
-        const fileInput = document.getElementById('FileInput5');
-        const file = fileInput.files[0];
-        if (file) {
-            const objectUrl = URL.createObjectURL(file);
-            window.open(objectUrl, '_blank');
-        } else {
-            alert('No file selected.');
-        }
-    }
-
-</script>
-
-<script asp-append-version="true">
-    $(document).ready(function () {
-
-        var phid = $('.Phyid').val();
-
-        $('.changePass').click(function () {
-            var pass = $('.pass').val().trim();
-            if (pass != '') {
-                $.ajax({
-                    url: '/AdminTab/ResetPhyPass',
-                    method: 'POST',
-                    data: { pass: pass, phid: phid },
-                    success: function (response) {
-                        $('.pass-error').text("");
-                        if (response.value == "ok") {
-                            $('.Addmsg').text("Password Changed").addClass('text-success');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
-            else {
-                $('.pass-error').text("Add Password to change");
-            }
-        });
-
-        $('#Formdata1').submit(function (e) {
-            e.preventDefault();
-            var data = $("#Formdata1").serialize();
-            var phid = $('.Phyid').val();
-            data += "&phid=" + phid;
-            if ($('.fname').val().trim() != '') {
-                $.ajax({
-                    type: 'POST',
-                    url: '/AdminTab/UpdatePhyProfile',
-                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                    data: data,
-                    success: function (response) {
-                        if (response.value == "changed") {
-                            window.location.reload();
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            }
-        });
-        $('#Formdata2').submit(function (e) {
-            e.preventDefault();
-            var data = $("#Formdata2").serialize();
-            var phid = $('.Phyid').val();
-            data += "&phid=" + phid;
-            $.ajax({
-                type: 'POST',
-                url: '/AdminTab/UpdatePhyLoc',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                data: data,
-                success: function (response) {
-                    if (response.value == "changed") {
-                        window.location.reload();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-        $('#Formdata3').submit(function (e) {
-            e.preventDefault();
-
-            var formData = new FormData();
-            formData.append('phid', $('.Phyid').val());
-            formData.append('BusinessN', $('.phybn').val());
-            formData.append('BusinessW', $('.phybw').val());
-            formData.append('Note', document.querySelector('.phyAdmNote').value);
-            formData.append('Photo', $('.uploadPhoto')[0].files[0]);
-            formData.append('Sign', $('.uploadSign')[0].files[0]);
-
-            $.ajax({
-                type: 'POST',
-                url: '/AdminTab/UpdatePhyAdditional',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    if (response.value == "changed") {
-                        window.location.reload();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-
-        $('.deletePhy').click(function () {
-            var phid = $('.Phyid').val();
-            $.ajax({
-                type: 'POST',
-                url: '/AdminTab/DeletePhy',
-                data: { phid: phid },
-                success: function (response) {
-                    window.location.reload();
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-    });
 </script>

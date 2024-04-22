@@ -174,7 +174,7 @@
                             </div>
                             <div>
                                 <label class="btn btn-outline-info d-flex">
-                                    <input type="file" class="uploadPhoto fileUplod" style="display: none;" id="FileInput" name="Photo">
+                                    <input type="file" class="uploadPhoto fileUplod" style="display: none;" id="FileInput" name="Photo" accept='image/*'>
                                     <i class="bi bi-cloud-arrow-up border-info"></i>
                                     <span class="upload_txt ms-2 edi3">Upload</span>
                                 </label>
@@ -189,7 +189,7 @@
                             </div>
                             <div>
                                 <label class="btn btn-outline-info d-flex ">
-                                    <input type="file" class="uploadSign fileUplod" style="display: none;" id="FileInputs" name="Sign">
+                                    <input type="file" class="uploadSign fileUplod" style="display: none;" id="FileInputs" name="Sign" accept='image/*'>
                                     <i class="bi bi-cloud-arrow-up border-info"></i>
                                     <span class="upload_txt ms-2 edi3">Upload</span>
                                 </label>
@@ -693,7 +693,11 @@
             var data = $("#Formdata1").serialize();
             var phid = $('.Phyid').val();
             data += "&phid=" + phid;
-            if ($('.fname').val().trim() != '') {
+            var validForm = $('#Formdata1');
+            $.validator.unobtrusive.parse(validForm);
+            validForm.validate();
+
+            if (validForm.valid()) {
                 $.ajax({
                     type: 'POST',
                     url: '/AdminTab/UpdatePhyProfile',

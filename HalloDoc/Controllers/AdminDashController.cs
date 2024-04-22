@@ -53,10 +53,10 @@ namespace HalloDoc.Controllers
             {
                 phyFilterId = _Genral.getPhyId(Request.Cookies["CookieEmail"]);
             }
-            var Tcount = _Admin.TotalCountPatient(phyFilterId);
-            var region = _Admin.getAllRegion();
+            List<int> Tcount = _Admin.TotalCountPatient(phyFilterId);
+            List<Region> region = _Admin.getAllRegion();
 
-            var dashData = new DashTable { ToatlCount = Tcount, Regions = region };
+            DashTable dashData = new DashTable { ToatlCount = Tcount, Regions = region };
             return View(dashData);
         }
 
@@ -105,8 +105,8 @@ namespace HalloDoc.Controllers
             ViewBag.dTable = id;
             ViewBag.CurrentPage = page;
             ViewBag.TPage = Math.Ceiling(Req.filterCount / 5.0);
-            var region = _Admin.getAllRegion();
-            var dashData = new DashTable { Tdata = Req.Tdata.ToList(), Regions = region };
+            List<Region> region = _Admin.getAllRegion();
+            DashTable dashData = new DashTable { Tdata = Req.Tdata.ToList(), Regions = region };
 
             return PartialView("TablePartial", dashData);
         }
@@ -141,7 +141,6 @@ namespace HalloDoc.Controllers
             {
                 return Json(new { Value = "Error" });
             }
-            return Ok();
         }
         #endregion
 

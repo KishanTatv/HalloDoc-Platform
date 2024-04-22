@@ -156,6 +156,16 @@ namespace HalloDoc.Controllers
             PhysicianProfileViewModel data = new PhysicianProfileViewModel { PhysicianCustom = phinfo, physician = phy, Regions = region, phyReg = phReg, DocFile = Doclist };
             return View(data);
         }
+
+        public IActionResult providerProfileChange(string note)
+        {
+            string recEmail = "patelkishan@gmail.com";
+            int phyId = _physician.getPhyId(recEmail);
+            string sub = "Change Profile";
+            _Genral.SendEmailOffice365(recEmail, sub, note, null);
+            _Genral.addEmailLog(note, sub, recEmail, null, Convert.ToInt16(Request.Cookies["CookieRole"]), null, null, phyId);
+            return Ok();
+        }
         #endregion
     }
 }
