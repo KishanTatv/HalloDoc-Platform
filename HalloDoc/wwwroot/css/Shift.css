@@ -67,3 +67,21 @@ a.fc-col-header-cell-cushion {
     height: 70px;
     width: 70px;
 }
+
+
+td.fc-day.fc-day-sat.fc-day-future.fc-daygrid-day > :nth-child(1) > :nth-child(1) {
+    background-color: #d7f5ff;
+}
+
+td.fc-day.fc-day-sat.fc-day-past.fc-daygrid-day > :nth-child(1) > :nth-child(1) {
+    background-color: #d7f5ff;
+}
+
+td.fc-day.fc-day-sun.fc-day-future.fc-daygrid-day > :nth-child(1) > :nth-child(1) {
+    background-color: #dafde8;
+}
+
+td.fc-day.fc-day-sun.fc-day-past.fc-daygrid-day > :nth-child(1) > :nth-child(1) {
+    background-color: #dafde8;
+}
+

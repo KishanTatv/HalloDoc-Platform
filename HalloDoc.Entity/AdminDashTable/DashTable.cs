@@ -9,7 +9,7 @@ namespace HalloDoc.Entity.AdminDashTable
 {
     public class DashTable
     {
-        public IEnumerable<tableData> Tdata { get; set; } 
+        public IEnumerable<tableData> Tdata { get; set; }  = new List<tableData>();
         public List<int> ToatlCount { get; set; }   
 
         public int filterCount { get; set; }

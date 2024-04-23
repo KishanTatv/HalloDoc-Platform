@@ -103,7 +103,7 @@
             var page = $(this).data('page');
             var tpage = $(this).data('tpage');
             console.log(page + " " + tpage);
-            if (page < tpage+1) {
+            if (page < tpage && page > 0) {
                 $.ajax({
                     url: '/AdminTab/ProviderData',
                     method: 'POST',

@@ -50,156 +50,167 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     <th scope="col">Action</th>
                 </tr>
 
-                @foreach (var item in Model.Tdata)
+                @if (Model.Tdata.Count != 0)
                 {
-                    <tr class=" @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))">
-                        <td class="text-light " scope="row">
-                            <p class="d-flex justify-content-between">
-                                @item.Name
-                                <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
-                            </p>
-                        </td>
-
-                        @if (ViewBag.dTable != 6)
-                        {
-                            <td class="text-light "> @item.Strmonth @item.Intdate , @item.Intyear (@item.Age) </td>
-                        }
-                        @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
-                        {
-                            <td class="text-light ">
-                                @Enum.GetName(typeof(HalloEnum.repestType), @item.ReqTypeId) @item.Requestor
+                    @foreach (var item in Model.Tdata)
+                    {
+                        <tr class=" @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))">
+                            <td class="text-light " scope="row">
+                                <p class="d-flex justify-content-between">
+                                    @item.Name
+                                    <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
+                                </p>
                             </td>
-                        }
-                        @if (ViewBag.dTable == 1)
-                        {
-                            <td class="text-light "> @item.RequestedDate</td>
-                        }
-                        @if (ViewBag.dTable == 5)
-                        {
-                            <td class="text-light ">@item.Region</td>
-                        }
-                        @if (ViewBag.dTable != 1)
-                        {
-                            <td class="text-light ">@item.PhysicianName</td>
-                        }
-                        @if (ViewBag.dTable != 1)
-                        {
-                            <td class="text-light ">@item.DateOfService</td>
-                        }
-                        @if (ViewBag.dTable != 5)
-                        {
-                            <td>
-                                <button class="btn btn-outline-light p-0 ps-1 pe-1">
-                                    <i class="bi bi-telephone text-light"></i>
-                                    @item.Phonenumber
-                                </button>
-                                <p class="text-light m-0">(Patient)</p>
 
-                                @if (item.ReqTypeId != 2)
-                                {
+                            @if (ViewBag.dTable != 6)
+                            {
+                                <td class="text-light "> @item.Strmonth @item.Intdate , @item.Intyear (@item.Age) </td>
+                            }
+                            @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3)
+                            {
+                                <td class="text-light ">
+                                    @Enum.GetName(typeof(HalloEnum.repestType), @item.ReqTypeId) @item.Requestor
+                                </td>
+                            }
+                            @if (ViewBag.dTable == 1)
+                            {
+                                <td class="text-light "> @item.RequestedDate</td>
+                            }
+                            @if (ViewBag.dTable == 5)
+                            {
+                                <td class="text-light ">@item.Region</td>
+                            }
+                            @if (ViewBag.dTable != 1)
+                            {
+                                <td class="text-light ">@item.PhysicianName</td>
+                            }
+                            @if (ViewBag.dTable != 1)
+                            {
+                                <td class="text-light ">@item.DateOfService</td>
+                            }
+                            @if (ViewBag.dTable != 5)
+                            {
+                                <td>
                                     <button class="btn btn-outline-light p-0 ps-1 pe-1">
                                         <i class="bi bi-telephone text-light"></i>
-                                        @item.ReqPhonenumber
+                                        @item.Phonenumber
                                     </button>
-                                    <p class="text-light m-0">(@Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))</p>
+                                    <p class="text-light m-0">(Patient)</p>
 
-                                }
-                            </td>
-                        }
-                        <td class="text-light ">
-                            @if (item.Region != null)
-                            {
-                                @item.Address
+                                    @if (item.ReqTypeId != 2)
+                                    {
+                                        <button class="btn btn-outline-light p-0 ps-1 pe-1">
+                                            <i class="bi bi-telephone text-light"></i>
+                                            @item.ReqPhonenumber
+                                        </button>
+                                        <p class="text-light m-0">(@Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))</p>
+
+                                    }
+                                </td>
                             }
-                            else
-                            {
-                                <p>-</p>
-                            }
-                        </td>
-                        @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
-                        {
                             <td class="text-light ">
-                                @if (ViewBag.dTable == 2)
+                                @if (item.Region != null)
                                 {
-                                    <span>@item.ReqNotes</span>
+                                    @item.Address
                                 }
                                 else
                                 {
-                                    <span>@item.Notes</span>
+                                    <p>-</p>
                                 }
                             </td>
-
-                        }
-                        <td>
-                            @if (item.PhysicianId != null)
+                            @if (ViewBag.dTable == 1 || ViewBag.dTable == 2 || ViewBag.dTable == 3 || ViewBag.dTable == 5)
                             {
-                                <button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button>
+                                <td class="text-light ">
+                                    @if (ViewBag.dTable == 2)
+                                    {
+                                        <span>@item.ReqNotes</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.Notes</span>
+                                    }
+                                </td>
+
                             }
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                Actions
-                            </button>
-                            <ul class="dropdown-menu">
-                                @if (ViewBag.dTable == 1)
+                            <td>
+                                @if (item.PhysicianId != null)
                                 {
+                                    <button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button>
+                                }
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @if (ViewBag.dTable == 1)
+                                    {
+                                        <li>
+                                            <div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="AssignPhy"> <i class="bi bi-card-heading me-2"></i> Assign Case </div>
+                                        </li>
+                                    }
+                                    @if (ViewBag.dTable == 1)
+                                    {
+                                        <li>
+                                            <div class="dropdown-item CancelCase" data-reqid="@item.RequestId"> <i class="bi bi-x-circle me-2"></i> Cancel Case </div>
+                                        </li>
+                                    }
                                     <li>
-                                        <div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="AssignPhy"> <i class="bi bi-card-heading me-2"></i> Assign Case </div>
+                                        <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> <i class="bi bi-journal-album me-2"></i> View Case </div>
                                     </li>
-                                }
-                                @if (ViewBag.dTable == 1)
-                                {
+                                    @if (ViewBag.dTable != 1)
+                                    {
+                                        <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId"> <i class="bi bi-file-earmark-arrow-up me-2"></i> View Uploads </div></li>
+                                    }
                                     <li>
-                                        <div class="dropdown-item CancelCase" data-reqid="@item.RequestId"> <i class="bi bi-x-circle me-2"></i> Cancel Case </div>
+                                        <div class="dropdown-item ViewNote" data-reqid="@item.RequestId"> <i class="bi bi-file-diff me-2"></i> View Notes</div>
                                     </li>
-                                }
-                                <li>
-                                    <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> <i class="bi bi-journal-album me-2"></i> View Case </div>
-                                </li>
-                                @if (ViewBag.dTable != 1)
-                                {
-                                    <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId"> <i class="bi bi-file-earmark-arrow-up me-2"></i> View Uploads </div></li>
-                                }
-                                <li>
-                                    <div class="dropdown-item ViewNote" data-reqid="@item.RequestId"> <i class="bi bi-file-diff me-2"></i> View Notes</div>
-                                </li>
-                                @if (ViewBag.dTable == 1)
-                                {
-                                    <li>
-                                        <div class="dropdown-item BlockCase" data-reqid="@item.RequestId">
-                                            <i class="bi bi-slash-circle me-2"></i> Block Patient
-                                        </div>
-                                    </li>
-                                }
-                                @if (ViewBag.dTable == 2)
-                                {
-                                    <li><div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="TransferPhy"><i class="bi bi-journal-medical me-2"></i> Transfer</div></li>
-                                }
-                                @if (ViewBag.dTable == 5)
-                                {
-                                    <li><a class="dropdown-item CloseCase" data-reqid="@item.RequestId"><i class="bi bi-x-circle me-2"></i> Close Case</a></li>
-                                }
-                                @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
-                                {
-                                    <li><div class="dropdown-item OrderCase" data-reqid="@item.RequestId"><i class="bi bi-journal-check me-2"></i> Order</div></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-journal-bookmark-fill me-2"></i> Doctors Notes</a></li>
-                                }
-                                @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
-                                {
-                                    <li><div class="dropdown-item ClearCase" data-reqid="@item.RequestId"><i class="bi bi-x-circle me-2"></i> Clear Case</div></li>
-                                }
-                                @if (ViewBag.dTable == 2)
-                                {
-                                    <li><div class="dropdown-item SendAgreement" data-reqid="@item.RequestId"><i class="bi bi-journals me-2"></i> Send Agreement</div></li>
-                                }
-                                @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
-                                {
-                                    <li><a class="dropdown-item Encounter" data-reqid="@item.RequestId"><i class="bi bi-journal-plus me-2"></i> Encounter</a></li>
-                                }
+                                    @if (ViewBag.dTable == 1)
+                                    {
+                                        <li>
+                                            <div class="dropdown-item BlockCase" data-reqid="@item.RequestId">
+                                                <i class="bi bi-slash-circle me-2"></i> Block Patient
+                                            </div>
+                                        </li>
+                                    }
+                                    @if (ViewBag.dTable == 2)
+                                    {
+                                        <li><div class="dropdown-item AssignCase" data-reqid="@item.RequestId" data-phycase="TransferPhy"><i class="bi bi-journal-medical me-2"></i> Transfer</div></li>
+                                    }
+                                    @if (ViewBag.dTable == 5)
+                                    {
+                                        <li><a class="dropdown-item CloseCase" data-reqid="@item.RequestId"><i class="bi bi-x-circle me-2"></i> Close Case</a></li>
+                                    }
+                                    @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                                    {
+                                        <li><div class="dropdown-item OrderCase" data-reqid="@item.RequestId"><i class="bi bi-journal-check me-2"></i> Order</div></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-journal-bookmark-fill me-2"></i> Doctors Notes</a></li>
+                                    }
+                                    @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
+                                    {
+                                        <li><div class="dropdown-item ClearCase" data-reqid="@item.RequestId"><i class="bi bi-x-circle me-2"></i> Clear Case</div></li>
+                                    }
+                                    @if (ViewBag.dTable == 2)
+                                    {
+                                        <li><div class="dropdown-item SendAgreement" data-reqid="@item.RequestId"><i class="bi bi-journals me-2"></i> Send Agreement</div></li>
+                                    }
+                                    @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                                    {
+                                        <li><a class="dropdown-item Encounter" data-reqid="@item.RequestId"><i class="bi bi-journal-plus me-2"></i> Encounter</a></li>
+                                    }
 
-                            </ul>
+                                </ul>
 
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10">
+                            <p class="text-danger mt-4 h6 mb-4 text-center">No More Record's</p>
                         </td>
                     </tr>
                 }
@@ -208,97 +219,108 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
 
         <div class="accordion accordion-flush MediaclSM" id="accordionFlushExample">
-            @foreach (var item in Model.Tdata)
+            @if (Model.Tdata.Count != 0)
             {
-                <div class="accordion-item">
-                    <div class="accordion-header bg-lighinfo p-2">
-                        <div class="d-flex justify-content-between mb-3">
-                            <span>@item.Name</span>
-                            <span class="d-flex align-items-center gap-2"> @Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId) <span class="dot me-1 @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))"></span></span>
+                @foreach (var item in Model.Tdata)
+                {
+                    <div class="accordion-item">
+                        <div class="accordion-header bg-lighinfo p-2">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span>@item.Name</span>
+                                <span class="d-flex align-items-center gap-2"> @Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId) <span class="dot me-1 @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))"></span></span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>@item.Address</span>
+                                <span class="btn btn-outline-info rounded-pill" type="button" data-bs-toggle="collapse"
+                                      data-bs-target="#flush-@item.ReqClientId" aria-expanded="false" aria-controls="flush-collapseOne">Map Location</span>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-between">
-                            <span>@item.Address</span>
-                            <span class="btn btn-outline-info rounded-pill" type="button" data-bs-toggle="collapse"
-                                  data-bs-target="#flush-@item.ReqClientId" aria-expanded="false" aria-controls="flush-collapseOne">Map Location</span>
-                        </div>
-                    </div>
-                    <div id="flush-@item.ReqClientId" class="accordion-collapse collapse bg-lighinfo"
-                         data-bs-parent="#accordionFlushExample">
-                        <div class="accordion-body">
-                            <div class="d-flex flex-column px-3">
-                                <div class="d-flex flex-column px-5 position-relative new">
-                                    <button class="btn text-nowrap btn-light state">View Case</button>
-                                </div>
-                                <div class="d-flex mb-3 flex-column">
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-clock text-primary"></i><span class="text-secondary mx-2">
-                                            Wait Time:
-                                        </span>@item.RequestedDate
-                                    </span>
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-calendar3 text-primary"></i><span class="text-secondary mx-2"> Date of Birth: </span> @item.Strmonth.Substring(0, 3) @item.Intdate , @item.Intyear (@item.Age)
-                                    </span>
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-envelope text-primary"></i><span class="text-secondary mx-2"> Email: </span> @item.Email
-                                    </span>
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-telephone text-primary"></i><span class="text-secondary mx-2"> Patient:</span>  @item.Name
-                                    </span>
-                                    <span class="d-inline-flex">
-                                        <i class="bi bi-person text-primary"></i><span class="text-secondary mx-2">
-                                            Requestor:
-                                        </span> @item.Requestor
-                                    </span>
-                                </div>
-                                <div class="d-flex justify-content-between row">
-                                    @if (ViewBag.dTable == 1)
-                                    {
-                                        <button class="btn btn-primary col-5 mb-2 AssignCase" data-reqid="@item.RequestId" data-phycase="AssignPhy">Assign Case</button>
-                                    }
-                                    @if (ViewBag.dTable == 1)
-                                    {
-                                        <button class="btn btn-danger col-5 mb-2 CancelCase" data-reqid="@item.RequestId">Cancel Case</button>
-                                    }
-                                    <button class="btn btn-danger col-5 mb-2 ViewCase" data-reqid="@item.RequestId">View Case</button>
-                                    @if (ViewBag.dTable != 1)
-                                    {
-                                        <button class="btn btn-success col-5 mb-2 ViewUpload" data-reqid="@item.RequestId">View Upload</button>
-                                    }
-                                    <button class="btn btn-success col-5 mb-2 ViewNote" data-reqid="@item.RequestId">View Notes</button>
-                                    @if (ViewBag.dTable == 1)
-                                    {
-                                        <button class="btn btn-danger col-5 mb-2 BlockCase" data-reqid="@item.RequestId">Block Patient</button>
-                                    }
-                                    @if (ViewBag.dTable == 2)
-                                    {
-                                        <button class="btn btn-info col-5 mb-2 AssignCase" data-reqid="@item.RequestId" data-phycase="TransferPhy"> Transfer </button>
-                                    }
-                                    @if (ViewBag.dTable == 5)
-                                    {
-                                        <button class="btn btn-danger col-5 mb-2 CloseCase" data-reqid="@item.RequestId"> Close Case</button>
-                                    }
-                                    @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
-                                    {
-                                        <button class="btn btn-danger col-5 mb-2 OrderCase" data-reqid="@item.RequestId"> Order</button>
-                                        <button class="btn btn-danger col-5 mb-2" href="#"> Doctors Notes</button>
-                                    }
-                                    @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
-                                    {
-                                        <button class="btn btn-warning col-5 mb-2 ClearCase" data-reqid="@item.RequestId"> Clear Case</button>
-                                    }
-                                    @if (ViewBag.dTable == 2)
-                                    {
-                                        <button class="btn btn-warning col-5 mb-2 SendAgreement" data-reqid="@item.RequestId"> Send Agreement</button>
-                                    }
-                                    @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
-                                    {
-                                        <button class="btn btn-success col-5 mb-2 Encounter" data-reqid="@item.RequestId"> Encounter </button>
-                                    }
+                        <div id="flush-@item.ReqClientId" class="accordion-collapse collapse bg-lighinfo"
+                             data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-column px-3">
+                                    <div class="d-flex flex-column px-5 position-relative new">
+                                        <button class="btn text-nowrap btn-light state">View Case</button>
+                                    </div>
+                                    <div class="d-flex mb-3 flex-column">
+                                        <span class="d-inline-flex">
+                                            <i class="bi bi-clock text-primary"></i><span class="text-secondary mx-2">
+                                                Wait Time:
+                                            </span>@item.RequestedDate
+                                        </span>
+                                        <span class="d-inline-flex">
+                                            <i class="bi bi-calendar3 text-primary"></i><span class="text-secondary mx-2"> Date of Birth: </span> @item.Strmonth.Substring(0, 3) @item.Intdate , @item.Intyear (@item.Age)
+                                        </span>
+                                        <span class="d-inline-flex">
+                                            <i class="bi bi-envelope text-primary"></i><span class="text-secondary mx-2"> Email: </span> @item.Email
+                                        </span>
+                                        <span class="d-inline-flex">
+                                            <i class="bi bi-telephone text-primary"></i><span class="text-secondary mx-2"> Patient:</span>  @item.Name
+                                        </span>
+                                        <span class="d-inline-flex">
+                                            <i class="bi bi-person text-primary"></i><span class="text-secondary mx-2">
+                                                Requestor:
+                                            </span> @item.Requestor
+                                        </span>
+                                    </div>
+                                    <div class="d-flex justify-content-between row">
+                                        @if (ViewBag.dTable == 1)
+                                        {
+                                            <button class="btn btn-primary col-5 mb-2 AssignCase" data-reqid="@item.RequestId" data-phycase="AssignPhy">Assign Case</button>
+                                        }
+                                        @if (ViewBag.dTable == 1)
+                                        {
+                                            <button class="btn btn-danger col-5 mb-2 CancelCase" data-reqid="@item.RequestId">Cancel Case</button>
+                                        }
+                                        <button class="btn btn-danger col-5 mb-2 ViewCase" data-reqid="@item.RequestId">View Case</button>
+                                        @if (ViewBag.dTable != 1)
+                                        {
+                                            <button class="btn btn-success col-5 mb-2 ViewUpload" data-reqid="@item.RequestId">View Upload</button>
+                                        }
+                                        <button class="btn btn-success col-5 mb-2 ViewNote" data-reqid="@item.RequestId">View Notes</button>
+                                        @if (ViewBag.dTable == 1)
+                                        {
+                                            <button class="btn btn-danger col-5 mb-2 BlockCase" data-reqid="@item.RequestId">Block Patient</button>
+                                        }
+                                        @if (ViewBag.dTable == 2)
+                                        {
+                                            <button class="btn btn-info col-5 mb-2 AssignCase" data-reqid="@item.RequestId" data-phycase="TransferPhy"> Transfer </button>
+                                        }
+                                        @if (ViewBag.dTable == 5)
+                                        {
+                                            <button class="btn btn-danger col-5 mb-2 CloseCase" data-reqid="@item.RequestId"> Close Case</button>
+                                        }
+                                        @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                                        {
+                                            <button class="btn btn-danger col-5 mb-2 OrderCase" data-reqid="@item.RequestId"> Order</button>
+                                            <button class="btn btn-danger col-5 mb-2" href="#"> Doctors Notes</button>
+                                        }
+                                        @if (ViewBag.dTable == 2 || ViewBag.dTable == 5)
+                                        {
+                                            <button class="btn btn-warning col-5 mb-2 ClearCase" data-reqid="@item.RequestId"> Clear Case</button>
+                                        }
+                                        @if (ViewBag.dTable == 2)
+                                        {
+                                            <button class="btn btn-warning col-5 mb-2 SendAgreement" data-reqid="@item.RequestId"> Send Agreement</button>
+                                        }
+                                        @if (ViewBag.dTable == 3 || ViewBag.dTable == 4 || ViewBag.dTable == 5)
+                                        {
+                                            <button class="btn btn-success col-5 mb-2 Encounter" data-reqid="@item.RequestId"> Encounter </button>
+                                        }
 
-                                    <button class="btn btn-success col-5 mb-2">Email</button>
+                                        <button class="btn btn-success col-5 mb-2">Email</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="accordion-item">
+                    <div class="accordion-header bg-lighinfo p-2">
+                        <p class="text-danger mt-4 h6 mb-4 text-center">No More Record's</p>
                     </div>
                 </div>
             }
@@ -330,106 +352,117 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                     }
                     <th scope="col">Action</th>
                 </tr>
-                @foreach (var item in Model.Tdata)
+                @if (Model.Tdata.Count != 0)
                 {
-                    <tr class=" @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))">
-                        <td class="text-light" scope="row">
-                            <p class="d-flex justify-content-between">
-                                @item.Name
-                                <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
-                            </p>
-                        </td>
-                        <td>
-                            <button class="btn btn-outline-light p-0 ps-1 pe-1">
-                                <i class="bi bi-telephone text-light"></i>
-                                @item.Phonenumber
-                            </button>
-                            <p class="text-light m-0">(Patient)</p>
-
-                            @if (item.ReqTypeId != 2)
-                            {
+                    @foreach (var item in Model.Tdata)
+                    {
+                        <tr class=" @("bg"+Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))">
+                            <td class="text-light" scope="row">
+                                <p class="d-flex justify-content-between">
+                                    @item.Name
+                                    <button class="btn btn-outline-light p-0 ps-1 pe-1"><i class="bi bi-envelope"></i></button>
+                                </p>
+                            </td>
+                            <td>
                                 <button class="btn btn-outline-light p-0 ps-1 pe-1">
                                     <i class="bi bi-telephone text-light"></i>
-                                    @item.ReqPhonenumber
+                                    @item.Phonenumber
                                 </button>
-                                <p class="text-light m-0">(@Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))</p>
+                                <p class="text-light m-0">(Patient)</p>
 
-                            }
-                        </td>
-                        <td class="text-light">
-                            @if (item.Region != null)
-                            {
-                                @item.Address
-                            }
-                            else
-                            {
-                                <p>-</p>
-                            }
-                        </td>
-                        @if (ViewBag.dTable == 1)
-                        {
-                            <td class="text-light">
-                                <button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Chat With</button>
+                                @if (item.ReqTypeId != 2)
+                                {
+                                    <button class="btn btn-outline-light p-0 ps-1 pe-1">
+                                        <i class="bi bi-telephone text-light"></i>
+                                        @item.ReqPhonenumber
+                                    </button>
+                                    <p class="text-light m-0">(@Enum.GetName(typeof(HalloEnum.repestType), item.ReqTypeId))</p>
+
+                                }
                             </td>
-                        }
-                        @if (ViewBag.dTable == 3)
-                        {
-                            @if (item.status == 5)
-                            {
-                                <td> <button type="button" class="btn btn-info text-light proHouseCall" data-reqid="@item.RequestId"> HouseCall </button></td>
-                            }
-                            else
-                            {
-                                <td> - </td>
-                            }
-                        }
-                        <td class="text-light">
-                            <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                Actions
-                            </button>
-                            <ul class="dropdown-menu">
-                                @if (ViewBag.dTable == 1)
+                            <td class="text-light">
+                                @if (item.Region != null)
                                 {
+                                    @item.Address
+                                }
+                                else
+                                {
+                                    <p>-</p>
+                                }
+                            </td>
+                            @if (ViewBag.dTable == 1)
+                            {
+                                <td class="text-light">
+                                    <button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Chat With</button>
+                                </td>
+                            }
+                            @if (ViewBag.dTable == 3)
+                            {
+                                @if (item.status == 5)
+                                {
+                                    <td> <button type="button" class="btn btn-info text-light proHouseCall" data-reqid="@item.RequestId"> HouseCall </button></td>
+                                }
+                                else
+                                {
+                                    <td> - </td>
+                                }
+                            }
+                            <td class="text-light">
+                                <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @if (ViewBag.dTable == 1)
+                                    {
+                                        <li>
+                                            <div class="dropdown-item AcceptPhy" data-reqid="@item.RequestId"> <i class="bi bi-card-heading me-2"></i> Accept </div>
+                                        </li>
+                                    }
+                                    @if (ViewBag.dTable == 2)
+                                    {
+                                        <li><div class="dropdown-item SendAgreement" data-reqid="@item.RequestId"><i class="bi bi-journals me-2"></i> Send Agreement</div></li>
+                                    }
+                                    @if (ViewBag.dTable == 4)
+                                    {
+                                        <li><div class="dropdown-item concludeCare " data-reqid="@item.RequestId"><i class="bi bi-journals me-2"></i> Conclude Care</div></li>
+                                    }
                                     <li>
-                                        <div class="dropdown-item AcceptPhy" data-reqid="@item.RequestId"> <i class="bi bi-card-heading me-2"></i> Accept </div>
+                                        <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> <i class="bi bi-journal-album me-2"></i> View Case </div>
                                     </li>
-                                }
-                                @if (ViewBag.dTable == 2)
-                                {
-                                    <li><div class="dropdown-item SendAgreement" data-reqid="@item.RequestId"><i class="bi bi-journals me-2"></i> Send Agreement</div></li>
-                                }
-                                @if (ViewBag.dTable == 4)
-                                {
-                                    <li><div class="dropdown-item concludeCare " data-reqid="@item.RequestId"><i class="bi bi-journals me-2"></i> Conclude Care</div></li>
-                                }
-                                <li>
-                                    <div class="dropdown-item ViewCase" data-reqid="@item.RequestId"> <i class="bi bi-journal-album me-2"></i> View Case </div>
-                                </li>
-                                @if (ViewBag.dTable != 1)
-                                {
-                                    <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId"> <i class="bi bi-file-earmark-arrow-up me-2"></i> View Uploads </div></li>
-                                }
-                                <li>
-                                    <div class="dropdown-item ViewNote" data-reqid="@item.RequestId"> <i class="bi bi-file-diff me-2"></i> View Notes</div>
-                                </li>
-                                @if (ViewBag.dTable == 2)
-                                {
-                                    <li><div class="dropdown-item Transferpro" data-reqid="@item.RequestId"><i class="bi bi-journal-medical me-2"></i> Transfer</div></li>
-                                }
-                                @if (ViewBag.dTable == 3)
-                                {
-                                    <li><div class="dropdown-item OrderCase" data-reqid="@item.RequestId"><i class="bi bi-journal-check me-2"></i> Order</div></li>
-                                }
-                                @if (ViewBag.dTable == 3)
-                                {
-                                    <li><a class="dropdown-item EncounterPro" data-reqid="@item.RequestId"><i class="bi bi-journal-plus me-2"></i> Encounter</a></li>
-                                }
-                                @if (ViewBag.dTable == 4)
-                                {
-                                    <li><a class="dropdown-item Encounter" data-reqid="@item.RequestId"><i class="bi bi-journal-plus me-2"></i> Encounter</a></li>
-                                }
-                            </ul>
+                                    @if (ViewBag.dTable != 1)
+                                    {
+                                        <li><div class="dropdown-item ViewUpload" data-reqid="@item.RequestId"> <i class="bi bi-file-earmark-arrow-up me-2"></i> View Uploads </div></li>
+                                    }
+                                    <li>
+                                        <div class="dropdown-item ViewNote" data-reqid="@item.RequestId"> <i class="bi bi-file-diff me-2"></i> View Notes</div>
+                                    </li>
+                                    @if (ViewBag.dTable == 2)
+                                    {
+                                        <li><div class="dropdown-item Transferpro" data-reqid="@item.RequestId"><i class="bi bi-journal-medical me-2"></i> Transfer</div></li>
+                                    }
+                                    @if (ViewBag.dTable == 3)
+                                    {
+                                        <li><div class="dropdown-item OrderCase" data-reqid="@item.RequestId"><i class="bi bi-journal-check me-2"></i> Order</div></li>
+                                    }
+                                    @if (ViewBag.dTable == 3)
+                                    {
+                                        <li><a class="dropdown-item EncounterPro" data-reqid="@item.RequestId"><i class="bi bi-journal-plus me-2"></i> Encounter</a></li>
+                                    }
+                                    @if (ViewBag.dTable == 4)
+                                    {
+                                        <li><a class="dropdown-item Encounter" data-reqid="@item.RequestId"><i class="bi bi-journal-plus me-2"></i> Encounter</a></li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="10">
+                            <p class="text-danger mt-4 h6 mb-4 text-center">No More Record's</p>
                         </td>
                     </tr>
                 }

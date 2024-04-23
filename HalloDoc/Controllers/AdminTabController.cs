@@ -148,7 +148,7 @@ namespace HalloDoc.Controllers
         [CustomAuthorize("Admin:Provider", "Provider")]
         public IActionResult ProviderData(int page, int reg)
         {
-            var data = _Admin.getAllPhysicianData().ToList();
+            List<Physician> data = _Admin.getAllPhysicianData().ToList();
             ViewBag.TPage = Math.Ceiling(data.Count() / 5.0);
 
             if (reg != 0)
@@ -252,8 +252,8 @@ namespace HalloDoc.Controllers
         {
             var regList = Request.Form["checkReg"].ToList();
             var phReg = _physician.phyRegionExist(phinfo.phid);
-            var addReg = regList.Select(int.Parse).Except(phReg).ToList();
-            var remReg = phReg.Except(regList.Select(int.Parse)).ToList();
+            List<int> addReg = regList.Select(int.Parse).Except(phReg).ToList();
+            List<int> remReg = phReg.Except(regList.Select(int.Parse)).ToList();
             foreach (var reg in addReg)
             {
                 _physician.addPhyRegion(phinfo.phid, reg);
