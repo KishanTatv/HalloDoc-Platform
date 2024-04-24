@@ -1,0 +1,146 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model AssignmentTask.Entity.ViewModels.BookPopupViewModel;
+@{
+}
+
+<div class="modal fade" id="AddBookPopup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-darkBlue pt-4 pb-2 p-2">
+                <h1 class="modal-title fs-5 text-light ms-2" id="exampleModalLabel">
+                    <span>Book Form</span>
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="Formdata" class="needs-validation">
+                <div class="modal-body">
+                    <input type="hidden" id="BookUId" asp-for="id" />
+                    <div class="row pt-2">
+                        <div class="col form-floating w-25 mt-2">
+                            <input type="text" class="form-control" asp-for="BookName" placeholder="add1">
+                            <label class="ms-2"> Book Name </label>
+                            <span asp-validation-for="BookName" class="text-danger"></span>
+                        </div>
+                        <div class="col form-floating w-25 mt-2">
+                            <input type="text" class="form-control" asp-for="AuthorName" placeholder="add1">
+                            <label class="ms-2"> Author Name </label>
+                            <span asp-validation-for="AuthorName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col form-floating w-25 mt-2">
+                            <input type="text" class="form-control" asp-for="BorrowerName" placeholder="add1">
+                            <label class="ms-2"> Borrower Name </label>
+                            <span asp-validation-for="BorrowerName" class="text-danger"></span>
+                        </div>
+                        <div class="col form-floating w-25 mt-2">
+                            <input type="date" class="form-control" asp-for="DateOfIssue" placeholder="add1">
+                            <label class="ms-2"> Date of Issue </label>
+                            <span asp-validation-for="DateOfIssue" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row pt-2">
+                        <div class="col form-floating mt-2">
+                            <select class="form-select genereSelect" onchange="checkSelect()" aria-label="Floating label select">
+                                @if (Model != null)
+                                {
+                                    @foreach (var i in Enum.GetValues(typeof(helperLibraryEnum.GenereList)))
+                                    {
+                                        @if (i.ToString().Contains(Model.Genere))
+                                        {
+                                            <option selected value="@i"> @Enum.GetName(typeof(helperLibraryEnum.GenereList), i) </option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@i"> @Enum.GetName(typeof(helperLibraryEnum.GenereList), i) </option>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <option selected disabled> All  </option>
+                                    @foreach (var i in Enum.GetValues(typeof(helperLibraryEnum.GenereList)))
+                                    {
+                                        <option value="@i"> @Enum.GetName(typeof(helperLibraryEnum.GenereList), i) </option>
+                                    }
+                                }
+                            </select>
+                            <label class="ms-2"> Genere </label>
+                            <span class="text-danger genereError"></span>
+                            <input type="hidden" class="form-control inputGenere" asp-for="Genere" placeholder="add1">
+                        </div>
+                        <div class="col form-floating w-25 mt-2">
+                            <input type="text" class="form-control" asp-for="City" placeholder="add1">
+                            <label class="ms-2"> City </label>
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <p class="text-danger m-0">@TempData["msg"]</p>
+                </div>
+                <div class="m-4 mt-1">
+                    <div class="row pt-2">
+                        <button type="button" class="col btn btn-outline-secondary me-1" data-bs-dismiss="modal"> Cancel </button>
+                        <button type="submit" class="col btn btn-secondary text-light ms-1 SaveDone"> Save </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script asp-append-version="true">
+
+    function checkSelect() {
+        console.log("call");
+        if ($('.genereSelect').val() == null) {
+            $(".genereError").text("Please Select");
+        }
+        else {
+            $(".genereError").text("");
+            $(".inputGenere").val($('.genereSelect').val());
+        }
+    }
+
+    $('#Formdata').submit(function (e) {
+        checkSelect();
+        e.preventDefault();
+        var data = $("#Formdata").serialize();
+        var dataValidt = $("#Formdata");
+        $.validator.unobtrusive.parse(dataValidt);
+        dataValidt.validate();
+        if (dataValidt.valid()) {
+            if ($('#BookUId').val() == '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '/Library/BookDetailSave',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: data,
+                    success: function (response) {
+                        window.location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+            else{
+                $.ajax({
+                    type: 'POST',
+                    url: '/Library/UpdateBookDetail',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: data,
+                    success: function (response) {
+                        window.location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        }
+    });
+
+</script>
