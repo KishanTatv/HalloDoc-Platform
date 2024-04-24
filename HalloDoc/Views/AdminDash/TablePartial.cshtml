@@ -74,7 +74,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             }
                             @if (ViewBag.dTable == 1)
                             {
-                                <td class="text-light "> @item.RequestedDate</td>
+                                <td class="text-light "> @item.RequestedDate.Date.ToString("MMMM dd, yyyy") </td>
                             }
                             @if (ViewBag.dTable == 5)
                             {
