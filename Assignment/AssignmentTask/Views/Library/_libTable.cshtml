@@ -1,0 +1,148 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model AssignmentTask.Entity.ViewModels.HomeDataTableModel;
+
+
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"> BookId </th>
+                <th scope="col"> Book Name </th>
+                <th scope="col"> Author </th>
+                <th scope="col"> Borrower Name </th>
+                <th scope="col"> Date of Issue <i class="bi bi-arrow-down ms-1"></i> </th>
+                <th scope="col"> City </th>
+                <th scope="col"> Genere </th>
+                <th scope="col" class="text-center"> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.BookModelList.Count() != 0)
+            {
+                @foreach (var item in Model.BookModelList)
+                {
+                    <tr>
+                        <td> @item.id </td>
+                        <td> @item.BookName </td>
+                        <td> @item.AuthorName </td>
+                        <td> @item.BorrowerName </td>
+                        <td> @item.DateOfIssue </td>
+                        <td> @item.City </td>
+                        <td> @item.Genere </td>
+                        <td class="text-center">
+                            <div class="btn bg-darkBlue text-light ps-2 pe-2 p-0 me-2 AEdit" data-id="@item.id">
+                                Edit
+                            </div>
+                            <div class="btn bg-black text-light ps-2 pe-2 p-0 ADelete" data-id="@item.id">
+                                Delete
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="8" class="mt-3 mb-3">
+                        <h3 class="text-center text-danger"> No More Record's </h3>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-between me-3 pb-2">
+
+        <div>
+            <span>
+                Page : <span class="text-primary">
+                    @(
+                        ViewBag.CurrentPage + 1
+                        )
+                </span> / @ViewBag.TPage
+
+                , Total Records :  @ViewBag.TotalRecord
+            </span>
+        </div>
+        <div class="d-flex">
+            @if (ViewBag.CurrentPage > 0)
+            {
+            <li>
+                <div class="page-link text-warning" data-page="@(ViewBag.CurrentPage - 1)">
+                    Previous
+                </div>
+            </li>
+            }
+            @for (int i = 1; i <= ViewBag.TPage; i++)
+            {
+            <li class="page-item">
+                <div class="page-link" data-page="@(i - 1)">
+                        @i
+                </div>
+            </li>
+            }
+            @if (ViewBag.TPage - 1 > ViewBag.CurrentPage)
+            {
+            <li>
+                <div class="page-link text-warning" data-page="@(ViewBag.CurrentPage + 1)">
+                    Next
+                </div>
+            </li>
+            }
+        </div>
+
+    </ul>
+</nav>
+
+
+
+<script asp-append-version="true">
+    $('.ADelete').click(function () {
+        var id = $(this).data('id');
+        Swal.fire({
+            title: "Confirm to delete",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Delete",
+            showLoaderOnConfirm: true,
+            preConfirm: async (login) => {
+                $.ajax({
+                    url: '/Library/BookDetailDelete',
+                    method: 'POST',
+                    data: { id: id },
+                    success: function (response) {
+                        window.location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        });
+
+    });
+
+    $('.AEdit').click(function () {
+        var id = $(this).data('id');
+        $.ajax({
+            url: '/Library/AddBook',
+            method: 'POST',
+            data: { id: id },
+            success: function (response) {
+                $("#PartialPopup").html(response);
+                var my = new bootstrap.Modal(document.getElementById('AddBookPopup'));
+                my.show();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+</script>
