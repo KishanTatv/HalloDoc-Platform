@@ -85,5 +85,13 @@ namespace AssignmentTask.Controllers
             return Ok();
         }
         #endregion
+
+
+
+        public List<string> getSuggestCity(string name)
+        {
+            List<string> cityList = _library.getCityFromBorrow(name);
+            return cityList;
+        }
     }
 }

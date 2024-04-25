@@ -4,6 +4,9 @@
 @model AssignmentTask.Entity.ViewModels.BookPopupViewModel;
 @{
 }
+<script asp-append-version="true" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script asp-append-version="true" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+<link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
 
 <div class="modal fade" id="AddBookPopup" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-dialog-centered">
@@ -72,8 +75,8 @@
                             <input type="hidden" class="form-control inputGenere" asp-for="Genere" placeholder="add1">
                         </div>
                         <div class="col form-floating w-25 mt-2">
-                            <input type="text" class="form-control" asp-for="City" placeholder="add1">
-                            <label class="ms-2"> City </label>
+                            <input type="text" class="form-control" id="City" asp-for="City" placeholder="add1">
+                            <label class="ms-2" for="City"> City </label>
                             <span asp-validation-for="City" class="text-danger"></span>
                         </div>
                     </div>
@@ -91,6 +94,7 @@
 </div>
 
 
+
 <script asp-append-version="true">
 
     function checkSelect() {
@@ -103,6 +107,23 @@
             $(".inputGenere").val($('.genereSelect').val());
         }
     }
+
+
+    $('#City').keyup(function (){
+        var name = $('#City').val();
+        $.ajax({
+            url: "/Library/getSuggestCity",
+            data: {name: name},
+            type: "POST",
+            success: function (data) {
+                console.log(data);
+                $("#City").autocomplete({
+                    source: data
+                });
+                $("#City").autocomplete("enable");
+            }
+        });
+    });
 
     $('#Formdata').submit(function (e) {
         checkSelect();
@@ -126,7 +147,7 @@
                     }
                 });
             }
-            else{
+            else {
                 $.ajax({
                     type: 'POST',
                     url: '/Library/UpdateBookDetail',

@@ -41,6 +41,11 @@ namespace AssignmentTask.Repository.Implement
             return data;
         }
 
+        public List<string> getCityFromBorrow(string name)
+        {
+            return _library.Borrowers.Where(x => name == null || x.City.ToLower().Contains(name.ToLower())).Select(x => x.City).ToList();
+        }
+
 
         public BookPopupViewModel getSingleBook(int id)
         {

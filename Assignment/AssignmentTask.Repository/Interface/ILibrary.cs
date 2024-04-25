@@ -12,6 +12,8 @@ namespace AssignmentTask.Repository.Interface
     {
         HomeDataTableModel getBooks(string searchName, int page, int pageSize);
 
+        List<string> getCityFromBorrow(string name);
+
         BookPopupViewModel getSingleBook(int id);
 
         void addBookDetail(BookPopupViewModel book);
