@@ -97,6 +97,7 @@
     $("#FileInput").change(function (e) {
         e.preventDefault();
         var reqid = $("#SpBtnUpload").data('reqid');
+        var page = "Conclude";
         var files = this.files;
         let filedata = new FormData();
         if (files.length > 0) {
@@ -105,6 +106,7 @@
             }
         }
         filedata.append('id', reqid);
+        filedata.append('page', page);
 
         $.ajax({
             url: '/Home/UploadDoc',

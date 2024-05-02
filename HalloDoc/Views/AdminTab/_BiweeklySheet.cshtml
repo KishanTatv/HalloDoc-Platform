@@ -5,6 +5,7 @@
     DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15);
     DateTime endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
 }
+@model List<HalloDoc.Entity.Models.Providerweeklysheet>;
 
 <div class="d-flex w-100 justify-content-center pb-4">
     <div class="HContainer m-auto">
@@ -15,53 +16,72 @@
         </div>
 
         <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead class="table-secondary">
-                        <tr>
-                            <th scope="col"> Date </th>
-                            <th scope="col"> On-call Hours </th>
-                            <th scope="col"> Total Hours </th>
-                            <th scope="col"> Weekend/ Holiday</th>
-                            <th scope="col"> Number of Housecall </th>
-                            <th scope="col"> Number of Phone Consult</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model == 0)
-                        {
-                            @for (var i = 1; i <= startDate.Date.Day; i++)
+            <form id="WeekSheetSubmit">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th scope="col"> Date </th>
+                                <th scope="col"> On-call Hours </th>
+                                <th scope="col"> Total Hours </th>
+                                <th scope="col"> Weekend/ Holiday</th>
+                                <th scope="col"> Number of Housecall </th>
+                                <th scope="col"> Number of Phone Consult</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count == 0)
                             {
-                                <tr>
-                                    <td>@System.DateTime.Now.Date.ToString("MM")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy") </td>
-                                    <td>0</td>
-                                    <td><input type="number" class="form-control" value="0" /></td>
-                                    <td><input type="checkbox" class="form-check-input checkboxClass mt-2" /></td>
-                                    <td><input type="number" class="form-control" /></td>
-                                    <td><input type="number" class="form-control" /></td>
-                                </tr>
+                                @if (ViewBag.period == 0)
+                                {
+                                    @for (var i = 1; i <= startDate.Date.Day; i++)
+                                    {
+                                        <tr>
+                                            <td>@*@System.DateTime.Now.Date.ToString("MM")*@04/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy")</td>
+                                            <td>0</td>
+                                            <td><input type="number" class="form-control" value="0" /></td>
+                                            <td><input type="checkbox" class="form-check-input checkboxClass mt-2" /></td>
+                                            <td><input type="number" class="form-control" /></td>
+                                            <td><input type="number" class="form-control" /></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    @for (var i = 16; i <= endDate.Date.Day; i++)
+                                    {
+                                        <tr>
+                                            <td>@*@System.DateTime.Now.Date.ToString("MM")*@04/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy")</td>
+                                            <td>0</td>
+                                            <td><input type="number" class="form-control" value="0" /></td>
+                                            <td><input type="checkbox" class="form-check-input checkboxClass mt-2" /></td>
+                                            <td><input type="number" class="form-control" /></td>
+                                            <td><input type="number" class="form-control" /></td>
+                                        </tr>
+                                    }
+                                }
                             }
-                        }
-                        else
-                        {
-                            @for (var i = 16; i <= endDate.Date.Day; i++)
+                            else
                             {
-                                <tr>
-                                    <td>@System.DateTime.Now.Date.ToString("MM")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy") </td>
-                                    <td>0</td>
-                                    <td><input type="number" class="form-control" value="0" /></td>
-                                    <td><input type="checkbox" class="form-check-input checkboxClass mt-2" /></td>
-                                    <td><input type="number" class="form-control" /></td>
-                                    <td><input type="number" class="form-control" /></td>
-                                </tr>
+                                @foreach(var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Weekdate.Value.ToString("MM")/@item.Weekdate.Value.ToString("dd")/@item.Weekdate.Value.ToString("yyyy")</td>
+                                        <td>0</td>
+                                        <td><input type="number" class="form-control" value="@item.Totalhours" /></td>
+                                        <td><input type="checkbox" class="form-check-input checkboxClass mt-2" @(item.Isholiday.Value.Equals(true) ? "checked" : "") /></td>
+                                        <td><input type="number" class="form-control" value="@item.Housecall"/></td>
+                                        <td><input type="number" class="form-control" value="@item.Consult"/></td>
+                                    </tr>
+                                }
                             }
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-info text-light">Submit</button>
-            </div>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-info text-light subBtn" data-phid="@ViewBag.phyid">Submit</button>
+                </div>
+            </form>
         </div>
         <button type="button" class="btn btn-info text-light addRecpt">Add Recipts</button>
         <div id="ReciptPartial"></div>
@@ -73,11 +93,11 @@
 
 <script asp-append-version="true">
     $('.addRecpt').click(function () {
-        var period = @Model;
+        var period = @ViewBag.period;
         $.ajax({
             url: '/AdminTab/AddRecipt',
             method: 'POST',
-            data: {period: period},
+            data: { period: period },
             success: function (response) {
                 $('#ReciptPartial').html(response);
             },
@@ -86,4 +106,30 @@
             }
         });
     });
+    $('#WeekSheetSubmit').submit(function (e) {
+        e.preventDefault();
+
+        var phid = $('.subBtn').data('phid');
+        var weeklyData = [];
+        $('tbody tr').each(function () {
+            var rowData = {
+                date: $(this).find('td:first-child').text(),
+                isHoliday: $(this).find('td:nth-child(4) input').prop('checked') ? true : false,
+                Totalhours: $(this).find('td:nth-child(3) input').val(),
+                housecall: $(this).find('td:nth-child(5) input').val(),
+                consult: $(this).find('td:nth-child(6) input').val()
+            };
+            weeklyData.push(rowData);
+        });
+        $.ajax({
+            url: '/AdminTab/WeekReciptSave',
+            method: 'POST',
+            data: { weeklyData: weeklyData , phid: phid},
+            success: function (response) {
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    })
 </script>

@@ -5,6 +5,7 @@ using HalloDoc.Entity.Data;
 using HalloDoc.Entity.Models;
 using HalloDoc.Entity.RequestForm;
 using HalloDoc.Repository.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -65,14 +66,14 @@ namespace HalloDoc.Repository.Implement
         {
             BitArray truebit = new BitArray(1);
             truebit[0] = true;
-            int Tnew = _context.Requests.Count(x => x.Status == 1 && x.Isdeleted!=truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
+            int Tnew = _context.Requests.Count(x => x.Status == 1 && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
             int Tpending = _context.Requests.Count(x => x.Status == 2 && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
             int Tactive = _context.Requests.Count(x => (x.Status == 4 || x.Status == 5) && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
             int Tconclide = _context.Requests.Count(x => x.Status == 6 && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
             int Tclose = _context.Requests.Count(x => (x.Status == 3 || x.Status == 7 || x.Status == 8) && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
             int Tunpaid = _context.Requests.Count(x => x.Status == 9 && x.Isdeleted != truebit && (phyFilterId == 0 || x.Physicianid.Equals(phyFilterId)));
 
-            List<int> countList = new List<int>{Tnew, Tpending, Tactive, Tconclide, Tclose, Tunpaid};
+            List<int> countList = new List<int> { Tnew, Tpending, Tactive, Tconclide, Tclose, Tunpaid };
 
             return countList;
         }
@@ -87,7 +88,7 @@ namespace HalloDoc.Repository.Implement
                        join p in _context.Physicians on r.Physicianid equals p.Physicianid into rf
                        from p in rf.DefaultIfEmpty()
                        orderby r.Createddate descending
-                       where (status == null ? true : status.Contains(r.Status)) && (r.Isdeleted != new BitArray(new bool[] {true})) &&
+                       where (status == null ? true : status.Contains(r.Status)) && (r.Isdeleted != new BitArray(new bool[] { true })) &&
                       (search == null ? true : f.Firstname.ToLower().Contains(search.ToLower()) || f.Lastname.ToLower().Contains(search.ToLower())) &&
                       (reg == null ? true : f.State.ToLower().Equals(reg.ToLower())) &&
                       (phyFilterId == 0 ? true : p.Physicianid.Equals(phyFilterId)) &&
@@ -220,7 +221,7 @@ namespace HalloDoc.Repository.Implement
                 Reason = note,
                 Email = email,
                 Phonenumber = phoneNum,
-                Isactive = new BitArray(new bool[] { true}),
+                Isactive = new BitArray(new bool[] { true }),
                 Createddate = System.DateTime.Now,
                 Ip = Dns.GetHostAddresses(Dns.GetHostName())[1].ToString(),
             };
@@ -500,7 +501,7 @@ namespace HalloDoc.Repository.Implement
         {
             return _context.Physicians.FirstOrDefault(x => x.Physicianid == phid).Email;
         }
-        
+
         public string getPhysicianMobile(int phid)
         {
             return _context.Physicians.FirstOrDefault(x => x.Physicianid == phid).Mobile;
@@ -615,7 +616,7 @@ namespace HalloDoc.Repository.Implement
                     userName = x.Username,
                     Phone = x.Phonenumber,
                     status = (int)(x.Aspnetuserrole.Roleid == 1 ? x.AdminAspnetusers?.FirstOrDefault()?.Status : x.PhysicianAspnetusers.FirstOrDefault()?.Status),
-                    totalRequest = x.Aspnetuserrole.Roleid == 2 ? _context.Requests.Where(i => i.Physicianid == x.PhysicianAspnetusers.FirstOrDefault().Physicianid).Count(): 0,
+                    totalRequest = x.Aspnetuserrole.Roleid == 2 ? _context.Requests.Where(i => i.Physicianid == x.PhysicianAspnetusers.FirstOrDefault().Physicianid).Count() : 0,
                 });
             return data;
         }
@@ -626,7 +627,7 @@ namespace HalloDoc.Repository.Implement
         {
             BitArray bitArray = new BitArray(1);
             bitArray[0] = true;
-            return _context.Users.Where(x => 
+            return _context.Users.Where(x =>
             (x.Isdeleted != new BitArray(new bool[] { true })) &&
             (fname == null || x.Firstname.Contains(fname)) &&
             (lname == null || x.Lastname.Contains(lname)) &&
@@ -704,7 +705,7 @@ namespace HalloDoc.Repository.Implement
         public bool checkExistShift(ShiftPoupViewModel model, DateOnly newDate)
         {
             var filteredShifts = _context.Shiftdetails.Include(x => x.Shift)
-                .Where(x => x.Shiftdate == newDate && x.Shift.Physicianid == model.phyid && x.Isdeleted != new BitArray(new bool[] {true}))
+                .Where(x => x.Shiftdate == newDate && x.Shift.Physicianid == model.phyid && x.Isdeleted != new BitArray(new bool[] { true }))
                 .AsEnumerable()
                 .Where(x => IsDateRange(x.Starttime, x.Endtime, model.timeStart, model.timeEnd));
             bool shiftExists = filteredShifts.Any();
@@ -721,7 +722,7 @@ namespace HalloDoc.Repository.Implement
                 Starttime = model.timeStart,
                 Endtime = model.timeEnd,
                 Status = status,
-                Isdeleted = new BitArray(new bool[] {false}),
+                Isdeleted = new BitArray(new bool[] { false }),
             };
             _context.Shiftdetails.Add(shiftdetail);
             _context.SaveChanges();
@@ -758,7 +759,7 @@ namespace HalloDoc.Repository.Implement
             BitArray deleteBit = new BitArray(1);
             deleteBit[0] = true;
             return _context.Shiftdetails.Include(x => x.Shiftdetailregions).ThenInclude(x => x.Region).Include(x => x.Shift).ThenInclude(x => x.Physician)
-                .Where(x => x.Isdeleted != deleteBit && 
+                .Where(x => x.Isdeleted != deleteBit &&
                 (reg == 0 || x.Shiftdetailregions.FirstOrDefault().Regionid == reg)).ToList();
         }
 
@@ -866,6 +867,74 @@ namespace HalloDoc.Repository.Implement
         {
             Blockrequest blockrequest = _context.Blockrequests.FirstOrDefault(x => x.Requestid == reqId);
             _context.Blockrequests.Remove(blockrequest);
+            _context.SaveChanges();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        //invoice
+        public Providerpayrate providerPayrate(int phid)
+        {
+            Providerpayrate proPayRate = _context.Providerpayrates.FirstOrDefault(x => x.Physicianid == phid);
+            return proPayRate;
+        }
+
+        public void proPayrateUpdate(int phid, int rate, string col)
+        {
+            Providerpayrate providerpayrate = _context.Providerpayrates.FirstOrDefault(x => x.Physicianid == phid);
+            var property = typeof(Providerpayrate).GetProperty(col);
+
+            if (property != null)
+            {
+                property.SetValue(providerpayrate, rate);
+                _context.Providerpayrates.Update(providerpayrate);
+                _context.SaveChanges();
+            }
+        }
+
+        public List<Providerweeklysheet> getWeeksheetwithPhysician(int phid)
+        {
+            return _context.Providerweeklysheets.Where(x => x.Physicianid == phid).ToList();
+        }
+
+        public void addReciptDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid)
+        {
+            foreach (var item in weeklyData)
+            {
+                DateOnly newDate = DateOnly.ParseExact(item.date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                bool exist = _context.Providerweeklysheets.Any(x => x.Weekdate.Value.Equals(newDate) && x.Physicianid == phid);
+                if (!exist)
+                {
+                    Providerweeklysheet sheet = new Providerweeklysheet()
+                    {
+                        Physicianid = phid,
+                        Housecall = item.housecall,
+                        Consult = item.consult,
+                        Totalhours = item.Totalhours,
+                        Isholiday = item.isHoliday,
+                        Weekdate = DateOnly.ParseExact(item.date, "MM/dd/yyyy", CultureInfo.InvariantCulture),
+                    };
+                    _context.Providerweeklysheets.Add(sheet);
+                }
+                else
+                {
+                    Providerweeklysheet sheet = _context.Providerweeklysheets.FirstOrDefault(x => x.Weekdate.Equals(newDate) && x.Physicianid == phid);
+                    sheet.Housecall = item.housecall;
+                    sheet.Consult = item.consult;
+                    sheet.Totalhours = item.Totalhours;
+                    sheet.Isholiday = item.isHoliday;
+                    _context.Providerweeklysheets.Update(sheet);
+                }
+            }
             _context.SaveChanges();
         }
     }

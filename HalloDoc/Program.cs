@@ -26,7 +26,6 @@ builder.Services.AddNotyf(config => { config.DurationInSeconds = 2; config.IsDis
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddScoped<IGenral, GenralRepo>();
 builder.Services.AddScoped<IPatient, PatientRepo>();
-builder.Services.AddScoped<IPatient, PatientRepo>();
 builder.Services.AddScoped<IPhysician, PhysicianRepo>();
 builder.Services.AddScoped<IAdmin, AdminRepo>();
 builder.Services.AddScoped<IJwtToken, JwtToken>();

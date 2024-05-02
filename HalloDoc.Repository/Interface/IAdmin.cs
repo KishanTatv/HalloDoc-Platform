@@ -167,5 +167,19 @@ namespace HalloDoc.Repository.Interface
         IEnumerable<ProcallModel> phyOffcall(int reg);
 
 
+
+
+
+
+
+        //invoice
+        Providerpayrate providerPayrate(int phid);
+
+        void proPayrateUpdate(int phid, int rate, string col);
+
+        List<Providerweeklysheet> getWeeksheetwithPhysician(int phid);
+
+        void addReciptDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid);
+
     }
 }

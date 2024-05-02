@@ -4,7 +4,6 @@ using HalloDoc.Entity.Models;
 using HalloDoc.Repository.Interface;
 using HalloDoc.Repository.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Windows.System;
 
 namespace HalloDoc.Controllers
 {

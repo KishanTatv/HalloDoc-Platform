@@ -1,0 +1,234 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model HalloDoc.Entity.Models.Providerpayrate;
+
+
+<div class="d-flex justify-content-between">
+    <h4> Payrate </h4>
+    <a class="btn w-5 btn-info rounded bg-transparent m-2 text-info" asp-controller="AdminTab" asp-action="Provider">
+        <strong class="pe-2">&lt Back</strong>
+    </a>
+</div>
+<div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+    <div class="mb-4">
+
+        <div class="table-responsive mt-2">
+            <table class="table">
+                <thead class="table-secondary">
+                    <tr>
+                        <th scope="col" class="text-center"> Category </th>
+                        <th scope="col" class="text-center"> Payrate </th>
+                        <th scope="col" class="text-center"> Action </th>
+                    </tr>
+                </thead>
+                <input type="hidden" id="Phyid" asp-for="Physicianid" />
+                <tbody>
+                    <tr>
+                        <td class="text-center">NightShift_Weekend</td>
+                        <td class="text-center pt-0">
+                            <div class="form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent NW_in" placeholder="licence" asp-for="@Model.NightshiftWeekend">
+                                <label> Payrate </label>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-info me-4 payEditNW"> Edit </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Shift</td>
+                        <td class="text-center pt-0">
+                            <div class="form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent S_in" placeholder="licence" asp-for="@Model.Shift">
+                                <label> Payrate</label>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-info me-4 payEditS">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">HouseCalls_Nights_Weekend</td>
+                        <td class="text-center pt-0">
+                            <div class="form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent HNW_in" placeholder="licence" asp-for="@Model.HousecallNightWeekend">
+                                <label> Payrate</label>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-info me-4 payEditHNW">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">PhoneConsults</td>
+                        <td class="text-center pt-0">
+                            <div class="form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent PC_in" placeholder="licence" asp-for="@Model.Phoneconsults">
+                                <label> Payrate</label>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-info me-4 payEditPC">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">PhoneConsults_Nights_Weekend</td>
+                        <td class="text-center pt-0">
+                            <div class="form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent PCNW_in" placeholder="licence" asp-for="@Model.PhoneconsultsNightWeekend">
+                                <label> Payrate</label>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-info me-4 payEditPCNW">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">BatchTesing</td>
+                        <td class="text-center pt-0">
+                            <div class="form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent BT_in" placeholder="licence" asp-for="@Model.Batchtesting">
+                                <label> Payrate</label>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-info me-4 payEditBT">Edit</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">HouseCalls</td>
+                        <td class="text-center pt-0">
+                            <div class="form-floating mt-2">
+                                <input type="text" class="form-control bg-transparent HC_in" placeholder="licence" asp-for="@Model.Housecalls">
+                                <label> Payrate</label>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-info me-4 payEditHC">Edit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script asp-append-version="true">
+    $(document).ready(function () {
+        var phid = $('#Phyid').val();
+
+        $('.payEditNW').click(function () {
+            var rate = $('.NW_in').val();
+            var column = 'NightshiftWeekend';
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateProRate',
+                data: { phid: phid, rate: rate, column: column, },
+                success: function (response) {
+                    // Handle success response if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.payEditS').click(function () {
+            var rate = $('.S_in').val();
+            var column = 'Shift';
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateProRate',
+                data: { phid: phid, rate: rate, column: column, },
+                success: function (response) {
+                    // Handle success response if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.payEditHNW').click(function () {
+            var rate = $('.HNW_in').val();
+            var column = 'HousecallNightWeekend';
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateProRate',
+                data: { phid: phid, rate: rate, column: column, },
+                success: function (response) {
+                    // Handle success response if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.payEditPC').click(function () {
+            var rate = $('.PC_in').val();
+            var column = 'Phoneconsults';
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateProRate',
+                data: { phid: phid, rate: rate, column: column, },
+                success: function (response) {
+                    // Handle success response if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.payEditPCNW').click(function () {
+            var rate = $('.PCNW_in').val();
+            var column = 'PhoneconsultsNightWeekend';
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateProRate',
+                data: { phid: phid, rate: rate, column: column, },
+                success: function (response) {
+                    // Handle success response if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.payEditBT').click(function () {
+            var rate = $('.BT_in').val();
+            var column = 'Batchtesting';
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateProRate',
+                data: { phid: phid, rate: rate, column: column, },
+                success: function (response) {
+                    // Handle success response if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.payEditHC').click(function () {
+            var rate = $('.HC_in').val();
+            var column = 'Housecalls';
+            $.ajax({
+                type: 'POST',
+                url: '/AdminTab/UpdateProRate',
+                data: { phid: phid, rate: rate, column: column, },
+                success: function (response) {
+                    // Handle success response if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+
+</script>

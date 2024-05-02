@@ -14,27 +14,20 @@ public partial class EncounterForm
 
     public int? RequestId { get; set; }
 
-    [Required(ErrorMessage = "Injury is required")]
     public string? HistoryOfPresentIllnessOrInjury { get; set; }
 
-    [Required(ErrorMessage = "MedicalHistory is required")]
     public string? MedicalHistory { get; set; }
 
-    [Required(ErrorMessage = "Medications is required")]
     public string? Medications { get; set; }
 
-    [Required(ErrorMessage = "Allergies is required")]
     public string? Allergies { get; set; }
 
-    [Required(ErrorMessage = "Temprature is required")]
     public string? Temp { get; set; }
 
     [Column("HR")]
-    [Required(ErrorMessage = "HR is required")]
     public string? Hr { get; set; }
 
     [Column("RR")]
-    [Required(ErrorMessage = "RR is required")]
     public string? Rr { get; set; }
 
     public string? BloodPressureSystolic { get; set; }
@@ -50,11 +43,9 @@ public partial class EncounterForm
     [Column("CV")]
     public string? Cv { get; set; }
 
-    [Required(ErrorMessage = "Chest is required")]
     public string? Chest { get; set; }
 
     [Column("ABD")]
-    [Required(ErrorMessage = "ABD is required")]
     public string? Abd { get; set; }
 
     public string? Extremeties { get; set; }

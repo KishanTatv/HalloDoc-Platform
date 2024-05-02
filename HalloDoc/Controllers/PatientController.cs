@@ -13,7 +13,6 @@ using HalloDoc.Models;
 using DocumentFormat.OpenXml.Spreadsheet;
 using HalloDoc.Repository.Service.Interface;
 using HalloDoc.Repository.Service;
-using Windows.Web.Http;
 using Microsoft.Net.Http.Headers;
 using DocumentFormat.OpenXml.ExtendedProperties;
 using AspNetCoreHero.ToastNotification.Abstractions;

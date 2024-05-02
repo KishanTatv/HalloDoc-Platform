@@ -19,7 +19,6 @@ using System.Security.AccessControl;
 using System.Text;
 using static HalloDoc.HelperClass.HalloEnum;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using static Uno.WinRTFeatureConfiguration;
 
 namespace HalloDoc.Controllers
 {
@@ -769,7 +768,7 @@ namespace HalloDoc.Controllers
         [CustomAuthorize("Admin:Provider", "Scheduling")]
         public IActionResult getPhysicianRecord(int reg)
         {
-            var data = _Admin.getAllPhysicianName();
+            List<phyCustomNameViewModel> data = _Admin.getAllPhysicianName();
             if (reg != 0)
             {
                 data = data.Where(x => x.phyReg.Contains(reg)).ToList();
@@ -1142,12 +1141,16 @@ namespace HalloDoc.Controllers
         #region Invoice 
         public IActionResult Invoice()
         {
-            return View();
+            List<phyCustomNameViewModel> data = _Admin.getAllPhysicianName();
+            return View(data);
         }
 
-        public IActionResult FinalizeSheet(int period)
+        public IActionResult FinalizeSheet(int period, int phid)
         {
-            return PartialView("_BiweeklySheet", period);
+            List<Providerweeklysheet> sheetData = _Admin.getWeeksheetwithPhysician(phid);
+            ViewBag.phyid = phid;
+            ViewBag.period = period;
+            return PartialView("_BiweeklySheet", sheetData);
         }
 
         public IActionResult AddRecipt(int period)
@@ -1155,6 +1158,26 @@ namespace HalloDoc.Controllers
             return PartialView("_InvoiceRecipt", period);
         }
 
+        public IActionResult WeekReciptSave(List<InvoiceWeeklySheetData> weeklyData, int phid)
+        {
+            _Admin.addReciptDataInvoice(weeklyData, phid);
+            return Ok();
+        }
+        #endregion
+
+
+        #region ProPayRate
+        public IActionResult PhysicanPayRate(int phid)
+        {
+            Providerpayrate payrate = _Admin.providerPayrate(phid);
+            return PartialView("_PhysicianPayrate", payrate);
+        }
+
+        public IActionResult UpdateProRate(int phid, int rate, string column)
+        {
+            _Admin.proPayrateUpdate(phid, rate, column);
+            return Ok();
+        }
         #endregion
     }
 }

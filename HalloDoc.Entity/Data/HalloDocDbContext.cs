@@ -54,6 +54,10 @@ public partial class HalloDocDbContext : DbContext
 
     public virtual DbSet<Physicianregion> Physicianregions { get; set; }
 
+    public virtual DbSet<Providerpayrate> Providerpayrates { get; set; }
+
+    public virtual DbSet<Providerweeklysheet> Providerweeklysheets { get; set; }
+
     public virtual DbSet<Region> Regions { get; set; }
 
     public virtual DbSet<Request> Requests { get; set; }
@@ -97,7 +101,6 @@ public partial class HalloDocDbContext : DbContext
         {
             entity.HasKey(e => e.Adminid).HasName("admin_pkey");
 
-            entity.Property(e => e.Adminid).UseIdentityAlwaysColumn();
             entity.Property(e => e.Createddate).HasDefaultValueSql("CURRENT_DATE");
 
             entity.HasOne(d => d.Aspnetuser).WithMany(p => p.AdminAspnetusers)
@@ -135,7 +138,6 @@ public partial class HalloDocDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("aspnetusers_pkey");
 
-            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
             entity.Property(e => e.Createddate).HasDefaultValueSql("CURRENT_DATE");
         });
 
@@ -157,8 +159,6 @@ public partial class HalloDocDbContext : DbContext
         modelBuilder.Entity<Blockrequest>(entity =>
         {
             entity.HasKey(e => e.Blockrequestid).HasName("blockrequests_pkey");
-
-            entity.Property(e => e.Blockrequestid).UseIdentityAlwaysColumn();
 
             entity.HasOne(d => d.Request).WithMany(p => p.Blockrequests).HasConstraintName("fkeyreqid");
         });
@@ -236,8 +236,6 @@ public partial class HalloDocDbContext : DbContext
         {
             entity.HasKey(e => e.Physicianid).HasName("physician_pkey");
 
-            entity.Property(e => e.Physicianid).UseIdentityAlwaysColumn();
-
             entity.HasOne(d => d.Aspnetuser).WithMany(p => p.PhysicianAspnetusers).HasConstraintName("physician_aspnetuserid_fkey");
 
             entity.HasOne(d => d.CreatedbyNavigation).WithMany(p => p.PhysicianCreatedbyNavigations)
@@ -286,6 +284,24 @@ public partial class HalloDocDbContext : DbContext
                 .HasConstraintName("physicianregion_regionid_fkey");
         });
 
+        modelBuilder.Entity<Providerpayrate>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("providerpayrate_pkey");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.Providerpayrates)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("providerpayrate_physicianid_fkey");
+        });
+
+        modelBuilder.Entity<Providerweeklysheet>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("providerweeklysheet_pkey");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.Providerweeklysheets)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("providerweeklysheet_physicianid_fkey");
+        });
+
         modelBuilder.Entity<Region>(entity =>
         {
             entity.HasKey(e => e.Regionid).HasName("region_pkey");
@@ -297,7 +313,6 @@ public partial class HalloDocDbContext : DbContext
         {
             entity.HasKey(e => e.Requestid).HasName("request_pkey");
 
-            entity.Property(e => e.Requestid).UseIdentityAlwaysColumn();
             entity.Property(e => e.Createddate).HasDefaultValueSql("CURRENT_DATE");
 
             entity.HasOne(d => d.Physician).WithMany(p => p.Requests).HasConstraintName("request_physicianid_fkey");
@@ -323,8 +338,6 @@ public partial class HalloDocDbContext : DbContext
         modelBuilder.Entity<Requestclient>(entity =>
         {
             entity.HasKey(e => e.Requestclientid).HasName("requestclient_pkey");
-
-            entity.Property(e => e.Requestclientid).UseIdentityAlwaysColumn();
 
             entity.HasOne(d => d.Region).WithMany(p => p.Requestclients).HasConstraintName("requestclient_regionid_fkey");
 
@@ -481,7 +494,6 @@ public partial class HalloDocDbContext : DbContext
         {
             entity.HasKey(e => e.Userid).HasName("User_pkey");
 
-            entity.Property(e => e.Userid).UseIdentityAlwaysColumn();
             entity.Property(e => e.Createddate).HasDefaultValueSql("CURRENT_DATE");
 
             entity.HasOne(d => d.Aspnetuser).WithMany(p => p.Users).HasConstraintName("User_aspnetuserid_fkey");

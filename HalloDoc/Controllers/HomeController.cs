@@ -4,7 +4,6 @@ using HalloDoc.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.IO.Compression;
-using Windows.System;
 
 namespace HalloDoc.Controllers
 {
@@ -28,7 +27,7 @@ namespace HalloDoc.Controllers
 
 
         [ActionName("UploadDoc")]
-        public async Task<IActionResult> UploadDoc(ICollection<IFormFile> DocFile, int id)
+        public async Task<IActionResult> UploadDoc(ICollection<IFormFile> DocFile, int id, string page)
         {
             foreach (var File in DocFile)
             {
@@ -50,7 +49,10 @@ namespace HalloDoc.Controllers
             }
             else if ((Request.Cookies["CookieRole"]) == "2")
             {
-                return RedirectToAction("ConcludeCare", "Physician", new { reqid = id });
+                if (page == "Conclude")
+                {
+                    return RedirectToAction("ConcludeCare", "Physician", new { reqid = id });
+                }
             }
             return RedirectToAction("ViewUploads", "AdminDash", new { reqid = id });
         }

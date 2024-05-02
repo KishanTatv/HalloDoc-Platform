@@ -5,7 +5,11 @@
 @{
     ViewData["Title"] = "Invoice";
     Layout = "~/Views/Shared/_LayoutDashbord.cshtml";
+    DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15);
+    DateTime endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
 }
+@model List<HalloDoc.Entity.AdminTab.phyCustomNameViewModel>;
+
 
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
 
@@ -25,12 +29,24 @@
 
             <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <div class="col-md-3 form-floating mt-2">
-                        <select class="form-select selectTimePeriod ms-2" aria-label="Floating label select">
-                            <option value="0" selected>2024/04/01 - 2024/04/15</option>
-                            <option value="1">2024/04/16 - 2024/04/30</option>
-                        </select>
-                        <label class="ms-2" for="floatingSelect">Search by TimesheetPeriod</label>
+                    <div class="d-flex">
+                        <div class="col-md-6 form-floating mt-2 me-3">
+                            <select class="form-select selectPhy ms-2" aria-label="Floating label select">
+                                <option selected disabled>select physician</option>
+                                @foreach (var phy in Model)
+                                {
+                                    <option value="@phy.Physicianid"> @phy.Firstname @phy.Lastname </option>
+                                }
+                            </select>
+                            <label class="ms-2" for="floatingSelect">Physician</label>
+                        </div>
+                        <div class="col-md-8 form-floating mt-2">
+                            <select class="form-select selectTimePeriod ms-2" aria-label="Floating label select">
+                                <option value="0" selected>2024/04/01 - 2024/04/15</option>
+                                <option value="1">2024/04/16 - 2024/04/30</option>
+                            </select>
+                            <label class="ms-2" for="floatingSelect">Search by TimesheetPeriod</label>
+                        </div>
                     </div>
                     <div class="col-2 justify-content-end">
                         <button type="button" class="btn btn-outline-info FinalizeBtn">Finalize Timesheet</button>
@@ -58,10 +74,11 @@
 <script asp-append-version="true">
     $('.FinalizeBtn').click(function () {
         var period = $('.selectTimePeriod').val();
+        var phid = $('.selectPhy').val();
         $.ajax({
             url: '/AdminTab/FinalizeSheet',
             method: 'POST',
-            data: {period : period},
+            data: { period: period, phid: phid },
             success: function (response) {
                 $('.MainInvoice').remove();
                 $('#PartialSheet').html(response);
