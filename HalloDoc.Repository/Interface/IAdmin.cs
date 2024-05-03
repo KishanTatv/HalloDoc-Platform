@@ -179,7 +179,7 @@ namespace HalloDoc.Repository.Interface
 
         List<Providerweeklysheet> getWeeksheetwithPhysician(int phid, int period);
 
-        void addReciptDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid);
+        void addReciptDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid, int period);
 
     }
 }

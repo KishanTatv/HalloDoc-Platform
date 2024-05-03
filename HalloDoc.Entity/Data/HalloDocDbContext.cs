@@ -54,6 +54,8 @@ public partial class HalloDocDbContext : DbContext
 
     public virtual DbSet<Physicianregion> Physicianregions { get; set; }
 
+    public virtual DbSet<Providerfullsheet> Providerfullsheets { get; set; }
+
     public virtual DbSet<Providerpayrate> Providerpayrates { get; set; }
 
     public virtual DbSet<Providerweeklysheet> Providerweeklysheets { get; set; }
@@ -284,6 +286,15 @@ public partial class HalloDocDbContext : DbContext
                 .HasConstraintName("physicianregion_regionid_fkey");
         });
 
+        modelBuilder.Entity<Providerfullsheet>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("providerfullsheet_pkey");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.Providerfullsheets)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("providerfullsheet_physicianid_fkey");
+        });
+
         modelBuilder.Entity<Providerpayrate>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("providerpayrate_pkey");
@@ -297,9 +308,7 @@ public partial class HalloDocDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("providerweeklysheet_pkey");
 
-            entity.HasOne(d => d.Physician).WithMany(p => p.Providerweeklysheets)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("providerweeklysheet_physicianid_fkey");
+            entity.HasOne(d => d.Sheet).WithMany(p => p.Providerweeklysheets).HasConstraintName("providerweeklysheet_sheetid_fkey");
         });
 
         modelBuilder.Entity<Region>(entity =>

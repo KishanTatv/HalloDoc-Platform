@@ -13,9 +13,6 @@ public partial class Providerweeklysheet
     [Column("id")]
     public int Id { get; set; }
 
-    [Column("physicianid")]
-    public int Physicianid { get; set; }
-
     [Column("weekdate")]
     public DateOnly? Weekdate { get; set; }
 
@@ -31,7 +28,10 @@ public partial class Providerweeklysheet
     [Column("consult")]
     public int? Consult { get; set; }
 
-    [ForeignKey("Physicianid")]
+    [Column("sheetid")]
+    public int? Sheetid { get; set; }
+
+    [ForeignKey("Sheetid")]
     [InverseProperty("Providerweeklysheets")]
-    public virtual Physician Physician { get; set; } = null!;
+    public virtual Providerfullsheet? Sheet { get; set; }
 }

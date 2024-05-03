@@ -48,7 +48,7 @@
                                 }
                                 else
                                 {
-                                    @for (var i = 16; i <= endDate.Date.Day; i++)
+                                    @for (var i = 16; i < endDate.Date.Day; i++)
                                     {
                                         <tr>
                                             <td>@*@System.DateTime.Now.Date.ToString("MM")*@04/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy")</td>
@@ -63,15 +63,15 @@
                             }
                             else
                             {
-                                @foreach(var item in Model)
+                                @foreach (var item in Model)
                                 {
                                     <tr>
                                         <td>@item.Weekdate.Value.ToString("MM")/@item.Weekdate.Value.ToString("dd")/@item.Weekdate.Value.ToString("yyyy")</td>
                                         <td>0</td>
                                         <td><input type="number" class="form-control" value="@item.Totalhours" /></td>
                                         <td><input type="checkbox" class="form-check-input checkboxClass mt-2" @(item.Isholiday.Value.Equals(true) ? "checked" : "") /></td>
-                                        <td><input type="number" class="form-control" value="@item.Housecall"/></td>
-                                        <td><input type="number" class="form-control" value="@item.Consult"/></td>
+                                        <td><input type="number" class="form-control" value="@item.Housecall" /></td>
+                                        <td><input type="number" class="form-control" value="@item.Consult" /></td>
                                     </tr>
                                 }
                             }
@@ -92,8 +92,8 @@
 </div>
 
 <script asp-append-version="true">
+    var period = @ViewBag.period;
     $('.addRecpt').click(function () {
-        var period = @ViewBag.period;
         $.ajax({
             url: '/AdminTab/AddRecipt',
             method: 'POST',
@@ -124,7 +124,7 @@
         $.ajax({
             url: '/AdminTab/WeekReciptSave',
             method: 'POST',
-            data: { weeklyData: weeklyData , phid: phid},
+            data: { weeklyData: weeklyData, phid: phid, period: period },
             success: function (response) {
             },
             error: function (xhr, status, error) {

@@ -1158,9 +1158,9 @@ namespace HalloDoc.Controllers
             return PartialView("_InvoiceRecipt", period);
         }
 
-        public IActionResult WeekReciptSave(List<InvoiceWeeklySheetData> weeklyData, int phid)
+        public IActionResult WeekReciptSave(List<InvoiceWeeklySheetData> weeklyData, int phid, int period)
         {
-            _Admin.addReciptDataInvoice(weeklyData, phid);
+            _Admin.addReciptDataInvoice(weeklyData, phid, period);
             return Ok();
         }
         #endregion

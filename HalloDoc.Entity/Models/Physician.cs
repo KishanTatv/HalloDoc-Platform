@@ -153,10 +153,10 @@ public partial class Physician
     public virtual ICollection<Physicianregion> Physicianregions { get; } = new List<Physicianregion>();
 
     [InverseProperty("Physician")]
-    public virtual ICollection<Providerpayrate> Providerpayrates { get; } = new List<Providerpayrate>();
+    public virtual ICollection<Providerfullsheet> Providerfullsheets { get; } = new List<Providerfullsheet>();
 
     [InverseProperty("Physician")]
-    public virtual ICollection<Providerweeklysheet> Providerweeklysheets { get; } = new List<Providerweeklysheet>();
+    public virtual ICollection<Providerpayrate> Providerpayrates { get; } = new List<Providerpayrate>();
 
     [InverseProperty("Physician")]
     public virtual ICollection<Request> Requests { get; } = new List<Request>();

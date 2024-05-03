@@ -903,40 +903,56 @@ namespace HalloDoc.Repository.Implement
 
         public List<Providerweeklysheet> getWeeksheetwithPhysician(int phid, int period)
         {
-            List<Providerweeklysheet> data = _context.Providerweeklysheets.Where(x => x.Physicianid == phid).ToList();
-            if(period == 0)
+            List<Providerweeklysheet> data = new List<Providerweeklysheet>();
+            bool WeeksheetExist = _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period);
+            if (WeeksheetExist)
             {
-                data = data.Take(15).ToList();
-            }
-            else
-            {
-                data = data.Take(15).Skip(15).ToList();
+                int weeksheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && period == period).Id;
+                data = _context.Providerweeklysheets.Where(x => x.Sheetid == weeksheet).ToList();
             }
             return data;
         }
 
-        public void addReciptDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid)
+
+        public int addWeekSingleRecipt(int phid, int period)
         {
+            Providerfullsheet sheet = new Providerfullsheet()
+            {
+                Peroid = Convert.ToInt16(period),
+                Physicianid = phid,
+                Finalize = false,
+            };
+            _context.Providerfullsheets.Add(sheet);
+            _context.SaveChanges();
+
+            return sheet.Id;
+        }
+
+
+        public void addReciptDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid, int period)
+        {
+            int weektypesheet = addWeekSingleRecipt(phid, period);
+
             foreach (var item in weeklyData)
             {
                 DateOnly newDate = DateOnly.ParseExact(item.date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                bool exist = _context.Providerweeklysheets.Any(x => x.Weekdate.Value.Equals(newDate) && x.Physicianid == phid);
+                bool exist = _context.Providerweeklysheets.Any(x => x.Weekdate.Value.Equals(newDate) && x.Sheetid == weektypesheet);
                 if (!exist)
                 {
                     Providerweeklysheet sheet = new Providerweeklysheet()
                     {
-                        Physicianid = phid,
                         Housecall = item.housecall,
                         Consult = item.consult,
                         Totalhours = item.Totalhours,
                         Isholiday = item.isHoliday,
                         Weekdate = DateOnly.ParseExact(item.date, "MM/dd/yyyy", CultureInfo.InvariantCulture),
+                        Sheetid = weektypesheet,
                     };
                     _context.Providerweeklysheets.Add(sheet);
                 }
                 else
                 {
-                    Providerweeklysheet sheet = _context.Providerweeklysheets.FirstOrDefault(x => x.Weekdate.Equals(newDate) && x.Physicianid == phid);
+                    Providerweeklysheet sheet = _context.Providerweeklysheets.FirstOrDefault(x => x.Weekdate.Equals(newDate) && x.Sheetid == weektypesheet);
                     sheet.Housecall = item.housecall;
                     sheet.Consult = item.consult;
                     sheet.Totalhours = item.Totalhours;
