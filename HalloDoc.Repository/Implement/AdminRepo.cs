@@ -901,9 +901,18 @@ namespace HalloDoc.Repository.Implement
             }
         }
 
-        public List<Providerweeklysheet> getWeeksheetwithPhysician(int phid)
+        public List<Providerweeklysheet> getWeeksheetwithPhysician(int phid, int period)
         {
-            return _context.Providerweeklysheets.Where(x => x.Physicianid == phid).ToList();
+            List<Providerweeklysheet> data = _context.Providerweeklysheets.Where(x => x.Physicianid == phid).ToList();
+            if(period == 0)
+            {
+                data = data.Take(15).ToList();
+            }
+            else
+            {
+                data = data.Take(15).Skip(15).ToList();
+            }
+            return data;
         }
 
         public void addReciptDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid)

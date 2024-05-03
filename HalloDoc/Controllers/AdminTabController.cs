@@ -1147,7 +1147,7 @@ namespace HalloDoc.Controllers
 
         public IActionResult FinalizeSheet(int period, int phid)
         {
-            List<Providerweeklysheet> sheetData = _Admin.getWeeksheetwithPhysician(phid);
+            List<Providerweeklysheet> sheetData = _Admin.getWeeksheetwithPhysician(phid, period);
             ViewBag.phyid = phid;
             ViewBag.period = period;
             return PartialView("_BiweeklySheet", sheetData);
