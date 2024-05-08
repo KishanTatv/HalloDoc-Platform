@@ -497,7 +497,7 @@ namespace HalloDoc.Controllers
             }
         }
         #endregion
-
+        
 
         #region Account Access
         [CustomAuthorize("Admin:Provider", "Account Access")]
@@ -1145,16 +1145,19 @@ namespace HalloDoc.Controllers
             return View(data);
         }
 
-        public IActionResult FinalizeSheet(int period, int phid)
+        public IActionResult FinalizeSheet(string period, int phid)
         {
-            List<Providerweeklysheet> sheetData = _Admin.getWeeksheetwithPhysician(phid, period);
+            int month = Convert.ToInt16(period.Substring(0,2));
+            List<Providerweeklysheet> sheetData = _Admin.getWeeksheetwithPhysician(phid, Convert.ToInt16(period.Substring(3)), month);
             ViewBag.phyid = phid;
-            ViewBag.period = period;
+            ViewBag.period = Convert.ToInt16(period.Substring(3));
+            ViewBag.month = month;
             return PartialView("_BiweeklySheet", sheetData);
         }
 
-        public IActionResult AddRecipt(int period)
+        public IActionResult AddRecipt(int period, int month)
         {
+            ViewBag.month = month;
             return PartialView("_InvoiceRecipt", period);
         }
 

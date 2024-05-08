@@ -31,6 +31,15 @@ public partial class Providerweeklysheet
     [Column("sheetid")]
     public int? Sheetid { get; set; }
 
+    [Column("item", TypeName = "character varying")]
+    public string? Item { get; set; }
+
+    [Column("amount")]
+    public decimal? Amount { get; set; }
+
+    [Column("bill", TypeName = "character varying")]
+    public string? Bill { get; set; }
+
     [ForeignKey("Sheetid")]
     [InverseProperty("Providerweeklysheets")]
     public virtual Providerfullsheet? Sheet { get; set; }

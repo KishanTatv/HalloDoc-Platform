@@ -42,8 +42,24 @@
                         </div>
                         <div class="col-md-8 form-floating mt-2">
                             <select class="form-select selectTimePeriod ms-2" aria-label="Floating label select">
-                                <option value="0" selected>2024/04/01 - 2024/04/15</option>
-                                <option value="1">2024/04/16 - 2024/04/30</option>
+                                @for(var i=1; i<=startDate.Month; i++)
+                                {
+                                    int lastDate = DateTime.DaysInMonth(DateTime.Now.Year, i);
+                                    @if(i == startDate.Month)
+                                    {
+                                        <option value="@i.ToString("00")-1" selected>@startDate.Date.ToString("yyyy")/@i.ToString("00")/01 - @startDate.Date.ToString("yyyy")/@i.ToString("00")/15</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@i.ToString("00")-1">@startDate.Date.ToString("yyyy")/@i.ToString("00")/01 - @startDate.Date.ToString("yyyy")/@i.ToString("00")/15</option>
+                                    }
+                                    @if (!startDate.Month.Equals(i) && System.DateTime.Now.Date < startDate)
+                                    {
+                                        <option value="@i.ToString("00")-2">@startDate.Date.ToString("yyyy")/@i.ToString("00")/16 - @startDate.Date.ToString("yyyy")/@i.ToString("00")/@lastDate </option>
+                                    }
+                                }
+                                @*<option value="0" selected>2024/04/01 - 2024/04/15</option>
+                                <option value="1">2024/04/16 - 2024/04/30</option>*@
                             </select>
                             <label class="ms-2" for="floatingSelect">Search by TimesheetPeriod</label>
                         </div>

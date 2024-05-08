@@ -2,8 +2,6 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    DateTime startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 15);
-    DateTime endDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month));
 }
 @model List<HalloDoc.Entity.Models.Providerweeklysheet>;
 
@@ -15,7 +13,7 @@
             </a>
         </div>
 
-        <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
+        <div class="rounded shadow p-4 mb-5 bg-body-tertiary">
             <form id="WeekSheetSubmit">
                 <div class="table-responsive">
                     <table class="table">
@@ -32,12 +30,13 @@
                         <tbody>
                             @if (Model.Count == 0)
                             {
-                                @if (ViewBag.period == 0)
+                                int lastDate = DateTime.DaysInMonth(DateTime.Now.Year, @ViewBag.month);
+                                @if (ViewBag.period == 1)
                                 {
-                                    @for (var i = 1; i <= startDate.Date.Day; i++)
+                                    @for (var i = 1; i <= 15; i++)
                                     {
                                         <tr>
-                                            <td>@*@System.DateTime.Now.Date.ToString("MM")*@04/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy")</td>
+                                            <td> @ViewBag.month.ToString("00")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy")</td>
                                             <td>0</td>
                                             <td><input type="number" class="form-control" value="0" /></td>
                                             <td><input type="checkbox" class="form-check-input checkboxClass mt-2" /></td>
@@ -48,10 +47,10 @@
                                 }
                                 else
                                 {
-                                    @for (var i = 16; i < endDate.Date.Day; i++)
+                                    @for (var i = 16; i <= lastDate; i++)
                                     {
                                         <tr>
-                                            <td>@*@System.DateTime.Now.Date.ToString("MM")*@04/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy")</td>
+                                            <td> @ViewBag.month.ToString("00")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy")</td>
                                             <td>0</td>
                                             <td><input type="number" class="form-control" value="0" /></td>
                                             <td><input type="checkbox" class="form-check-input checkboxClass mt-2" /></td>
@@ -93,11 +92,12 @@
 
 <script asp-append-version="true">
     var period = @ViewBag.period;
+    var month = @ViewBag.month;
     $('.addRecpt').click(function () {
         $.ajax({
             url: '/AdminTab/AddRecipt',
             method: 'POST',
-            data: { period: period },
+            data: { period: period, month: month },
             success: function (response) {
                 $('#ReciptPartial').html(response);
             },

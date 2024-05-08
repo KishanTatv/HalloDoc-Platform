@@ -901,14 +901,14 @@ namespace HalloDoc.Repository.Implement
             }
         }
 
-        public List<Providerweeklysheet> getWeeksheetwithPhysician(int phid, int period)
+        public List<Providerweeklysheet> getWeeksheetwithPhysician(int phid, int period, int month)
         {
             List<Providerweeklysheet> data = new List<Providerweeklysheet>();
             bool WeeksheetExist = _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period);
             if (WeeksheetExist)
             {
                 int weeksheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && period == period).Id;
-                data = _context.Providerweeklysheets.Where(x => x.Sheetid == weeksheet).ToList();
+                data = _context.Providerweeklysheets.Where(x => x.Sheetid == weeksheet && x.Weekdate.Value.Month.Equals(month)).ToList();
             }
             return data;
         }
