@@ -68,7 +68,7 @@
                                         <td>@item.Weekdate.Value.ToString("MM")/@item.Weekdate.Value.ToString("dd")/@item.Weekdate.Value.ToString("yyyy")</td>
                                         <td>0</td>
                                         <td><input type="number" class="form-control" value="@item.Totalhours" /></td>
-                                        <td><input type="checkbox" class="form-check-input checkboxClass mt-2" @(item.Isholiday.Value.Equals(true) ? "checked" : "") /></td>
+                                        <td><input type="checkbox" class="form-check-input checkboxClass mt-2" @(item.Isholiday.HasValue && item.Isholiday.Value ? "checked" : "") /></td>
                                         <td><input type="number" class="form-control" value="@item.Housecall" /></td>
                                         <td><input type="number" class="form-control" value="@item.Consult" /></td>
                                     </tr>
@@ -92,26 +92,35 @@
 
 <script asp-append-version="true">
     var period = @ViewBag.period;
+    var phid = $('.subBtn').data('phid');
     var month = @ViewBag.month;
+    var isContentAdded = false;
+
     $('.addRecpt').click(function () {
-        $.ajax({
-            url: '/AdminTab/AddRecipt',
-            method: 'POST',
-            data: { period: period, month: month },
-            success: function (response) {
-                $('#ReciptPartial').html(response);
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
+        isContentAdded = !isContentAdded;
+        $(this).text(isContentAdded ? 'Remove Receipt' : 'Add Receipt');
+
+        if (isContentAdded) {
+            $.ajax({
+                url: '/AdminTab/AddRecipt',
+                method: 'POST',
+                data: { period: period, month: month, phid: phid },
+                success: function (response) {
+                    $('#ReciptPartial').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        } else {
+            $('#ReciptPartial').html('');
+        }
     });
+
     $('#WeekSheetSubmit').submit(function (e) {
         e.preventDefault();
-
-        var phid = $('.subBtn').data('phid');
         var weeklyData = [];
-        $('tbody tr').each(function () {
+        $('table:first tbody tr').each(function () {
             var rowData = {
                 date: $(this).find('td:first-child').text(),
                 isHoliday: $(this).find('td:nth-child(4) input').prop('checked') ? true : false,
@@ -122,7 +131,7 @@
             weeklyData.push(rowData);
         });
         $.ajax({
-            url: '/AdminTab/WeekReciptSave',
+            url: '/AdminTab/WeekSheetSave',
             method: 'POST',
             data: { weeklyData: weeklyData, phid: phid, period: period },
             success: function (response) {

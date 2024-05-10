@@ -18,6 +18,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Helpers;
+using System.Web.WebPages;
 using System.Xml.Linq;
 
 namespace HalloDoc.Repository.Implement
@@ -904,34 +905,52 @@ namespace HalloDoc.Repository.Implement
         public List<Providerweeklysheet> getWeeksheetwithPhysician(int phid, int period, int month)
         {
             List<Providerweeklysheet> data = new List<Providerweeklysheet>();
-            bool WeeksheetExist = _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period);
+            bool WeeksheetExist = _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month));
             if (WeeksheetExist)
             {
-                int weeksheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && period == period).Id;
-                data = _context.Providerweeklysheets.Where(x => x.Sheetid == weeksheet && x.Weekdate.Value.Month.Equals(month)).ToList();
+                int weeksheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month)).Id;
+                data = _context.Providerweeklysheets.Where(x => x.Sheetid == weeksheet).OrderBy(x => x.Weekdate).ToList();
             }
             return data;
         }
 
 
-        public int addWeekSingleRecipt(int phid, int period)
+        public int addWeekSingleRecipt(int phid, int period, string startDate, string endDate)
         {
-            Providerfullsheet sheet = new Providerfullsheet()
+            DateOnly startedDates = DateOnly.ParseExact(startDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            DateOnly endedDates = DateOnly.ParseExact(endDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            if (!checkInvoiceFullexist(phid, period, startDate, endDate))
             {
-                Peroid = Convert.ToInt16(period),
-                Physicianid = phid,
-                Finalize = false,
-            };
-            _context.Providerfullsheets.Add(sheet);
-            _context.SaveChanges();
+                Providerfullsheet sheet = new Providerfullsheet()
+                {
+                    Peroid = Convert.ToInt16(period),
+                    Physicianid = phid,
+                    Startdate = startedDates,
+                    Enddate = endedDates,
+                    Finalize = false,
+                };
+                _context.Providerfullsheets.Add(sheet);
+                _context.SaveChanges();
 
-            return sheet.Id;
+                return sheet.Id;
+            }
+            else
+            {
+                return _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Equals(startedDates) && x.Enddate.Equals(endedDates)).Id;
+            }
+        }
+
+        public bool checkInvoiceFullexist(int phid, int period, string startDate, string endDate)
+        {
+            DateOnly startedDate = DateOnly.ParseExact(startDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            DateOnly Endeddate = DateOnly.ParseExact(endDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            return _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Equals(startedDate) && x.Enddate.Equals(Endeddate));
         }
 
 
-        public void addReciptDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid, int period)
+        public void addsheetDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid, int period)
         {
-            int weektypesheet = addWeekSingleRecipt(phid, period);
+            int weektypesheet = addWeekSingleRecipt(phid, period, weeklyData.FirstOrDefault().date, weeklyData.LastOrDefault().date);
 
             foreach (var item in weeklyData)
             {
@@ -957,6 +976,39 @@ namespace HalloDoc.Repository.Implement
                     sheet.Consult = item.consult;
                     sheet.Totalhours = item.Totalhours;
                     sheet.Isholiday = item.isHoliday;
+                    _context.Providerweeklysheets.Update(sheet);
+                }
+            }
+            _context.SaveChanges();
+        }
+
+
+        public void addreciptDataInvoice(List<ReciptWeeklySheet> recipteData, int phid, int period)
+        {
+            int weektypesheet = addWeekSingleRecipt(phid, period, recipteData.FirstOrDefault().date, recipteData.LastOrDefault().date);
+
+            foreach (var item in recipteData)
+            {
+                DateOnly newDate = DateOnly.ParseExact(item.date, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                bool exist = _context.Providerweeklysheets.Any(x => x.Weekdate.Value.Equals(newDate) && x.Sheetid == weektypesheet);
+                if (!exist)
+                {
+                    Providerweeklysheet sheet = new Providerweeklysheet()
+                    {
+                        Sheetid = weektypesheet,
+                        Weekdate = DateOnly.ParseExact(item.date, "MM/dd/yyyy", CultureInfo.InvariantCulture),
+                        Item = item.item,
+                        Amount = item.amount,
+                        //Bill = item.bill.FileName,
+                    };
+                    _context.Providerweeklysheets.Add(sheet);
+                }
+                else
+                {
+                    Providerweeklysheet sheet = _context.Providerweeklysheets.FirstOrDefault(x => x.Weekdate.Equals(newDate) && x.Sheetid == weektypesheet);
+                    sheet.Item = item.item;
+                    sheet.Amount = item.amount;
+                    //sheet.Bill = item.bill.FileName;
                     _context.Providerweeklysheets.Update(sheet);
                 }
             }

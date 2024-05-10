@@ -1155,15 +1155,24 @@ namespace HalloDoc.Controllers
             return PartialView("_BiweeklySheet", sheetData);
         }
 
-        public IActionResult AddRecipt(int period, int month)
+        public IActionResult AddRecipt(int period, int month, int phid)
         {
+            List<Providerweeklysheet> sheetRecptData = _Admin.getWeeksheetwithPhysician(phid, period, month);
+            ViewBag.phyid = phid;
             ViewBag.month = month;
-            return PartialView("_InvoiceRecipt", period);
+            ViewBag.period = period;
+            return PartialView("_InvoiceRecipt", sheetRecptData);
         }
 
-        public IActionResult WeekReciptSave(List<InvoiceWeeklySheetData> weeklyData, int phid, int period)
+        public IActionResult WeekSheetSave(List<InvoiceWeeklySheetData> weeklyData, int phid, int period)
         {
-            _Admin.addReciptDataInvoice(weeklyData, phid, period);
+            _Admin.addsheetDataInvoice(weeklyData, phid, period);
+            return Ok();
+        }
+
+        public IActionResult WeekReciptSave(List<ReciptWeeklySheet> reciptrData, int phid, int period)
+        {
+            _Admin.addreciptDataInvoice(reciptrData, phid, period);
             return Ok();
         }
         #endregion

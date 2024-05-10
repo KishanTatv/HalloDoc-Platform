@@ -22,6 +22,12 @@ public partial class Providerfullsheet
     [Column("finalize")]
     public bool? Finalize { get; set; }
 
+    [Column("startdate")]
+    public DateOnly? Startdate { get; set; }
+
+    [Column("enddate")]
+    public DateOnly? Enddate { get; set; }
+
     [ForeignKey("Physicianid")]
     [InverseProperty("Providerfullsheets")]
     public virtual Physician Physician { get; set; } = null!;

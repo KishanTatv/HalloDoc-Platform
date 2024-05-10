@@ -7,77 +7,131 @@
 }
 
 <div class="rounded shadow p-4 mb-5 bg-body-tertiary">
-    <div class="table-responsive mt-2">
-        <table class="table">
-            <thead class="table-secondary">
-                <tr>
-                    <th scope="col"> Date </th>
-                    <th scope="col"> Item </th>
-                    <th scope="col"> Amount </th>
-                    <th scope="col"> Bill </th>
-                    <th scope="col"> Action </th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model == 1)
-                {
-                    @for (var i = 1; i <= 15; i++)
+    <form id="WeekReciptSubmit">
+        <div class="table-responsive mt-2">
+            <table class="table">
+                <thead class="table-secondary">
+                    <tr>
+                        <th scope="col"> Date </th>
+                        <th scope="col"> Item </th>
+                        <th scope="col"> Amount </th>
+                        <th scope="col"> Bill </th>
+                        <th scope="col"> Action </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
                     {
-                        <tr>
-                            <td>@ViewBag.month.ToString("00")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy") </td>
-                            <td><input type="text" class="form-control" /></td>
-                            <td><input type="number" class="form-control" valuex="0" /></td>
-                            <td>
-                                <div class="d-flex m-auto">
-                                    <div class="p-0 w-100">
-                                        <input type="text" class="form-control bg-transparent" id="selectedFile_@i" placeholder="select File"
-                                               disabled>
-                                        <label class="ms-3"></label>
-                                    </div>
-                                    <div>
-                                        <label class="btn btn-outline-info d-flex ">
-                                            <input type="file" style="display: none;" id="FileInput_@i" name="DocFile" onchange="updateSelectedFileName(this, @i)">
-                                            <i class="bi bi-cloud-arrow-up border-info"></i>
-                                            <span class="upload_txt ms-2">Upload</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </td>
-                            <td></td>
-                        </tr>
+                        @if (ViewBag.period == 1)
+                        {
+                            @for (var i = 1; i <= 15; i++)
+                            {
+                                <tr>
+                                    <td>@ViewBag.month.ToString("00")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy")</td>
+                                    <td><input type="text" class="form-control" /></td>
+                                    <td><input type="number" class="form-control" valuex="0" /></td>
+                                    <td>
+                                        <div class="d-flex m-auto">
+                                            <div class="p-0 w-100">
+                                                <input type="text" class="form-control bg-transparent" id="selectedFile_@i" placeholder="select File"
+                                                       disabled>
+                                                <label class="ms-3"></label>
+                                            </div>
+                                            <div>
+                                                <label class="btn btn-outline-info d-flex ">
+                                                    <input type="file" style="display: none;" id="FileInput_@i" name="DocFile" onchange="updateSelectedFileName(this, @i)">
+                                                    <i class="bi bi-cloud-arrow-up border-info"></i>
+                                                    <span class="upload_txt ms-2">Upload</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="actionButtons_@i" style="display:none">
+                                            <button class="btn btn-outline-info" onclick="viewFile(@i)">View</button>
+                                            <button class="btn btn-outline-info" onclick="editFile(@i)">Edit</button>
+                                            <button class="btn btn-outline-info" onclick="deleteFile(@i)">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            @for (var i = 16; i <= lastDate; i++)
+                            {
+                                <tr>
+                                    <td>@ViewBag.month.ToString("00")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy")</td>
+                                    <td><input type="text" class="form-control" /></td>
+                                    <td><input type="number" class="form-control" valuex="0" /></td>
+                                    <td>
+                                        <div class="d-flex m-auto">
+                                            <div class="p-0 w-100">
+                                                <input type="text" class="form-control bg-transparent" id="selectedFile_@i" placeholder="select File"
+                                                       disabled>
+                                                <label class="ms-3"></label>
+                                            </div>
+                                            <div>
+                                                <label class="btn btn-outline-info d-flex">
+                                                    <input type="file" style="display: none;" id="FileInput_@i" name="DocFile" onchange="updateSelectedFileName(this, @i)">
+                                                    <i class="bi bi-cloud-arrow-up border-info"></i>
+                                                    <span class="upload_txt ms-2">Upload</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div id="actionButtons_@i" style="display:none">
+                                            <button class="btn btn-outline-info" onclick="viewFile(@i)">View</button>
+                                            <button class="btn btn-outline-info" onclick="editFile(@i)">Edit</button>
+                                            <button class="btn btn-outline-info" onclick="deleteFile(@i)">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
                     }
-                }
-                else
-                {
-                    @for (var i = 16; i <= lastDate; i++)
+                    else
                     {
-                        <tr>
-                            <td>@ViewBag.month.ToString("00")/@i.ToString("00")/@System.DateTime.Now.Date.ToString("yyyy") </td>
-                            <td><input type="text" class="form-control" /></td>
-                            <td><input type="number" class="form-control" valuex="0" /></td>
-                            <td>
-                                <div class="d-flex m-auto">
-                                    <div class="p-0 w-100">
-                                        <input type="text" class="form-control bg-transparent" id="selectedFile_@i" placeholder="select File"
-                                               disabled>
-                                        <label class="ms-3"></label>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Weekdate.ToString("MM")/@item.Weekdate.ToString("dd")/@item.Weekdate.ToString("yyyy")</td>
+                                <td><input type="text" class="form-control" value="@item.Item" /></td>
+                                <td><input type="text" class="form-control" value="@item.Amount" /></td>
+                                <td>
+                                    <div class="d-flex m-auto">
+                                        <div class="p-0 w-100">
+                                            <input type="text" class="form-control bg-transparent" id="selectedFile_x" placeholder="select File"
+                                                   disabled>
+                                            <label class="ms-3"></label>
+                                        </div>
+                                        <div>
+                                            <label class="btn btn-outline-info d-flex">
+                                                <input type="file" style="display: none;" id="FileInput_x" name="DocFile" onchange="updateSelectedFileName(this, x)">
+                                                <i class="bi bi-cloud-arrow-up border-info"></i>
+                                                <span class="upload_txt ms-2">Upload</span>
+                                            </label>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label class="btn btn-outline-info d-flex ">
-                                            <input type="file" style="display: none;" id="FileInput_@i" name="DocFile" onchange="updateSelectedFileName(this, @i)">
-                                            <i class="bi bi-cloud-arrow-up border-info"></i>
-                                            <span class="upload_txt ms-2">Upload</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </td>
-                            <td></td>
-                        </tr>
+                                </td>
+                                <td>
+                                    @*<div id="actionButtons_@i" style="display:none">
+                                        <button class="btn btn-outline-info" onclick="viewFile(@i)">View</button>
+                                        <button class="btn btn-outline-info" onclick="editFile(@i)">Edit</button>
+                                        <button class="btn btn-outline-info" onclick="deleteFile(@i)">Delete</button>
+                                    </div>*@
+                                </td>
+                            </tr>
+                        }
                     }
-                }
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-info text-light subBtn1" data-phid="@ViewBag.phyid">Submit</button>
+        </div>
+    </form>
 </div>
 
 <script>
@@ -85,8 +139,69 @@
         var selectedFile = document.getElementById('selectedFile_' + index);
         if (input.files.length > 0) {
             selectedFile.value = input.files[0].name;
+            document.getElementById('actionButtons_' + index).style.display = 'block';
         } else {
             selectedFile.value = '';
+            document.getElementById('actionButtons_' + index).style.display = 'none';
         }
     }
+
+    function viewFile(index) {
+        var fileInput = document.getElementById('FileInput_' + index);
+        if (fileInput.files.length > 0) {
+            var file = fileInput.files[0]; window.open(URL.createObjectURL(file), '_blank');
+        } else {
+            console.log("not file exist");
+        }
+    }
+
+    function editFile(index) {
+        var fileInput = document.getElementById('FileInput_' + index);
+        fileInput.click();
+    }
+
+    function deleteFile(index) {
+        var fileInput = document.getElementById('FileInput_' + index);
+        fileInput.value = '';
+        var selectedFile = document.getElementById('selectedFile_' + index);
+        selectedFile.value = '';
+        document.getElementById('actionButtons_' + index).style.display = 'none';
+    }
+
+
+    $('#WeekReciptSubmit').submit(function (e) {
+        e.preventDefault();
+        var phid = $('.subBtn1').data('phid');
+        var period = @ViewBag.period;
+        var formData = new FormData();
+        $('table:eq(1) tbody tr').each(function (index) {
+            var rowData = {
+                date: $(this).find('td:first-child').text(),
+                item: $(this).find('td:nth-child(2) input').val(),
+                amount: $(this).find('td:nth-child(3) input').val(),
+                bills: $(this).find('td:nth-child(4) div div:nth-child(2) label input')[0].files[0],
+            };
+            console.log(rowData);
+            formData.append('reciptrData[' + index + '].date', rowData.date);
+            formData.append('reciptrData[' + index + '].item', rowData.item);
+            formData.append('reciptrData[' + index + '].amount', rowData.amount);
+            formData.append('reciptrData[' + index + '].bills', rowData.bills);
+        });
+
+        formData.append('phid', phid);
+        formData.append('period', period);
+        $.ajax({
+            url: '/AdminTab/WeekReciptSave',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    })
 </script>
