@@ -498,7 +498,7 @@ namespace HalloDoc.Controllers
             }
         }
         #endregion
-        
+
 
         #region Account Access
         [CustomAuthorize("Admin:Provider", "Account Access")]
@@ -1152,18 +1152,50 @@ namespace HalloDoc.Controllers
 
         public IActionResult getFinalizeSheetData(string period, int phid)
         {
-            Providerfullsheet sheet = _Admin.getFullSheetWithFinalize(phid, Convert.ToInt16(period.Substring(3)), Convert.ToInt16(period.Substring(0, 2)));
-            return PartialView("_FinalizeSheetAdmin", sheet);
+            if (Request.Cookies["CookieRole"] == "1")
+            {
+                bool checkApproved = _Admin.isApproved(phid, Convert.ToInt16(period.Substring(3)), Convert.ToInt16(period.Substring(0, 2)));
+                if (checkApproved)
+                {
+                    List<Providerweeklysheet> sheetData = _Admin.getWeeksheetwithPhysician(phid, Convert.ToInt16(period.Substring(3)), Convert.ToInt16(period.Substring(0, 2)));
+                    return PartialView("_FinalizeSheetProvider", sheetData);
+                }
+                else
+                {
+                    Providerfullsheet sheet = _Admin.getFullSheetWithFinalize(phid, Convert.ToInt16(period.Substring(3)), Convert.ToInt16(period.Substring(0, 2)));
+                    return PartialView("_FinalizeSheetAdmin", sheet);
+                }
+            }
+            else
+            {
+                List<Providerweeklysheet> sheetData = null;
+                bool checkFinalize = _Admin.isFinalized(phid, Convert.ToInt16(period.Substring(3)), Convert.ToInt16(period.Substring(0, 2)));
+                if (checkFinalize)
+                {
+                    sheetData = _Admin.getWeeksheetwithPhysician(phid, Convert.ToInt16(period.Substring(3)), Convert.ToInt16(period.Substring(0, 2)));
+                }
+                return PartialView("_FinalizeSheetProvider", sheetData);
+            }
         }
 
         public IActionResult FinalizeSheet(string period, int phid)
         {
-            int month = Convert.ToInt16(period.Substring(0,2));
+            int month = Convert.ToInt16(period.Substring(0, 2));
             List<Providerweeklysheet> sheetData = _Admin.getWeeksheetwithPhysician(phid, Convert.ToInt16(period.Substring(3)), month);
             ViewBag.phyid = phid;
             ViewBag.period = Convert.ToInt16(period.Substring(3));
             ViewBag.month = month;
-            return PartialView("_BiweeklySheet", sheetData);
+            SheetPayrateModel model;
+            if (Request.Cookies["CookieRole"] == "1")
+            {
+                Providerpayrate payrate = _Admin.providerPayrate(phid);
+                model = new SheetPayrateModel { providerweeklysheets = sheetData, Providerpayrate = payrate };
+            }
+            else
+            {
+                model = new SheetPayrateModel { providerweeklysheets = sheetData };
+            }
+            return PartialView("_BiweeklySheet", model);
         }
 
         public IActionResult AddRecipt(int period, int month, int phid)
@@ -1190,6 +1222,12 @@ namespace HalloDoc.Controllers
         public IActionResult sheetFinalize(int period, int month, int phid)
         {
             _Admin.sheetFinalize(period, month, phid);
+            return Ok();
+        }
+
+        public IActionResult sheetApprove(int period, int month, int phid, string desc, int bonus)
+        {
+            _Admin.approvedTimeSheet(period, month, phid, desc, bonus);
             return Ok();
         }
         #endregion

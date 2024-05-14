@@ -28,6 +28,15 @@ public partial class Providerfullsheet
     [Column("enddate")]
     public DateOnly? Enddate { get; set; }
 
+    [Column("bonus")]
+    public int? Bonus { get; set; }
+
+    [Column("description", TypeName = "character varying")]
+    public string? Description { get; set; }
+
+    [Column("approve")]
+    public bool? Approve { get; set; }
+
     [ForeignKey("Physicianid")]
     [InverseProperty("Providerfullsheets")]
     public virtual Physician Physician { get; set; } = null!;

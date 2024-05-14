@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<HalloDoc.Entity.Models.Providerweeklysheet>;
+@{
+}
+
+@if (Model == null || Model.Count == 0)
+{
+    <p>No record(s) found</p>
+    <script>
+        $('.FinalizeBtn').removeClass('d-none');
+    </script>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table">
+            <thead class="table-secondary">
+                <tr>
+                    <th scope="col"> Shift date </th>
+                    <th scope="col"> Shift </th>
+                    <th scope="col"> NightShift Weekend </th>
+                    <th scope="col"> Housecall </th>
+                    <th scope="col"> Housecall Nights Weekend </th>
+                    <th scope="col"> Phone Consults </th>
+                    <th scope="col"> Phone Consults Night Weekend </th>
+                    <th scope="col"> Batch Testing </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Weekdate</td>
+                        <td>@item.Totalhours</td>
+                        <td>0</td>
+                        <td>@item.Housecall</td>
+                        <td>0</td>
+                        <td>@item.Consult</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $('.FinalizeBtn').addClass('d-none');
+    </script>
+}
+
+                

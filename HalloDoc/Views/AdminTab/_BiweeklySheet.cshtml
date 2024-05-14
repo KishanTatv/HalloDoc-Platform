@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model List<HalloDoc.Entity.Models.Providerweeklysheet>;
+@model HalloDoc.Entity.AdminTab.SheetPayrateModel;
 
 <div class="d-flex w-100 justify-content-center pb-4">
     <div class="HContainer m-auto">
@@ -25,10 +25,14 @@
                                 <th scope="col"> Weekend/ Holiday</th>
                                 <th scope="col"> Number of Housecall </th>
                                 <th scope="col"> Number of Phone Consult</th>
+                                 @if (Context.Request.Cookies["CookieRole"] == "1")
+                                {
+                                    <th scope="col"> Total </th>
+                                }
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Count == 0)
+                            @if (Model.providerweeklysheets.Count == 0)
                             {
                                 int lastDate = DateTime.DaysInMonth(DateTime.Now.Year, @ViewBag.month);
                                 @if (ViewBag.period == 1)
@@ -62,15 +66,37 @@
                             }
                             else
                             {
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.providerweeklysheets)
                                 {
                                     <tr>
                                         <td>@item.Weekdate.Value.ToString("MM")/@item.Weekdate.Value.ToString("dd")/@item.Weekdate.Value.ToString("yyyy")</td>
                                         <td>0</td>
-                                        <td><input type="number" class="form-control" value="@item.Totalhours" /></td>
-                                        <td><input type="checkbox" class="form-check-input checkboxClass mt-2" @(item.Isholiday.HasValue && item.Isholiday.Value ? "checked" : "") /></td>
-                                        <td><input type="number" class="form-control" value="@item.Housecall" /></td>
-                                        <td><input type="number" class="form-control" value="@item.Consult" /></td>
+                                        <td><input type="number" class="form-control tHours" value="@item.Totalhours" /></td>
+                                        <td><input type="checkbox" class="form-check-input checkboxClass sholiday mt-2" @(item.Isholiday.HasValue && item.Isholiday.Value ? "checked" : "") /></td>
+                                        <td><input type="number" class="form-control shousecall" value="@item.Housecall" /></td>
+                                        <td><input type="number" class="form-control sconsult" value="@item.Consult" /></td>
+                                        <td></td>
+                                    </tr>
+                                }
+                                @if (Context.Request.Cookies["CookieRole"] == "1")
+                                {
+                                    <tr>
+                                        <td>Payrate</td>
+                                        <td></td>
+                                        <td><input type="number" class="form-control shift_payrate" disabled value="@Model.Providerpayrate.Shift" /></td>
+                                        <td><input type="number" class="form-control shiftNW_payrate" disabled value="@Model.Providerpayrate.NightshiftWeekend" /></td>
+                                        <td><input type="number" class="form-control shiftHC_payrate" disabled value="@Model.Providerpayrate.Housecalls" /></td>
+                                        <td><input type="number" class="form-control shiftPC_payrate" disabled value="@Model.Providerpayrate.Phoneconsults" /></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Invoice Total</td>
+                                        <td></td>
+                                        <td><input type="number" class="form-control Invoice_Total_thours" disabled /></td>
+                                        <td><input type="number" class="form-control Invoice_Total_tholiday" disabled /></td>
+                                        <td><input type="number" class="form-control Invoice_Total_thousecall" disabled /></td>
+                                        <td><input type="number" class="form-control Invoice_Total_tconsult" disabled /></td>
+                                        <td><input type="number" class="form-control Invoice_full_Total" disabled /></td>
                                     </tr>
                                 }
                             }
@@ -94,11 +120,11 @@
         {
             <div class="d-flex justify-content-end">
                 <div class="col-md-2 form-floating me-2">
-                    <input type="number" class="form-control bg-transparent" placeholder="username">
+                    <input type="number" class="form-control bg-transparent bonusAmnt" placeholder="bonus">
                     <label> Bonus Amount</label>
                 </div>
                 <div class="col-md-2 form-floating me-2">
-                    <input type="number" class="form-control bg-transparent" placeholder="username">
+                    <input type="text" class="form-control bg-transparent adminDesc" placeholder="desc">
                     <label> Admin Description </label>
                 </div>
                 <button type="button" class="btn btn-info text-light toApprove"> Approve </button>
@@ -107,6 +133,37 @@
 
     </div>
 </div>
+
+
+@if (Context.Request.Cookies["CookieRole"] == "1")
+{
+    <script>
+        $(document).ready(function () {
+            var totalHours = 0;
+            var totalhosecall = 0;
+            var totalconsult = 0;
+            var totalholiday = 0;
+            $('.tHours').each(function () {
+                totalHours += parseFloat($(this).val()) || 0;
+            });
+            $('.sholiday').each(function () {
+                totalholiday += $(this).prop('checked') ? 1 : 0;
+            });
+            $('.shousecall').each(function () {
+                totalhosecall += parseFloat($(this).val()) || 0;
+            });
+            $('.sconsult').each(function () {
+                totalconsult += parseFloat($(this).val()) || 0;
+            });
+            $('.Invoice_Total_thours').val($('.shift_payrate').val()*totalHours);
+            $('.Invoice_Total_tholiday').val($('.shiftNW_payrate').val() * totalholiday);
+            $('.Invoice_Total_thousecall').val($('.shiftHC_payrate').val() * totalhosecall);
+            $('.Invoice_Total_tconsult').val($('.shiftPC_payrate').val() * totalconsult);
+            $('.Invoice_full_Total').val(parseFloat($('.Invoice_Total_thours').val()) + parseFloat($('.Invoice_Total_tholiday').val()) + parseFloat($('.Invoice_Total_thousecall').val()) + parseFloat($('.Invoice_Total_tconsult').val()));
+        });
+    </script>
+}
+
 
 <script asp-append-version="true">
     var period = @ViewBag.period;
@@ -149,10 +206,29 @@
         });
     });
 
+    $('.toApprove').click(function(){
+        var desc = $('.adminDesc').val();
+        var bonus = $('.bonusAmnt').val();
+        $.ajax({
+            url: '/AdminTab/sheetApprove',
+            method: 'POST',
+            data: { period: period, month: month, phid: phid, desc: desc, bonus: bonus },
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
     $('#WeekSheetSubmit').submit(function (e) {
         e.preventDefault();
         var weeklyData = [];
-        $('table:first tbody tr').each(function () {
+        $('table:first tbody tr').each(function (index) {
+            if (@Context.Request.Cookies["CookieRole"] == "1" && index >= $('table:first tbody tr').length - 2) {
+                return; 
+            }
             var rowData = {
                 date: $(this).find('td:first-child').text(),
                 isHoliday: $(this).find('td:nth-child(4) input').prop('checked') ? true : false,

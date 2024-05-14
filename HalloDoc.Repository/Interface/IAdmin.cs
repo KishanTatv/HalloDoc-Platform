@@ -175,6 +175,9 @@ namespace HalloDoc.Repository.Interface
         //invoice
         Providerpayrate providerPayrate(int phid);
 
+        bool isFinalized(int phid, int period, int month);
+        bool isApproved(int phid, int period, int month);
+
         void proPayrateUpdate(int phid, int rate, string col);
 
         Providerfullsheet getFullSheetWithFinalize(int phid, int period, int month);
@@ -185,5 +188,7 @@ namespace HalloDoc.Repository.Interface
         void addreciptDataInvoice(List<ReciptWeeklySheet> reciptrData, int phid, int period);
 
         void sheetFinalize(int period, int month, int phid);
+
+        void approvedTimeSheet(int period, int month, int phid, string desc, int bonus);
     }
 }

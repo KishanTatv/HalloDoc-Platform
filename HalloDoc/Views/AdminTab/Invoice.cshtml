@@ -96,29 +96,23 @@
     <div id="PartialSheet"></div>
 </div>
 
-
-@if (Context.Request.Cookies["CookieRole"] == "1")
-{
-    <script>
-        $('.selectTimePeriod').change(function () {
-            var period = $('.selectTimePeriod').val();
-            var phid = $('.selectPhy').val();
-            $.ajax({
-                url: '/AdminTab/getFinalizeSheetData',
-                method: 'POST',
-                data: { period: period, phid: phid },
-                success: function (response) {
-                    $('.sheet_Record').html(response);
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
-    </script>
-}
-
 <script asp-append-version="true">
+    $('.selectTimePeriod').change(function () {
+        var period = $('.selectTimePeriod').val();
+        var phid = $('.selectPhy').val();
+        $.ajax({
+            url: '/AdminTab/getFinalizeSheetData',
+            method: 'POST',
+            data: { period: period, phid: phid },
+            success: function (response) {
+                $('.sheet_Record').html(response);
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
     $(document).on('click', '.FinalizeBtn', function () {
         var period = $('.selectTimePeriod').val();
         var phid = $('.selectPhy').val();

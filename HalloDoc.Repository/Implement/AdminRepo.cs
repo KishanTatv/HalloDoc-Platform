@@ -903,11 +903,25 @@ namespace HalloDoc.Repository.Implement
             }
         }
 
+        public bool isWeeksheetExist(int phid, int period, int month)
+        {
+            return _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month));
+        }
+
+        public bool isFinalized(int phid, int period, int month)
+        {
+            return _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month) && x.Finalize == true);
+        }
+
+        public bool isApproved(int phid, int period, int month)
+        {
+            return _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month) && x.Approve == true);
+        }
+
         public List<Providerweeklysheet> getWeeksheetwithPhysician(int phid, int period, int month)
         {
             List<Providerweeklysheet> data = new List<Providerweeklysheet>();
-            bool WeeksheetExist = _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month));
-            if (WeeksheetExist)
+            if (isWeeksheetExist(phid, period, month))
             {
                 int weeksheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month)).Id;
                 data = _context.Providerweeklysheets.Where(x => x.Sheetid == weeksheet).OrderBy(x => x.Weekdate).ToList();
@@ -929,6 +943,7 @@ namespace HalloDoc.Repository.Implement
                     Startdate = startedDates,
                     Enddate = endedDates,
                     Finalize = false,
+                    Approve = false,
                 };
                 _context.Providerfullsheets.Add(sheet);
                 _context.SaveChanges();
@@ -1033,8 +1048,7 @@ namespace HalloDoc.Repository.Implement
 
         public void sheetFinalize(int period, int month, int phid)
         {
-            bool WeeksheetExist = _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month));
-            if (WeeksheetExist)
+            if (isWeeksheetExist(phid, period, month))
             {
                 int weeksheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month)).Id;
                 Providerfullsheet fullSheet = _context.Providerfullsheets.FirstOrDefault(x => x.Id == weeksheet);
@@ -1047,12 +1061,26 @@ namespace HalloDoc.Repository.Implement
         public Providerfullsheet getFullSheetWithFinalize(int phid, int period, int month)
         {
             Providerfullsheet sheet = null;
-            bool WeeksheetExist = _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month));
-            if (WeeksheetExist)
+            if (isWeeksheetExist(phid, period, month))
             {
-                sheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month) && x.Finalize==true);
+                sheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month) && x.Finalize == true && x.Approve == false);
             }
             return sheet;
+        }
+
+
+        public void approvedTimeSheet(int period, int month, int phid, string desc, int bonus)
+        {
+            if (isWeeksheetExist(phid, period, month))
+            {
+                int weeksheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month)).Id;
+                Providerfullsheet fullSheet = _context.Providerfullsheets.FirstOrDefault(x => x.Id == weeksheet);
+                fullSheet.Description = desc;
+                fullSheet.Bonus = bonus;
+                fullSheet.Approve = true;
+                _context.Providerfullsheets.Update(fullSheet);
+                _context.SaveChanges();
+            }
         }
     }
 }
