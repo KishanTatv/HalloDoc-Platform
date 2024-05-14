@@ -177,9 +177,13 @@ namespace HalloDoc.Repository.Interface
 
         void proPayrateUpdate(int phid, int rate, string col);
 
+        Providerfullsheet getFullSheetWithFinalize(int phid, int period, int month);
+
         List<Providerweeklysheet> getWeeksheetwithPhysician(int phid, int period, int month);
 
         void addsheetDataInvoice(List<InvoiceWeeklySheetData> weeklyData, int phid, int period);
         void addreciptDataInvoice(List<ReciptWeeklySheet> reciptrData, int phid, int period);
+
+        void sheetFinalize(int period, int month, int phid);
     }
 }

@@ -30,22 +30,31 @@
             <div class="rounded shadow p-4 mb-5 bg-body-tertiary rounded">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div class="d-flex">
-                        <div class="col-md-6 form-floating mt-2 me-3">
-                            <select class="form-select selectPhy ms-2" aria-label="Floating label select">
-                                <option selected disabled>select physician</option>
-                                @foreach (var phy in Model)
-                                {
-                                    <option value="@phy.Physicianid"> @phy.Firstname @phy.Lastname </option>
-                                }
+                        @if (Context.Request.Cookies["CookieRole"] == "1")
+                        {
+                            <div class="col-md-5 form-floating mt-2 me-3">
+                                <select class="form-select selectPhy ms-2" aria-label="Floating label select">
+                                    <option selected disabled>select physician</option>
+                                    @foreach (var phy in Model)
+                                    {
+                                        <option value="@phy.Physicianid"> @phy.Firstname @phy.Lastname </option>
+                                    }
+                                </select>
+                                <label class="ms-2" for="floatingSelect">Physician</label>
+                            </div>
+                        }
+                        else
+                        {
+                            <select class="form-select selectPhy d-none ms-2" aria-label="Floating label select">
+                                <option value="@ViewBag.rolePhyId"></option>
                             </select>
-                            <label class="ms-2" for="floatingSelect">Physician</label>
-                        </div>
-                        <div class="col-md-8 form-floating mt-2">
+                        }
+                        <div class="col-md form-floating mt-2">
                             <select class="form-select selectTimePeriod ms-2" aria-label="Floating label select">
-                                @for(var i=1; i<=startDate.Month; i++)
+                                @for (var i = 1; i <= startDate.Month; i++)
                                 {
                                     int lastDate = DateTime.DaysInMonth(DateTime.Now.Year, i);
-                                    @if(i == startDate.Month)
+                                    @if (i == startDate.Month)
                                     {
                                         <option value="@i.ToString("00")-1" selected>@startDate.Date.ToString("yyyy")/@i.ToString("00")/01 - @startDate.Date.ToString("yyyy")/@i.ToString("00")/15</option>
                                     }
@@ -58,17 +67,18 @@
                                         <option value="@i.ToString("00")-2">@startDate.Date.ToString("yyyy")/@i.ToString("00")/16 - @startDate.Date.ToString("yyyy")/@i.ToString("00")/@lastDate </option>
                                     }
                                 }
-                                @*<option value="0" selected>2024/04/01 - 2024/04/15</option>
-                                <option value="1">2024/04/16 - 2024/04/30</option>*@
                             </select>
                             <label class="ms-2" for="floatingSelect">Search by TimesheetPeriod</label>
                         </div>
                     </div>
-                    <div class="col-2 justify-content-end">
-                        <button type="button" class="btn btn-outline-info FinalizeBtn">Finalize Timesheet</button>
-                    </div>
+                    @if (Context.Request.Cookies["CookieRole"] == "2")
+                    {
+                        <div class="col-2 justify-content-end">
+                            <button type="button" class="btn btn-outline-info FinalizeBtn">Finalize Timesheet</button>
+                        </div>
+                    }
                 </div>
-                <div>
+                <div class="sheet_Record">
                     <p class="ms-2">No record(s) found</p>
                 </div>
             </div>
@@ -87,8 +97,29 @@
 </div>
 
 
+@if (Context.Request.Cookies["CookieRole"] == "1")
+{
+    <script>
+        $('.selectTimePeriod').change(function () {
+            var period = $('.selectTimePeriod').val();
+            var phid = $('.selectPhy').val();
+            $.ajax({
+                url: '/AdminTab/getFinalizeSheetData',
+                method: 'POST',
+                data: { period: period, phid: phid },
+                success: function (response) {
+                    $('.sheet_Record').html(response);
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    </script>
+}
+
 <script asp-append-version="true">
-    $('.FinalizeBtn').click(function () {
+    $(document).on('click', '.FinalizeBtn', function () {
         var period = $('.selectTimePeriod').val();
         var phid = $('.selectPhy').val();
         $.ajax({

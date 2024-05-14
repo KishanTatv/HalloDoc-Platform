@@ -3,7 +3,8 @@
 *@
 
 @{
-    int lastDate = DateTime.DaysInMonth(DateTime.Now.Year, @ViewBag.month);
+    int smonth = ViewBag.month ?? 1;
+    int lastDate = DateTime.DaysInMonth(DateTime.Now.Year, smonth);
 }
 
 <div class="rounded shadow p-4 mb-5 bg-body-tertiary">
@@ -82,9 +83,9 @@
                                     </td>
                                     <td>
                                         <div id="actionButtons_@i" style="display:none">
-                                            <button class="btn btn-outline-info" onclick="viewFile(@i)">View</button>
-                                            <button class="btn btn-outline-info" onclick="editFile(@i)">Edit</button>
-                                            <button class="btn btn-outline-info" onclick="deleteFile(@i)">Delete</button>
+                                            <button type="button" class="btn btn-outline-info" onclick="viewFile(@i)">View</button>
+                                            <button type="button" class="btn btn-outline-info" onclick="editFile(@i)">Edit</button>
+                                            <button type="button" class="btn btn-outline-info" onclick="deleteFile(@i)">Delete</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -101,26 +102,42 @@
                                 <td><input type="text" class="form-control" value="@item.Amount" /></td>
                                 <td>
                                     <div class="d-flex m-auto">
-                                        <div class="p-0 w-100">
-                                            <input type="text" class="form-control bg-transparent" id="selectedFile_x" placeholder="select File"
-                                                   disabled>
-                                            <label class="ms-3"></label>
-                                        </div>
-                                        <div>
-                                            <label class="btn btn-outline-info d-flex">
-                                                <input type="file" style="display: none;" id="FileInput_x" name="DocFile" onchange="updateSelectedFileName(this, x)">
-                                                <i class="bi bi-cloud-arrow-up border-info"></i>
-                                                <span class="upload_txt ms-2">Upload</span>
-                                            </label>
-                                        </div>
+                                        @if (item.Bill != null)
+                                        {
+                                            <div class="p-0 w-100">
+                                                <input type="text" class="form-control bg-transparent" id="selectedFile_@item.Id" value="@item.Bill" placeholder="select File" disabled>
+                                                <label class="ms-3"></label>
+                                            </div>
+                                            <div>
+                                                <label class="btn btn-outline-info d-flex">
+                                                    <input type="file" style="display: none;" id="FileInput_@item.Id" name="DocFile" value="@item.Bill" onchange="updateSelectedFileName(this, @item.Id)">
+                                                    <i class="bi bi-cloud-arrow-up border-info"></i>
+                                                    <span class="upload_txt ms-2">Upload</span>
+                                                </label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="p-0 w-100">
+                                            <input type="text" class="form-control bg-transparent" id="selectedFile_@item.Id" placeholder="No file available" disabled>
+                                                <label class="ms-3"></label>
+                                            </div>
+                                            <div>
+                                                <label class="btn btn-outline-info d-flex">
+                                                    <input type="file" style="display: none;" id="FileInput_@item.Id" name="DocFile" onchange="updateSelectedFileName(this, @item.Id)">
+                                                    <i class="bi bi-cloud-arrow-up border-info"></i>
+                                                    <span class="upload_txt ms-2">Upload</span>
+                                                </label>
+                                            </div>
+                                        }
                                     </div>
                                 </td>
                                 <td>
-                                    @*<div id="actionButtons_@i" style="display:none">
-                                        <button class="btn btn-outline-info" onclick="viewFile(@i)">View</button>
-                                        <button class="btn btn-outline-info" onclick="editFile(@i)">Edit</button>
-                                        <button class="btn btn-outline-info" onclick="deleteFile(@i)">Delete</button>
-                                    </div>*@
+                                    <div id="actionButtons_@item.Id" style="display:none">
+                                        <button type="button" class="btn btn-outline-info" onclick="viewFile(@item.Id)">View</button>
+                                        <button type="button" class="btn btn-outline-info" onclick="editFile(@item.Id)">Edit</button>
+                                        <button type="button" class="btn btn-outline-info" onclick="deleteFile(@item.Id)">Delete</button>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -179,13 +196,13 @@
                 date: $(this).find('td:first-child').text(),
                 item: $(this).find('td:nth-child(2) input').val(),
                 amount: $(this).find('td:nth-child(3) input').val(),
-                bills: $(this).find('td:nth-child(4) div div:nth-child(2) label input')[0].files[0],
+                bill: $(this).find('td:nth-child(4) div div:nth-child(2) label input')[0].files[0],
             };
             console.log(rowData);
             formData.append('reciptrData[' + index + '].date', rowData.date);
             formData.append('reciptrData[' + index + '].item', rowData.item);
             formData.append('reciptrData[' + index + '].amount', rowData.amount);
-            formData.append('reciptrData[' + index + '].bills', rowData.bills);
+            formData.append('reciptrData[' + index + '].bill', rowData.bill);
         });
 
         formData.append('phid', phid);

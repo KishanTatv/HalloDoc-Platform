@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Office2016.Excel;
@@ -1142,7 +1143,17 @@ namespace HalloDoc.Controllers
         public IActionResult Invoice()
         {
             List<phyCustomNameViewModel> data = _Admin.getAllPhysicianName();
+            if (Request.Cookies["CookieRole"] == "2")
+            {
+                ViewBag.rolePhyId = _physician.getPhyId(Request.Cookies["CookieEmail"]);
+            }
             return View(data);
+        }
+
+        public IActionResult getFinalizeSheetData(string period, int phid)
+        {
+            Providerfullsheet sheet = _Admin.getFullSheetWithFinalize(phid, Convert.ToInt16(period.Substring(3)), Convert.ToInt16(period.Substring(0, 2)));
+            return PartialView("_FinalizeSheetAdmin", sheet);
         }
 
         public IActionResult FinalizeSheet(string period, int phid)
@@ -1173,6 +1184,12 @@ namespace HalloDoc.Controllers
         public IActionResult WeekReciptSave(List<ReciptWeeklySheet> reciptrData, int phid, int period)
         {
             _Admin.addreciptDataInvoice(reciptrData, phid, period);
+            return Ok();
+        }
+
+        public IActionResult sheetFinalize(int period, int month, int phid)
+        {
+            _Admin.sheetFinalize(period, month, phid);
             return Ok();
         }
         #endregion

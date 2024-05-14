@@ -84,9 +84,27 @@
         </div>
         <button type="button" class="btn btn-info text-light addRecpt">Add Recipts</button>
         <div id="ReciptPartial"></div>
-        <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-info text-light">Finalize</button>
-        </div>
+        @if (Context.Request.Cookies["CookieRole"] == "2")
+        {
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-info text-light toFinalize">Finalize</button>
+            </div>
+        }
+        @if (Context.Request.Cookies["CookieRole"] == "1")
+        {
+            <div class="d-flex justify-content-end">
+                <div class="col-md-2 form-floating me-2">
+                    <input type="number" class="form-control bg-transparent" placeholder="username">
+                    <label> Bonus Amount</label>
+                </div>
+                <div class="col-md-2 form-floating me-2">
+                    <input type="number" class="form-control bg-transparent" placeholder="username">
+                    <label> Admin Description </label>
+                </div>
+                <button type="button" class="btn btn-info text-light toApprove"> Approve </button>
+            </div>
+        }
+
     </div>
 </div>
 
@@ -117,6 +135,20 @@
         }
     });
 
+    $('.toFinalize').click(function () {
+        $.ajax({
+            url: '/AdminTab/sheetFinalize',
+            method: 'POST',
+            data: { period: period, month: month, phid: phid },
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
     $('#WeekSheetSubmit').submit(function (e) {
         e.preventDefault();
         var weeklyData = [];
@@ -135,6 +167,10 @@
             method: 'POST',
             data: { weeklyData: weeklyData, phid: phid, period: period },
             success: function (response) {
+                Swal.fire({
+                    title: "Shift Saved !",
+                    icon: "success"
+                });
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);

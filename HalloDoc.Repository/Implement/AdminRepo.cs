@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Web.Helpers;
 using System.Web.WebPages;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HalloDoc.Repository.Implement
 {
@@ -983,6 +984,20 @@ namespace HalloDoc.Repository.Implement
         }
 
 
+        private string ConvertIFormFileToBase64String(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return null;
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                file.CopyTo(memoryStream);
+                byte[] fileBytes = memoryStream.ToArray();
+                return Convert.ToBase64String(fileBytes);
+            }
+        }
         public void addreciptDataInvoice(List<ReciptWeeklySheet> recipteData, int phid, int period)
         {
             int weektypesheet = addWeekSingleRecipt(phid, period, recipteData.FirstOrDefault().date, recipteData.LastOrDefault().date);
@@ -999,7 +1014,7 @@ namespace HalloDoc.Repository.Implement
                         Weekdate = DateOnly.ParseExact(item.date, "MM/dd/yyyy", CultureInfo.InvariantCulture),
                         Item = item.item,
                         Amount = item.amount,
-                        //Bill = item.bill.FileName,
+                        Bill = ConvertIFormFileToBase64String(item.bill),
                     };
                     _context.Providerweeklysheets.Add(sheet);
                 }
@@ -1008,11 +1023,36 @@ namespace HalloDoc.Repository.Implement
                     Providerweeklysheet sheet = _context.Providerweeklysheets.FirstOrDefault(x => x.Weekdate.Equals(newDate) && x.Sheetid == weektypesheet);
                     sheet.Item = item.item;
                     sheet.Amount = item.amount;
-                    //sheet.Bill = item.bill.FileName;
+                    sheet.Bill = ConvertIFormFileToBase64String(item.bill);
                     _context.Providerweeklysheets.Update(sheet);
                 }
             }
             _context.SaveChanges();
+        }
+
+
+        public void sheetFinalize(int period, int month, int phid)
+        {
+            bool WeeksheetExist = _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month));
+            if (WeeksheetExist)
+            {
+                int weeksheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month)).Id;
+                Providerfullsheet fullSheet = _context.Providerfullsheets.FirstOrDefault(x => x.Id == weeksheet);
+                fullSheet.Finalize = true;
+                _context.Providerfullsheets.Update(fullSheet);
+                _context.SaveChanges();
+            }
+        }
+
+        public Providerfullsheet getFullSheetWithFinalize(int phid, int period, int month)
+        {
+            Providerfullsheet sheet = null;
+            bool WeeksheetExist = _context.Providerfullsheets.Any(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month));
+            if (WeeksheetExist)
+            {
+                sheet = _context.Providerfullsheets.FirstOrDefault(x => x.Physicianid == phid && x.Peroid == period && x.Startdate.Value.Month.Equals(month) && x.Finalize==true);
+            }
+            return sheet;
         }
     }
 }
