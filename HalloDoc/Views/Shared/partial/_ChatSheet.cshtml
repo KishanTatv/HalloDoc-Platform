@@ -12,8 +12,35 @@
         <div id="chatBox" class="d-flex flex-column justify-content-end" style="min-height: 95%;">
             @if (Model.Count() >= 0)
             {
+                int previousdate = Model.FirstOrDefault().Createddate.Value.Day;
+                if (previousdate == System.DateTime.Now.Date.Day)
+                {
+                    <p class="text-center chatdate"> Today </p>
+                }
+                else
+                {
+                    <p class="text-center chatdate"> @Model.FirstOrDefault().Createddate.Value.ToString("dd MMM yyyy") </p>
+                }
                 @foreach (var item in Model)
                 {
+                    int newdate = item.Createddate.Value.Day;
+                    if (!newdate.Equals(previousdate))
+                    {
+                        previousdate = newdate;
+                        if (newdate == System.DateTime.Now.Date.Day)
+                        {
+                            <p class="text-center chatdate"> Today </p>
+                        }
+                        else if (newdate == System.DateTime.Now.Date.AddDays(-1).Date.Day)
+                        {
+                            <p class="text-center chatdate"> Yesterday </p>
+                        }
+                        else
+                        {
+                            <p class="text-center chatdate"> @item.Createddate.Value.ToString("dd MMM yyyy") </p>
+                        }
+                    }
+
                     @if (ViewBag.CookieAspId == item.Sender)
                     {
                         <p class="message sent"> @item.Messages </p>

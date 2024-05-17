@@ -377,3 +377,9 @@ floating > .form-select {
     align-self: flex-end;
     margin-bottom: 2px;
 }
+
+.chatdate {
+    font-size: 14px;
+    color: #64a8d1;
+    margin-bottom: 0px;
+}
