@@ -28,6 +28,7 @@ namespace HalloDoc.Repository.Implement
             _config = config;
         }
 
+
         public int getPhyId(string email)
         {
             return _context.Physicians.FirstOrDefault(x => x.Email == email).Physicianid;

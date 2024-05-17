@@ -4,6 +4,9 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 @{
 }
 
+
+
+
 @if (Context.Request.Cookies["CookieRole"] == "1")
 {
     <div class="table-responsive mt-2">
@@ -135,7 +138,11 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             <td>
                                 @if (item.PhysicianId != null)
                                 {
-                                    <button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Provider</button>
+                                    <button class="btn btn-outline-light chatBtn" type="button" data-reqid="@item.RequestId" data-chattype="Provider"><i class="bi bi-person-fill-add"></i>Provider</button>
+                                    @if (ViewBag.dTable != 1)
+                                    {
+                                        <button class="btn btn-outline-light chatBtn" type="button" data-reqid="@item.RequestId" data-chattype="Patient"><i class="bi bi-person-fill-add"></i>Patient</button>
+                                    }
                                 }
                             </td>
                             <td>
@@ -390,10 +397,15 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                                     <p>-</p>
                                 }
                             </td>
-                            @if (ViewBag.dTable == 1)
+                            @if (ViewBag.dTable == 1 || ViewBag.dTable == 3)
                             {
                                 <td class="text-light">
-                                    <button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Chat With</button>
+                                    @*<button class="btn btn-outline-light"><i class="bi bi-person-fill-add"></i>Chat With</button>*@
+                                    <button class="btn btn-outline-light chatBtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight1" data-reqid="@item.RequestId" data-chattype="Admin" aria-controls="offcanvasRight"><i class="bi bi-person-fill-add"></i> Admin </button>
+                                    @if (ViewBag.dTable == 3)
+                                    {
+                                        <button class="btn btn-outline-light chatBtn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight1" data-reqid="@item.RequestId" data-chattype="Patient" aria-controls="offcanvasRight"><i class="bi bi-person-fill-add"></i> patient </button>
+                                    }
                                 </td>
                             }
                             @if (ViewBag.dTable == 3)
@@ -409,7 +421,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                             }
                             <td class="text-light">
                                 <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                                        aria-expanded="false">
                                     Actions
                                 </button>
                                 <ul class="dropdown-menu">
@@ -513,7 +525,7 @@ For more information on enabling MVC for empty projects, visit https://go.micros
 
     </ul>
 </nav>
-
+<div id="chatHistory"></div>
 
 
 <script asp-append-version="true">
@@ -807,5 +819,32 @@ For more information on enabling MVC for empty projects, visit https://go.micros
                 }
             });
         });
+    });
+</script>
+
+
+@*for chat*@
+
+
+<script asp-append-version="true">
+
+    $('.chatBtn').click(function () {
+        var reqid = "" + $(this).data('reqid');
+        var chatRecType = "" + $(this).data('chattype');
+        $.ajax({
+            url: '/AdminDash/Chatclick',
+            method: 'GET',
+            data: { reqid: reqid, chatRecType: chatRecType},
+            success: function (response) {
+                $("#chatHistory").html(response);
+                var bsOffcanvas = new bootstrap.Offcanvas(document.getElementById('chatSheetData'));
+                bsOffcanvas.show();
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+
+
     });
 </script>

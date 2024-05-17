@@ -32,6 +32,8 @@ public partial class HalloDocDbContext : DbContext
 
     public virtual DbSet<Casetag> Casetags { get; set; }
 
+    public virtual DbSet<Chatmessage> Chatmessages { get; set; }
+
     public virtual DbSet<Concierge> Concierges { get; set; }
 
     public virtual DbSet<Emaillog> Emaillogs { get; set; }
@@ -182,6 +184,11 @@ public partial class HalloDocDbContext : DbContext
         modelBuilder.Entity<Casetag>(entity =>
         {
             entity.Property(e => e.Casetagid).ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<Chatmessage>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("chatmessage_pkey");
         });
 
         modelBuilder.Entity<Concierge>(entity =>

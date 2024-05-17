@@ -16,6 +16,7 @@ using HalloDoc.Repository.Service;
 using Microsoft.Net.Http.Headers;
 using DocumentFormat.OpenXml.ExtendedProperties;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.SignalR;
 
 namespace HalloDoc.Controllers
 {

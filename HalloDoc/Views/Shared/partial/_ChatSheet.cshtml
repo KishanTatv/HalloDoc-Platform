@@ -1,0 +1,71 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model IEnumerable<HalloDoc.Entity.Models.Chatmessage>;
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="chatSheetData" aria-labelledby="offcanvasRightLabel" aria-modal="true" role="dialog">
+    <div class="offcanvas-header bg-info">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">@ViewBag.reciverName</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="chatBox" class="d-flex flex-column justify-content-end" style="min-height: 95%;">
+            @if (Model.Count() >= 0)
+            {
+                @foreach (var item in Model)
+                {
+                    @if (ViewBag.CookieAspId == item.Sender)
+                    {
+                        <p class="message sent"> @item.Messages </p>
+                        <span class="timespanr">@item.Createddate.Value.ToString("h:mm tt")</span>
+                    }
+                    else
+                    {
+                        <p class="message received"> @item.Messages </p>
+                        <span class="timespanl">@item.Createddate.Value.ToString("h:mm tt")</span>
+                    }
+                }
+            }
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="chatMessage" placeholder="Enter your message">
+            <button class="btn btn-info" type="button" id="sendChatButton"><i class="bi bi-send text-light"></i></button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var reqid = '@ViewBag.reqid';
+    var chatRecType = '@ViewBag.chatRecType';
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+    connection.on("ReceiveMessage", function (user, message) {
+        var encodedUser = $("<div />").text(user).html();
+        var encodedMsg = $("<div />").text(message).html();
+        var currentTime = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+        $("#chatBox").append("<p class='message received'>" + encodedMsg + "</p>");
+        $("#chatBox").append("<span class='timespanl'>" + currentTime + "</span>");
+    });
+
+    $("#sendChatButton").click(function () {
+        if ($("#chatMessage").val() != '') {
+            var user = '@Context.Request.Cookies["CookieUserName"]';
+            var senderEmail = '@Context.Request.Cookies["CookieEmail"]';
+            var message = $("#chatMessage").val();
+            var currentTime = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            $("#chatBox").append("<p class='message sent'>" + message + "</p>");
+            connection.invoke("SendMessage", user, senderEmail, message, reqid, chatRecType);
+            $("#chatBox").append("<span class='timespanr'>" + currentTime + "</span>");
+            $("#chatMessage").val("").focus();
+        }
+    });
+
+    connection.start().then(function () {
+        console.log("Connected!");
+    }).catch(function (err) {
+        console.error(err.toString());
+    });
+</script>

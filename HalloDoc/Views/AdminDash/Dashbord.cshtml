@@ -17,7 +17,8 @@
 }
 
 <link rel="stylesheet" href="~/css/Dashbord.css" asp-append-version="true" />
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.13/signalr.min.js"></script>
 
 <div class="MainContent pt-0 min-vh-100">
 
@@ -306,6 +307,7 @@
 
 <script asp-append-version="true">
     $(document).ready(function () {
+
         $.ajax({
             url: '/AdminDash/DashbordData',
             method: 'POST',

@@ -28,14 +28,16 @@ namespace HalloDoc.Controllers
         private readonly IAdmin _Admin;
         private readonly IPatient _Patient;
         private readonly IPhysician _Physician;
+        private readonly IChat _Chat;
 
-        public AdminDashController(ILogger<AdminDashController> logger, IGenral Genral, IAdmin Admin, IPatient Patient, IPhysician physician)
+        public AdminDashController(ILogger<AdminDashController> logger, IGenral Genral, IAdmin Admin, IPatient Patient, IPhysician physician, IChat chat)
         {
             _logger = logger;
             _Genral = Genral;
             _Admin = Admin;
             _Patient = Patient;
             _Physician = physician;
+            _Chat = chat;
         }
 
 
@@ -761,6 +763,23 @@ namespace HalloDoc.Controllers
                 PageMargins = { Left = 80, Bottom = 30, Right = 80, Top = 30 },
                 CustomSwitches = "--page-offset 0 --footer-center [page] --footer-font-size 12"
             };
+        }
+        #endregion
+
+
+
+
+        #region
+        public IActionResult Chatclick(int reqid, string chatRecType)
+        {
+            ViewBag.reqid = reqid;
+            ViewBag.chatRecType = chatRecType;
+            int recAspId = (int)_Chat.getAspIdfromReqid(Convert.ToInt32(reqid), chatRecType);
+            int senAspId = _Chat.getAspIsfromEmail(Request.Cookies["CookieEmail"]);
+            ViewBag.CookieAspId = senAspId;
+            ViewBag.reciverName = _Chat.getchatPersonName(recAspId, chatRecType);
+            IEnumerable<Chatmessage> chatdata = _Chat.getChatmessages(senAspId, recAspId, reqid);
+            return PartialView("~/Views/Shared/partial/_ChatSheet.cshtml", chatdata);
         }
         #endregion
     }

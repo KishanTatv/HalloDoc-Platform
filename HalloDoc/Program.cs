@@ -10,10 +10,12 @@ using System.Text.Json.Serialization;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Rotativa.AspNetCore;
+using HalloDoc.ChatSignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HalloDocDbContext>(options =>
      options.UseNpgsql(builder.Configuration.GetConnectionString("HalloDocDb"))
@@ -29,6 +31,7 @@ builder.Services.AddScoped<IPatient, PatientRepo>();
 builder.Services.AddScoped<IPhysician, PhysicianRepo>();
 builder.Services.AddScoped<IAdmin, AdminRepo>();
 builder.Services.AddScoped<IJwtToken, JwtToken>();
+builder.Services.AddScoped<IChat, ChatRepo>();
 
 //builder.Services.AddSession(options =>
 //{
@@ -57,11 +60,10 @@ app.UseCookiePolicy();
 app.UseAuthorization();
 //app.UseSession();
 app.UseNotyf();
-
 app.UseRotativa();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Patient}/{action=PatientSite}/{id?}");
-
+app.MapHub<ChatHub>("/chatHub");
 app.Run();

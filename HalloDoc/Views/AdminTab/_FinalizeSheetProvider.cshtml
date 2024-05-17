@@ -35,10 +35,38 @@ else
                         <td>@item.Weekdate</td>
                         <td>@item.Totalhours</td>
                         <td>0</td>
-                        <td>@item.Housecall</td>
-                        <td>0</td>
-                        <td>@item.Consult</td>
-                        <td>0</td>
+                        @if (item.Isholiday == true)
+                        {
+                            <td>0</td>
+                        }
+                        else
+                        {
+                            <td>@item.Housecall</td>
+                        }
+                        @if (item.Isholiday == false)
+                        {
+                            <td>0</td>
+                        }
+                        else
+                        {
+                            <td>@item.Housecall</td>
+                        }
+                        @if (item.Isholiday == true)
+                        {
+                            <td>0</td>
+                        }
+                        else
+                        {
+                            <td>@item.Consult</td>
+                        }
+                        @if (item.Isholiday == false)
+                        {
+                            <td>0</td>
+                        }
+                        else
+                        {
+                            <td>@item.Consult</td>
+                        }
                         <td>0</td>
                     </tr>
                 }

@@ -339,3 +339,41 @@ floating > .form-select {
         display: none !important;
     }
 }
+
+
+
+
+
+/*for chat*/
+.message {
+    margin-bottom: 0px;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.received {
+    background-color: #f9f9f9;
+    border: 1px solid #d5d4d4;
+    align-self: flex-start;
+}
+
+.sent {
+    background-color: #beeff961;
+    border: 1px solid #7ae9ff;
+    align-self: flex-end;
+}
+
+.timespanl {
+    font-size: smaller;
+    align-self: flex-start;
+    margin-bottom: 2px;
+}
+
+.timespanr {
+    font-size: smaller;
+    align-self: flex-end;
+    margin-bottom: 2px;
+}
