@@ -75,6 +75,22 @@
         var currentTime = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
         $("#chatBox").append("<p class='message received'>" + encodedMsg + "</p>");
         $("#chatBox").append("<span class='timespanl'>" + currentTime + "</span>");
+
+        if (Notification.permission === "granted") {
+            new Notification("HalloDoc Chat", {
+                body: "You have received a new message from " + user + ": " + message,
+                icon: "/image/Fig56. Patient site 1.png"
+            });
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission().then(function (permission) {
+                if (permission === "granted") {
+                    new Notification("HalloDoc Chat", {
+                        body: "You have received a new message from " + user + ": " + message,
+                        icon: "/image/Fig56. Patient site 1.png"
+                    });
+                }
+            });
+        }
     });
 
     $("#sendChatButton").click(function () {

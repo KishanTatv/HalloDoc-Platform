@@ -43,7 +43,7 @@ namespace HalloDoc.ChatSignalR
             var recAspId = _Chat.getAspIdfromReqid(Convert.ToInt32(reqid), chatRecType);
             int senAspId = _Chat.getAspIsfromEmail(CookieEmail);
 
-            _Chat.addMessageInChat(senAspId, Convert.ToInt32(recAspId), Convert.ToInt32(reqid), message);
+            //_Chat.addMessageInChat(senAspId, Convert.ToInt32(recAspId), Convert.ToInt32(reqid), message);
 
             var connectionid = ConnectionStore.GetValueOrDefault(recAspId.ToString());
             await Clients.Client(connectionid ?? "").SendAsync("ReceiveMessage", user, message);

@@ -115,6 +115,16 @@
                                                     <span class="upload_txt ms-2">Upload</span>
                                                 </label>
                                             </div>
+                                            <script>
+                                                var pdfData = '@item.Bill';
+                                                var pdfByteArray = Uint8Array.from(atob(pdfData), c => c.charCodeAt(0));
+                                                var pdfBlob = new Blob([pdfByteArray], { type: 'application/pdf' });
+
+                                                var pdfFile = new File([pdfBlob], 'document.pdf', { type: 'application/pdf' });
+
+                                                var pdfFileInput = document.getElementById('FileInput_@item.Id');
+                                                pdfFileInput.files = [pdfFile];
+                                            </script>
                                         }
                                         else
                                         {
@@ -152,6 +162,8 @@
 </div>
 
 <script>
+
+
     function updateSelectedFileName(input, index) {
         var selectedFile = document.getElementById('selectedFile_' + index);
         if (input.files.length > 0) {

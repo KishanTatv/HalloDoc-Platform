@@ -146,6 +146,7 @@ namespace HalloDoc.Controllers
         }
         #endregion
 
+
         #region SendLink
         public IActionResult SendLink()
         {
@@ -769,7 +770,7 @@ namespace HalloDoc.Controllers
 
 
 
-        #region
+        #region signalR chat
         public IActionResult Chatclick(int reqid, string chatRecType)
         {
             ViewBag.reqid = reqid;
